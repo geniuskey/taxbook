@@ -1,0 +1,793 @@
+{
+  "_about": "TaxBook 세법 수치 파일. 이 책의 모든 세율·공제율·한도·기준 금액은 이 파일 하나에서 읽는다. 금액은 원, 비율은 소수. 근거와 확인 상태는 refs와 SOURCES.md에 있다. 새 귀속 연도에는 이 파일을 복사해 data/tax-YYYY.json으로 만들고 값을 고친다.",
+  "year": 2026,
+  "label": "2026년 귀속 기준",
+  "settleYear": 2027,
+  "asOf": "2026-10-09",
+  "lawVersion": "소득세법 법률 제21221호(2025.12.23 일부개정)·조세특례제한법(2025.12.23 개정)·상속세 및 증여세법(법률 제21219호, 2025.12.23) 기준. 2026년 세법개정안(2026.9 국회 제출)은 반영하지 않았다.",
+  "income": {
+    "rates": [
+      [
+        14000000,
+        0.06
+      ],
+      [
+        50000000,
+        0.15
+      ],
+      [
+        88000000,
+        0.24
+      ],
+      [
+        150000000,
+        0.35
+      ],
+      [
+        300000000,
+        0.38
+      ],
+      [
+        500000000,
+        0.4
+      ],
+      [
+        1000000000,
+        0.42
+      ],
+      [
+        null,
+        0.45
+      ]
+    ],
+    "localRate": 0.1
+  },
+  "wage": {
+    "earnedDeduction": [
+      [
+        5000000,
+        0.7,
+        0
+      ],
+      [
+        15000000,
+        0.4,
+        3500000
+      ],
+      [
+        45000000,
+        0.15,
+        7500000
+      ],
+      [
+        100000000,
+        0.05,
+        12000000
+      ],
+      [
+        null,
+        0.02,
+        14750000
+      ]
+    ],
+    "earnedDeductionMax": 20000000,
+    "earnedCredit": {
+      "threshold": 1300000,
+      "lowRate": 0.55,
+      "highRate": 0.3,
+      "limits": [
+        {
+          "upTo": 33000000,
+          "base": 740000,
+          "floor": 740000
+        },
+        {
+          "upTo": 70000000,
+          "from": 33000000,
+          "base": 740000,
+          "slope": 0.008,
+          "floor": 660000
+        },
+        {
+          "upTo": 120000000,
+          "from": 70000000,
+          "base": 660000,
+          "slope": 0.5,
+          "floor": 500000
+        },
+        {
+          "upTo": null,
+          "from": 120000000,
+          "base": 500000,
+          "slope": 0.5,
+          "floor": 200000
+        }
+      ]
+    },
+    "nontax": {
+      "mealMonthly": 200000,
+      "carMonthly": 200000,
+      "childcareMonthly": 200000,
+      "_note": "출산·보육수당은 2026년부터 6세 이하 자녀 1인당 월 20만원."
+    }
+  },
+  "personal": {
+    "basic": 1500000,
+    "elderly": 1000000,
+    "elderlyAge": 70,
+    "disabled": 2000000,
+    "woman": 500000,
+    "womanIncomeMax": 30000000,
+    "single": 1000000,
+    "depIncomeMax": 1000000,
+    "depWageGrossMax": 5000000,
+    "childAgeMax": 20,
+    "parentAgeMin": 60
+  },
+  "social": {
+    "pension": 0.0475,
+    "pensionMinBase": 400000,
+    "pensionMaxBase": 6370000,
+    "health": 0.03595,
+    "careOfHealth": 0.1314,
+    "employment": 0.009,
+    "_note": "국민연금 기준소득월액 상·하한은 2026년 1~6월 값(7월부터 659만·41만원). 고용보험은 실업급여분 근로자 부담.",
+    "pensionMaxBaseFromJuly": 6590000,
+    "pensionMinBaseFromJuly": 410000
+  },
+  "simplified": {
+    "ratios": [
+      0.8,
+      1.0,
+      1.2
+    ],
+    "_note": "간이세액표([별표 2])를 만든 산식의 교육용 재현. 특별소득공제 등 = 고정액 + 총급여×율 − (총급여−a)×b + (총급여−c)×d. 구간 경계는 확인 필요.",
+    "special": [
+      {
+        "upTo": 30000000,
+        "byFamily": [
+          [
+            3100000,
+            0.04,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3600000,
+            0.04,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            5000000,
+            0.07,
+            0,
+            0,
+            40000000,
+            0.04
+          ]
+        ]
+      },
+      {
+        "upTo": 45000000,
+        "byFamily": [
+          [
+            3100000,
+            0.04,
+            30000000,
+            0.05,
+            0,
+            0
+          ],
+          [
+            3600000,
+            0.04,
+            30000000,
+            0.05,
+            0,
+            0
+          ],
+          [
+            5000000,
+            0.07,
+            30000000,
+            0.05,
+            40000000,
+            0.04
+          ]
+        ]
+      },
+      {
+        "upTo": 70000000,
+        "byFamily": [
+          [
+            3100000,
+            0.015,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3600000,
+            0.02,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            5000000,
+            0.05,
+            0,
+            0,
+            40000000,
+            0.04
+          ]
+        ]
+      },
+      {
+        "upTo": null,
+        "byFamily": [
+          [
+            3100000,
+            0.005,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            3600000,
+            0.01,
+            0,
+            0,
+            0,
+            0
+          ],
+          [
+            5000000,
+            0.03,
+            0,
+            0,
+            40000000,
+            0.04
+          ]
+        ]
+      }
+    ],
+    "childMonthly": {
+      "one": 20830,
+      "two": 45830,
+      "extraPerChild": 33330,
+      "since": "2026-03-01"
+    }
+  },
+  "card": {
+    "threshold": 0.25,
+    "rates": {
+      "credit": 0.15,
+      "debit": 0.3,
+      "cash": 0.3,
+      "culture": 0.3,
+      "market": 0.4,
+      "transit": 0.4
+    },
+    "cultureGrossMax": 70000000,
+    "limits": [
+      {
+        "upTo": 70000000,
+        "base": 3000000,
+        "extra": 3000000,
+        "perChild": 500000,
+        "childMax": 1000000
+      },
+      {
+        "upTo": null,
+        "base": 2500000,
+        "extra": 2000000,
+        "perChild": 250000,
+        "childMax": 500000
+      }
+    ],
+    "growth": null,
+    "sunset": 2028
+  },
+  "housing": {
+    "subscription": {
+      "max": 3000000,
+      "rate": 0.4,
+      "grossMax": 70000000
+    },
+    "lease": {
+      "rate": 0.4,
+      "limit": 4000000
+    },
+    "mortgage": {
+      "limits": {
+        "basic": 6000000,
+        "fixedOrInstallment": 18000000,
+        "both15y": 20000000,
+        "short10y": 6000000,
+        "either15y": 18000000,
+        "none15y": 8000000
+      }
+    }
+  },
+  "credits": {
+    "child": {
+      "one": 250000,
+      "two": 550000,
+      "extra": 400000,
+      "ageMin": 9,
+      "_note": "대상 연령은 법률 제21548호(2026.4.21)로 2026년 9세 이상, 2030년까지 해마다 1세씩 올라 13세 이상이 된다(부칙 제2조). 금액은 그대로."
+    },
+    "birth": [
+      300000,
+      500000,
+      700000
+    ],
+    "insurance": {
+      "limit": 1000000,
+      "rate": 0.12,
+      "disabledRate": 0.15
+    },
+    "medical": {
+      "threshold": 0.03,
+      "rate": 0.15,
+      "otherLimit": 7000000,
+      "infertilityRate": 0.3,
+      "prematureRate": 0.2
+    },
+    "education": {
+      "rate": 0.15,
+      "univLimit": 9000000,
+      "schoolLimit": 3000000,
+      "_status": "대학 900만원 한도는 확인 필요"
+    },
+    "donation": {
+      "rate": 0.15,
+      "highFrom": 10000000,
+      "highRate": 0.3,
+      "hometownFull": 100000,
+      "hometownFullRate": 0.9090909090909091,
+      "hometownLimit": 20000000,
+      "hometownMid": 200000,
+      "hometownMidRate": 0.4
+    },
+    "rent": {
+      "grossMax": 80000000,
+      "incomeMax": 70000000,
+      "lowGrossMax": 55000000,
+      "rateLow": 0.17,
+      "rateHigh": 0.15,
+      "limit": 10000000,
+      "areaMax": 85,
+      "officialPriceMax": 400000000,
+      "_note": "2026년 개정: 주거를 달리하는 배우자도 각자 공제(부부 합산 한도), 자녀 3명 이상 가구는 100㎡ 이하까지(적용 시작 시점 확인 필요)."
+    },
+    "marriage": 500000,
+    "marriageUntil": 2026,
+    "standardWage": 130000,
+    "standardOther": 70000
+  },
+  "business": {
+    "withholding": 0.03,
+    "simpleRateIllustration": 0.641,
+    "simpleRateCode": "940909",
+    "simpleThresholdServices": 36000000,
+    "bookkeepingCreditRate": 0.2,
+    "bookkeepingCreditLimit": 1000000,
+    "noBooksPenalty": 0.2,
+    "_status": "단순경비율 64.1%(940909 기타자영업)는 2차 자료로만 확인. 2026년 귀속 경비율은 2027년 고시."
+  },
+  "other": {
+    "expenseRate": 0.6,
+    "withholding": 0.2,
+    "separateMax": 3000000,
+    "minTaxable": 50000
+  },
+  "financial": {
+    "withholding": 0.14,
+    "threshold": 20000000,
+    "grossUp": 0.1,
+    "highDividend": {
+      "active": true,
+      "from": 2026,
+      "until": 2029,
+      "rates": [
+        [
+          20000000,
+          0.14
+        ],
+        [
+          300000000,
+          0.2
+        ],
+        [
+          5000000000,
+          0.25
+        ],
+        [
+          null,
+          0.3
+        ]
+      ]
+    }
+  },
+  "isa": {
+    "freeGeneral": 2000000,
+    "freeLow": 4000000,
+    "overRate": 0.09,
+    "yearLimit": 20000000,
+    "totalLimit": 100000000,
+    "minYears": 3
+  },
+  "pension": {
+    "savingLimit": 6000000,
+    "totalLimit": 9000000,
+    "rateLow": 0.15,
+    "rateHigh": 0.12,
+    "lowGrossMax": 55000000,
+    "lowIncomeMax": 45000000,
+    "isaTransferRate": 0.1,
+    "isaTransferLimit": 3000000,
+    "payoutRates": {
+      "byAge": [
+        {
+          "under": 70,
+          "rate": 0.05
+        },
+        {
+          "under": 80,
+          "rate": 0.04
+        },
+        {
+          "under": null,
+          "rate": 0.03
+        }
+      ],
+      "lifetime": 0.03
+    },
+    "separateLimit": 15000000,
+    "overSeparateRate": 0.15,
+    "earlyRate": 0.15,
+    "startAge": 55,
+    "minYears": 5,
+    "limitBase": 11,
+    "limitMult": 1.2,
+    "limitFreeYear": 11,
+    "_note": "종신계약 연금소득세 4%→3%(2026.1.1 이후 수령분)."
+  },
+  "stock": {
+    "domestic": {
+      "transactionTax": {
+        "kospi": {
+          "tax": 0.0005,
+          "rural": 0.0015
+        },
+        "kosdaq": {
+          "tax": 0.002,
+          "rural": 0
+        },
+        "konex": {
+          "tax": 0.001,
+          "rural": 0
+        }
+      },
+      "majorThreshold": 5000000000,
+      "majorRates": [
+        [
+          300000000,
+          0.2
+        ],
+        [
+          null,
+          0.25
+        ]
+      ],
+      "majorDeduction": 2500000,
+      "_note": "2026.1.1 이후 양도분부터 코스피 0.05%+농특세 0.15%, 코스닥 0.20%(증권거래세법 시행령 2025.12.31 개정)."
+    },
+    "overseas": {
+      "deduction": 2500000,
+      "rate": 0.2
+    },
+    "derivatives": {
+      "rate": 0.1,
+      "deduction": 2500000
+    }
+  },
+  "crypto": {
+    "startYear": 2027,
+    "rate": 0.2,
+    "deduction": 2500000,
+    "deemedCostDate": "2026-12-31",
+    "_note": "2024.12 개정으로 2027.1.1 이후 양도·대여분부터 과세(법률 제20615호 부칙). 2026년 귀속분은 과세 없음."
+  },
+  "transfer": {
+    "rates": [
+      [
+        100000000,
+        0.1
+      ],
+      [
+        500000000,
+        0.2
+      ],
+      [
+        1000000000,
+        0.3
+      ],
+      [
+        3000000000,
+        0.4
+      ],
+      [
+        null,
+        0.5
+      ]
+    ],
+    "filingCredit": 0.03,
+    "minBase": 500000,
+    "giftFilingMonths": 3,
+    "inheritFilingMonths": 6
+  },
+  "gift": {
+    "deduction": {
+      "spouse": 600000000,
+      "parentToAdult": 50000000,
+      "parentToMinor": 20000000,
+      "childToParent": 50000000,
+      "relative": 10000000,
+      "other": 0
+    },
+    "marriageBirth": 100000000,
+    "windowYears": 10,
+    "skipRate": 0.3,
+    "skipRateMinor": 0.4,
+    "skipMinorOver": 2000000000
+  },
+  "inherit": {
+    "basic": 200000000,
+    "child": 50000000,
+    "minorPerYear": 10000000,
+    "minorAge": 19,
+    "elderly": 50000000,
+    "elderlyAge": 65,
+    "lump": 500000000,
+    "spouse": {
+      "min": 500000000,
+      "max": 3000000000
+    },
+    "financial": {
+      "fullUpTo": 20000000,
+      "rate": 0.2,
+      "max": 200000000
+    },
+    "cohabit": {
+      "rate": 1.0,
+      "max": 600000000,
+      "years": 10
+    },
+    "funeral": {
+      "min": 5000000,
+      "max": 10000000,
+      "enshrine": 5000000
+    },
+    "priorHeirYears": 10,
+    "priorOtherYears": 5,
+    "installmentYears": 10
+  },
+  "acqGift": {
+    "rate": 0.035,
+    "heavyRate": 0.12,
+    "heavyMinValue": 300000000
+  },
+  "refs": {
+    "income.rates": {
+      "law": "소득세법 제55조",
+      "url": "https://www.law.go.kr/법령/소득세법/제55조"
+    },
+    "income.local": {
+      "law": "지방세법 제103조의3",
+      "url": "https://www.law.go.kr/법령/지방세법/제103조의3"
+    },
+    "wage.earnedDeduction": {
+      "law": "소득세법 제47조",
+      "url": "https://www.law.go.kr/법령/소득세법/제47조"
+    },
+    "wage.earnedCredit": {
+      "law": "소득세법 제59조",
+      "url": "https://www.law.go.kr/법령/소득세법/제59조"
+    },
+    "wage.nontax": {
+      "law": "소득세법 제12조, 시행령 제12조·제17조의2",
+      "url": "https://www.law.go.kr/법령/소득세법/제12조"
+    },
+    "personal": {
+      "law": "소득세법 제50조·제51조",
+      "url": "https://www.law.go.kr/법령/소득세법/제50조"
+    },
+    "pensionIns": {
+      "law": "소득세법 제51조의3",
+      "url": "https://www.law.go.kr/법령/소득세법/제51조의3"
+    },
+    "specialDeduction": {
+      "law": "소득세법 제52조",
+      "url": "https://www.law.go.kr/법령/소득세법/제52조"
+    },
+    "simplified": {
+      "law": "소득세법 시행령 제194조, [별표 2] 근로소득 간이세액표",
+      "url": "https://www.law.go.kr/법령/소득세법시행령/제194조"
+    },
+    "card": {
+      "law": "조세특례제한법 제126조의2",
+      "url": "https://www.law.go.kr/법령/조세특례제한법/제126조의2"
+    },
+    "housing.subscription": {
+      "law": "조세특례제한법 제87조",
+      "url": "https://www.law.go.kr/법령/조세특례제한법/제87조"
+    },
+    "credits.child": {
+      "law": "소득세법 제59조의2",
+      "url": "https://www.law.go.kr/법령/소득세법/제59조의2"
+    },
+    "credits.pension": {
+      "law": "소득세법 제59조의3",
+      "url": "https://www.law.go.kr/법령/소득세법/제59조의3"
+    },
+    "credits.special": {
+      "law": "소득세법 제59조의4",
+      "url": "https://www.law.go.kr/법령/소득세법/제59조의4"
+    },
+    "credits.rent": {
+      "law": "조세특례제한법 제95조의2",
+      "url": "https://www.law.go.kr/법령/조세특례제한법/제95조의2"
+    },
+    "credits.marriage": {
+      "law": "조세특례제한법 제92조",
+      "url": "https://www.law.go.kr/법령/조세특례제한법/제92조"
+    },
+    "credits.hometown": {
+      "law": "조세특례제한법 제58조",
+      "url": "https://www.law.go.kr/법령/조세특례제한법/제58조"
+    },
+    "business.withholding": {
+      "law": "소득세법 제129조",
+      "url": "https://www.law.go.kr/법령/소득세법/제129조"
+    },
+    "business.rate": {
+      "law": "소득세법 시행령 제143조, 단순경비율·기준경비율 고시",
+      "url": "https://www.law.go.kr/법령/소득세법시행령/제143조"
+    },
+    "other": {
+      "law": "소득세법 제21조·제37조·제14조",
+      "url": "https://www.law.go.kr/법령/소득세법/제21조"
+    },
+    "financial.threshold": {
+      "law": "소득세법 제14조 제3항",
+      "url": "https://www.law.go.kr/법령/소득세법/제14조"
+    },
+    "financial.compare": {
+      "law": "소득세법 제62조",
+      "url": "https://www.law.go.kr/법령/소득세법/제62조"
+    },
+    "financial.grossUp": {
+      "law": "소득세법 제17조 제3항, 제56조",
+      "url": "https://www.law.go.kr/법령/소득세법/제17조"
+    },
+    "financial.highDividend": {
+      "law": "조세특례제한법 배당소득 분리과세 특례(2025.12.23 신설)",
+      "url": "https://www.nts.go.kr/nts/na/ntt/selectNttInfo.do?mi=2201&bbsId=1028&nttSn=1349597"
+    },
+    "isa": {
+      "law": "조세특례제한법 제91조의18",
+      "url": "https://www.law.go.kr/법령/조세특례제한법/제91조의18"
+    },
+    "pension.payout": {
+      "law": "소득세법 제129조 제1항 제5호의2, 제14조 제3항 제9호",
+      "url": "https://www.law.go.kr/법령/소득세법/제129조"
+    },
+    "pension.limit": {
+      "law": "소득세법 시행령 제40조의2",
+      "url": "https://www.law.go.kr/법령/소득세법시행령/제40조의2"
+    },
+    "stock.transaction": {
+      "law": "증권거래세법 시행령 제5조, 농어촌특별세법 제5조",
+      "url": "https://www.law.go.kr/법령/증권거래세법시행령/제5조"
+    },
+    "stock.major": {
+      "law": "소득세법 제104조, 시행령 제157조",
+      "url": "https://www.law.go.kr/법령/소득세법시행령/제157조"
+    },
+    "stock.overseas": {
+      "law": "소득세법 제103조·제118조의5",
+      "url": "https://www.law.go.kr/법령/소득세법/제118조의5"
+    },
+    "crypto": {
+      "law": "소득세법 제21조 제1항 제27호, 제37조 제5항, 제64조의3, 부칙(법률 제20615호)",
+      "url": "https://www.law.go.kr/법령/소득세법/제37조"
+    },
+    "transfer.rates": {
+      "law": "상속세 및 증여세법 제26조·제56조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제26조"
+    },
+    "transfer.filing": {
+      "law": "상속세 및 증여세법 제67조·제68조·제69조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제69조"
+    },
+    "gift.deduction": {
+      "law": "상속세 및 증여세법 제53조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제53조"
+    },
+    "gift.marriage": {
+      "law": "상속세 및 증여세법 제53조의2",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제53조의2"
+    },
+    "gift.sum10": {
+      "law": "상속세 및 증여세법 제47조 제2항",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제47조"
+    },
+    "transfer.skip": {
+      "law": "상속세 및 증여세법 제27조·제57조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제57조"
+    },
+    "inherit.deduction": {
+      "law": "상속세 및 증여세법 제18조~제24조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제21조"
+    },
+    "inherit.spouse": {
+      "law": "상속세 및 증여세법 제19조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제19조"
+    },
+    "inherit.financial": {
+      "law": "상속세 및 증여세법 제22조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제22조"
+    },
+    "inherit.cohabit": {
+      "law": "상속세 및 증여세법 제23조의2",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제23조의2"
+    },
+    "inherit.prior": {
+      "law": "상속세 및 증여세법 제13조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제13조"
+    },
+    "inherit.valuation": {
+      "law": "상속세 및 증여세법 제60조·제61조, 시행령 제49조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제60조"
+    },
+    "inherit.payment": {
+      "law": "상속세 및 증여세법 제70조·제71조·제73조",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제71조"
+    },
+    "acqGift": {
+      "law": "지방세법 제11조 제1항 제2호, 제13조의2 제2항",
+      "url": "https://www.law.go.kr/법령/지방세법/제13조의2"
+    },
+    "penalty": {
+      "law": "국세기본법 제47조의2~제47조의4",
+      "url": "https://www.law.go.kr/법령/국세기본법/제47조의2"
+    }
+  },
+  "penalty": {
+    "noFiling": 0.2,
+    "underFiling": 0.1,
+    "lateDaily": 0.00022,
+    "_note": "일반 무신고 가산세 20%, 과소신고 10%, 납부지연 하루 0.022%(국세기본법 제47조의2~제47조의4). 부정행위는 40%."
+  },
+  "calendar": {
+    "simplifiedOpen": "1월 15일",
+    "simplifiedOpenStatus": "2026년 일정 기준 예상(2027년 일정 발표 전)",
+    "settlement": "2월 급여",
+    "withholdingReport": "3월 10일",
+    "incomeFiling": "5월 1일~5월 31일",
+    "giftFiling": "증여일이 속한 달의 말일부터 3개월",
+    "inheritFiling": "상속개시일이 속한 달의 말일부터 6개월",
+    "foreignAccount": "6월"
+  }
+}

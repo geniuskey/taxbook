@@ -1,0 +1,10 @@
+{
+  "id": "taxbook",
+  "title": "TaxBook",
+  "description": "월급명세서의 원천징수에서 연말정산과 종합소득세, 이자·배당·ISA·연금저축·주식·가상자산의 세금, 증여세와 상속세까지. 다온의 세금 노트를 따라 숫자를 직접 바꾸며 한 해의 세금을 정리합니다.",
+  "url": "https://taxbook.euiyun.com/",
+  "repo": "https://github.com/geniuskey/taxbook",
+  "field": "money",
+  "status": "published",
+  "domain": "taxbook.euiyun.com"
+}
