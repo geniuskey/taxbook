@@ -367,8 +367,13 @@
     const marriage = x.marriage ? D.credits.marriage : 0;
 
     function run(itemized) {
-      const special = itemized ? healthEmploy + house.total : 0;
-      const other = card.deduction;
+      // 주택자금 중 청약저축(조특법)은 표준세액공제를 골라도 남고, 임차·저당(소득세법 특별소득공제)은 항목별에서만
+      const subPart = Math.min(house.subscription, house.leaseSub), houseSpecial = house.total - subPart;
+      // 소득공제 종합한도(조특법 제132조의2): 주택자금·청약저축·신용카드 등의 합계
+      const capItems = (itemized ? houseSpecial : 0) + subPart + card.deduction;
+      const capped = Math.min(capItems, D.deductionCap != null ? D.deductionCap : Infinity);
+      const special = itemized ? healthEmploy : 0;
+      const other = capped;
       let base = earned - pers.total - pensionIns - special - other;
       base = Math.max(0, base);
       const calc = TX.incomeTax(base);
@@ -385,7 +390,12 @@
       let left = calc.tax;
       credits.forEach((c) => { c.used = Math.min(left, c.value); left -= c.used; });
       const decided = trunc10(left);
-      return { itemized, special, base, calc, ec, credits, creditTotal: credits.reduce((s, c) => s + c.used, 0), decided, local: TX.local(decided) };
+      // 한도를 넘은 몫은 카드 → 청약 → 주택자금 순으로 깎인 것으로 표시한다(표시용 배분)
+      let room = capped;
+      const houseUsed = itemized ? Math.min(houseSpecial, room) : 0; room -= houseUsed;
+      const subUsed = Math.min(subPart, room); room -= subUsed;
+      const cardUsed = Math.min(card.deduction, room);
+      return { itemized, special: special + houseUsed, houseUsed, subUsed, cardUsed, capItems, capped, capLost: capItems - capped, base, calc, ec, credits, creditTotal: credits.reduce((s, c) => s + c.used, 0), decided, local: TX.local(decided) };
     }
     const A = run(true), B = run(false);
     const best = B.decided < A.decided ? B : A;

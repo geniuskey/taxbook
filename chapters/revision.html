@@ -90,7 +90,7 @@
 
     <div class="callout warn">
       <strong>세법은 해마다 바뀐다</strong>
-      이 장의 표와 계산은 <span data-t="label"></span>이다. 기준 법령은 <span data-t="lawVersion"></span> 이 책은 국가법령정보센터·국세청·재정경제부 원문을 정부 도메인 검색 색인과 언론 보도로 교차 확인했고, 출처와 확인 상태(확인·대체로 확인·확인 필요)는 <a href="../SOURCES.md">SOURCES.md</a>에 있다. 실제 신고와 연말정산은 그 해 국세청 안내와 홈택스로 다시 확인한다.
+      이 장의 표와 계산은 <span data-t="label"></span>이다. 기준 법령은 <span data-t="lawVersion"></span> 이 책은 국가법령정보센터·국세청 원문(법률·시행령·시행규칙·부칙·별표·고시)을 직접 대조했고, 국회 심사 중인 개정안은 재정경제부 발표와 언론 보도로 확인했다. 출처와 확인 상태(확인·대체로 확인·확인 필요)는 <a href="../SOURCES.md">SOURCES.md</a>에 있다. 실제 신고와 연말정산은 그 해 국세청 안내와 홈택스로 다시 확인한다.
     </div>
   </section>
 
@@ -109,7 +109,7 @@
           <tr><td>출산·보육수당 비과세</td><td>근로자 1인당 월 20만원 → 6세 이하 자녀 1인당 월 <span data-t="wage.nontax.childcareMonthly" data-f="man"></span></td><td>2026.1.1 지급분</td><td><a href="taxbase.html">3장</a></td><td><code>wage.nontax.childcareMonthly</code></td></tr>
           <tr><td>교육비 세액공제</td><td>초등 1~2학년 예체능 학원·체육시설 비용 추가, 대학생 교육비의 부양가족 소득요건 폐지(공제율·한도는 그대로)</td><td>2026.1.1 지출분</td><td><a href="credit.html">5장</a></td><td>—</td></tr>
           <tr><td>고향사랑기부금 <span data-t="credits.donation.hometownFull" data-f="man"></span> 초과~<span data-t="credits.donation.hometownMid" data-f="man"></span> 구간</td><td><span data-p="hometownMidRate"></span> → <b><span data-t="credits.donation.hometownMidRate"></span></b>(<span data-t="credits.donation.hometownFull" data-f="man"></span>까지 100/110은 그대로)</td><td>2026.1.1 기부분</td><td><a href="credit.html">5장</a>, 아래 <a href="#sim-cmp">비교기</a></td><td><code>credits.donation.hometownMid</code>, <code>hometownMidRate</code></td></tr>
-          <tr><td>월세 세액공제 요건</td><td>주거를 달리하는 배우자도 각자 공제(부부 합산 한도), 자녀 3명 이상 가구는 100㎡ 이하까지</td><td><b>확인 필요</b>(2026.1.1인지 시행령 시행일인지)</td><td><a href="credit.html">5장</a>(엔진은 요건을 단순화)</td><td><code>credits.rent._note</code></td></tr>
+          <tr><td>월세 세액공제 요건</td><td>주거를 달리하는 배우자도 각자 공제(부부 합산 한도), 자녀 3명 이상 가구는 100㎡ 이하까지</td><td>배우자: <span data-t="credits.rent.spouseFrom" data-f="raw"></span> 이후 지급 월세분(법률 제21223호 부칙 제17조) / 3자녀 면적: 2026.2.27 시행령 개정</td><td><a href="credit.html">5장</a>(엔진은 요건을 단순화)</td><td><code>credits.rent._note</code></td></tr>
           <tr><td>근로소득 간이세액표</td><td>자녀 차감액 개정: 1명 <span data-t="simplified.childMonthly.one" data-f="wonfull"></span>, 2명 <span data-t="simplified.childMonthly.two" data-f="wonfull"></span>, 3명부터 1명당 <span data-t="simplified.childMonthly.extraPerChild" data-f="wonfull"></span></td><td><span data-t="simplified.childMonthly.since"></span> 이후 원천징수분</td><td><a href="payslip.html">2장</a></td><td><code>simplified.childMonthly</code></td></tr>
           <tr><td>국민연금 보험료율</td><td>9%(근로자 4.5%) → 근로자·회사 각 <span data-t="social.pension"></span>. 기준소득월액 상한은 7월부터 <span data-t="social.pensionMaxBaseFromJuly" data-f="man"></span></td><td>2026년 1월(상·하한은 7월)</td><td><a href="payslip.html">2장</a></td><td><code>social.pension</code>, <code>pensionMaxBaseFromJuly</code></td></tr>
           <tr><td>건강보험·장기요양</td><td>건강보험료율 인상(2025년 7.09%, 올해 근로자 부담 <span data-t="social.health"></span>), 장기요양은 건강보험료의 <span data-t="social.careOfHealth"></span></td><td>2026년 1월</td><td><a href="payslip.html">2장</a></td><td><code>social.health</code>, <code>careOfHealth</code></td></tr>
@@ -128,8 +128,9 @@
           <tr><td>증권거래세(코스닥·K-OTC)</td><td><span data-p="tx.kosdaq"></span> → <b><span data-t="stock.domestic.transactionTax.kosdaq.tax"></span></b></td><td>2026.1.1 이후 양도분</td><td><a href="stock.html#sim-turn">11장</a>, 아래 비교기</td><td><code>stock.domestic.transactionTax.kosdaq</code></td></tr>
           <tr><td>종신형 사적연금 연금소득세</td><td><span data-p="lifetimeAnnuity"></span> → <b><span data-t="pension.payoutRates.lifetime"></span></b>(지방세 별도)</td><td>2026.1.1 이후 수령분</td><td><a href="pension.html">10장</a></td><td><code>pension.payoutRates.lifetime</code></td></tr>
           <tr><td>이연퇴직소득 연금 수령</td><td>실제 수령 연차 20년 초과분 감면 구간 신설(퇴직소득세의 60% → 50%)</td><td>2026.1.1 이후 수령분</td><td><a href="pension.html">10장</a>(엔진 미반영)</td><td>—</td></tr>
-          <tr><td>국내시장 복귀계좌(RIA)</td><td>없음 → 해외 상장주식을 팔아 국내 주식에 투자하면 양도소득 일부 공제(한시). 공제율 구간 경계는 출처마다 달라 '대체로 확인'</td><td>2026년 양도분</td><td><a href="stock.html">11장</a>(심화 상자, 계산 미반영)</td><td>—</td></tr>
-          <tr><td>청년미래적금</td><td>이자 비과세 상품 신설(연령 요건은 시행령)</td><td>2026년</td><td><a href="interest.html">8장</a></td><td>—</td></tr>
+          <tr><td>국내시장 복귀계좌(RIA)</td><td>없음 → 2025.12.23 이전 보유 해외 상장주식을 복귀계좌로 팔아 국내 주식 등에 투자하면 양도소득금액의 <span data-t="stock.ria.periods.0.2" data-f="pct"></span>(1~5월)·<span data-t="stock.ria.periods.1.2" data-f="pct"></span>(6~7월)·<span data-t="stock.ria.periods.2.2" data-f="pct"></span>(8~12월) 공제(한시, 납입한도 <span data-t="stock.ria.limit"></span>)</td><td>2026년 양도분(법률 제21549호)</td><td><a href="stock.html">11장</a>(심화 상자, 계산 미반영)</td><td>—</td></tr>
+          <tr><td>국민성장펀드 전용저축</td><td>없음 → 신설. 전용계좌로 국민성장집합투자기구에 3년 이상 투자하면 투자일부터 <span data-t="nationalGrowth.dividendYears" data-f="num"></span>년간 배당 <span data-t="nationalGrowth.dividendRate"></span> 분리과세, 투자금액 소득공제(3천만원 이하 <span data-t="nationalGrowth.deductionRates.0.1"></span>, 5천만원 이하 <span data-t="nationalGrowth.deductionRates.1.1"></span>, 7천만원 이하 <span data-t="nationalGrowth.deductionRates.2.1"></span>), 1인 <span data-t="nationalGrowth.limit"></span> 한도. 소득공제는 종합한도 2,500만원에 포함</td><td>2026.5.12 이후 가입분(법률 제21612호), <span data-t="nationalGrowth.until" data-f="raw"></span>년까지 가입</td><td>이 장만(계산 미반영)</td><td><code>nationalGrowth</code></td></tr>
+          <tr><td>청년미래적금</td><td>이자 비과세 상품 신설. 직전 총급여 7,500만원 이하(또는 종합소득금액 6,300만원 이하) 등 요건, <span data-t="year" data-f="raw"></span>~2028년 가입(연령은 시행령)</td><td>2026년 가입분</td><td><a href="interest.html">8장</a></td><td>—</td></tr>
         </tbody>
       </table>
     </div>
@@ -325,7 +326,7 @@
     <ol>
       <li>이 책은 확정된 개정만 세법 수치 파일에 넣어 계산하고, 국회를 통과하지 않은 개정안은 이 장의 '추진 중' 표에만 적는다.</li>
       <li>2026년 귀속 직장인 개정의 중심은 자녀(세액공제 연령 <span data-t="credits.child.ageMin" data-f="num"></span>세 이상, 카드 한도 자녀 가산, 출산·보육수당 비과세 자녀별)와 고향사랑기부 <span data-t="credits.donation.hometownFull" data-f="man"></span> 초과 구간(<span data-t="credits.donation.hometownMidRate"></span>)이다.</li>
-      <li>투자 쪽은 고배당기업 배당소득 분리과세 신설, 증권거래세 인상, 종신형 연금소득세 인하, 국내시장 복귀계좌(RIA) 한시 공제가 있다.</li>
+      <li>투자 쪽은 고배당기업 배당소득 분리과세 신설, 증권거래세 인상, 종신형 연금소득세 인하, 국내시장 복귀계좌(RIA) 한시 공제, 국민성장펀드 전용저축 신설(2026년 5월)이 있다.</li>
       <li>상속·증여는 세율과 공제가 그대로이고, 영리법인 유증·ATS 거래 같은 회피 방지·정비 규정이 바뀌었다.</li>
       <li>같은 개정이 사람에 따라 효과가 0일 수 있고, 한 가구 안에서도 늘리는 개정과 줄이는 개정이 섞인다. 같은 입력을 개정 전후로 계산해 보면 어디서 차이가 나는지 보인다.</li>
       <li>한 해 중간의 개정(2026년 4월 자녀세액공제 연령)도 그 해 과세기간 전체에 적용될 수 있다. 2026 세법개정안은 국회 심사 중인 확정 전 안이다.</li>

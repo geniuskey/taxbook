@@ -667,7 +667,8 @@ TX.ready(function (D) {
         { k: "인적공제", d: r.personal.total },
         { k: "연금보험료", d: r.pensionIns },
         { k: "특별소득공제", d: b.special },
-        { k: "카드 등 소득공제", d: r.card.deduction },
+        { k: "청약저축 소득공제", d: b.subUsed },
+        { k: "카드 등 소득공제", d: b.cardUsed },
         { k: "과세표준", v: b.base, c: P.accent, t: 1 },
       ];
       let y = 26;
@@ -739,7 +740,7 @@ TX.ready(function (D) {
         T(ctx, tx, right ? x1 + 5 : inside ? x1 - 5 : x0 - 5, yy + bh / 2, { size: 11, mono: true, color: inside ? "#fff" : (it.res != null ? col : P.text), align: right ? "left" : "right", base: "middle", weight: 700 });
         y += rowH;
       });
-    }, { get height() { return pw("calc-cv") < 520 ? 470 : 480; } });
+    }, { get height() { return pw("calc-cv") < 520 ? 494 : 504; } });
 
     function contrib(x) {
       const base = tot(TX.yearEnd(x));
@@ -767,6 +768,8 @@ TX.ready(function (D) {
       const sum = (p) => p.credits.reduce((s, c) => s + c.used, 0);
       return "<table><thead><tr><th></th><th class=\"num" + (ch === "itemized" ? " chosen" : "") + "\">항목별" + (ch === "itemized" ? " ✓" : "") + "</th><th class=\"num" + (ch === "standard" ? " chosen" : "") + "\">표준" + (ch === "standard" ? " ✓" : "") + "</th></tr></thead><tbody>" +
         row("특별소득공제", won(A.special), won(B.special)) +
+        row("청약저축·카드 등", won(A.subUsed + A.cardUsed), won(B.subUsed + B.cardUsed)) +
+        (A.capLost > 0 ? row("종합한도로 사라진 공제", won(A.capLost), won(B.capLost)) : "") +
         row("과세표준", won(A.base), won(B.base)) +
         row("산출세액", won(A.calc.tax), won(B.calc.tax)) +
         row("세액공제(쓰인 몫)", won(sum(A)), won(sum(B))) +

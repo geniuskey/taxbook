@@ -274,7 +274,7 @@
         <tbody id="hd-table"></tbody>
       </table>
     </div>
-    <p style="font-size:14px;color:var(--text-dim)">지방소득세 <span data-t="income.localRate" data-f="pct"></span>가 따로 붙는다. 대상 기업은 현금배당이 전년보다 줄지 않은 상장법인 가운데 배당성향 요건을 채운 곳이다. 배당 증가 요건의 세부 기준은 자료마다 달라 확인 필요다.</p>
+    <p style="font-size:14px;color:var(--text-dim)">지방소득세 <span data-t="income.localRate" data-f="pct"></span>가 따로 붙는다. 대상 기업은 코넥스를 뺀 상장법인으로, 직전 사업연도 배당이 2024 사업연도보다 줄지 않았고, 배당성향이 <span data-t="financial.highDividend.payoutMin" data-f="pct"></span> 이상이거나 배당성향 <span data-t="financial.highDividend.payoutMinWithGrowth" data-f="pct"></span> 이상이면서 이익배당금이 전전 사업연도보다 <span data-t="financial.highDividend.growthMin" data-f="pct"></span> 이상 늘어난 곳이다(<a data-src="financial.highDividend.law"></a>). 기업이 정기주주총회 뒤 요건 충족을 공시하고, 받는 사람이 합산배제를 신청해야 적용된다.</p>
 
     <p>이 특례의 효과는 받는 사람의 한계세율에 달려 있다. 고배당기업 배당이 기준금액 안에 머물면 어차피 <span data-t="financial.withholding" data-f="pct"></span>라 차이가 없다. 기준금액을 넘고 다른 소득도 커서 넘는 몫이 높은 구간에 얹히는 사람에게는 별도 세율이 종합과세보다 낮다. 아래 그래프의 손잡이를 끌어 고배당기업 배당 금액을 바꾸고, 다른 소득의 크기를 바꿔 본다.</p>
 
