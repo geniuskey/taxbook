@@ -1,0 +1,616 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "책 전체의 세금 용어 70여 개를 한국어·영어·초성으로 검색하고 관련 장으로 바로 이동하며, 누진세 빠른 계산기와 1~16장 전 범위 종합 퀴즈로 세금 공부를 마무리한다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>용어집 & 종합 퀴즈 · TaxBook</title>
+<meta name="description" content="책 전체의 세금 용어 70여 개를 한국어·영어·초성으로 검색하고 관련 장으로 바로 이동하며, 누진세 빠른 계산기와 1~16장 전 범위 종합 퀴즈로 세금 공부를 마무리한다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/glossary.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="용어집 &amp; 종합 퀴즈 · TaxBook">
+<meta property="og:description" content="책 전체의 세금 용어 70여 개를 한국어·영어·초성으로 검색하고 관련 장으로 바로 이동하며, 누진세 빠른 계산기와 1~16장 전 범위 종합 퀴즈로 세금 공부를 마무리한다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/glossary.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/glossary.html#chapter","name":"용어집 & 종합 퀴즈","headline":"용어집 & 종합 퀴즈 · TaxBook","description":"책 전체의 세금 용어 70여 개를 한국어·영어·초성으로 검색하고 관련 장으로 바로 이동하며, 누진세 빠른 계산기와 1~16장 전 범위 종합 퀴즈로 세금 공부를 마무리한다.","url":"https://taxbook.euiyun.com/chapters/glossary.html","position":17,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"17. 용어집 & 종합 퀴즈","item":"https://taxbook.euiyun.com/chapters/glossary.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<style>
+  .jump { display: flex; flex-wrap: wrap; gap: 6px 14px; margin-top: 16px; font-size: 15px; }
+  .gl-tools { display: grid; gap: 10px; margin-bottom: 14px; }
+  .gl-tools .row { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; }
+  .gl-tools .cap { font-size: 13px; color: var(--text-dim); }
+  .gl-tools .seg { flex-wrap: wrap; }
+  .gl-tools .seg button { font-size: 12.5px; padding: 4px 9px; }
+  .gl-search { margin-bottom: 0 !important; width: 100%; box-sizing: border-box; }
+  .gl-count { font-size: 13px; color: var(--text-faint); margin-left: auto; font-family: var(--mono); }
+  #gl-list { max-height: min(76vh, 960px); overflow-y: auto; overscroll-behavior: contain; padding: 2px 6px 2px 2px; border-radius: 12px; }
+  .gl-group { position: sticky; top: 0; z-index: 1; background: var(--bg); font-weight: 700; font-size: 13px; color: var(--accent); letter-spacing: .04em; margin: 14px 0 0; padding: 4px 0; border-bottom: 1px solid var(--border); }
+  .gl-group:first-child { margin-top: 0; }
+  .gl-item h4 { overflow-wrap: anywhere; }
+  .gl-item .cat { font-size: 11.5px; padding: 1px 8px; border-radius: 999px; background: var(--surface); color: var(--text-dim); margin-right: 10px; }
+  .gl-item mark { background: color-mix(in srgb, var(--warn) 35%, transparent); color: inherit; border-radius: 3px; padding: 0 1px; }
+  .gl-empty { padding: 24px; text-align: center; color: var(--text-dim); border: 1px dashed var(--border); border-radius: 12px; }
+  .pt-in { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: 14px; color: var(--text-dim); }
+  .pt-in input { font: inherit; font-family: var(--mono); width: 9em; max-width: 100%; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-elev); color: var(--text); }
+  .pt-steps { font-family: var(--mono); font-size: 13px; color: var(--text-dim); padding: 10px 16px; border-top: 1px solid var(--border); overflow-wrap: anywhere; }
+  .fq-status { position: sticky; top: calc(var(--nav-h, 56px) + 6px); z-index: 3; display: flex; flex-wrap: wrap; gap: 6px 16px; align-items: center; padding: 10px 16px; margin-bottom: 16px; border-radius: 12px; background: color-mix(in srgb, var(--bg-elev) 92%, transparent); border: 1px solid var(--border); box-shadow: var(--shadow); backdrop-filter: blur(8px); font-size: 14px; color: var(--text-dim); }
+  .fq-status b { font-family: var(--mono); color: var(--text); }
+  .fq-bar { flex: 1 1 120px; height: 6px; background: var(--surface-2, var(--surface)); border-radius: 3px; overflow: hidden; }
+  .fq-bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width .3s ease; }
+  .quiz-q .qch { display: block; font-size: 12px; font-weight: 700; color: var(--accent); letter-spacing: .03em; margin-bottom: 4px; }
+  .quiz-q .quiz-exp a { font-weight: 600; }
+  .fq-result { margin-top: 20px; background: var(--bg-elev); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 22px 20px; text-align: center; }
+  .fq-title { font-size: clamp(22px, 5vw, 30px); font-weight: 800; margin: 4px 0; color: var(--accent); }
+  .fq-big { font-family: var(--mono); font-size: 40px; font-weight: 700; }
+  .fq-big small { font-size: 18px; color: var(--text-dim); }
+  .fq-dots { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin: 14px 0; }
+  .fq-dots a { width: 30px; height: 30px; border-radius: 8px; display: grid; place-items: center; font-family: var(--mono); font-size: 12px; font-weight: 700; color: var(--text); border: 1px solid var(--border); text-decoration: none; }
+  .fq-dots a.ok { background: color-mix(in srgb, var(--ok) 22%, transparent); border-color: var(--ok); }
+  .fq-dots a.bad { background: color-mix(in srgb, var(--bad) 18%, transparent); border-color: var(--bad); }
+  .fq-weak { text-align: left; display: grid; gap: 6px; margin: 0 0 16px; padding: 0; list-style: none; }
+  .fq-weak li { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; padding: 8px 12px; border-radius: 8px; background: var(--surface); font-size: 14px; margin: 0 !important; }
+  .fq-weak li a { font-weight: 700; }
+  .fq-weak li span { color: var(--text-dim); }
+</style>
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="glossary">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 17 · <span data-t="label"></span></div>
+    <h1>용어집 &amp; 종합 퀴즈</h1>
+    <p class="lead">세금의 말은 짧고 비슷하다. 소득공제와 세액공제, 산출세액과 결정세액, 분리과세와 종합과세, 증여재산공제와 상속공제. 한 글자 차이로 계산하는 자리가 바뀐다. 현장에는 13월의 월급, 토해내기, 3.3%, 맞벌이 몰아주기 같은 말도 섞여 다닌다. 이 장은 1장부터 16장까지 나온 용어를 한곳에 모은 사전이고, 마지막으로 책 전체를 한 번에 점검하는 종합 퀴즈다. 용어 설명의 세율·한도는 <span data-t="label"></span> 값이다.</p>
+    <ul class="objectives">
+      <li>한국어·영어·초성 어느 쪽으로든 세금 용어를 찾아 한 줄 정의를 읽고, 그 용어를 풀어 쓴 장으로 바로 이동한다.</li>
+      <li>직장인·투자·상속증여·기본 네 분야로 용어를 걸러 보며 책의 큰 그림을 다시 그린다.</li>
+      <li>누진세 빠른 계산기로 과세표준에서 산출세액·한계세율·실효세율을 한 번에 구한다.</li>
+      <li>16장 전체에서 고르게 낸 종합 퀴즈로 스스로를 점검하고, 틀린 문제의 장을 다시 본다.</li>
+    </ul>
+    <p class="jump"><a href="#glossary">→ 용어집</a><a href="#calc">→ 누진세 빠른 계산</a><a href="#quiz">→ 종합 퀴즈</a></p>
+  </header>
+
+  <section id="glossary">
+    <h2>용어집</h2>
+    <p>검색창에 한국어(예: <code>결정세액</code>), 영어(예: <code>credit</code>), 초성(예: <code>ㅅㅇㄱㅈ</code> → 세액공제)을 넣으면 바로 걸러진다. 부분 일치이고 정의 본문도 검색 대상이다. 이름이 맞는 용어가 먼저 나오고, 정의에서만 찾은 용어는 아래에 따로 모인다. 각 용어의 장 링크를 누르면 그 용어를 처음 풀어 쓴 장으로 간다.</p>
+    <div class="gl-tools">
+      <input type="search" class="gl-search" id="gl-q" placeholder="용어 검색: 예) 결정세액, gross-up, ㄱㄴㅅ" autocomplete="off" aria-label="용어 검색">
+      <div class="row">
+        <span class="cap">분야</span>
+        <div class="seg" id="gl-cat">
+          <button data-value="all" class="on">전체</button>
+          <button data-value="b">기본</button>
+          <button data-value="w">직장인</button>
+          <button data-value="i">투자</button>
+          <button data-value="t">상속·증여</button>
+        </div>
+        <span class="gl-count" id="gl-count"></span>
+      </div>
+    </div>
+    <div class="gl-list" id="gl-list" aria-live="polite"></div>
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다. 용어 설명의 값은 <span data-t="label"></span>이다</strong>
+      용어 정의 안의 세율·공제율·한도·기준 금액은 data/tax-<span data-t="year" data-f="raw"></span>.json에서 읽는다. 새 귀속 연도의 파일이 생기면 이 용어집의 숫자도 함께 바뀐다. 국회를 통과하지 않은 세법개정안(2026 세법개정안 등)은 용어 설명에도 넣지 않았다. 실제 신고와 연말정산은 그해의 법령과 국세청 홈택스 안내로 다시 확인한다.
+    </div>
+  </section>
+
+  <section id="calc">
+    <h2>누진세 빠른 계산</h2>
+    <p><a href="overview.html">1장</a>의 누진세율 계단을 숫자 하나로 다시 해 본다. 과세표준을 넣으면 구간별로 나눈 세금의 합(산출세액), 마지막 1원에 붙는 한계세율, 과세표준 대비 실효세율이 나온다. 누진공제를 쓰면 같은 값을 한 줄로 구할 수 있다. 종합소득세 기본세율과 상속·증여세율을 바꿔 볼 수 있다.</p>
+    <div class="sim" id="sim-pt">
+      <div class="sim-head"><span class="sim-tag">TOOL</span><h3>과세표준 → 산출세액</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="pt-cv"></canvas></div>
+        <div class="sim-controls">
+          <div class="seg" id="pt-k"><button data-value="income" class="on">종합소득세</button><button data-value="transfer">상속·증여세</button></div>
+          <label class="pt-in">과세표준(만원) <input type="number" class="num-in" id="pt-n" min="0" step="100" value="3000" inputmode="numeric"></label>
+          <label class="ctrl"><span>슬라이더로 <output id="pt-r-out"></output></span><input type="range" id="pt-r" min="0" max="50000" step="100" value="3000"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">산출세액</span><span class="v" id="pt-o-t">—</span></div>
+        <div class="stat"><span class="k">한계세율</span><span class="v" id="pt-o-m">—</span></div>
+        <div class="stat"><span class="k">실효세율</span><span class="v" id="pt-o-e">—</span></div>
+        <div class="stat"><span class="k">지방소득세 포함(소득세)</span><span class="v" id="pt-o-l">—</span></div>
+      </div>
+      <div class="pt-steps" id="pt-steps"></div>
+      <div class="sim-note">해볼 것: ① 과세표준을 구간 경계 바로 위로 넣는다. 한계세율은 한 단계 오르지만 실효세율은 거의 그대로다. 경계를 넘은 몫에만 높은 세율이 붙기 때문이다. ② 같은 금액을 '상속·증여세'로 바꾼다. 세율표가 달라 산출세액이 달라진다(상속·증여세에는 지방소득세가 없다). ③ 아래 줄의 "과세표준 × 세율 − 누진공제" 한 줄 계산이 구간별 합과 같은지 확인한다. (과세표준을 넣는 계산기다. 총급여에서 과세표준까지는 <a href="taxbase.html">3장</a>, 세액공제는 <a href="credit.html">5장</a>을 거쳐야 한다.)</div>
+    </div>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>종합 퀴즈</h2>
+    <p>1장 세금의 지도에서 16장 올해 바뀐 세법까지 고르게 낸 문항이다. 보기를 하나 고르면 정답과 해설, 그 장으로 가는 링크가 나온다. 모두 풀면 점수와 다시 볼 장이 나타난다. 세법 숫자는 <span data-t="label"></span> 값이다.</p>
+    <div class="fq-status" id="fq-status" aria-live="polite">
+      <span>푼 문항 <b id="fq-n">0</b> / <b id="fq-total">0</b></span>
+      <span>정답 <b id="fq-s">0</b></span>
+      <span class="fq-bar"><i id="fq-fill"></i></span>
+    </div>
+    <div class="quiz" id="fq">
+      <div class="quiz-q" data-ch="overview">
+        <p><span class="qch">01 세금의 지도</span>과세표준이 4,000만원인 사람의 한계세율(지방소득세 제외)은?</p>
+        <div class="opts">
+          <button class="opt"><span data-t="income.rates.0.1" data-f="pct"></span></button>
+          <button class="opt" data-correct><span data-t="income.rates.1.1" data-f="pct"></span></button>
+          <button class="opt"><span data-t="income.rates.2.1" data-f="pct"></span></button>
+          <button class="opt">과세표준 전체의 평균 세율</button>
+        </div>
+        <div class="quiz-exp">한계세율은 마지막 1원에 붙는 세율이다. 4,000만원은 <span data-t="income.rates.0.0"></span> 초과 <span data-t="income.rates.1.0"></span> 이하 구간이라 <span data-t="income.rates.1.1" data-f="pct"></span>다. 과세표준 전체에 대한 평균은 실효세율이고, 한계세율보다 낮다. <a href="overview.html">→ 1장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="payslip">
+        <p><span class="qch">02 월급명세서와 원천징수</span>간이세액표의 원천징수 비율을 <span data-t="simplified.ratios.1" data-f="pct"></span>에서 <span data-t="simplified.ratios.0" data-f="pct"></span>로 낮추면 어떻게 되는가?</p>
+        <div class="opts">
+          <button class="opt">한 해 결정세액 자체가 그 비율만큼 줄어든다</button>
+          <button class="opt">매달 실수령액이 줄고 연말정산 환급이 커진다</button>
+          <button class="opt" data-correct>매달 떼는 세금이 줄어 실수령액이 늘고, 그만큼 연말정산 환급이 줄거나 추가 납부가 생긴다</button>
+          <button class="opt">지방소득세만 줄어든다</button>
+        </div>
+        <div class="quiz-exp">원천징수는 미리 내는 세금이라 비율을 바꿔도 한 해 결정세액은 그대로다. 매달 덜 떼면 연말정산 때 정산할 몫이 커진다. 비율은 <span data-t="simplified.ratios.0" data-f="pct"></span>·<span data-t="simplified.ratios.1" data-f="pct"></span>·<span data-t="simplified.ratios.2" data-f="pct"></span> 가운데 고른다. <a href="payslip.html">→ 2장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="taxbase">
+        <p><span class="qch">03 총급여에서 과세표준까지</span>근로소득만 있는 부모님을 기본공제 대상자로 올릴 수 있는 소득 요건은?</p>
+        <div class="opts">
+          <button class="opt" data-correct>총급여 <span data-t="personal.depWageGrossMax"></span> 이하</button>
+          <button class="opt">총급여 <span data-t="personal.basic"></span> 이하</button>
+          <button class="opt">소득과 상관없이 나이만 맞으면 된다</button>
+          <button class="opt">총급여 <span data-t="financial.threshold"></span> 이하</button>
+        </div>
+        <div class="quiz-exp">부양가족의 소득 요건은 연 소득금액 <span data-t="personal.depIncomeMax"></span> 이하이고, 근로소득만 있으면 총급여 <span data-t="personal.depWageGrossMax"></span> 이하다. 부모님은 <span data-t="personal.parentAgeMin" data-f="num"></span>세 이상이라는 나이 요건도 있다. 한 사람은 한 명의 자녀만 기본공제로 올릴 수 있다. <a href="taxbase.html">→ 3장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="deduction">
+        <p><span class="qch">04 소득공제</span>신용카드 등 소득공제 계산에서 총급여 × <span data-t="card.threshold" data-f="pct"></span> 문턱을 가장 먼저 채우는 사용분은?</p>
+        <div class="opts">
+          <button class="opt">전통시장 사용분</button>
+          <button class="opt">체크카드 사용분</button>
+          <button class="opt">연초에 쓴 사용분</button>
+          <button class="opt" data-correct>신용카드 사용분</button>
+        </div>
+        <div class="quiz-exp">문턱은 공제율이 낮은 것(신용카드 <span data-t="card.rates.credit" data-f="pct"></span>)부터 채운다. 그래서 공제율이 높은 체크카드·전통시장 사용분이 공제 계산에 살아남는다. 쓴 시기는 상관없다. <a href="deduction.html">→ 4장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="credit">
+        <p><span class="qch">05 세액공제</span>표준세액공제 <span data-t="credits.standardWage"></span>을 받을 수 없게 되는 경우는?</p>
+        <div class="opts">
+          <button class="opt">연금저축 세액공제를 받았다</button>
+          <button class="opt" data-correct>보험료나 의료비 같은 특별세액공제, 또는 월세 세액공제를 하나라도 신청했다</button>
+          <button class="opt">근로소득세액공제를 받았다</button>
+          <button class="opt">신용카드 소득공제를 받았다</button>
+        </div>
+        <div class="quiz-exp">특별소득공제·특별세액공제·월세 세액공제를 하나라도 신청하면 표준세액공제는 사라진다. 근로소득세액공제·연금계좌·자녀 세액공제와 신용카드 공제는 표준세액공제와 함께 받을 수 있다. <a href="credit.html">→ 5장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="yearend">
+        <p><span class="qch">06 연말정산 계산기</span>연말정산에서 결정세액이 기납부세액보다 작다면?</p>
+        <div class="opts">
+          <button class="opt" data-correct>차이만큼(지방소득세 포함) 2월 급여 등에서 돌려받는다</button>
+          <button class="opt">차이만큼 추가로 낸다</button>
+          <button class="opt">결정세액 전액을 돌려받는다</button>
+          <button class="opt">5월에 반드시 종합소득세를 신고해야 돌려받는다</button>
+        </div>
+        <div class="quiz-exp">기납부세액은 한 해 동안 매달 원천징수로 미리 낸 세금이다. 결정세액이 그보다 작으면 차액이 환급되고, 크면 추가 납부한다. 결정세액은 0원 아래로 내려가지 않으므로 환급의 천장은 기납부세액이다. <a href="yearend.html">→ 6장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="income">
+        <p><span class="qch">07 종합소득세</span>프리랜서 외주 대금에서 떼는 "3.3%"에 대한 설명으로 옳은 것은?</p>
+        <div class="opts">
+          <button class="opt">그것으로 세금이 끝나는 분리과세다</button>
+          <button class="opt">부가가치세다</button>
+          <button class="opt" data-correct>사업소득 원천징수(소득세 <span data-t="business.withholding" data-f="pct"></span> + 지방소득세)이고, 다음 해 5월 종합소득세 신고 때 정산한다</button>
+          <button class="opt">기타소득의 필요경비다</button>
+        </div>
+        <div class="quiz-exp">3.3%는 미리 낸 세금이다. 5월에 근로소득 등과 합산해 종합소득세를 계산하고, 미리 낸 3.3%를 빼서 더 내거나 돌려받는다. 신고하지 않으면 가산세가 붙을 수 있다. <a href="income.html">→ 7장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="interest">
+        <p><span class="qch">08 금융소득</span>한 해 이자·배당 합계가 얼마를 넘으면 금융소득종합과세 대상이 되는가?</p>
+        <div class="opts">
+          <button class="opt"><span data-t="isa.freeGeneral"></span></button>
+          <button class="opt" data-correct><span data-t="financial.threshold"></span></button>
+          <button class="opt"><span data-t="stock.overseas.deduction"></span></button>
+          <button class="opt">금액과 상관없이 모두 종합과세한다</button>
+        </div>
+        <div class="quiz-exp">이자·배당 합계가 <span data-t="financial.threshold"></span> 이하이면 <span data-t="financial.withholding" data-f="pct"></span> 원천징수로 끝난다(분리과세). 넘으면 넘는 몫을 다른 종합소득과 합쳐 누진세율로 계산하되, 원천징수세율로 계산한 것보다 적어지지 않게 비교과세한다. <a href="interest.html">→ 8장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="isa">
+        <p><span class="qch">09 ISA</span>일반형 ISA에서 손익을 통산한 순이익이 비과세 한도를 넘으면 넘는 몫은?</p>
+        <div class="opts">
+          <button class="opt">금융소득종합과세에 합산된다</button>
+          <button class="opt">이자소득세 <span data-t="financial.withholding" data-f="pct"></span>를 낸다</button>
+          <button class="opt">세금이 없다</button>
+          <button class="opt" data-correct><span data-t="isa.overRate" data-f="pct"></span> 분리과세한다</button>
+        </div>
+        <div class="quiz-exp">일반형 ISA는 순이익 <span data-t="isa.freeGeneral"></span>까지 비과세, 넘는 몫은 <span data-t="isa.overRate" data-f="pct"></span> 분리과세로 끝난다. 계좌 안의 이익과 손실을 먼저 합치는 손익 통산이 ISA의 또 다른 장점이다. <a href="isa.html">→ 9장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="pension">
+        <p><span class="qch">10 연금저축과 IRP</span>연금계좌 세액공제를 "과세이연"이라고 부르는 이유는?</p>
+        <div class="opts">
+          <button class="opt" data-correct>지금 공제받은 원금과 그 운용수익에, 나중에 연금으로 받을 때 연금소득세를 매기기 때문이다</button>
+          <button class="opt">공제받은 금액을 다음 해에 갚아야 하기 때문이다</button>
+          <button class="opt">세금을 영원히 면제해 주기 때문이다</button>
+          <button class="opt">공제를 다음 해로 미뤄서 받기 때문이다</button>
+        </div>
+        <div class="quiz-exp">연금계좌는 넣을 때 세금을 덜어 주고, <span data-t="pension.startAge" data-f="num"></span>세 이후 연금으로 받을 때 낮은 세율의 연금소득세를 매긴다. 연금이 아닌 방식으로 중도 인출하면 공제받은 몫과 수익에 <span data-t="pension.earlyRate" data-f="pct"></span>의 기타소득세가 붙는다. <a href="pension.html">→ 10장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="stock">
+        <p><span class="qch">11 주식과 ETF</span>한 해에 미국 주식에서 이익과 손실을 통산해 순이익이 났다. 해외주식 양도소득세는 어떻게 계산하는가?</p>
+        <div class="opts">
+          <button class="opt">순이익 × <span data-t="financial.withholding" data-f="pct"></span>를 증권사가 원천징수한다</button>
+          <button class="opt" data-correct>(순이익 − <span data-t="stock.overseas.deduction"></span>) × <span data-t="stock.overseas.rate" data-f="pct"></span>에 지방소득세를 더해 다음 해 5월에 신고한다</button>
+          <button class="opt">이익 난 종목만 골라 누진세율을 곱한다</button>
+          <button class="opt">국내 주식처럼 소액주주는 비과세다</button>
+        </div>
+        <div class="quiz-exp">해외주식은 같은 해의 이익과 손실을 합친 뒤 연 <span data-t="stock.overseas.deduction"></span>을 공제하고 <span data-t="stock.overseas.rate" data-f="pct"></span>로 과세한다. 원천징수가 아니라 다음 해 5월에 스스로 신고·납부한다. <a href="stock.html">→ 11장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="crypto">
+        <p><span class="qch">12 가상자산</span>이 책의 기준 연도 법령에서 가상자산 소득 과세가 시작되는 해는?</p>
+        <div class="opts">
+          <button class="opt">이미 시작되어 <span data-t="year" data-f="raw"></span>년 귀속분부터 신고한다</button>
+          <button class="opt" data-correct><span data-t="crypto.startYear" data-f="raw"></span>년 1월 1일 이후 양도·대여분부터</button>
+          <button class="opt">과세 계획이 완전히 폐지되었다</button>
+          <button class="opt">가상자산은 금융소득으로 합산된다</button>
+        </div>
+        <div class="quiz-exp">가상자산 소득은 <span data-t="crypto.startYear" data-f="raw"></span>년 이후 양도·대여분부터 기타소득으로 분리과세할 예정이다(연 <span data-t="crypto.deduction"></span> 공제, <span data-t="crypto.rate" data-f="pct"></span>). 시작 전에 가진 자산은 <span data-t="crypto.deemedCostDate" data-f="raw"></span> 시가와 실제 취득가액 중 큰 값을 취득가액으로 볼 수 있다. <a href="crypto.html">→ 12장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="gift">
+        <p><span class="qch">13 증여세</span>성인 자녀가 10년 안에 아버지에게서 3,000만원, 어머니에게서 3,000만원을 받았다(혼인·출산 공제 없음). 증여재산공제는?</p>
+        <div class="opts">
+          <button class="opt">부모 각각 <span data-t="gift.deduction.parentToAdult"></span>씩, 합쳐서 두 배</button>
+          <button class="opt">공제가 없다</button>
+          <button class="opt" data-correct>직계존속에게서 받은 것을 합쳐 10년간 <span data-t="gift.deduction.parentToAdult"></span></button>
+          <button class="opt">받은 금액 전액</button>
+        </div>
+        <div class="quiz-exp">증여재산공제는 받는 사람 기준이고, 직계존속(부모·조부모)에게서 받은 증여는 모두 합쳐 10년간 성인 <span data-t="gift.deduction.parentToAdult"></span>을 공제한다. 혼인신고 전후 2년 안이면 혼인·출산 증여재산공제 <span data-t="gift.marriageBirth"></span>이 더해진다. <a href="gift.html">→ 13장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="inherit">
+        <p><span class="qch">14 상속세</span>배우자 없이 자녀만 상속받을 때 기초공제·인적공제 합계 대신 고를 수 있는 일괄공제는?</p>
+        <div class="opts">
+          <button class="opt"><span data-t="inherit.basic"></span></button>
+          <button class="opt" data-correct><span data-t="inherit.lump"></span></button>
+          <button class="opt"><span data-t="inherit.spouse.max"></span></button>
+          <button class="opt"><span data-t="gift.deduction.spouse"></span></button>
+        </div>
+        <div class="quiz-exp">상속세는 기초공제 <span data-t="inherit.basic"></span>과 자녀 등 인적공제의 합계와 일괄공제 <span data-t="inherit.lump"></span> 중 큰 쪽을 뺀다. 배우자가 있으면 배우자 상속공제(최소 <span data-t="inherit.spouse.min"></span>)가 따로 더해진다. <a href="inherit.html">→ 14장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="transfer">
+        <p><span class="qch">15 상속이냐 증여냐</span>부모가 돌아가시기 전 10년 안에 자녀에게 한 증여는 상속세 계산에서 어떻게 되는가?</p>
+        <div class="opts">
+          <button class="opt">이미 증여세를 냈으니 상관없다</button>
+          <button class="opt">증여세를 돌려받는다</button>
+          <button class="opt">5년 안의 증여만 합산한다</button>
+          <button class="opt" data-correct>상속재산에 합산하고, 이미 낸 증여세는 상속세에서 빼 준다</button>
+        </div>
+        <div class="quiz-exp">상속인에게 상속 개시 전 <span data-t="inherit.priorHeirYears" data-f="num"></span>년 안에 한 증여(상속인이 아닌 사람은 <span data-t="inherit.priorOtherYears" data-f="num"></span>년)는 상속재산에 다시 더한다. 대신 그때 낸 증여세는 공제한다. 미리 나눠 주는 증여가 효과를 보려면 시간이 필요하다. <a href="transfer.html">→ 15장 복습</a></div>
+      </div>
+      <div class="quiz-q" data-ch="revision">
+        <p><span class="qch">16 올해 바뀐 세법</span>2026년 8월 정부가 발표한 세법개정안의 대중교통 공제율 폐지를 이 책은 어떻게 다루는가?</p>
+        <div class="opts">
+          <button class="opt" data-correct>국회를 통과하지 않은 확정 전 안이라 "추진 중"으로만 쓰고 계산에 넣지 않는다</button>
+          <button class="opt">발표했으니 <span data-t="year" data-f="raw"></span>년 귀속 계산에 바로 반영한다</button>
+          <button class="opt">내년 JSON 파일에 미리 넣는다</button>
+          <button class="opt">개정안은 언급하지 않는다</button>
+        </div>
+        <div class="quiz-exp">정부안은 국회 심사에서 바뀔 수 있다. 이 책은 공포된 법령의 값만 data/tax-<span data-t="year" data-f="raw"></span>.json에 넣고, 개정안은 16장과 각 장의 상자에서 "추진 중·확정 전"으로 소개한다. <span data-t="year" data-f="raw"></span>년 귀속에는 대중교통 <span data-t="card.rates.transit" data-f="pct"></span>가 그대로다. <a href="revision.html">→ 16장 복습</a></div>
+      </div>
+    </div>
+
+    <div class="fq-result" id="fq-result" hidden>
+      <div class="fq-title" id="fq-title"></div>
+      <div class="fq-big" id="fq-big"></div>
+      <p id="fq-msg"></p>
+      <div class="fq-dots" id="fq-dots"></div>
+      <ul class="fq-weak" id="fq-weak"></ul>
+      <button class="btn primary" id="fq-retry">다시 풀기</button>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>소득에 붙는 세금은 총급여 → 소득공제 → 과세표준 → 누진세율 → 산출세액 → 세액공제 → 결정세액의 순서로 계산한다. 원천징수는 미리 낸 세금이고, 연말정산과 5월 신고는 그 정산이다.</li>
+      <li>소득공제의 값은 공제액 × 한계세율, 세액공제의 값은 공제액 그대로다. 문턱·한도·공제율이 공제의 실제 크기를 정한다.</li>
+      <li>투자 수익의 세금은 계좌(일반·ISA·연금)와 자산(예금·국내주식·해외주식·가상자산)에 따라 분리과세·비과세·과세이연·양도소득세로 갈린다.</li>
+      <li>증여세는 받는 사람 기준으로 10년을 합산하고, 상속세는 남긴 재산 전체에 매긴다. 공제와 누진세율이 언제 넘겨주느냐를 바꾼다.</li>
+      <li>세법 숫자는 해마다 바뀐다. 이 책의 값은 <span data-t="label"></span>이고, 실제 신고 전에는 그해의 법령과 홈택스 안내를 다시 확인한다.</li>
+    </ol>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  /* =============================================================== 용어 데이터
+     [한국어, 영어, 정의, 장 slug, 분야]  분야: b 기본, w 직장인, i 투자, t 상속·증여
+     정의 안의 {경로|형식}은 data/tax-YYYY.json의 세법 값으로 바뀐다. */
+  const RAW = [
+    // 01 세금의 지도
+    ["소득세", "Income tax", "개인이 한 해 번 소득에 매기는 국세. 근로·사업·이자·배당·연금·기타소득은 합쳐서(종합소득), 퇴직·양도소득은 따로 계산한다.", "overview", "b"],
+    ["지방소득세", "Local income tax", "소득세에 따라붙는 지방세. 개인 소득분은 대개 소득세의 {income.localRate|pct}이고 소득세와 함께 떼거나 신고한다.", "overview", "b"],
+    ["국세와 지방세", "National and local taxes", "국가가 걷는 세금(소득세·상속세·증여세 등)과 지방자치단체가 걷는 세금(지방소득세·취득세·재산세 등). 신고 창구가 홈택스와 위택스로 나뉜다.", "overview", "b"],
+    ["누진세율", "Progressive tax rates", "과세표준이 커질수록 높은 구간에 더 높은 세율을 매기는 방식. 소득세는 {income.rates.0.1|pct}에서 {income.rates.7.1|pct}까지 여덟 구간이다.", "overview", "b"],
+    ["한계세율", "Marginal tax rate", "소득이 1원 늘 때 그 1원에 붙는 세율. 과세표준이 속한 가장 높은 구간의 세율이고, 소득공제의 값을 정한다.", "overview", "b"],
+    ["실효세율", "Effective tax rate", "실제로 낸 세금을 소득(또는 과세표준)으로 나눈 평균 세율. 누진 구조라 한계세율보다 낮다.", "overview", "b"],
+    ["과세표준", "Tax base", "세율을 곱하는 바탕 금액. 소득에서 비과세와 각종 소득공제를 뺀 값이다.", "overview", "b"],
+    ["누진공제", "Quick deduction", "구간별 세금을 하나씩 더하는 대신 '과세표준 × 그 구간 세율 − 누진공제' 한 줄로 산출세액을 구하게 해 주는 빼기 값.", "overview", "b"],
+    ["원천징수", "Withholding", "소득을 주는 쪽이 줄 때 세금을 미리 떼어 대신 내는 것. 월급, 이자, 3.3% 사업소득이 대표적이고, 연말정산이나 5월 신고에서 정산한다.", "overview", "b"],
+    ["종합소득", "Global income", "이자·배당·사업·근로·연금·기타소득을 한 사람 단위로 합친 소득. 합친 뒤 누진세율을 적용해 5월에 신고한다.", "overview", "b"],
+    ["분리과세", "Separate taxation", "다른 소득과 합치지 않고 정해진 세율로 따로 과세해 끝내는 방식. 원천징수로 납세가 끝나면 신고할 필요가 없다.", "income", "b"],
+    ["가산세", "Penalty tax", "신고·납부 의무를 지키지 않았을 때 더 내는 세금. 무신고는 일반적으로 산출세액의 {penalty.noFiling|pct}, 과소신고는 {penalty.underFiling|pct}, 늦게 내면 하루 {penalty.lateDaily|pct}씩 붙는다.", "income", "b"],
+    // 02 월급명세서
+    ["간이세액표", "Simplified withholding table", "월급과 공제대상가족 수에 따라 매달 뗄 소득세를 정해 둔 표(소득세법 시행령 별표). 연말정산 전의 어림값이다.", "payslip", "w"],
+    ["원천징수 비율", "Withholding ratio", "간이세액표 금액의 {simplified.ratios.0|pct}·{simplified.ratios.1|pct}·{simplified.ratios.2|pct} 가운데 근로자가 고르는 비율. 한 해 세금은 같고 미리 내는 몫과 정산 몫만 바뀐다.", "payslip", "w"],
+    ["4대보험", "Social insurance", "국민연금·건강보험(장기요양 포함)·고용보험·산재보험. 근로자 몫은 월급에서 뗀다. 산재보험은 회사만 낸다.", "payslip", "w"],
+    ["국민연금보험료", "National pension contribution", "기준소득월액의 {social.pension|pct}를 근로자가 낸다(회사도 같은 금액). 낸 보험료 전액이 소득공제된다.", "payslip", "w"],
+    ["실수령액", "Take-home pay", "세전 월급에서 4대보험과 소득세·지방소득세를 뺀, 통장에 들어오는 돈.", "payslip", "w"],
+    // 03 과세표준
+    ["총급여", "Gross wage", "한 해 받은 근로소득에서 비과세 소득을 뺀 금액. 카드 공제 문턱·월세 공제 요건 등 많은 기준이 이 숫자로 정해진다.", "taxbase", "w"],
+    ["비과세 소득", "Non-taxable income", "법이 세금을 매기지 않기로 한 소득. 식대 월 {wage.nontax.mealMonthly}, 자가운전보조금 월 {wage.nontax.carMonthly} 등이 있다.", "taxbase", "w"],
+    ["근로소득공제", "Earned income deduction", "근로자의 필요경비를 대신해 총급여에서 구간별 비율로 빼 주는 공제. 한도는 {wage.earnedDeductionMax}이다.", "taxbase", "w"],
+    ["근로소득금액", "Earned income amount", "총급여에서 근로소득공제를 뺀 금액. 여기서 인적공제와 소득공제를 빼면 과세표준이 된다.", "taxbase", "w"],
+    ["기본공제", "Basic personal deduction", "본인과 요건을 채운 배우자·부양가족 1명당 {personal.basic}을 소득에서 빼는 인적공제.", "taxbase", "w"],
+    ["부양가족 소득 요건", "Dependent income test", "기본공제 대상자의 연 소득금액이 {personal.depIncomeMax} 이하여야 한다는 요건. 근로소득만 있으면 총급여 {personal.depWageGrossMax} 이하.", "taxbase", "w"],
+    ["추가공제", "Additional deduction", "기본공제 대상자가 경로우대({personal.elderlyAge|num}세 이상), 장애인, 부녀자, 한부모이면 더해 주는 인적공제.", "taxbase", "w"],
+    // 04 소득공제
+    ["소득공제", "Income deduction", "과세표준을 줄여 주는 공제. 줄어드는 세금은 공제액 × 한계세율(지방소득세 포함)이다.", "deduction", "w"],
+    ["신용카드 등 소득공제", "Card spending deduction", "총급여의 {card.threshold|pct}를 넘게 쓴 카드·현금영수증 사용액에 결제 수단별 공제율(신용카드 {card.rates.credit|pct}, 체크카드 {card.rates.debit|pct} 등)을 곱해 한도 안에서 빼 주는 공제.", "deduction", "w"],
+    ["최저사용금액", "Minimum spending threshold", "카드 공제가 시작되는 문턱. 총급여의 {card.threshold|pct}이고 공제율이 낮은 신용카드 사용분부터 채운다.", "deduction", "w"],
+    ["추가한도", "Additional limit", "카드 공제 기본한도를 넘친 몫 가운데 전통시장·대중교통·도서공연 등에서 나온 공제를 더 인정해 주는 한도(총급여 {card.cultureGrossMax} 이하 {card.limits.0.extra}).", "deduction", "w"],
+    ["주택청약종합저축 공제", "Housing subscription deduction", "총급여 {housing.subscription.grossMax} 이하 무주택 세대주가 납입한 금액을 연 {housing.subscription.max}까지 {housing.subscription.rate|pct} 소득공제하는 제도.", "deduction", "w"],
+    ["주택임차차입금 원리금 공제", "Lease loan repayment deduction", "무주택 세대주가 전세 보증금 등을 빌리고 갚은 원리금의 {housing.lease.rate|pct}를 공제. 청약저축 공제와 합쳐 연 {housing.lease.limit} 한도.", "deduction", "w"],
+    ["장기주택저당차입금 이자 공제", "Mortgage interest deduction", "집을 사며 받은 장기 담보대출의 이자를 공제. 상환 기간과 고정금리·분할상환 여부에 따라 최대 {housing.mortgage.limits.both15y} 한도.", "deduction", "w"],
+    // 05 세액공제
+    ["세액공제", "Tax credit", "산출세액에서 바로 빼는 공제. 공제액만큼 세금이 줄지만 산출세액을 넘을 수는 없다.", "credit", "w"],
+    ["산출세액", "Computed tax", "과세표준에 세율을 곱해 나온 세금. 세액공제를 빼기 전의 금액이다.", "credit", "w"],
+    ["결정세액", "Determined tax", "산출세액에서 세액공제·감면을 뺀, 한 해에 실제로 내야 할 세금. 0원 아래로 내려가지 않는다.", "credit", "w"],
+    ["근로소득세액공제", "Earned income tax credit", "근로자 누구나 받는 세액공제. 산출세액의 {wage.earnedCredit.lowRate|pct}·{wage.earnedCredit.highRate|pct}로 계산하되 총급여별 한도가 있다.", "credit", "w"],
+    ["자녀세액공제", "Child tax credit", "기본공제 대상인 {credits.child.ageMin|num}세 이상 자녀가 1명이면 {credits.child.one}, 2명이면 {credits.child.two}, 3명째부터 1명당 {credits.child.extra}을 더하는 세액공제.", "credit", "w"],
+    ["특별세액공제", "Special tax credits", "보험료·의료비·교육비·기부금 세액공제를 묶어 부르는 말. 하나라도 신청하면 표준세액공제를 받지 못한다.", "credit", "w"],
+    ["표준세액공제", "Standard tax credit", "특별공제와 월세 세액공제를 신청하지 않은 근로자에게 주는 {credits.standardWage}의 세액공제.", "credit", "w"],
+    ["의료비 세액공제", "Medical expense credit", "총급여의 {credits.medical.threshold|pct}를 넘는 의료비의 {credits.medical.rate|pct}. 본인 등은 한도가 없고 그 밖의 부양가족은 {credits.medical.otherLimit} 한도.", "credit", "w"],
+    ["연금계좌 세액공제", "Pension account credit", "연금저축(연 {pension.savingLimit})과 IRP(합산 {pension.totalLimit}) 납입액의 {pension.rateLow|pct} 또는 {pension.rateHigh|pct}를 세액공제.", "credit", "w"],
+    ["월세 세액공제", "Rent tax credit", "무주택 세대주, 총급여 {credits.rent.grossMax} 이하 근로자가 낸 월세의 {credits.rent.rateLow|pct}·{credits.rent.rateHigh|pct}를 연 {credits.rent.limit}까지 세액공제. 간소화 자료에 잘 뜨지 않는다.", "credit", "w"],
+    ["고향사랑기부금", "Hometown love donation", "주소지가 아닌 지방자치단체에 낸 기부금. {credits.donation.hometownFull}까지는 지방소득세를 합쳐 전액, {credits.donation.hometownMid}까지는 {credits.donation.hometownMidRate|pct}를 세액공제.", "credit", "w"],
+    ["혼인세액공제", "Marriage tax credit", "혼인신고한 해에 1인당 {credits.marriage}을 생애 한 번 세액공제. {credits.marriageUntil|raw}년 혼인신고분까지.", "credit", "w"],
+    ["경정청구", "Claim for refund", "이미 신고·정산한 세금이 많았다며 돌려 달라고 청구하는 절차. 연말정산에서 빠뜨린 공제를 기한 안에 되찾을 수 있다.", "credit", "b"],
+    // 06 연말정산
+    ["연말정산", "Year-end tax settlement", "회사가 근로자의 한 해 결정세액을 계산해, 매달 떼어 둔 세금과 비교해 돌려주거나 더 걷는 절차. 다음 해 {calendar.settlement|raw}에 반영된다.", "yearend", "w"],
+    ["간소화 자료", "Simplified year-end data", "국세청 홈택스가 병원·카드사·금융회사에서 모아 보여 주는 공제 자료. 월세·일부 기부금 등은 빠질 수 있다.", "yearend", "w"],
+    ["기납부세액", "Prepaid tax", "한 해 동안 원천징수 등으로 이미 낸 세금. 결정세액에서 빼면 환급액이나 추가 납부액이 나온다.", "yearend", "w"],
+    ["13월의 월급", "13th-month pay", "연말정산 환급을 부르는 현장 말. 실제로는 미리 많이 낸 세금을 돌려받는 것이다.", "yearend", "w"],
+    ["토해내기", "Additional payment", "연말정산에서 결정세액이 기납부세액보다 커서 차액을 더 내는 것을 부르는 현장 말.", "yearend", "w"],
+    ["맞벌이 몰아주기", "Shifting deductions between spouses", "맞벌이 부부가 부양가족 공제나 의료비를 한쪽에 모아 공제 효과를 키우는 것. 공제마다 누구에게 모을 수 있는지 규칙이 다르다.", "yearend", "w"],
+    // 07 종합소득세
+    ["사업소득", "Business income", "독립적으로 일해 번 소득. 프리랜서 외주 대금도 여기에 들어가고, 수입에서 필요경비를 뺀 금액이 소득이다.", "income", "w"],
+    ["3.3% 원천징수", "Freelancer withholding", "사업소득을 줄 때 떼는 소득세 {business.withholding|pct}와 지방소득세. 다음 해 5월 종합소득세 신고에서 정산한다.", "income", "w"],
+    ["기타소득", "Other income", "강연료·원고료·상금처럼 일시적인 소득. 강연료 등은 지급액의 {other.expenseRate|pct}를 필요경비로 보고, 소득금액 {other.separateMax} 이하면 분리과세를 고를 수 있다.", "income", "w"],
+    ["단순경비율", "Simple expense rate", "장부가 없는 소규모 사업자의 필요경비를 수입의 일정 비율로 인정해 주는 국세청 고시 비율. 업종마다 다르다.", "income", "w"],
+    ["간편장부", "Simplified bookkeeping", "소규모 사업자가 수입과 비용을 날짜순으로 적는 장부. 실제 경비가 많으면 장부를 쓰는 편이 유리할 수 있다.", "income", "w"],
+    ["종합소득세 신고", "Global income tax return", "한 해의 종합소득을 합쳐 다음 해 {calendar.incomeFiling|raw}에 신고·납부하는 것.", "income", "w"],
+    // 08 금융소득
+    ["금융소득", "Financial income", "이자소득과 배당소득. 대개 {financial.withholding|pct}를 원천징수한다.", "interest", "i"],
+    ["금융소득종합과세", "Global taxation of financial income", "한 해 이자·배당이 {financial.threshold}을 넘으면 넘는 몫을 다른 종합소득과 합쳐 누진세율로 과세하는 제도.", "interest", "i"],
+    ["비교과세", "Comparative taxation", "금융소득을 종합과세할 때 원천징수세율로 계산한 세금보다 적어지지 않도록 두 계산 중 큰 쪽을 택하는 방식.", "interest", "i"],
+    ["배당가산", "Gross-up", "종합과세되는 배당에 법인세 이중과세를 조정하려고 배당의 {financial.grossUp|pct}를 더하고, 같은 금액을 배당세액공제로 빼 주는 장치.", "interest", "i"],
+    ["고배당기업 배당 분리과세", "High-dividend separate taxation", "요건을 채운 고배당기업 배당을 종합과세하지 않고 별도 세율({financial.highDividend.rates.0.1|pct}부터)로 분리과세하는 한시 특례.", "interest", "i"],
+    // 09 ISA
+    ["ISA", "Individual Savings Account", "개인종합자산관리계좌. 계좌 안의 손익을 통산해 순이익 {isa.freeGeneral}(서민형 {isa.freeLow})까지 비과세, 넘는 몫은 {isa.overRate|pct} 분리과세.", "isa", "i"],
+    ["손익통산", "Netting gains and losses", "여러 상품의 이익과 손실을 합쳐 순이익에만 세금을 매기는 것. ISA와 해외주식 양도소득이 대표적이다.", "isa", "i"],
+    ["의무가입기간", "Minimum holding period", "ISA 세제 혜택을 받으려면 유지해야 하는 기간. {isa.minYears|num}년이다.", "isa", "i"],
+    // 10 연금
+    ["연금저축", "Pension savings", "노후 대비용 개인 연금계좌. 납입액에 세액공제를 받고 {pension.startAge|num}세 이후 연금으로 받으면 연금소득세를 낸다.", "pension", "i"],
+    ["IRP", "Individual Retirement Pension", "개인형 퇴직연금. 퇴직금을 옮겨 받거나 직접 납입할 수 있고 연금저축과 합쳐 {pension.totalLimit}까지 세액공제.", "pension", "i"],
+    ["과세이연", "Tax deferral", "세금을 없애는 것이 아니라 나중으로 미루는 것. 연금계좌의 공제분과 운용수익은 연금을 받을 때 과세한다.", "pension", "i"],
+    ["연금소득세", "Pension income tax", "연금계좌에서 연금으로 받을 때 내는 세금. 나이에 따라 {pension.payoutRates.byAge.0.rate|pct}~{pension.payoutRates.byAge.2.rate|pct}(지방소득세 별도)이다.", "pension", "i"],
+    ["연금 외 수령", "Early withdrawal", "연금계좌의 공제받은 원금과 수익을 연금이 아닌 방식으로 꺼내는 것. {pension.earlyRate|pct}의 기타소득세가 붙는다.", "pension", "i"],
+    // 11 주식
+    ["증권거래세", "Securities transaction tax", "주식을 팔 때 매도 금액에 붙는 세금. 이익·손실과 상관없이 낸다. 코스피는 농어촌특별세가 함께 붙는다.", "stock", "i"],
+    ["대주주", "Major shareholder", "상장주식 양도차익에 세금을 내는 큰손 주주. 종목별 보유액 {stock.domestic.majorThreshold} 이상 등이 기준이다.", "stock", "i"],
+    ["해외주식 양도소득세", "Overseas stock capital gains tax", "해외 주식의 한 해 순이익에서 {stock.overseas.deduction}을 빼고 {stock.overseas.rate|pct}(지방소득세 별도)로 과세. 다음 해 5월에 신고한다.", "stock", "i"],
+    // 12 가상자산
+    ["가상자산 소득", "Virtual asset income", "가상자산을 팔거나 빌려줘 생긴 소득. {crypto.startYear|raw}년 이후분부터 연 {crypto.deduction} 공제 후 {crypto.rate|pct} 분리과세 예정.", "crypto", "i"],
+    ["취득가액 의제", "Deemed acquisition cost", "과세 시작 전부터 가진 가상자산은 {crypto.deemedCostDate|raw} 시가와 실제 취득가액 중 큰 값을 취득가액으로 볼 수 있게 한 장치.", "crypto", "i"],
+    // 13 증여
+    ["증여세", "Gift tax", "재산을 대가 없이 받은 사람이 내는 세금. 받은 사람 기준으로 10년 안의 증여를 합쳐 {transfer.rates.0.1|pct}~{transfer.rates.4.1|pct} 누진세율로 계산한다.", "gift", "t"],
+    ["증여재산공제", "Gift deduction", "10년 동안 받은 증여에서 빼 주는 금액. 배우자 {gift.deduction.spouse}, 성인 자녀 {gift.deduction.parentToAdult}, 미성년 자녀 {gift.deduction.parentToMinor}, 기타 친족 {gift.deduction.relative}.", "gift", "t"],
+    ["10년 합산", "10-year aggregation", "같은 사람(직계존속은 배우자와 합쳐)에게서 10년 안에 받은 증여를 합쳐 세율과 공제를 다시 계산하는 규칙.", "gift", "t"],
+    ["혼인·출산 증여재산공제", "Marriage and childbirth gift deduction", "혼인신고 전후 2년 또는 자녀 출생 후 2년 안에 직계존속에게 받은 증여에 {gift.marriageBirth}을 더 공제.", "gift", "t"],
+    ["신고세액공제", "Filing credit", "상속세·증여세를 기한 안에 신고하면 산출세액의 {transfer.filingCredit|pct}를 빼 주는 공제.", "gift", "t"],
+    ["세대생략 할증", "Generation-skipping surcharge", "조부모가 손자녀에게 바로 넘겨줄 때 세액에 {gift.skipRate|pct}(일정 금액을 넘는 미성년자는 {gift.skipRateMinor|pct})를 더하는 규칙.", "gift", "t"],
+    // 14 상속
+    ["상속세", "Inheritance tax", "돌아가신 분이 남긴 재산 전체에 매기는 세금. 상속 개시일이 속한 달의 말일부터 {transfer.inheritFilingMonths|num}개월 안에 신고한다.", "inherit", "t"],
+    ["일괄공제", "Lump-sum deduction", "기초공제와 인적공제 합계 대신 고를 수 있는 {inherit.lump}의 상속공제.", "inherit", "t"],
+    ["배우자 상속공제", "Spousal deduction", "배우자가 실제 받은 상속분을 법정상속분 한도 안에서 빼 주는 공제. 최소 {inherit.spouse.min}, 최대 {inherit.spouse.max}.", "inherit", "t"],
+    ["금융재산 상속공제", "Financial asset deduction", "예금·주식 같은 순금융재산의 {inherit.financial.rate|pct}(최대 {inherit.financial.max})를 빼 주는 상속공제.", "inherit", "t"],
+    ["동거주택 상속공제", "Cohabited house deduction", "부모와 {inherit.cohabit.years|num}년 이상 함께 산 자녀가 그 집을 물려받으면 최대 {inherit.cohabit.max}을 빼 주는 공제.", "inherit", "t"],
+    ["2차 상속", "Second inheritance", "부부 중 한 사람이 먼저 돌아가신 뒤 남은 배우자가 돌아가실 때의 상속. 배우자공제가 없어 세금이 커지기 쉽다.", "inherit", "t"],
+    // 15 상속이냐 증여냐
+    ["사전증여", "Lifetime gift", "상속 전에 미리 재산을 나눠 주는 것. 상속인에게 한 증여는 상속 개시 전 {inherit.priorHeirYears|num}년 안이면 상속재산에 다시 합산된다.", "transfer", "t"],
+    // 16 개정
+    ["일몰", "Sunset", "세제 혜택이 정해진 날짜에 끝나도록 한 규정. 신용카드 공제는 {card.sunset|raw}년 말이 일몰이다.", "revision", "b"],
+    ["세법개정안", "Tax reform bill", "정부가 해마다 발표하는 세법 개정 계획. 국회를 통과해 공포되기 전에는 확정이 아니다.", "revision", "b"],
+  ];
+
+  /* =============================================================== 공통 */
+  const CH = {}, ORDER = {};
+  TB.CHAPTERS.forEach((c, i) => { CH[c.slug] = c; ORDER[c.slug] = i; });
+  const GNAME = { b: "기본", w: "직장인", i: "투자", t: "상속·증여" };
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  const norm = (s) => String(s).toLowerCase().replace(/[\s\-·_/()'.,%]/g, "");
+  const CHO = ["ㄱ", "ㄲ", "ㄴ", "ㄷ", "ㄸ", "ㄹ", "ㅁ", "ㅂ", "ㅃ", "ㅅ", "ㅆ", "ㅇ", "ㅈ", "ㅉ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ"];
+  const MERGE = { "ㄲ": "ㄱ", "ㄸ": "ㄷ", "ㅃ": "ㅂ", "ㅆ": "ㅅ", "ㅉ": "ㅈ" };
+  const JUMP = ["ㄱ", "ㄴ", "ㄷ", "ㄹ", "ㅁ", "ㅂ", "ㅅ", "ㅇ", "ㅈ", "ㅊ", "ㅋ", "ㅌ", "ㅍ", "ㅎ", "A–Z", "0–9"];
+  const choOf = (ch) => { const c = ch.charCodeAt(0); return c >= 0xac00 && c <= 0xd7a3 ? CHO[Math.floor((c - 0xac00) / 588)] : ch.toLowerCase(); };
+  const choStr = (s) => [...s.replace(/\s/g, "")].map(choOf).join("");
+  const initial = (s) => { const j = choOf(s[0]); return CHO.includes(j) ? MERGE[j] || j : /[0-9]/.test(s[0]) ? "0–9" : "A–Z"; };
+  const gOrd = (g) => { const i = JUMP.indexOf(g); return i >= 0 ? i : 99; };
+
+  // 정의를 조각으로: 글자 조각과 세법 값 조각
+  const TOK = /\{([\w.]+)\|?(\w*)\}/g;
+  function parts(def) {
+    const out = []; let last = 0, m;
+    TOK.lastIndex = 0;
+    while ((m = TOK.exec(def))) {
+      if (m.index > last) out.push({ s: def.slice(last, m.index) });
+      const v = TX.v(m[1]), f = m[2] || (typeof v === "number" ? (Math.abs(v) < 1 && v !== 0 ? "pct" : "won") : "raw");
+      out.push({ s: v == null ? "확인 필요" : (TX.fmt[f] || TX.fmt.raw)(v), path: m[1], f });
+      last = m.index + m[0].length;
+    }
+    if (last < def.length) out.push({ s: def.slice(last) });
+    return out;
+  }
+  function hl(text, q) {
+    if (!q) return esc(text);
+    const i = text.toLowerCase().indexOf(q);
+    if (i < 0) return esc(text);
+    return esc(text.slice(0, i)) + "<mark>" + esc(text.slice(i, i + q.length)) + "</mark>" + esc(text.slice(i + q.length));
+  }
+  const defHTML = (t, q) => t.parts.map((p) => (p.path ? `<span class="tval" data-t="${p.path}" data-f="${p.f}" title="${esc(D.label)}">${esc(p.s)}</span>` : hl(p.s, q))).join("");
+
+  const TERMS = RAW.map((r, i) => {
+    const t = { id: i, ko: r[0], en: r[1], ch: r[3], g: r[4] };
+    t.parts = parts(r[2]);
+    t.text = t.parts.map((p) => p.s).join("");
+    t._key = norm(t.ko + " " + t.en);
+    t._def = norm(t.text);
+    t._cho = choStr(t.ko);
+    t._ini = initial(t.ko);
+    return t;
+  });
+
+  /* =============================================================== 용어집 */
+  const qEl = $("gl-q"), listEl = $("gl-list"), countEl = $("gl-count");
+  const catSel = TB.seg("gl-cat", renderGlossary);
+  qEl.addEventListener("input", renderGlossary);
+  function renderGlossary() {
+    const raw = qEl.value.trim(), q = norm(raw), qLow = raw.toLowerCase(), cat = catSel();
+    const choQ = /^[ㄱ-ㅎ]+$/.test(q) ? q : "";
+    const nameHit = (t) => (choQ ? t._cho.indexOf(choQ) >= 0 : t._key.indexOf(q) >= 0);
+    const items = TERMS.filter((t) => (cat === "all" || t.g === cat) && (!q || nameHit(t) || (!choQ && t._def.indexOf(q) >= 0)));
+    const rank = (t) => (q && !nameHit(t) ? 1 : 0);
+    items.sort((a, b) => rank(a) - rank(b) || gOrd(a._ini) - gOrd(b._ini) || a.ko.localeCompare(b.ko, "ko"));
+    const inCat = cat === "all" ? TERMS.length : TERMS.filter((t) => t.g === cat).length;
+    countEl.textContent = items.length + " / " + inCat + "개 용어";
+    if (!items.length) { listEl.innerHTML = `<div class="gl-empty">“${esc(raw)}”에 해당하는 용어가 없다. 다른 표현이나 영어, 초성으로도 검색해 보자.</div>`; return; }
+    const html = []; let last = null;
+    items.forEach((t) => {
+      const c = CH[t.ch];
+      const g = q && rank(t) ? "정의 본문 일치" : t._ini;
+      if (g !== last) { last = g; html.push(`<div class="gl-group">${esc(g)}</div>`); }
+      html.push(`<div class="gl-item" id="term-${t.id}"><h4>${hl(t.ko, choQ ? "" : qLow)}${t.en ? `<span class="en">${hl(t.en, qLow)}</span>` : ""}</h4><p>${defHTML(t, choQ ? "" : qLow)}</p><span class="cat">${GNAME[t.g]}</span>${c ? `<a class="ch" href="${t.ch}.html">→ ${Number(c.num)}장 ${esc(c.title)}</a>` : ""}</div>`);
+    });
+    listEl.innerHTML = html.join("");
+    listEl.scrollTop = 0;
+  }
+  renderGlossary();
+
+  /* =============================================================== 누진세 빠른 계산 */
+  (function () {
+    const kG = TB.seg("pt-k", () => draw());
+    const nEl = $("pt-n");
+    const rG = TB.range("pt-r", (v) => TB.won(v * 1e4), (v) => { nEl.value = v; draw(); });
+    nEl.addEventListener("input", () => { const v = Math.max(0, Number(nEl.value) || 0); rG.el.value = Math.min(v, Number(rG.el.max)); rG.el.style.setProperty("--fill", (Math.min(v, Number(rG.el.max)) / Number(rG.el.max)) * 100 + "%"); $("pt-r-out").textContent = TB.won(v * 1e4); draw(); });
+    const table = () => (kG() === "income" ? D.income.rates : D.transfer.rates);
+    function calc() {
+      const base = Math.max(0, Number(nEl.value) || 0) * 1e4;
+      const r = TX.progressive(table(), base);
+      const q = TX.quickTable(table()).find((row) => row.to == null || base <= row.to);
+      return { base, r, q };
+    }
+    const cv = TB.canvas("#pt-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc();
+      const steps = c.r.steps;
+      if (!steps.length) { ctx.font = TB.font(13); ctx.fillStyle = P.dim; ctx.textAlign = "center"; ctx.fillText("과세표준을 넣는다", w / 2, h / 2); return; }
+      const bx = 44, bw = w - bx - 12, rows = steps.length, rh = 34;
+      const maxPart = Math.max(...steps.map((s) => s.to - s.from));
+      steps.forEach((s, i) => {
+        const y = 12 + i * rh, len = (s.to - s.from) / maxPart * bw;
+        ctx.fillStyle = P.grid; ctx.fillRect(bx, y + 12, len, rh - 18);
+        ctx.fillStyle = P.bad; ctx.globalAlpha = 0.8; ctx.fillRect(bx, y + 12, Math.max(1, len * s.rate), rh - 18); ctx.globalAlpha = 1;
+        ctx.font = TB.font(11, true, 700); ctx.fillStyle = P.text; ctx.textAlign = "right"; ctx.textBaseline = "middle";
+        ctx.fillText(TB.pct(s.rate, 1).replace(/\.0%$/, "%"), bx - 6, y + 12 + (rh - 18) / 2);
+        ctx.textAlign = "right"; ctx.font = TB.font(10, true); ctx.fillStyle = P.text;
+        const lab = TB.wonAxis(s.to - s.from) + " × " + TB.pct(s.rate, 1).replace(/\.0%$/, "%") + " = " + TB.wonAxis(s.part);
+        ctx.textBaseline = "alphabetic"; ctx.fillText(lab, bx + bw, y + 9);
+      });
+    }, { get height() { return Math.max(90, 20 + calc().r.steps.length * 34); } });
+    function draw() {
+      const c = calc(), loc = kG() === "income";
+      TB.stat("pt-o-t", '<span class="minus">' + TB.won(c.r.tax) + "</span>");
+      TB.stat("pt-o-m", c.base > 0 ? TB.pct(c.r.rate, 1) : "—");
+      TB.stat("pt-o-e", c.base > 0 ? TB.pct(c.r.tax / c.base, 2) : "—");
+      TB.stat("pt-o-l", loc ? TB.won(c.r.tax * (1 + D.income.localRate)) : "해당 없음");
+      cv.resize();
+      $("pt-steps").textContent = c.base > 0 ? "한 줄 계산: " + TB.won(c.base) + " × " + TB.pct(c.q.rate, 1) + " − 누진공제 " + TB.won(c.q.quick) + " = " + TB.won(c.base * c.q.rate - c.q.quick) : "";
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* =============================================================== 종합 퀴즈 */
+  const QS = [...document.querySelectorAll("#fq .quiz-q")];
+  const QN = QS.length;
+  $("fq-total").textContent = QN;
+  const RANKS = [
+    [0, "다시 첫 장부터", "용어집에서 낯선 말을 먼저 찾고, 틀린 장을 차례로 다시 읽어 보자."],
+    [6, "기초를 잡는 중", "큰 흐름은 잡혔다. 아래 장들의 시뮬레이터를 직접 움직여 보면 숫자가 손에 붙는다."],
+    [10, "연말정산을 읽을 수 있는 수준", "대부분의 원리와 제도를 이해했다. 틀린 장의 계산만 다시 해 보자."],
+    [14, "숫자로 판단하는 사람", "거의 모든 문제를 맞혔다. 6장 계산기에 내 숫자를 넣어 볼 차례다."],
+    [QN, "만점", "책 전체를 꿰뚫었다. 남은 것은 그해의 세법을 확인하는 일이다."],
+  ];
+  function tally() {
+    const done = QS.filter((q) => q.classList.contains("done"));
+    const ok = done.filter((q) => !q.querySelector("button.opt.wrong"));
+    $("fq-n").textContent = done.length;
+    $("fq-s").textContent = ok.length;
+    $("fq-fill").style.width = (done.length / QN) * 100 + "%";
+    if (done.length === QN) showResult(ok.length);
+  }
+  function showResult(s) {
+    let rank = RANKS[0];
+    RANKS.forEach((r) => { if (s >= r[0]) rank = r; });
+    $("fq-title").textContent = rank[1];
+    $("fq-big").innerHTML = s + "<small> / " + QN + "</small>";
+    $("fq-msg").textContent = "정답률 " + Math.round((s / QN) * 100) + "% · " + rank[2];
+    $("fq-dots").innerHTML = QS.map((q, i) => {
+      const good = !q.querySelector("button.opt.wrong"), c = CH[q.dataset.ch];
+      return `<a class="${good ? "ok" : "bad"}" href="#fq-q${i + 1}" title="${c ? Number(c.num) + "장 " + esc(c.title) : ""}">${i + 1}</a>`;
+    }).join("");
+    const miss = {};
+    QS.forEach((q) => { if (q.querySelector("button.opt.wrong")) miss[q.dataset.ch] = 1; });
+    const weak = TB.CHAPTERS.filter((c) => miss[c.slug]);
+    $("fq-weak").innerHTML = weak.length
+      ? weak.map((c) => `<li><a href="${c.slug}.html">${Number(c.num)}장 ${esc(c.title)}</a><span>${esc(c.desc)}</span></li>`).join("")
+      : `<li><span>모든 문제를 맞혔다. <a href="yearend.html">6장 연말정산 계산기</a>에 내 숫자를 넣어 보자.</span></li>`;
+    $("fq-result").hidden = false;
+  }
+  QS.forEach((q, i) => { q.id = "fq-q" + (i + 1); });
+  $("fq").addEventListener("answered", tally);
+  $("fq-retry").addEventListener("click", () => {
+    QS.forEach((q) => {
+      q.classList.remove("done");
+      q.querySelectorAll("button.opt").forEach((b) => { b.disabled = false; b.classList.remove("right", "wrong"); });
+    });
+    $("fq-result").hidden = true;
+    tally();
+    $("quiz").scrollIntoView({ behavior: "smooth", block: "start" });
+  });
+  tally();
+
+  const refill = () => TX.fill(document);
+  if (document.readyState === "complete") setTimeout(refill, 50); else window.addEventListener("load", () => setTimeout(refill, 50));
+});
+</script>
+</body>
+</html>

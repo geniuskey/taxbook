@@ -1,0 +1,692 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "연금저축과 IRP의 세액공제는 지금 세금을 깎아 주는 대신 55세 이후 연금소득세로 일부를 돌려받는 과세이연이다. 공제 한도와 공제율, 산출세액이 바닥나는 지점, 연 1,500만원 분리과세 기준, 연금수령한도, 중도 인출의 기타소득세를 시뮬레이터로 따라간다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>연금저축과 IRP · TaxBook</title>
+<meta name="description" content="연금저축과 IRP의 세액공제는 지금 세금을 깎아 주는 대신 55세 이후 연금소득세로 일부를 돌려받는 과세이연이다. 공제 한도와 공제율, 산출세액이 바닥나는 지점, 연 1,500만원 분리과세 기준, 연금수령한도, 중도 인출의 기타소득세를 시뮬레이터로 따라간다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/pension.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="연금저축과 IRP · TaxBook">
+<meta property="og:description" content="연금저축과 IRP의 세액공제는 지금 세금을 깎아 주는 대신 55세 이후 연금소득세로 일부를 돌려받는 과세이연이다. 공제 한도와 공제율, 산출세액이 바닥나는 지점, 연 1,500만원 분리과세 기준, 연금수령한도, 중도 인출의 기타소득세를 시뮬레이터로 따라간다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/pension.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/pension.html#chapter","name":"연금저축과 IRP","headline":"연금저축과 IRP · TaxBook","description":"연금저축과 IRP의 세액공제는 지금 세금을 깎아 주는 대신 55세 이후 연금소득세로 일부를 돌려받는 과세이연이다. 공제 한도와 공제율, 산출세액이 바닥나는 지점, 연 1,500만원 분리과세 기준, 연금수령한도, 중도 인출의 기타소득세를 시뮬레이터로 따라간다.","url":"https://taxbook.euiyun.com/chapters/pension.html","position":10,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"10. 연금저축과 IRP","item":"https://taxbook.euiyun.com/chapters/pension.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="pension">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 10 · <span data-t="label"></span></div>
+    <h1>연금저축과 IRP</h1>
+    <p class="lead">다온은 2023년부터 연금저축에 월 25만원, 한 해 300만원을 넣고 있다. 연말정산 때마다 회사 동료들이 "한도까지 채워라, IRP도 열어라"라고 한다. 한도까지 채우면 정말 그만큼 세금이 줄어드는가. 줄어든 세금은 공짜인가, 언젠가 돌려줘야 하는 돈인가. 급하게 돈이 필요해 꺼내면 어떻게 되는가. 이 장은 연금계좌의 세금을 세 시점(넣을 때, 굴리는 동안, 꺼낼 때)으로 나누어 <span data-t="label"></span>으로 계산하고, 그 혜택이 '돈이 묶이는 값'과 어떻게 맞바꿔지는지 본다.</p>
+    <ul class="objectives">
+      <li>연금계좌 세액공제의 한도(연금저축 <span data-t="pension.savingLimit" data-f="man"></span>, IRP 합산 <span data-t="pension.totalLimit" data-f="man"></span>)와 총급여에 따른 공제율을 계산한다.</li>
+      <li>세액공제가 산출세액을 넘으면 사라진다는 것, 그래서 한도보다 내 세금이 먼저 바닥날 수 있다는 것을 확인한다.</li>
+      <li>공제 → 계좌 안 비과세 운용 → <span data-t="pension.startAge" data-f="num"></span>세 이후 연금소득세로 이어지는 과세이연의 실제 가치를 일반 계좌와 비교한다.</li>
+      <li>연 <span data-t="pension.separateLimit" data-f="man"></span> 분리과세 기준과 연금수령한도가 연금을 꺼내는 속도를 어떻게 정하는지 설명한다.</li>
+      <li>중도 인출의 기타소득세와 부득이한 사유를 알고, 넣은 돈이 묶이는 값을 공제와 함께 저울에 올린다.</li>
+    </ul>
+  </header>
+
+  <section id="three">
+    <h2>세금의 세 시점</h2>
+    <p><span class="term">연금저축</span><span class="en">(Pension savings account)</span>과 <span class="term">IRP</span><span class="en">(Individual Retirement Pension, 개인형 퇴직연금)</span>는 노후 자금을 모으는 계좌다. 둘을 묶어 <span class="term">연금계좌</span>라 한다. 이 계좌의 세금은 시점마다 다르게 움직인다.</p>
+    <ol>
+      <li><b>넣을 때</b>: 그 해 납입액의 일정 비율을 세금에서 바로 빼 준다(세액공제). 연말정산이나 5월 신고에서 돌려받는 돈이다.</li>
+      <li><b>굴리는 동안</b>: 계좌 안에서 생기는 이자·배당·매매차익에 그때그때 세금을 떼지 않는다. 일반 계좌라면 해마다 빠졌을 <a href="interest.html">8장</a>의 원천징수가 없다.</li>
+      <li><b>꺼낼 때</b>: <span data-t="pension.startAge" data-f="num"></span>세 이후 연금으로 받으면 낮은 세율의 연금소득세를 낸다. 그 전에 꺼내면(연금외수령) 공제받은 원금과 운용수익에 기타소득세 <span data-x="early"></span>를 낸다.</li>
+    </ol>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 280" role="img" aria-label="연금계좌 세금의 세 시점: 넣을 때 세액공제, 굴리는 동안 비과세, 55세 이후 연금소득세 또는 그 전 중도 인출 기타소득세">
+        <defs><marker id="pn-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <line x1="20" y1="96" x2="446" y2="96" class="s-line" marker-end="url(#pn-ar)"/>
+        <rect x="14" y="20" width="120" height="60" rx="8" class="f-ok-soft"/>
+        <text x="74" y="44" text-anchor="middle" class="lbl-b">넣을 때</text>
+        <text x="74" y="66" text-anchor="middle" class="lbl">세액공제 받음</text>
+        <rect x="160" y="20" width="140" height="60" rx="8" class="f-acc-soft"/>
+        <text x="230" y="44" text-anchor="middle" class="lbl-b">굴리는 동안</text>
+        <text x="230" y="66" text-anchor="middle" class="lbl">수익에 세금 없음</text>
+        <rect x="326" y="20" width="124" height="60" rx="8" class="f-warn-soft"/>
+        <text x="388" y="44" text-anchor="middle" class="lbl-b"><tspan data-t="pension.startAge" data-f="num"></tspan>세 이후</text>
+        <text x="388" y="66" text-anchor="middle" class="lbl">연금소득세</text>
+        <circle cx="74" cy="96" r="6" class="f-ok"/>
+        <circle cx="388" cy="96" r="6" class="f-warn"/>
+        <text x="388" y="124" text-anchor="middle" class="lbl-dim"><tspan data-x="payOld"></tspan>~<tspan data-x="pay70"></tspan></text>
+        <text x="388" y="142" text-anchor="middle" class="lbl-dim">나이·종신형에 따라</text>
+        <path d="M230 100 C230 150 200 170 170 190" class="s-dash" marker-end="url(#pn-ar)"/>
+        <rect x="20" y="194" width="210" height="64" rx="8" class="f-bad-soft"/>
+        <text x="125" y="218" text-anchor="middle" class="lbl-b">그 전에 꺼내면(연금외수령)</text>
+        <text x="125" y="240" text-anchor="middle" class="lbl">기타소득세 <tspan data-x="early"></tspan></text>
+        <rect x="250" y="194" width="200" height="64" rx="8" class="f-surface"/>
+        <text x="350" y="218" text-anchor="middle" class="lbl-b">부득이한 사유라면</text>
+        <text x="350" y="240" text-anchor="middle" class="lbl">연금소득세 세율로</text>
+        <text x="230" y="276" text-anchor="middle" class="lbl-dim">세율은 모두 지방소득세 포함</text>
+      </svg>
+      <figcaption><b>그림 1. 연금계좌 세금의 세 시점.</b> 공제받은 원금과 운용수익은 꺼낼 때 과세된다. 그래서 세액공제는 없어지는 세금이 아니라 낮은 세율로 미뤄지는 세금, 곧 과세이연이다. 공제받지 않은 납입액은 꺼낼 때 과세하지 않는다.</figcaption>
+    </figure>
+  </section>
+
+  <section id="credit">
+    <h2>세액공제: 한도와 공제율</h2>
+    <p>연금저축 납입액은 연 <span data-t="pension.savingLimit" data-f="man"></span>까지, IRP를 합친 연금계좌 전체는 연 <span data-t="pension.totalLimit" data-f="man"></span>까지 공제 대상이다(<a data-src="credits.pension"></a>). 연금저축만으로는 <span data-t="pension.savingLimit" data-f="man"></span>에서 멈추고, 나머지 <span data-x="irpOnly"></span>는 IRP로만 채울 수 있다. 공제율은 총급여 <span data-t="pension.lowGrossMax" data-f="man"></span>(근로소득만 있는 경우, 종합소득금액으로는 <span data-t="pension.lowIncomeMax" data-f="man"></span>) 이하이면 <span data-t="pension.rateLow" data-f="pct"></span>, 넘으면 <span data-t="pension.rateHigh" data-f="pct"></span>다. 지방소득세까지 줄어드니 실제로 돌아오는 비율은 <span data-x="cr15"></span>와 <span data-x="cr12"></span>다.</p>
+    <p>ISA 만기 자금을 연금계좌로 옮긴 해에는 전환액의 <span data-t="pension.isaTransferRate" data-f="pct"></span>(최대 <span data-t="pension.isaTransferLimit" data-f="man"></span>)가 공제 대상에 더해진다(<a href="isa.html">9장</a>). 아래에서 두 계좌의 납입액을 바꿔 한도 선을 넘겨 본다.</p>
+
+    <div class="sim" id="sim-cr">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>어디서부터 공제가 늘지 않나</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cr-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>연금저축 납입 <output id="cr-s-out"></output></span><input type="range" id="cr-s" min="0" max="1200" step="10" value="300"></label>
+          <label class="ctrl"><span>IRP 납입 <output id="cr-i-out"></output></span><input type="range" id="cr-i" min="0" max="1200" step="10" value="0"></label>
+          <div class="seg" id="cr-g"><button data-value="low" class="on">총급여 기준 이하</button><button data-value="high">기준 초과</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">납입 합계</span><span class="v" id="cr-o-p">—</span></div>
+        <div class="stat"><span class="k">공제 대상</span><span class="v" id="cr-o-e">—</span></div>
+        <div class="stat"><span class="k">세액공제(지방세 포함)</span><span class="v" id="cr-o-c">—</span></div>
+        <div class="stat"><span class="k">납입액 대비</span><span class="v" id="cr-o-r">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 연금저축만 1,200만원까지 올린다. 연금저축 한도에서 공제 대상이 멈추고, 넘는 몫(회색)은 공제가 없다. ② 연금저축을 한도에 두고 IRP를 올린다. 합산 한도까지는 다시 공제가 늘다가 멈춘다. 연금저축을 0으로 내리고 IRP만 올려도 합산 한도까지 공제된다. ③ '기준 초과'로 바꾼다. 같은 납입액에서 돌려받는 비율이 낮아진다. (산출세액이 충분해 공제를 모두 쓸 수 있다고 가정. 그렇지 않은 경우는 바로 다음 시뮬레이터.)</div>
+    </div>
+
+    <p>한도를 넘겨 넣은 돈도 계좌 안에서 비과세로 굴러가는 혜택은 받는다. 공제를 받지 않은 납입액은 꺼낼 때도 과세되지 않는다. 다만 '넣은 돈만큼 세금이 줄어든다'는 계산은 한도 안에서만 맞다. 그리고 한도 안에서도 맞지 않을 때가 있다.</p>
+  </section>
+
+  <section id="capacity">
+    <h2>한도보다 세금이 먼저 바닥난다</h2>
+    <p>세액공제는 계산된 세금(산출세액)에서 빼는 것이라 그 세금보다 클 수 없다. 근로소득세액공제, 보험료·의료비·기부금·월세 세액공제를 차례로 빼다 보면 연금계좌 공제를 다 쓰기 전에 세금이 0에 닿을 수 있다. 남는 공제는 다음 해로 넘어가지 않고 사라진다(<a href="credit.html">5장</a>). 그래서 연봉이 높지 않고 다른 공제가 많은 사람에게는 한도까지 채우는 것이 생각만큼 돈이 되지 않는다.</p>
+    <p>아래는 다온의 2026년 숫자(<a href="yearend.html">6장</a>의 연말정산 입력)로 이 책의 모델을 돌린 결과다. 가로축은 연금계좌 납입액(연금저축을 먼저 한도까지, 그다음 IRP)이다. 손잡이를 끌어 납입액을 바꾸고, 연말정산만 볼지 5월 종합소득세까지 합칠지 고른다. 다온은 부업 소득이 있어 5월에 종합소득세를 다시 계산한다(<a href="income.html">7장</a>).</p>
+
+    <div class="sim" id="sim-cap">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>다온의 연금 공제는 어디서 멈추나</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cap-cv"></canvas><span class="hint">손잡이를 끌어 납입액을 바꾼다</span></div>
+        <div class="sim-controls">
+          <div class="seg" id="cap-m"><button data-value="ye">연말정산만</button><button data-value="all" class="on">5월 신고까지 한 해 전체</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">연금계좌 납입</span><span class="v" id="cap-o-p">—</span></div>
+        <div class="stat"><span class="k">장부상 연금 공제</span><span class="v" id="cap-o-c">—</span></div>
+        <div class="stat"><span class="k">실제로 줄어든 세금(300만원 대비)</span><span class="v" id="cap-o-r">—</span></div>
+        <div class="stat"><span class="k">남은 소득세(지방세 포함)</span><span class="v" id="cap-o-t">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① '연말정산만'에서 손잡이를 300만원(다온의 지금)에서 오른쪽으로 옮긴다. 결정세액이 금방 0에 닿고, 그 뒤로는 장부상 공제가 늘어도 실제 세금은 줄지 않는다. ② '5월 신고까지 한 해 전체'로 바꾼다. 부업 소득으로 늘어난 세금이 있어 연금저축 한도까지는 공제가 거의 다 쓰인다. ③ IRP까지 합산 한도로 채운다. 남은 세금이 바닥나 늘린 공제 대부분이 사라진다. (다온의 2026년 입력 그대로. 5월 신고는 일러스트 외주 단순경비율 추계, 강연료는 세금이 적은 쪽을 고른 이 책의 교육용 모델이다. 실제 세액은 홈택스 모의계산으로 확인.)</div>
+    </div>
+
+    <p>그래서 "한도까지 채워라"는 조언 앞에 먼저 물을 것이 있다. 내 결정세액이 얼마인가. 작년 원천징수영수증의 결정세액이 연금 공제를 늘린 만큼보다 작다면, 늘린 공제의 일부는 아무것도 돌려주지 않는다. 그 돈은 공제 없이 묶이기만 한다.</p>
+
+    <div class="callout pro">
+      <strong>연말정산 담당자가 자주 보는 실수</strong>
+      <ul>
+        <li><b>12월 31일의 함정</b>: 공제는 그 해에 실제로 납입한 금액 기준이다. 연말에 몰아 넣으려다 이체가 다음 해로 넘어가면 그 해 공제 대상이 아니다.</li>
+        <li><b>회사 퇴직연금과 IRP 혼동</b>: 회사가 넣어 주는 퇴직연금(DB·DC) 부담금은 본인 공제 대상이 아니다. DC형에 본인이 추가로 넣은 금액은 공제 대상이다.</li>
+        <li><b>간소화 자료의 납입액</b>: 연금계좌 납입액은 대개 간소화 자료에 잡히지만, 계좌를 옮긴 해에는 이전 금액이 납입액처럼 보이는 경우가 있다. 이전은 새 납입이 아니다.</li>
+        <li><b>공제가 남는 사람</b>: 결정세액이 이미 0이면 연말 추가 납입은 그 해 세금을 줄이지 못한다. 공제를 받지 않은 납입액은 나중에 꺼낼 때 과세되지 않도록 금융회사에 '공제받지 않은 금액'으로 확인받는다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="deferral">
+    <h2>과세이연의 실제 가치</h2>
+    <p>세액공제는 지금 세금을 깎아 주는 대신, 그 돈과 운용수익을 꺼낼 때 연금소득세로 일부를 거둔다. 연금으로 받을 때의 세율은 <span data-t="pension.startAge" data-f="num"></span>세 이후 70세 미만 <span data-x="pay70"></span>, 70세 이상 80세 미만 <span data-x="pay80"></span>, 80세 이상 <span data-x="payOld"></span>이고, 죽을 때까지 받는 종신형 계약은 <span data-x="life"></span>다(지방소득세 포함). 종신형 세율은 2025년까지 4%(지방세 별도)였고 2026년 수령분부터 낮아졌다.</p>
+    <p>그러니 연금계좌의 이득은 세 갈래다. ① 공제율(<span data-x="cr15"></span>·<span data-x="cr12"></span>)과 꺼낼 때 세율(<span data-x="payOld"></span>~<span data-x="pay70"></span>)의 차이, ② 계좌 안에서 수익에 세금을 떼지 않아 생기는 복리 효과, ③ 그 수익에도 낮은 연금소득세만 붙는다는 것. 대가는 하나, 수십 년 동안 꺼내기 어렵다는 것이다. 아래에서 같은 돈을 연금계좌와 일반 계좌에 넣었을 때의 세후 결과를 비교한다.</p>
+
+    <div class="formula">
+      $$\underbrace{(1 + c)}_{\text{넣을 때}}\times\underbrace{(1+r)^n}_{\text{굴리는 동안}}\times\underbrace{(1 - p)}_{\text{꺼낼 때}}\quad\text{vs}\quad \big(1 + r(1-t_w)\big)^n$$
+      <div class="where">원금 1을 넣었을 때의 대략적인 비교. \(c\)는 공제율(지방세 포함), \(p\)는 연금소득세율, \(r\)은 연 수익률, \(n\)은 기간, \(t_w\)는 일반 계좌에서 해마다 떼는 세율(<span data-x="wh"></span>)이다. 공제로 돌려받은 \(c\)는 일반 계좌에 재투자한다고 보면 그 몫도 \((1+r(1-t_w))^n\)으로 자란다. 일반 계좌 쪽은 이자·배당처럼 해마다 과세되는 수익을 가정했다. 국내주식형 ETF처럼 일반 계좌에서도 차익이 비과세인 상품이라면 \(t_w = 0\)이다.</div>
+    </div>
+
+    <div class="sim" id="sim-def">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>연금계좌 vs 일반 계좌, 세후로</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="def-cv"></canvas><span class="hint">손잡이를 끌어 기간을 바꾼다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>해마다 넣는 돈 <output id="def-a-out"></output></span><input type="range" id="def-a" min="100" max="900" step="10" value="600"></label>
+          <label class="ctrl"><span>연 수익률(가정) <output id="def-r-out"></output></span><input type="range" id="def-r" min="0" max="8" step="0.5" value="4"></label>
+          <div class="seg" id="def-m"><button data-value="annuity" class="on">55세 이후 연금으로</button><button data-value="early">중간에 꺼냄</button></div>
+          <div class="seg" id="def-g"><button data-value="taxed" class="on">일반 계좌: 수익에 해마다 과세</button><button data-value="free">일반 계좌: 차익 비과세 상품</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">기간 / 넣은 돈</span><span class="v" id="def-o-n">—</span></div>
+        <div class="stat"><span class="k">연금계좌 세후(공제 재투자 포함)</span><span class="v" id="def-o-a">—</span></div>
+        <div class="stat"><span class="k">일반 계좌 세후</span><span class="v" id="def-o-b">—</span></div>
+        <div class="stat"><span class="k">차이</span><span class="v" id="def-o-d">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(해마다 600만원, 연 4%)에서 손잡이를 끌어 기간을 늘린다. 두 선의 간격이 시간이 갈수록 벌어진다. 공제와 세율 차이에 비과세 복리가 더해지기 때문이다. ② 수익률을 0으로 내린다. 그래도 연금계좌가 앞선다. 남는 것은 공제율과 연금소득세율의 차이뿐이다. ③ '중간에 꺼냄'으로 바꾸고 일반 계좌를 '차익 비과세 상품'(국내주식형 ETF처럼 일반 계좌에서도 차익에 세금이 없는 상품)으로 바꾼다. 두 선이 겹친다. 공제로 받은 만큼을 꺼낼 때 그대로 다시 내서, 남는 것은 돈이 묶였던 기간뿐이다. (총급여 기준 이하 공제율, 공제를 모두 쓸 수 있고, 돌려받은 공제는 해마다 같은 일반 계좌에 재투자한다고 가정. 연금은 70세 전 연 분리과세 기준 이하로 나눠 받는 것으로 보고, 운용 보수와 일반 계좌의 거래세는 넣지 않았다.)</div>
+    </div>
+
+    <p>계산해 보면 연금계좌의 이득은 두 가지가 겹친 것이다. 공제와 연금소득세의 세율 차이, 그리고 해마다 세금을 떼지 않는 복리다. 앞의 것은 <b>연금으로 받을 때만</b> 생긴다. 중간에 꺼내면 공제로 받은 비율을 그대로 다시 내고, 그동안의 수익에도 같은 세율이 붙는다. 일반 계좌에서도 세금이 거의 없는 상품과 비교하면 이득이 사라지고, 공제율이 낮은 구간의 사람은 오히려 잃는다(아래 표). 연금계좌의 혜택은 '오래 묶어 둔다'는 약속의 값이다.</p>
+  </section>
+
+  <section id="payout">
+    <h2>꺼낼 때: 분리과세 기준과 수령 한도</h2>
+    <p>연금으로 받는 돈 가운데 공제받은 원금과 운용수익(사적연금)이 한 해 <span data-t="pension.separateLimit" data-f="man"></span> 이하이면 나이에 따른 낮은 세율로 분리과세하고 끝낼 수 있다. 넘으면 그 해 사적연금 <b>전체</b>를 다른 소득과 합쳐 종합과세하거나, 전체에 <span data-t="pension.overSeparateRate" data-f="pct"></span>(지방소득세 포함 <span data-x="over"></span>)로 분리과세하는 것 중에서 고른다(<a data-src="pension.payout"></a>). 기준을 1원 넘으면 넘는 몫이 아니라 전체의 세율이 바뀐다는 점이 <a href="interest.html">8장</a>의 금융소득 기준과 다르다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 230" role="img" aria-label="사적연금 수령액의 과세 선택: 분리과세 기준 이하이면 저율 분리과세, 넘으면 전체를 종합과세하거나 전체를 높은 세율로 분리과세">
+        <defs><marker id="po-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="130" y="12" width="200" height="50" rx="8" class="f-surface"/>
+        <text x="230" y="34" text-anchor="middle" class="lbl-b">한 해 사적연금 수령액</text>
+        <text x="230" y="52" text-anchor="middle" class="lbl-dim">공제받은 원금 + 운용수익</text>
+        <path d="M180 62 L110 100" class="s-line" marker-end="url(#po-ar)"/>
+        <path d="M280 62 L350 100" class="s-line" marker-end="url(#po-ar)"/>
+        <text x="110" y="86" text-anchor="end" class="lbl-acc"><tspan data-t="pension.separateLimit" data-f="man"></tspan> 이하</text>
+        <text x="350" y="86" class="lbl-bad">초과</text>
+        <rect x="14" y="104" width="190" height="66" rx="8" class="f-ok-soft"/>
+        <text x="109" y="128" text-anchor="middle" class="lbl-b">저율 분리과세</text>
+        <text x="109" y="150" text-anchor="middle" class="lbl"><tspan data-x="payOld"></tspan>~<tspan data-x="pay70"></tspan>로 끝</text>
+        <rect x="236" y="104" width="100" height="66" rx="8" class="f-warn-soft"/>
+        <text x="286" y="128" text-anchor="middle" class="lbl-b">전체 분리</text>
+        <text x="286" y="150" text-anchor="middle" class="lbl"><tspan data-x="over"></tspan></text>
+        <rect x="346" y="104" width="100" height="66" rx="8" class="f-bad-soft"/>
+        <text x="396" y="128" text-anchor="middle" class="lbl-b">전체 종합</text>
+        <text x="396" y="150" text-anchor="middle" class="lbl">기본세율</text>
+        <text x="340" y="196" text-anchor="middle" class="lbl-dim">둘 중 유리한 쪽을 고른다</text>
+        <text x="230" y="222" text-anchor="middle" class="lbl-dim">공적연금(국민연금 등)과 이연퇴직소득은 이 기준에 넣지 않는다</text>
+      </svg>
+      <figcaption><b>그림 2. 연금 수령액의 과세 선택.</b> 기준 이하이면 낮은 세율로 끝낸다. 기준을 넘으면 넘는 몫이 아니라 그 해 사적연금 전체가 다른 방식으로 바뀐다. 그래서 연금은 해마다 기준 안으로 나눠 받는 것이 보통 유리하다.</figcaption>
+    </figure>
+
+    <p>아래 그래프에서 손잡이를 끌어 한 해 수령액을 기준 위아래로 옮겨 본다. 기준에서 세금이 계단처럼 뛰는 모습이 보인다.</p>
+
+    <div class="sim" id="sim-sep">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>1원 넘으면 전체가 바뀐다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="sep-cv"></canvas><span class="hint">손잡이를 끌어 수령액을 바꾼다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>다른 소득의 과세표준 <output id="sep-o-out"></output></span><input type="range" id="sep-o" min="0" max="1" step="0.02" value="0.2"></label>
+          <div class="seg" id="sep-a"><button data-value="60" class="on">70세 미만</button><button data-value="75">70~79세</button><button data-value="85">80세 이상</button></div>
+          <label class="check"><input type="checkbox" id="sep-l"> 종신형 계약</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">한 해 사적연금 수령</span><span class="v" id="sep-r-a">—</span></div>
+        <div class="stat"><span class="k">고른 방식</span><span class="v" id="sep-r-m">—</span></div>
+        <div class="stat"><span class="k">세금(지방세 포함)</span><span class="v" id="sep-r-t">—</span></div>
+        <div class="stat"><span class="k">수령액 대비</span><span class="v" id="sep-r-e">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 기준 바로 아래에서 바로 위로 옮긴다. 세금이 한 번에 뛴다. 넘는 1원이 아니라 전체의 세율이 바뀌기 때문이다. ② 다른 소득의 과세표준을 0으로 내린다. 기준을 넘은 뒤에는 종합과세가 더 싼 구간이 생긴다. 다른 소득이 크면 전체 분리과세가 낫다. ③ 나이를 80세 이상으로 바꾸거나 종신형을 켠다. 기준 아래의 세율이 낮아져 기준 위아래의 차이가 더 커진다. (종합과세 쪽은 연금소득공제를 생략한 이 책의 근사이고, 공적연금은 다른 소득에 포함된 것으로 본다.)</div>
+    </div>
+
+    <p>연금을 기준 안으로 나눠 받게 만드는 장치가 하나 더 있다. <span class="term">연금수령한도</span><span class="en">(Annual pension withdrawal limit)</span>다. 연금으로 인정받을 수 있는 한 해 인출액은 다음과 같다(<a data-src="pension.limit"></a>).</p>
+    <div class="formula">
+      $$\text{연금수령한도} = \frac{\text{그 해 1월 1일 평가액}}{a - k}\times m$$
+      <div class="where">\(a\)는 <span data-t="pension.limitBase" data-f="num"></span>, \(m\)은 <span data-t="pension.limitMult" data-f="num"></span>, \(k\)는 연금수령연차(연금을 받기 시작한 해가 1년차)다. 1년차 한도는 평가액의 약 <span data-x="limFirst"></span>이고, <span data-t="pension.limitFreeYear" data-f="num"></span>년차부터는 한도가 없다. 한도를 넘겨 꺼낸 몫은 연금외수령으로 보아 기타소득세(<span data-x="early"></span>)를 낸다. 가입한 지 <span data-t="pension.minYears" data-f="num"></span>년이 지나고 <span data-t="pension.startAge" data-f="num"></span>세 이후여야 연금 수령을 시작할 수 있다.</div>
+    </div>
+
+    <div class="sim" id="sim-lim">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>연금수령한도와 분리과세 기준선</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="lim-cv"></canvas><span class="hint">선을 위아래로 끌어 연 인출액을 바꾼다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>수령 시작 때 평가액 <output id="lim-v-out"></output></span><input type="range" id="lim-v" min="0.5" max="5" step="0.1" value="2"></label>
+          <label class="ctrl"><span>연 수익률(가정) <output id="lim-r-out"></output></span><input type="range" id="lim-r" min="0" max="6" step="0.5" value="3"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">해마다 꺼내는 돈</span><span class="v" id="lim-o-w">—</span></div>
+        <div class="stat"><span class="k">1년차 수령한도</span><span class="v" id="lim-o-l">—</span></div>
+        <div class="stat"><span class="k">한도를 넘는 해</span><span class="v" id="lim-o-n">—</span></div>
+        <div class="stat"><span class="k">분리과세 기준</span><span class="v" id="lim-o-s">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 평가액 2억원에서 인출 선을 1년차 한도 위로 올린다. 초기 몇 해의 막대가 선 아래로 들어가 그 해 한도를 넘는 몫이 연금외수령이 된다(빨간 표시). ② 인출 선을 분리과세 기준선 아래로 내린다. 한도 문제도, 기준 초과 문제도 사라지지만 받는 기간이 길어진다. ③ 평가액을 5억원으로 올린다. 한도는 넉넉해지지만 한도만큼 꺼내면 기준을 크게 넘는다. 한도는 '최대'이지 '권장'이 아니다. (연금수령연차는 1년차부터 시작, 해마다 같은 금액을 연초에 꺼낸다고 가정. 이연퇴직소득·공제받지 않은 납입액은 없다고 본다.)</div>
+    </div>
+  </section>
+
+  <section id="early">
+    <h2>중도 인출과 넣은 돈이 묶이는 값</h2>
+    <p><span data-t="pension.startAge" data-f="num"></span>세 전에 연금계좌에서 돈을 꺼내거나 수령한도를 넘겨 꺼내면 <span class="term">연금외수령</span><span class="en">(Non-pension withdrawal)</span>이다. 공제받은 납입액과 운용수익에 기타소득세 <span data-t="pension.earlyRate" data-f="pct"></span>(지방소득세 포함 <span data-x="early"></span>)를 떼고, 이 세금은 다른 소득과 합치지 않고 끝난다. 공제받지 않은 납입액은 이미 세금을 낸 돈이라 과세하지 않는다. 연금저축은 일부만 꺼낼 수 있지만, IRP는 법에서 정한 사유가 아니면 일부 인출이 막혀 있어 계좌를 해지해야 하는 경우가 많다.</p>
+    <p>예외가 있다. 천재지변, 가입자의 사망이나 해외 이주, 본인·부양가족의 3개월 이상 요양, 파산·개인회생, 금융기관 영업정지, 재난으로 15일 이상 입원 같은 <b>부득이한 사유</b>로 꺼내면 연금소득세 세율로 분리과세한다. 사유가 생긴 날부터 6개월 안에 서류를 내야 한다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>100만원을 넣고 공제받은 뒤</th><th class="num">넣을 때 받은 공제</th><th class="num">꺼낼 때 내는 세금</th><th class="num">원금 기준 순효과</th></tr></thead>
+        <tbody id="lock-table"></tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)">운용수익이 없을 때 원금 100만원에 대한 계산(지방소득세 포함). 운용수익이 있으면 그 수익에도 같은 세율이 붙는다. 연금은 70세 미만 분리과세 기준 이하로 받는 경우.</p>
+
+    <p>표의 마지막 줄이 '넣은 돈이 묶이는 값'이다. 공제율이 높은 구간의 사람은 중간에 꺼내도 원금 기준으로 손해가 거의 없지만, 그동안의 운용수익에 일반 계좌(<span data-x="wh"></span>)보다 높은 세율이 붙는다. 공제율이 낮은 구간의 사람은 원금에서도 차이만큼 잃는다. 그리고 표에 없는 비용이 있다. 급할 때 꺼낼 수 없어 더 비싼 대출을 쓰게 되는 비용이다. 연금계좌에 넣을 돈은 비상금을 먼저 따로 떼어 둔 뒤의 돈이어야 하는 이유다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>연금저축</th><th>IRP</th></tr></thead>
+        <tbody>
+          <tr><td>공제 한도</td><td>연 <span data-t="pension.savingLimit" data-f="man"></span></td><td>연금저축과 합쳐 연 <span data-t="pension.totalLimit" data-f="man"></span></td></tr>
+          <tr><td>중간에 일부 꺼내기</td><td>가능(공제받은 몫은 기타소득세)</td><td>법정 사유가 아니면 해지해야 하는 경우가 많다</td></tr>
+          <tr><td>담을 수 있는 자산</td><td>펀드·ETF 등</td><td>펀드·ETF·예금 등, 위험자산 비중 제한이 있다</td></tr>
+          <tr><td>가입 대상</td><td>누구나</td><td>소득이 있는 사람(근로자·자영업자 등)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)">IRP의 인출 사유와 자산 비중 규정은 근로자퇴직급여 보장법과 금융회사 약관이 정한다. 상품 조건은 금융회사마다 다르므로 직접 확인한다.</p>
+
+    <div class="callout check">
+      <strong>연말 납입 전에 확인할 것</strong>
+      <ul>
+        <li>작년 원천징수영수증(홈택스 '지급명세서 등 제출내역')의 결정세액. 늘리려는 공제보다 결정세액이 작으면 공제 일부가 사라진다.</li>
+        <li>올해 총급여가 공제율 기준(<span data-t="pension.lowGrossMax" data-f="man"></span>)을 넘는지. 5월에 다른 소득과 합산하는 사람은 종합소득금액 기준(<span data-t="pension.lowIncomeMax" data-f="man"></span>)으로 본다.</li>
+        <li>올해 연금저축·IRP 납입액 합계를 금융회사 앱에서 확인하고, 12월 마지막 영업일 전에 이체가 끝나는지 확인한다.</li>
+        <li>비상금(생활비 몇 달 치)을 따로 두었는지. 연금계좌는 비상금 통장이 아니다.</li>
+      </ul>
+    </div>
+
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다</strong>
+      이 장의 공제 한도, 공제율과 총급여 기준, 연금소득세율, 분리과세 기준, 수령한도 산식, 기타소득세율은 <span data-t="label"></span>이다(파일: data/tax-<span data-t="year" data-f="raw"></span>.json). 종신형 연금소득세율은 2026년 수령분부터 낮아졌다. 2026년 정부 세법개정안에 있는 청년(15~34세) 연금계좌 공제율 상향안은 국회 심사 중인 <b>확정 전</b> 내용이라 계산에 넣지 않았다. 이 장의 숫자는 교육용 모델의 결과이므로 실제 세액은 홈택스 모의계산이나 세무 전문가에게 확인한다.
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 연금 노트</h2>
+    <p>11월, 다온은 연말정산을 앞두고 두 가지를 정하기로 했다. 올해 12월까지 연금저축을 한도까지 채울지, 그리고 2027년부터 IRP를 더할지. 이 책의 모델로 다온의 2026년 숫자를 그대로 넣어 계산했다(5월 종합소득세는 부업 단순경비율 추계, 강연료는 세금이 적은 쪽).</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>연금계좌 납입(2026년)</th><th class="num">장부상 연금 공제</th><th class="num">연말정산 결정세액</th><th class="num">한 해 소득세(5월 신고까지)</th></tr></thead>
+        <tbody id="case-table"></tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)">소득세 기준(지방소득세 제외). 공제는 지방소득세도 같은 비율로 줄인다.</p>
+
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · 2026년 11월</span></div>
+      <h4>연금저축은 한도까지 채운다. IRP는 비상금을 먼저 채운 뒤 내년에 다시 본다</h4>
+      <p><b>올해 연금저축.</b> 지금처럼 300만원이면 연금 공제는 <b id="note-c300"></b>이다. 12월까지 <b id="note-add"></b>을 더 넣어 <span data-t="pension.savingLimit" data-f="man"></span>을 채우면 장부상 공제는 <b id="note-c600"></b>로 늘어난다. 연말정산만 보면 결정세액이 <b id="note-ye300"></b>에서 0원이 되어 늘린 공제 가운데 일부만 쓰인 것처럼 보인다. 그런데 5월에 부업 소득을 합쳐 다시 계산하면 한 해 소득세가 <b id="note-t300"></b>에서 <b id="note-t600"></b>로 줄어, 늘린 공제가 거의 다 쓰인다. 다만 더 넣는 돈은 <span data-t="pension.startAge" data-f="num"></span>세까지 묶인다.</p>
+      <p><b>내년의 IRP.</b> 같은 계산에 IRP <span data-x="irpOnly"></span>을 더하면 공제 대상은 합산 한도 <span data-t="pension.totalLimit" data-f="man"></span>까지 늘지만, 남은 소득세가 <b id="note-t600b"></b>뿐이라 늘린 공제 <b id="note-cirp"></b> 가운데 실제로 줄어드는 세금은 <b id="note-irpgain"></b>에 그친다. 세금이 바닥나 나머지는 사라진다. 게다가 IRP는 중간에 일부만 꺼내기 어렵다. 그래서 2027년에는 먼저 생활비 몇 달 치의 비상금을 따로 채우고, 연봉이 오르거나 월세 공제가 줄어 결정세액이 커지는지 2027년 11월에 다시 계산한다. 그 사이 2028년 ISA 만기 자금을 연금계좌로 옮길지도 같은 표로 따져 본다(<a href="isa.html">9장</a>).</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>연금 공제는 산출세액 안에서만 돈이 된다. 공제는 사라지는 세금이 아니라 낮은 세율로 미뤄지는 세금이고, 연금으로 받을 때만 그 차이가 남는다. 중간에 꺼내면 공제만큼을 거의 다시 낸다.</div><div><b>아직 남은 문제</b>2027년 결정세액이 얼마가 될지. 비상금을 얼마나 둘지. 연금을 받을 때 다른 연금(국민연금)과 합친 세금.</div><div><b>다음 장</b><a href="stock.html">11장</a>: 미국 ETF·주식의 실현 이익 460만원과 손실 90만원, 해외 주식 양도소득세.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>연금계좌 세액공제 한도는 연금저축 <span data-t="pension.savingLimit" data-f="man"></span>, IRP 합산 <span data-t="pension.totalLimit" data-f="man"></span>(ISA 전환 추가 별도)이고, 공제율은 총급여 <span data-t="pension.lowGrossMax" data-f="man"></span> 이하 <span data-x="cr15"></span>, 초과 <span data-x="cr12"></span>(지방세 포함)다.</li>
+      <li>세액공제는 산출세액을 넘을 수 없고 남는 공제는 사라진다. 한도보다 내 세금이 먼저 바닥날 수 있으니 결정세액부터 확인한다.</li>
+      <li>공제받은 원금과 운용수익은 꺼낼 때 과세된다. 세액공제는 과세이연이며, 이득의 핵심은 공제율과 연금소득세율(<span data-x="payOld"></span>~<span data-x="pay70"></span>)의 차이와 계좌 안의 비과세 복리다.</li>
+      <li>한 해 사적연금이 <span data-t="pension.separateLimit" data-f="man"></span> 이하이면 저율 분리과세로 끝난다. 넘으면 전체를 종합과세하거나 전체에 <span data-x="over"></span>로 분리과세한다.</li>
+      <li>연금수령한도는 평가액 ÷ (<span data-t="pension.limitBase" data-f="num"></span> − 연차) × <span data-t="pension.limitMult" data-f="num"></span>이다. 한도를 넘겨 꺼낸 몫과 <span data-t="pension.startAge" data-f="num"></span>세 전 인출은 기타소득세 <span data-x="early"></span>다(부득이한 사유는 연금소득세 세율).</li>
+      <li>중간에 꺼내면 공제로 받은 만큼을 거의 다시 내고 수익에도 높은 세율이 붙는다. 연금계좌에는 비상금을 따로 둔 뒤의 돈을 넣는다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>총급여 기준 이하인 직장인이 연금저축에 800만원, IRP에 200만원을 넣었다. 세액공제 대상 금액은? (ISA 전환 없음)</p>
+        <div class="opts">
+          <button class="opt">1,000만원 전부</button>
+          <button class="opt">800만원</button>
+          <button class="opt" data-correct>연금저축은 한도까지, 여기에 IRP를 더해 합산 한도 안에서</button>
+          <button class="opt">IRP 200만원만</button>
+        </div>
+        <div class="quiz-exp">연금저축은 <span data-t="pension.savingLimit" data-f="man"></span>까지만 공제 대상이고, IRP를 더한 전체는 <span data-t="pension.totalLimit" data-f="man"></span>까지다. 연금저축 한도 + IRP 200만원이 합산 한도 안에 있는지 확인하면 된다. 한도를 넘는 납입액은 공제는 없지만 꺼낼 때 과세되지 않는다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>연말정산 결정세액이 이미 0원에 가까운 사람이 12월에 IRP에 300만원을 더 넣었다. 그 해 세금 효과로 맞는 것은?</p>
+        <div class="opts">
+          <button class="opt">300만원 × 공제율만큼 무조건 환급된다</button>
+          <button class="opt" data-correct>세액공제는 산출세액을 넘을 수 없어 늘린 공제의 대부분 또는 전부가 사라진다</button>
+          <button class="opt">남는 공제는 다음 해로 넘어간다</button>
+          <button class="opt">남는 공제만큼 현금으로 지급된다</button>
+        </div>
+        <div class="quiz-exp">세액공제는 계산된 세금에서 빼는 것이라 세금이 0이 되면 더 뺄 것이 없다. 연금계좌 공제는 이월되지 않는다. 5월에 다른 소득과 합산 신고하는 사람이라면 그때 늘어난 세금에서 쓰일 수 있다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>62세에 연금저축에서 사적연금을 한 해 분리과세 기준(<span data-t="pension.separateLimit" data-f="man"></span>)보다 100만원 많이 받았다(다른 사적연금 없음). 과세 방식으로 맞는 것은?</p>
+        <div class="opts">
+          <button class="opt">기준까지는 저율, 넘는 100만원만 높은 세율이다</button>
+          <button class="opt">연금소득세가 없다</button>
+          <button class="opt">무조건 종합과세된다</button>
+          <button class="opt" data-correct>기준을 넘었으므로 그 해 사적연금 전체를 종합과세하거나 전체를 높은 세율로 분리과세하는 것 중에서 고른다</button>
+        </div>
+        <div class="quiz-exp">사적연금이 한 해 <span data-t="pension.separateLimit" data-f="man"></span>를 넘으면 넘는 몫이 아니라 전체에 대해 종합과세나 <span data-x="over"></span> 분리과세 중 하나를 고른다. 그래서 기준 바로 위에서 세금이 계단처럼 뛴다. 해마다 기준 안으로 나눠 받으면 <span data-x="pay70"></span>(70세 미만)로 끝난다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>45세에 부득이한 사유 없이 연금저축(공제받은 원금 1,000만원, 운용수익 300만원)을 해지했다. 세금은?</p>
+        <div class="opts">
+          <button class="opt" data-correct>1,300만원 전체에 기타소득세(지방세 포함 <span data-x="early"></span>)가 붙고 분리과세로 끝난다</button>
+          <button class="opt">운용수익 300만원에만 <span data-x="wh"></span>가 붙는다</button>
+          <button class="opt">연금소득세 세율이 적용된다</button>
+          <button class="opt">원금은 돌려받고 그동안 받은 공제를 이자와 함께 토해낸다</button>
+        </div>
+        <div class="quiz-exp">연금외수령은 공제받은 납입액과 운용수익에 기타소득세 <span data-t="pension.earlyRate" data-f="pct"></span>(지방세 포함 <span data-x="early"></span>)를 떼고 끝난다. 공제받지 않은 납입액이 있었다면 그 몫은 과세하지 않는다. 요양·파산 같은 부득이한 사유라면 연금소득세 세율로 낮아진다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  const Pn = D.pension, F = D.financial, L = D.income.localRate, C = TX.CASE;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  function legend(ctx, items, x0, y0, maxW, P) {
+    let lx = x0, ly = y0;
+    items.forEach(([s, col, dash]) => {
+      ctx.font = TB.font(11); const tw = ctx.measureText(s).width;
+      if (lx + tw + 22 > x0 + maxW && lx > x0) { lx = x0; ly += 16; }
+      ctx.strokeStyle = col; ctx.lineWidth = 2.4; ctx.setLineDash(dash || []); ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 14, ly); ctx.stroke(); ctx.setLineDash([]);
+      T(ctx, s, lx + 18, ly, { size: 11, color: P.dim, base: "middle" }); lx += tw + 32;
+    });
+    return ly - y0 + 16;
+  }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const minus = (v) => (v > 0.5 ? '<span class="minus">' + TB.won(v) + "</span>" : '<span class="plus">0원</span>');
+  const plus = (v) => '<span class="plus">' + TB.won(v) + "</span>";
+  const by = Pn.payoutRates.byAge;
+  const payRate = (age) => { const r = by.find((x) => age < (x.under == null ? Infinity : x.under)); return (r || by[by.length - 1]).rate; };
+  const GROSS = (C.monthly - C.mealMonthly) * 12;
+
+  /* ---------------------------------------------------------- 합성 값 */
+  const X = {
+    cr15: TX.fmt.pct(Pn.rateLow * (1 + L)), cr12: TX.fmt.pct(Pn.rateHigh * (1 + L)),
+    early: TX.fmt.pct(Pn.earlyRate * (1 + L)), over: TX.fmt.pct(Pn.overSeparateRate * (1 + L)),
+    pay70: TX.fmt.pct(by[0].rate * (1 + L)), pay80: TX.fmt.pct(by[1].rate * (1 + L)), payOld: TX.fmt.pct(by[by.length - 1].rate * (1 + L)),
+    life: TX.fmt.pct(Pn.payoutRates.lifetime * (1 + L)),
+    irpOnly: TX.fmt.man(Pn.totalLimit - Pn.savingLimit),
+    limFirst: TX.fmt.pct(Pn.limitMult / (Pn.limitBase - 1)),
+    wh: TX.fmt.pct(F.withholding * (1 + L)),
+  };
+  document.querySelectorAll("[data-x]").forEach((el) => { const v = X[el.getAttribute("data-x")]; el.textContent = v == null ? "확인 필요" : v; el.classList.add("tval"); });
+
+  /* ---------------------------------------------------------- 다온의 한 해: 연말정산과 5월 신고 */
+  const biz = TX.business({ revenue: C.side.revenue, rate: D.business.simpleRateIllustration });
+  const oth = TX.otherIncome(C.lecture);
+  function daon(paid) {
+    const saving = Math.min(paid, Pn.savingLimit), irp = Math.max(0, paid - Pn.savingLimit);
+    const ye = TX.yearEnd(TX.caseYearEnd({ pensionAcct: { saving, irp } }));
+    // 강연료: 분리과세(원천징수로 끝) vs 종합과세 중 소득세가 적은 쪽
+    const a = TX.comprehensive({ ye, business: biz, other: { income: oth.income, separate: true, withheld: oth.withheld } });
+    const b = TX.comprehensive({ ye, business: biz, other: { income: oth.income, separate: false, withheld: oth.withheld } });
+    const all = Math.min(a.decided + oth.withheld, b.decided);
+    const pen = ye.best.credits.find((c) => c.key === "pension");
+    return { ye: ye.decided, all, credit: pen ? pen.value : 0 };
+  }
+
+  /* ---------------------------------------------------------- 표·노트 */
+  (function () {
+    const d3 = daon(3e6), d6 = daon(Pn.savingLimit), d9 = daon(Pn.totalLimit);
+    document.getElementById("case-table").innerHTML = [[3e6, d3, "지금(연금저축 월 25만원)"], [Pn.savingLimit, d6, "연금저축 한도까지"], [Pn.totalLimit, d9, "IRP를 더해 합산 한도까지"]].map(([p, d, lab]) =>
+      "<tr><td>" + TB.won(p) + " <small>(" + lab + ")</small></td><td class=\"num\">" + TB.won(d.credit) + "</td><td class=\"num\">" + TB.won(d.ye) + "</td><td class=\"num\">" + TB.won(d.all) + "</td></tr>").join("");
+    TB.stat("note-add", TB.won(Math.max(0, Pn.savingLimit - 3e6)));
+    TB.stat("note-c300", TB.won(d3.credit)); TB.stat("note-c600", TB.won(d6.credit));
+    TB.stat("note-ye300", TX.fmt.wonfull(d3.ye));
+    TB.stat("note-t300", TX.fmt.wonfull(d3.all)); TB.stat("note-t600", TX.fmt.wonfull(d6.all));
+    TB.stat("note-t600b", TX.fmt.wonfull(d6.all));
+    TB.stat("note-cirp", TB.won(d9.credit - d6.credit));
+    TB.stat("note-irpgain", TX.fmt.wonfull(d6.all - d9.all));
+    // 묶이는 값 표: 원금 100만원
+    const P0 = 1e6, rows = [
+      ["공제율 높은 구간, 55세 이후 연금", Pn.rateLow, by[0].rate],
+      ["공제율 높은 구간, 중간에 꺼냄", Pn.rateLow, Pn.earlyRate],
+      ["공제율 낮은 구간, 55세 이후 연금", Pn.rateHigh, by[0].rate],
+      ["공제율 낮은 구간, 중간에 꺼냄", Pn.rateHigh, Pn.earlyRate],
+    ];
+    document.getElementById("lock-table").innerHTML = rows.map(([lab, c, t]) => {
+      const cr = P0 * c * (1 + L), tx = P0 * t * (1 + L), net = cr - tx;
+      return "<tr><td>" + lab + "</td><td class=\"num\">" + plus(cr) + "</td><td class=\"num\">" + minus(tx) + "</td><td class=\"num\">" + (net >= 0 ? plus(net) : '<span class="minus">' + TB.won(net) + "</span>") + "</td></tr>";
+    }).join("");
+  })();
+
+  /* ---------------------------------------------------------- 1. 한도와 공제율 */
+  (function () {
+    const sG = TB.range("cr-s", (v) => TB.won(v * 1e4), draw);
+    const iG = TB.range("cr-i", (v) => TB.won(v * 1e4), draw);
+    const gG = TB.seg("cr-g", draw);
+    const gross = () => (gG() === "low" ? Pn.lowGrossMax : Pn.lowGrossMax + 1e7);
+    const cv = TB.canvas("#cr-cv", (ctx, w, h) => {
+      const P = TB.palette(), s = sG() * 1e4, i = iG() * 1e4;
+      const r = TX.pensionCredit({ saving: s, irp: i }, gross());
+      const sOk = Math.min(s, Pn.savingLimit), iOk = Math.min(i, Pn.totalLimit - sOk);
+      const MAX = 2.4e7, bx = 20, bw = w - 40, X0 = (v) => bx + v / MAX * bw;
+      const y1 = 40, bh = 34;
+      T(ctx, "납입액", bx, 22, { size: 11, color: P.dim, weight: 700 });
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y1, bw, bh);
+      // 연금저축(공제분 / 초과분) 다음 IRP(공제분 / 초과분)
+      let x = bx;
+      const seg = (amt, col, a) => { if (amt <= 0) return; ctx.fillStyle = col; ctx.globalAlpha = a; ctx.fillRect(x, y1, amt / MAX * bw, bh); ctx.globalAlpha = 1; x += amt / MAX * bw; };
+      seg(sOk, P.accent, 0.85); seg(s - sOk, P.faint, 0.5); seg(iOk, P.accent2, 0.85); seg(i - iOk, P.faint, 0.5);
+      // 한도 선
+      [[Pn.savingLimit, "연금저축 한도"], [Pn.totalLimit, "합산 한도"]].forEach(([v, lab], k) => {
+        ctx.save(); ctx.setLineDash([4, 3]); ctx.strokeStyle = P.text; ctx.beginPath(); ctx.moveTo(X0(v), y1 - 6); ctx.lineTo(X0(v), y1 + bh + 6); ctx.stroke(); ctx.restore();
+        T(ctx, lab, X0(v) + (k ? 4 : -4), y1 + bh + 20, { size: 11, color: P.text, align: k ? "left" : "right" });
+      });
+      const lg = [["연금저축(공제)", P.accent], ["IRP(공제)", P.accent2], ["한도 초과(공제 없음)", P.faint]];
+      let lx = bx, ly = y1 + bh + 44;
+      lg.forEach(([t, col]) => { ctx.font = TB.font(11); const tw = ctx.measureText(t).width; if (lx + tw + 20 > bx + bw) { lx = bx; ly += 18; } ctx.fillStyle = col; ctx.fillRect(lx, ly - 5, 10, 10); T(ctx, t, lx + 14, ly, { size: 11, color: P.dim, base: "middle" }); lx += tw + 28; });
+      // 공제 막대
+      const y2 = ly + 30, CMAX = Pn.totalLimit * Pn.rateLow * (1 + L) * 1.1;
+      T(ctx, "세액공제(지방세 포함)", bx, y2, { size: 11, color: P.dim, weight: 700 });
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y2 + 10, bw, 22);
+      const cr = r.credit + r.local;
+      ctx.fillStyle = P.ok; ctx.globalAlpha = 0.8; ctx.fillRect(bx, y2 + 10, cr / CMAX * bw, 22); ctx.globalAlpha = 1;
+      T(ctx, TB.won(cr), bx + 6, y2 + 21, { size: 12, color: "#fff", base: "middle", weight: 700, mono: true });
+    }, { get height() { return pw("cr-cv") < 480 ? 230 : 210; } });
+    function draw() {
+      const s = sG() * 1e4, i = iG() * 1e4, r = TX.pensionCredit({ saving: s, irp: i }, gross());
+      TB.stat("cr-o-p", TB.won(s + i));
+      TB.stat("cr-o-e", TB.won(r.eligible) + (s + i > r.eligible ? ' <small class="minus">(' + TB.won(s + i - r.eligible) + " 초과)</small>" : ""));
+      TB.stat("cr-o-c", plus(r.credit + r.local) + " <small>(" + TX.fmt.pct(r.rate * (1 + L)) + ")</small>");
+      TB.stat("cr-o-r", s + i > 0 ? TB.pct((r.credit + r.local) / (s + i), 1) : "—");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 2. 다온: 공제가 세금을 넘으면 */
+  (function () {
+    const mG = TB.seg("cap-m", draw);
+    const PMAX = 1.2e7, STEP = 2e5;
+    const cache = {};
+    const at = (p) => (cache[p] || (cache[p] = daon(p)));
+    const base = at(3e6);
+    let paid = 3e6, box = null;
+    const cv = TB.canvas("#cap-cv", (ctx, w, h) => {
+      const P = TB.palette(), m = mG();
+      const paper = [], real = [];
+      for (let p = 0; p <= PMAX + 1; p += STEP) {
+        const d = at(p);
+        paper.push([p, (d.credit - base.credit) * (1 + L)]);
+        real.push([p, ((m === "ye" ? base.ye - d.ye : base.all - d.all)) * (1 + L)]);
+      }
+      const ymin = -base.credit * 1.15 * (1 + L), ymax = (TX.pensionCredit({ saving: Pn.savingLimit, irp: Pn.totalLimit }, GROSS).credit - base.credit) * (1 + L) * 1.15;
+      const lh = legend(ctx, [["장부상 공제 증가", P.faint, [5, 4]], ["실제로 줄어든 세금", P.ok]], 58, 12, w - 74, P);
+      const c = TB.chart(ctx, { x: 58, y: lh + 14, w: w - 74, h: h - lh - 62 }, {
+        x: [0, PMAX], y: [ymin, ymax], xTicks: [0, 3e6, 6e6, 9e6, 1.2e7], xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [{ data: paper, color: P.faint, width: 1.8, dash: [5, 4] }, { data: real, color: P.ok, width: 2.8 }],
+        vlines: [{ x: Pn.savingLimit, color: P.grid }, { x: Pn.totalLimit, color: P.grid }],
+        hlines: [{ y: 0, color: P.axis, dash: [] }],
+      });
+      box = c;
+      T(ctx, "연금저축 한도", c.X(Pn.savingLimit) - 4, c.box.y + c.box.h - 8, { size: 10, color: P.faint, align: "right" });
+      T(ctx, "합산 한도", c.X(Pn.totalLimit) + 4, c.box.y + c.box.h - 8, { size: 10, color: P.faint });
+      const d = at(paid), yv = ((m === "ye" ? base.ye - d.ye : base.all - d.all)) * (1 + L);
+      knob(ctx, c.X(paid), c.Y(yv), P);
+      if (w >= 480) T(ctx, "가로축: 2026년 연금계좌 납입액(지금 300만원 대비)", c.box.x, h - 8, { size: 11, color: P.faint });
+    }, { get height() { return pw("cap-cv") < 480 ? 300 : 320; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; paid = TB.clamp(Math.round((x - box.box.x) / box.box.w * PMAX / STEP) * STEP, 0, PMAX); draw(); } });
+    function draw() {
+      const m = mG(), d = at(paid);
+      const red = (m === "ye" ? base.ye - d.ye : base.all - d.all) * (1 + L);
+      TB.stat("cap-o-p", TB.won(paid));
+      TB.stat("cap-o-c", TB.won(d.credit * (1 + L)));
+      TB.stat("cap-o-r", red >= 0 ? plus(red) : '<span class="minus">' + TB.won(red) + "</span>");
+      TB.stat("cap-o-t", TB.won((m === "ye" ? d.ye : d.all) * (1 + L)));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 과세이연 */
+  (function () {
+    const aG = TB.range("def-a", (v) => TB.won(v * 1e4), draw);
+    const rG = TB.range("def-r", (v) => v.toFixed(1) + "%", draw);
+    const mG = TB.seg("def-m", draw);
+    const gG = TB.seg("def-g", draw);
+    const NMAX = 35;
+    let n = 23, box = null;   // 32세 → 55세
+    const WH = F.withholding * (1 + L);
+    function sim(years) {
+      const a = Math.min(aG() * 1e4, Pn.totalLimit), r = rG() / 100, c = Pn.rateLow * (1 + L);
+      const gt = gG() === "free" ? 0 : WH;
+      let pen = 0, side = 0, gen = 0;
+      for (let k = 0; k < years; k++) {
+        pen = (pen + a) * (1 + r);
+        side = (side + a * c) * (1 + r * (1 - gt));
+        gen = (gen + a) * (1 + r * (1 - gt));
+      }
+      const tax = mG() === "early" ? Pn.earlyRate * (1 + L) : by[0].rate * (1 + L);
+      return { pension: pen * (1 - tax) + side, general: gen, paid: a * years };
+    }
+    const cv = TB.canvas("#def-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const A = [], B = []; let ymax = 1;
+      for (let k = 0; k <= NMAX; k++) { const s = sim(k); A.push([k, s.pension]); B.push([k, s.general]); ymax = Math.max(ymax, s.pension, s.general); }
+      const lh = legend(ctx, [["연금계좌(세후, 공제 재투자 포함)", P.ok], ["일반 계좌(세후)", P.warn]], 58, 12, w - 74, P);
+      const c = TB.chart(ctx, { x: 58, y: lh + 14, w: w - 74, h: h - lh - 62 }, {
+        x: [0, NMAX], y: [0, ymax * 1.06], xTicks: [0, 5, 10, 15, 20, 25, 30, 35].filter((v, i) => w > 420 || i % 2 === 0), xFmt: (v) => v + "년", yFmt: TB.wonAxis,
+        series: [{ data: B, color: P.warn, width: 2.2 }, { data: A, color: P.ok, width: 2.8 }],
+      });
+      box = c;
+      const s = sim(n), px = c.X(n), hy = c.box.y + c.box.h;
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, hy); ctx.lineTo(px, c.Y(Math.max(s.pension, s.general))); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(px, c.Y(s.pension), 5, 0, TAU); ctx.fillStyle = P.ok; ctx.fill();
+      ctx.beginPath(); ctx.arc(px, c.Y(s.general), 5, 0, TAU); ctx.fillStyle = P.warn; ctx.fill();
+      knob(ctx, px, hy, P);
+    }, { get height() { return pw("def-cv") < 480 ? 290 : 310; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; n = TB.clamp(Math.round((x - box.box.x) / box.box.w * NMAX), 1, NMAX); draw(); } });
+    function draw() {
+      const s = sim(n), d = s.pension - s.general;
+      TB.stat("def-o-n", n + "년 · " + TB.won(s.paid));
+      TB.stat("def-o-a", TB.won(s.pension));
+      TB.stat("def-o-b", TB.won(s.general));
+      TB.stat("def-o-d", d >= 0 ? plus(d) + " 연금계좌" : '<span class="minus">' + TB.won(-d) + " 일반 계좌가 많음</span>");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 4. 1,500만원 기준 */
+  (function () {
+    const oG = TB.range("sep-o", (v) => TB.won(v * 1e8), draw);
+    const aG = TB.seg("sep-a", draw);
+    const lEl = document.getElementById("sep-l"); lEl.addEventListener("change", draw);
+    const AMAX = 4e7;
+    let amt = Pn.separateLimit - 1e6, box = null;
+    const pay = (x) => TX.pensionPayout({ amount: x, age: +aG(), lifetime: lEl.checked, other: oG() * 1e8 });
+    const cv = TB.canvas("#sep-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const low = [], sep = [], comp = [], ch = []; let ymax = 1;
+      for (let x = 0; x <= AMAX + 1; x += AMAX / 200) {
+        const r = pay(x);
+        if (x <= Pn.separateLimit) low.push([x, r.separate]); else { sep.push([x, r.separate]); comp.push([x, r.comprehensive]); }
+        ch.push([x, r.chosen]); ymax = Math.max(ymax, r.separate, r.comprehensive || 0);
+      }
+      const lh = legend(ctx, [["실제 세금(유리한 쪽)", P.bad], ["전체 분리과세", P.warn, [5, 4]], ["전체 종합과세", P.accent, [2, 3]]], 58, 12, w - 74, P);
+      const c = TB.chart(ctx, { x: 58, y: lh + 14, w: w - 74, h: h - lh - 62 }, {
+        x: [0, AMAX], y: [0, ymax * 1.06], xTicks: [0, 1e7, 2e7, 3e7, 4e7], xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [{ data: sep, color: P.warn, width: 1.6, dash: [5, 4] }, { data: comp, color: P.accent, width: 1.6, dash: [2, 3] }, { data: ch.filter((p) => p[0] <= Pn.separateLimit), color: P.bad, width: 2.8 }, { data: ch.filter((p) => p[0] > Pn.separateLimit), color: P.bad, width: 2.8 }],
+        vlines: [{ x: Pn.separateLimit, color: P.text }],
+      });
+      box = c;
+      T(ctx, "분리과세 기준", c.X(Pn.separateLimit) + 4, c.box.y + 12, { size: 11, color: P.text });
+      const r = pay(amt);
+      knob(ctx, c.X(amt), c.Y(r.chosen), P);
+      if (w >= 480) T(ctx, "가로축: 한 해 사적연금 수령액", c.box.x, h - 8, { size: 11, color: P.faint });
+    }, { get height() { return pw("sep-cv") < 480 ? 300 : 310; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; amt = TB.clamp(Math.round((x - box.box.x) / box.box.w * AMAX / 2.5e5) * 2.5e5, 0, AMAX); draw(); } });
+    function draw() {
+      const r = pay(amt);
+      TB.stat("sep-r-a", TB.won(amt));
+      TB.stat("sep-r-m", r.mode === "low" ? "저율 분리과세 " + TX.fmt.pct(r.rate * (1 + L)) : r.mode === "separate" ? "전체 분리과세" : "전체 종합과세");
+      TB.stat("sep-r-t", minus(r.chosen));
+      TB.stat("sep-r-e", amt > 0 ? TB.pct(r.chosen / amt, 1) : "—");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 5. 연금수령한도 */
+  (function () {
+    const vG = TB.range("lim-v", (v) => TB.won(v * 1e8), draw);
+    const rG = TB.range("lim-r", (v) => v.toFixed(1) + "%", draw);
+    const N = 12;
+    let wd = 2.2e7, box = null;
+    function path() {
+      let bal = vG() * 1e8; const r = rG() / 100, out = [];
+      for (let k = 1; k <= N; k++) {
+        const lim = TX.pensionLimit(bal, k), take = Math.min(wd, bal);
+        out.push({ k, bal, lim, take, over: isFinite(lim) ? Math.max(0, take - lim) : 0 });
+        bal = Math.max(0, (bal - take) * (1 + r));
+      }
+      return out;
+    }
+    const cv = TB.canvas("#lim-cv", (ctx, w, h) => {
+      const P = TB.palette(), ps = path();
+      const top = Math.max(vG() * 1e8 * Pn.limitMult / (Pn.limitBase - 1) * 1.15, wd * 1.2, Pn.separateLimit * 1.3);
+      const lims = ps.map((p) => (isFinite(p.lim) ? Math.min(p.lim, top) : 0));
+      const c = TB.bars(ctx, { x: 58, y: 30, w: w - 74, h: h - 70 }, {
+        labels: ps.map((p) => (w < 480 && p.k % 2 === 0 ? "" : p.k + "년차")), y: [0, top], yFmt: TB.wonAxis,
+        stacks: [{ label: "한도", color: P.accent, data: lims }],
+        hlines: [{ y: Pn.separateLimit, color: P.warn, label: "분리과세 기준" }],
+      });
+      ps.forEach((p, i) => {
+        const cx = c.X(i);
+        if (!isFinite(p.lim)) { ctx.fillStyle = P.accent; ctx.globalAlpha = 0.25; ctx.fillRect(cx - c.bw / 2, c.box.y, c.bw, c.box.h); ctx.globalAlpha = 1; T(ctx, "∞", cx, c.box.y + 14, { size: 12, color: P.accent, align: "center", weight: 700 }); }
+        if (p.over > 0) { ctx.fillStyle = P.bad; ctx.globalAlpha = 0.85; ctx.fillRect(cx - c.bw / 2, c.Y(p.take), c.bw, c.Y(p.lim) - c.Y(p.take)); ctx.globalAlpha = 1; }
+        if (p.take <= 0) T(ctx, "끝", cx, c.box.y + c.box.h - 6, { size: 10, color: P.faint, align: "center" });
+      });
+      // 인출 선(끌기)
+      ctx.strokeStyle = P.text; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(c.box.x, c.Y(wd)); ctx.lineTo(c.box.x + c.box.w, c.Y(wd)); ctx.stroke();
+      knob(ctx, c.box.x + c.box.w - 10, c.Y(wd), P);
+      T(ctx, "막대 = 그 해 수령한도 · 선 = 해마다 꺼내는 돈 · 빨강 = 한도 초과(연금외수령)", c.box.x, 16, { size: 11, color: P.dim });
+      box = c;
+    }, { get height() { return pw("lim-cv") < 480 ? 290 : 300; } });
+    TB.drag(cv.canvas, { move(x, y) { if (!box) return; const y0 = box.Y(0), y1 = box.Y(1e8), v = (y0 - y) / (y0 - y1) * 1e8; wd = TB.clamp(Math.round(v / 5e5) * 5e5, 1e6, 1e8); draw(); } });
+    function draw() {
+      const ps = path(), n = ps.filter((p) => p.over > 0).length;
+      TB.stat("lim-o-w", TB.won(wd));
+      TB.stat("lim-o-l", TB.won(ps[0].lim));
+      TB.stat("lim-o-n", n ? '<span class="minus">' + n + "개 해</span>" : '<span class="plus">없음</span>');
+      TB.stat("lim-o-s", wd > Pn.separateLimit ? '<span class="minus">넘음 · 전체 선택과세</span>' : '<span class="plus">이하 · 저율 분리</span>');
+      cv.redraw();
+    }
+    draw();
+  })();
+});
+</script>
+</body>
+</html>

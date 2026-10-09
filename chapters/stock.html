@@ -1,0 +1,771 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "국내 상장주식은 팔 때마다 떼는 증권거래세가, 해외 주식은 250만원 공제 뒤 22% 양도소득세가 붙는다. 대주주 문턱, 연간 손익 통산과 연말 손실 실현의 한계, 환율이 만드는 원화 이익, ETF 종류별 과세를 시뮬레이터로 따라간다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>주식과 ETF · TaxBook</title>
+<meta name="description" content="국내 상장주식은 팔 때마다 떼는 증권거래세가, 해외 주식은 250만원 공제 뒤 22% 양도소득세가 붙는다. 대주주 문턱, 연간 손익 통산과 연말 손실 실현의 한계, 환율이 만드는 원화 이익, ETF 종류별 과세를 시뮬레이터로 따라간다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/stock.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="주식과 ETF · TaxBook">
+<meta property="og:description" content="국내 상장주식은 팔 때마다 떼는 증권거래세가, 해외 주식은 250만원 공제 뒤 22% 양도소득세가 붙는다. 대주주 문턱, 연간 손익 통산과 연말 손실 실현의 한계, 환율이 만드는 원화 이익, ETF 종류별 과세를 시뮬레이터로 따라간다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/stock.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/stock.html#chapter","name":"주식과 ETF","headline":"주식과 ETF · TaxBook","description":"국내 상장주식은 팔 때마다 떼는 증권거래세가, 해외 주식은 250만원 공제 뒤 22% 양도소득세가 붙는다. 대주주 문턱, 연간 손익 통산과 연말 손실 실현의 한계, 환율이 만드는 원화 이익, ETF 종류별 과세를 시뮬레이터로 따라간다.","url":"https://taxbook.euiyun.com/chapters/stock.html","position":11,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"11. 주식과 ETF","item":"https://taxbook.euiyun.com/chapters/stock.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="stock">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 11 · <span data-t="label"></span></div>
+    <h1>주식과 ETF</h1>
+    <p class="lead">다온은 2026년에 미국 상장 ETF와 주식 몇 종목을 팔아 460만원을 벌었고, 다른 종목에서 90만원을 잃었다. 국내 주식을 팔 때는 세금 얘기를 들어 본 적이 없는데, 해외 주식은 이듬해 5월에 직접 신고해야 한다고 한다. 같은 "주식으로 번 돈"인데 왜 하나는 세금이 없고 하나는 있을까. 국내 주식도 정말 세금이 없을까. 이 장은 주식과 ETF에 붙는 세금을 국내·해외, 소액주주·대주주, ETF가 담은 자산으로 나누어 하나씩 계산한다. 이 장의 수치는 <span data-t="label"></span>이다.</p>
+    <ul class="objectives">
+      <li>국내 상장주식 소액주주에게는 양도소득세가 없고, 대신 팔 때마다 매도 금액에 증권거래세가 붙는다는 것을 설명한다. 매매 횟수가 거래세를 어떻게 키우는지 계산한다.</li>
+      <li>대주주 기준(종목당 보유액)과 대주주 양도소득세율을 알고, 문턱 하나로 세금이 0원에서 수천만원으로 바뀌는 구조를 본다.</li>
+      <li>해외 주식 양도소득세를 연간 손익 통산 → 기본공제 → 세율 → 지방소득세 순서로 계산하고, 연말 손실 실현의 효과와 한계(같은 해에만, 이월 없음)를 따진다.</li>
+      <li>달러로는 본전인데 원화로는 이익이 생기는 환율 효과를 계산한다.</li>
+      <li>ETF가 어디에 상장됐고 무엇을 담았는지에 따라 비과세·배당소득·양도소득으로 갈리는 과세 방식을 구분한다.</li>
+    </ul>
+  </header>
+
+  <section id="map">
+    <h2>주식에 붙는 세금의 지도</h2>
+    <p>주식으로 돈을 버는 길은 둘이다. 싸게 사서 비싸게 파는 <span class="term">매매차익</span><span class="en">(Capital gain)</span>과, 가지고 있는 동안 회사가 나눠 주는 <span class="term">배당</span><span class="en">(Dividend)</span>이다. 배당은 이자와 함께 금융소득으로 묶여 원천징수되고, 한 해 합계가 기준금액을 넘으면 종합과세된다. 배당 이야기는 <a href="interest.html">8장</a>에서 했으니, 이 장은 주로 매매차익을 다룬다.</p>
+    <p>매매차익에 세금이 붙느냐는 세 가지 질문으로 갈린다. 첫째, <b>어느 시장에 상장된 주식인가</b>(국내 상장인가 해외 상장인가). 둘째, 국내 상장주식이라면 <b>나는 대주주인가 소액주주인가</b>. 셋째, ETF라면 <b>무엇을 담은 ETF인가</b>. 우리나라 소득세법은 과세 대상을 하나하나 열거하는 방식이라, 목록에 없는 차익에는 세금이 없다. 국내 상장주식을 증권시장에서 판 소액주주의 차익이 그런 경우다. 대신 이 거래에는 팔 때마다 매도 금액에 붙는 <span class="term">증권거래세</span><span class="en">(Securities transaction tax)</span>가 있다. 이익이 났든 손해를 봤든 낸다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 330" role="img" aria-label="주식 매매차익의 과세 지도: 국내 상장 소액주주는 증권거래세만, 대주주는 양도소득세, 해외 상장은 양도소득세, ETF는 담은 자산에 따라 다르다">
+        <defs><marker id="st-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="160" y="10" width="140" height="40" rx="8" class="f-acc-soft"/>
+        <text x="230" y="35" text-anchor="middle" class="lbl-b">주식·ETF를 판다</text>
+        <line x1="200" y1="50" x2="96" y2="84" class="s-line" marker-end="url(#st-ar)"/>
+        <line x1="260" y1="50" x2="364" y2="84" class="s-line" marker-end="url(#st-ar)"/>
+        <text x="110" y="64" text-anchor="middle" class="lbl-dim">국내 상장</text>
+        <text x="350" y="64" text-anchor="middle" class="lbl-dim">해외 상장</text>
+        <rect x="16" y="86" width="164" height="36" rx="7" class="f-surface"/>
+        <text x="98" y="109" text-anchor="middle" class="lbl-b">국내 주식</text>
+        <line x1="60" y1="122" x2="60" y2="150" class="s-line" marker-end="url(#st-ar)"/>
+        <line x1="136" y1="122" x2="136" y2="150" class="s-line" marker-end="url(#st-ar)"/>
+        <rect x="10" y="152" width="96" height="74" rx="7" class="f-ok-soft"/>
+        <text x="58" y="172" text-anchor="middle" class="lbl-b">소액주주</text>
+        <text x="58" y="192" text-anchor="middle" class="lbl">양도세 없음</text>
+        <text x="58" y="212" text-anchor="middle" class="lbl-dim">거래세만</text>
+        <rect x="112" y="152" width="96" height="74" rx="7" class="f-bad-soft"/>
+        <text x="160" y="172" text-anchor="middle" class="lbl-b">대주주</text>
+        <text x="160" y="192" text-anchor="middle" class="lbl">양도소득세</text>
+        <text x="160" y="212" text-anchor="middle" class="lbl-dim">+ 거래세</text>
+        <rect x="280" y="86" width="168" height="62" rx="7" class="f-bad-soft"/>
+        <text x="364" y="108" text-anchor="middle" class="lbl-b">해외 주식·해외 상장 ETF</text>
+        <text x="364" y="130" text-anchor="middle" class="lbl">양도소득세 <tspan data-c="osAll"></tspan></text>
+        <text x="364" y="166" text-anchor="middle" class="lbl-dim">연 <tspan data-t="stock.overseas.deduction" data-f="man"></tspan> 공제 뒤</text>
+        <text x="364" y="184" text-anchor="middle" class="lbl-dim">다음 해 5월 직접 신고</text>
+        <rect x="10" y="246" width="200" height="72" rx="7" class="f-acc2-soft"/>
+        <text x="110" y="268" text-anchor="middle" class="lbl-b">국내 상장 ETF</text>
+        <text x="110" y="288" text-anchor="middle" class="lbl">국내주식형: 차익 비과세</text>
+        <text x="110" y="306" text-anchor="middle" class="lbl">그 밖의 ETF: 배당소득</text>
+        <rect x="236" y="220" width="212" height="98" rx="7" class="f-surface"/>
+        <text x="342" y="244" text-anchor="middle" class="lbl-acc">배당·분배금은 어느 쪽이든</text>
+        <text x="342" y="266" text-anchor="middle" class="lbl">배당소득(금융소득)</text>
+        <text x="342" y="286" text-anchor="middle" class="lbl-dim">원천징수 <tspan data-c="finAll"></tspan>, 연 합계가</text>
+        <text x="342" y="304" text-anchor="middle" class="lbl-dim">기준금액을 넘으면 종합과세(8장)</text>
+      </svg>
+      <figcaption><b>그림 1. 주식 매매차익의 과세 지도.</b> 국내 상장주식을 증권시장에서 판 소액주주는 양도소득세가 없고 증권거래세만 낸다. 대주주와 해외 주식은 양도소득세 대상이다. ETF는 상장된 시장과 담은 자산에 따라 비과세·배당소득·양도소득으로 갈린다. 배당과 분배금은 모두 금융소득이다.</figcaption>
+    </figure>
+
+    <p>지도에서 세금이 붙는 길은 계산 방식도 서로 다르다. 증권거래세는 <b>매도 금액</b>에, 양도소득세는 <b>한 해 동안 통산한 차익</b>에, 국내 상장 기타 ETF의 배당소득은 <b>원천징수</b>로 매긴다. 같은 100만원을 벌어도 어느 길로 버느냐에 따라 세금이 0원에서 수십만원까지 갈리는 이유다. 아래에서 하나씩 계산해 본다.</p>
+  </section>
+
+  <section id="transaction">
+    <h2>증권거래세: 팔 때마다 떼는 세금</h2>
+    <p>국내 상장주식을 팔면 증권회사가 매도 대금에서 증권거래세를 떼어 대신 낸다. 신고할 것은 없다. 세율은 시장마다 다르고, 코스피 주식에는 증권거래세에 <span class="term">농어촌특별세</span><span class="en">(Special tax for rural development)</span>가 더해진다. 이익과 상관없이 <b>판 금액</b>에 붙는다는 것이 핵심이다. 1,000만원어치를 팔면 손해를 보고 팔았어도 같은 세금을 낸다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>시장</th><th class="num">증권거래세</th><th class="num">농어촌특별세</th><th class="num">합계</th><th class="num">1,000만원 매도 시</th></tr></thead>
+        <tbody id="tt-table"></tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)"><span data-t="label"></span>. 근거: <a data-src="stock.transaction"></a>. 2026년 1월 1일 이후 양도분부터 인상됐다. 2025년에는 코스피가 증권거래세 0%에 농어촌특별세 0.15%, 코스닥이 0.15%였다(자세한 변화는 <a href="revision.html">16장</a>).</p>
+
+    <p>세율이 작아 보여도 거래세는 <b>매매할 때마다</b> 다시 붙는다. 3,000만원으로 한 해에 한 번 갈아타는 사람과, 같은 돈으로 매주 전부 사고파는 사람의 거래세는 50배 넘게 차이가 난다. 아래에서 캔버스를 가로로 끌어 한 해 동안 원금 전체를 몇 번 팔았는지(회전 수)를 바꿔 본다.</p>
+
+    <div class="sim" id="sim-turn">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>매매 횟수가 거래세를 키운다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="turn-cv"></canvas><span class="hint">가로로 끌어 연간 회전 수를 고른다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>투자 원금 <output id="turn-p-out"></output></span><input type="range" id="turn-p" min="500" max="20000" step="100" value="3000"></label>
+          <div class="seg" id="turn-m"><button data-value="kospi" class="on">코스피</button><button data-value="kosdaq">코스닥</button><button data-value="konex">코넥스</button></div>
+          <label class="ctrl"><span>기대 연 수익률(가정) <output id="turn-r-out"></output></span><input type="range" id="turn-r" min="0" max="15" step="0.5" value="6"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">연간 매도 금액</span><span class="v" id="turn-o-s">—</span></div>
+        <div class="stat"><span class="k">연간 거래세(농특세 포함)</span><span class="v" id="turn-o-t">—</span></div>
+        <div class="stat"><span class="k">원금 대비</span><span class="v" id="turn-o-p">—</span></div>
+        <div class="stat"><span class="k">기대 수익 중 거래세</span><span class="v" id="turn-o-e">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 회전 수를 1회(한 해에 한 번 전부 갈아탐)에 둔다. 거래세는 원금 × 거래세율 한 번분이라 작다. ② 12회(매달), 52회(매주)로 끈다. 거래세가 회전 수에 비례해 커지고, 기대 수익의 상당 부분을 먹기 시작한다. ③ 기대 수익률을 낮춘다. 수익이 작을수록 같은 거래세가 수익에서 차지하는 몫이 커지고, 빨간 선이 수익선을 넘는 지점(거래세가 수익을 전부 지우는 회전 수)이 왼쪽으로 온다. (모델의 가정: 원금이 한 해 동안 그대로이고, 매도 금액 = 원금 × 회전 수. 증권회사 수수료, 매수·매도 호가 차이, 배당은 넣지 않았다. 실제로는 수수료와 호가 차이가 거래세만큼 또는 그보다 클 수 있다.)</div>
+    </div>
+
+    <p>거래세는 한 번에는 작지만 회전 수에 정비례한다. 빨간 선이 초록 선(기대 수익)을 넘는 오른쪽에서는, 시장이 기대만큼 올라도 거래세만으로 수익이 사라진다. 거래세는 세금 가운데 유일하게 <b>"덜 팔수록" 줄어드는</b> 세금이다. 국내 주식 소액주주에게 양도소득세가 없다는 말은 맞지만, "세금이 없다"는 말은 틀리다.</p>
+  </section>
+
+  <section id="major">
+    <h2>대주주: 종목당 보유액의 문턱</h2>
+    <p>국내 상장주식이라도 <span class="term">대주주</span><span class="en">(Major shareholder)</span>가 팔면 양도소득세를 낸다. 여기서 대주주는 회사를 지배하는 사람만 뜻하지 않는다. 세법은 <b>직전 사업연도 말에 한 종목을 일정 금액 이상 가진 사람</b>을 대주주로 본다. 그 기준금액이 <b><span data-t="stock.domestic.majorThreshold"></span></b>이다. 지분율로 정한 기준도 따로 있다(시장마다 비율이 다르다). 근거는 <a data-src="stock.major"></a>다.</p>
+    <p>대주주가 되면 그 종목을 판 차익에서 기본공제 <span data-t="stock.domestic.majorDeduction" data-f="man"></span>을 빼고, 과세표준 <span data-t="stock.domestic.majorRates.0.0"></span> 이하에는 <span data-t="stock.domestic.majorRates.0.1"></span>, 넘는 부분에는 <span data-t="stock.domestic.majorRates.1.1"></span>를 매긴다(지방소득세 별도). 기본공제는 해외 주식과 합쳐 한 해 한 번만 받는다. 판정이 <b>직전 연도 말 보유액</b>으로 정해지기 때문에, 기준금액에 가까운 투자자들이 12월에 일부를 팔아 보유액을 기준 아래로 낮추는 일이 해마다 이야기된다.</p>
+    <p>아래 그래프는 문턱이 세금을 어떻게 바꾸는지 보여 준다. 위쪽 손잡이를 끌어 직전 연도 말의 종목 보유액을 움직이고, 오른쪽 슬라이더로 올해 그 종목에서 실현한 차익을 정한다.</p>
+
+    <div class="sim" id="sim-major">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>보유액이 문턱을 넘는 순간</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="major-cv"></canvas><span class="hint">손잡이를 끌어 직전 연말 보유액을 바꾼다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>올해 이 종목의 실현 차익 <output id="major-g-out"></output></span><input type="range" id="major-g" min="0.1" max="20" step="0.1" value="5"></label>
+          <div class="seg" id="major-m"><button data-value="kospi" class="on">코스피</button><button data-value="kosdaq">코스닥</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">직전 연말 보유액</span><span class="v" id="major-o-h">—</span></div>
+        <div class="stat"><span class="k">판정</span><span class="v" id="major-o-j">—</span></div>
+        <div class="stat"><span class="k">양도소득세(지방세 포함)</span><span class="v" id="major-o-t">—</span></div>
+        <div class="stat"><span class="k">거래세(차익만큼 판다고 가정)</span><span class="v" id="major-o-x">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 기준금액 바로 아래에 둔다. 차익이 얼마든 양도소득세는 0원이고 거래세만 남는다. ② 손잡이를 기준선 바로 위로 옮긴다. 보유액이 조금 늘었을 뿐인데 같은 차익에 양도소득세가 생긴다. 세금 곡선이 문턱에서 절벽처럼 뛴다. ③ 차익을 크게 올린다. 과세표준이 세율 구간 경계를 넘으면 넘는 부분의 세율이 올라간다. (모델의 가정: 지분율 기준은 넣지 않았고, 보유액은 그 한 종목만 본다. 중소기업 여부, 1년 미만 보유 세율, 대주주 예정신고, 특수관계인 판정은 생략했다. 거래세는 차익과 같은 금액을 판 경우로 단순화했다.)</div>
+    </div>
+
+    <p>대주주 과세는 누진세율이 아니라 <b>문턱</b>이 세금을 정한다. 기준금액 아래 1원과 위 1원의 차이가 세금 전체를 가른다. 그래서 대주주 기준을 바꾸려는 논의는 늘 시장의 관심을 끈다. 2025년 하반기에 기준을 낮추려던 정부안이 나왔다가 철회되어, <span data-t="label"></span>의 기준은 그대로다. 개인 투자자 대부분에게는 먼 이야기지만, 한 종목에 집중 투자한 사람이라면 연말 보유액을 한 번은 확인할 필요가 있다.</p>
+  </section>
+
+  <section id="overseas">
+    <h2>해외 주식 양도소득세: 공제 뒤 한 세율</h2>
+    <p>해외 증권시장에 상장된 주식(미국 주식, 미국 상장 ETF 등)을 판 차익은 금액과 상관없이 <span class="term">양도소득세</span><span class="en">(Capital gains tax)</span> 대상이다. 계산은 단순하다. 한 해(1월 1일~12월 31일) 동안 판 모든 해외 주식의 이익과 손실을 더한 뒤 기본공제를 빼고 하나의 세율을 곱한다. 근거는 <a data-src="stock.overseas"></a>다.</p>
+
+    <div class="formula">
+      $$\text{세금} = \max\!\Big(0,\ \sum \text{이익} - \sum \text{손실} - \text{기본공제}\Big) \times \text{세율} \times (1 + \text{지방소득세율})$$
+      <div class="where">이익·손실은 종목별로 (원화 양도가액 − 원화 취득가액 − 수수료 등 필요경비). 기본공제는 <span data-t="stock.overseas.deduction" data-f="man"></span>, 세율은 <span data-t="stock.overseas.rate"></span>, 지방소득세는 그 <span data-t="income.localRate"></span>라서 합치면 <span data-c="osAll"></span>다. 국내 과세 대상 주식(대주주 주식, 비상장주식 등)의 손익과도 통산할 수 있지만, 소액주주가 증권시장에서 판 국내 주식은 애초에 과세 대상이 아니어서 손실도 통산되지 않는다.</div>
+    </div>
+
+    <p>세율이 하나라서 누진세율의 계단은 없다. 대신 공제 <span data-t="stock.overseas.deduction" data-f="man"></span>이 첫 문턱이다. 이익이 이 금액 이하면 세금이 없고, 넘는 몫에만 <span data-c="osAll"></span>가 붙는다. 이 소득은 근로소득과 합산하지 않는 <b>분류과세</b>라서 연봉이 많든 적든 세율이 같다. 또 금융소득종합과세(<a href="interest.html">8장</a>)의 기준금액 <span data-t="financial.threshold"></span> 계산에도 들어가지 않는다. 아래 계단에서 맨 위 막대의 끝을 끌어 실현 이익을 바꿔 본다. 기본값은 다온의 2026년 숫자(이익 460만원, 손실 90만원)다.</p>
+
+    <div class="sim" id="sim-os">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>해외 주식 양도세 계단</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="os-cv"></canvas><span class="hint">맨 위 막대 끝을 끌어 이익을 바꾼다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>실현 이익 합계 <output id="os-g-out"></output></span><input type="range" id="os-g" min="0" max="3000" step="10" value="460"></label>
+          <label class="ctrl"><span>실현 손실 합계 <output id="os-l-out"></output></span><input type="range" id="os-l" min="0" max="1500" step="10" value="90"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">통산 손익</span><span class="v" id="os-o-n">—</span></div>
+        <div class="stat"><span class="k">과세표준</span><span class="v" id="os-o-b">—</span></div>
+        <div class="stat"><span class="k">세금 합계(지방세 포함)</span><span class="v" id="os-o-t">—</span></div>
+        <div class="stat"><span class="k">통산 이익 중 세금</span><span class="v" id="os-o-e">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 이익을 기본공제 금액 아래로 끈다. 세금이 0원이 되고, 공제 가운데 쓰지 못한 몫은 사라진다(다음 해로 넘어가지 않는다). ② 손실을 이익보다 크게 올린다. 통산 손익이 마이너스가 되어도 세금이 음수가 되지는 않고, 남은 손실도 다음 해로 넘어가지 않는다. ③ 이익을 3,000만원까지 끈다. 차익 중 세금의 비율이 <span data-c="osAll"></span>에 가까워지지만 넘지는 않는다. 공제가 고정 금액이라 이익이 커질수록 공제의 효과가 묽어진다. (모델의 가정: 이익·손실은 이미 원화로 환산한 금액이고, 같은 해 국내 대주주 주식 등 다른 양도소득은 없다고 보았다.)</div>
+    </div>
+
+    <p>계단에서 본 것을 정리하면, 해외 주식 양도세의 크기를 정하는 것은 <b>그 해에 실현한 손익의 합</b>이다. "실현"이 중요하다. 가지고 있는 동안 평가이익이 아무리 커도 팔지 않으면 세금이 없고, 평가손실도 팔지 않으면 통산에 쓰이지 않는다. 이 점을 이용하는 것이 다음 절의 연말 손실 실현이다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 210" role="img" aria-label="해외 주식 양도세의 한 해 일정: 1월부터 12월까지 매도, 결제일 기준으로 연도 귀속, 다음 해 5월 확정신고">
+        <defs><marker id="st-ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <line x1="20" y1="90" x2="446" y2="90" class="s-axis" marker-end="url(#st-ar2)"/>
+        <rect x="30" y="66" width="230" height="48" rx="6" class="f-acc-soft"/>
+        <text x="145" y="86" text-anchor="middle" class="lbl-b"><tspan data-t="year" data-f="raw"></tspan>년 1월 ~ 12월</text>
+        <text x="145" y="106" text-anchor="middle" class="lbl-dim">팔 때마다 손익이 쌓인다</text>
+        <line x1="262" y1="44" x2="262" y2="140" class="s-bad"/>
+        <text x="262" y="36" text-anchor="middle" class="lbl-bad">12월 31일 결제분까지</text>
+        <rect x="300" y="66" width="140" height="48" rx="6" class="f-bad-soft"/>
+        <text x="370" y="86" text-anchor="middle" class="lbl-b"><tspan data-t="settleYear" data-f="raw"></tspan>년 5월</text>
+        <text x="370" y="106" text-anchor="middle" class="lbl-dim">확정신고·납부</text>
+        <text x="145" y="150" text-anchor="middle" class="lbl">이익 − 손실을 통산</text>
+        <text x="145" y="170" text-anchor="middle" class="lbl-dim">손실은 같은 해 이익과만 상계</text>
+        <text x="370" y="150" text-anchor="middle" class="lbl">예정신고 없음</text>
+        <text x="370" y="170" text-anchor="middle" class="lbl-dim">신고하지 않으면 가산세</text>
+        <text x="230" y="200" text-anchor="middle" class="lbl-dim">남은 손실·남은 공제는 다음 해로 넘어가지 않는다</text>
+      </svg>
+      <figcaption><b>그림 2. 해외 주식 양도세의 한 해.</b> 한 해 동안 판 종목의 손익을 모두 더하고, 다음 해 5월 종합소득세 신고 기간에 따로 확정신고한다. 양도 시점은 체결일이 아니라 대금을 주고받는 결제일 기준이라, 12월 말에 판 주식은 다음 해 양도로 잡힐 수 있다. 신고하지 않으면 무신고 가산세 <span data-t="penalty.noFiling"></span>가 붙는다.</figcaption>
+    </figure>
+  </section>
+
+  <section id="harvest">
+    <h2>연말 손실 실현: 효과와 한계</h2>
+    <p>올해 이익이 공제 금액을 넘었고, 아직 팔지 않은 종목 중에 평가손실이 난 것이 있다고 하자. 12월에 그 종목을 팔면 손실이 실현되어 올해 이익과 통산되고, 세금이 줄어든다. 이것을 흔히 <span class="term">손실 실현 매도</span><span class="en">(Tax-loss harvesting)</span>라고 한다. 같은 종목을 다시 사면 투자 상태는 거의 그대로 두고 세금만 줄일 수 있다는 것이 매력이다.</p>
+    <p>하지만 효과에는 분명한 한계가 있다. 첫째, <b>같은 해 안에서만</b> 통산된다. 해외 주식 양도차손은 다음 해로 넘어가지 않는다. 둘째, 올해 이익이 이미 공제 금액 아래라면 손실을 실현해도 줄일 세금이 없다. 셋째, 다시 사면 취득가가 낮아져서 나중에 오를 때 그만큼 차익이 커진다. 세금을 없앤 것이 아니라 <b>뒤로 미룬 것</b>에 가깝다. 다만 기본공제가 해마다 새로 주어지므로, 미룬 차익이 나중 해의 공제 안에 들어가면 결과적으로 세금이 줄기도 한다.</p>
+    <p>아래 시뮬레이터에서 평가손실 종목을 언제 파느냐(12월, 다음 해 1월, 팔지 않음)에 따라 두 해의 세금 합계가 어떻게 달라지는지 본다.</p>
+
+    <div class="sim" id="sim-harvest">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>손실 종목을 12월에 팔면</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="hv-cv"></canvas><span class="hint">막대를 누르면 그 선택을 고른다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>올해 이미 실현한 이익 <output id="hv-g-out"></output></span><input type="range" id="hv-g" min="0" max="2000" step="10" value="460"></label>
+          <label class="ctrl"><span>손실 종목의 평가손실 <output id="hv-l-out"></output></span><input type="range" id="hv-l" min="0" max="1000" step="10" value="90"></label>
+          <label class="ctrl"><span>내년에 실현할 이익(가정) <output id="hv-n-out"></output></span><input type="range" id="hv-n" min="0" max="2000" step="10" value="0"></label>
+          <div class="seg" id="hv-w"><button data-value="dec" class="on">12월에 판다</button><button data-value="jan">내년 1월에 판다</button><button data-value="hold">팔지 않는다</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">올해 세금</span><span class="v" id="hv-o-1">—</span></div>
+        <div class="stat"><span class="k">내년 세금</span><span class="v" id="hv-o-2">—</span></div>
+        <div class="stat"><span class="k">두 해 합계</span><span class="v" id="hv-o-t">—</span></div>
+        <div class="stat"><span class="k">팔지 않을 때보다</span><span class="v" id="hv-o-d">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(다온의 숫자)에서 '12월에 판다'와 '팔지 않는다'를 비교한다. 손실 90만원이 올해 과세표준을 줄여 세금이 손실 × <span data-c="osAll"></span>만큼 준다. ② '내년 1월에 판다'를 고른다. 내년에 실현할 이익이 0이면 손실이 쓰일 곳이 없어 효과가 사라진다. 내년 이익을 공제 금액 위로 올려야 1월 매도도 효과가 생긴다. ③ 올해 이익을 공제 금액 아래로 낮춘다. 어느 선택이든 올해 세금이 0이라 12월 매도의 효과가 없다. (모델의 가정: 손실 종목은 팔고 같은 값에 다시 산다고 보고, 다시 산 뒤 낮아진 취득가가 먼 훗날 만드는 차익은 넣지 않았다. 수수료·환율 변동·결제일 문제는 생략했다.)</div>
+    </div>
+
+    <p>손실 실현이 통하는 조건은 둘이다. <b>같은 해에 공제 금액을 넘는 이익이 있을 것</b>, 그리고 <b>그 해 안에 결제될 것</b>. 둘 중 하나라도 빠지면 손실은 아무 데도 쓰이지 못하고 사라진다. 반대로 올해 이익이 공제 금액보다 한참 작다면, 12월에 오히려 <b>이익 난 종목</b>을 일부 팔고 다시 사서 공제를 채우는 방법도 이야기된다. 해마다 새로 주어지는 공제를 버리지 않는다는 점에서 같은 원리다. 어느 쪽이든 결정을 세금만 보고 해서는 안 된다. 다시 사는 사이 가격이 움직이고, 거래 비용과 환전 비용이 든다.</p>
+
+    <div class="callout pro">
+      <strong>12월 매도는 "결제일"로 센다</strong>
+      해외 주식의 양도 시기는 주문이 체결된 날이 아니라 대금을 주고받는 결제일이다. 해외 시장은 체결 뒤 며칠 지나 결제되고, 시차와 현지 휴장일까지 겹친다. 12월 마지막 주에 판 주식이 다음 해 1월에 결제되면 그 손익은 다음 해 것이 된다. 손실 실현을 계획했다면 증권회사가 연말에 공지하는 "연내 결제 마지막 매도일"을 확인하고 그보다 앞서 판다. 반대로 이익 실현을 다음 해로 넘기고 싶다면 그 날 이후에 판다. 또 하나 흔한 실수는 여러 증권회사 계좌를 쓰면서 한 곳의 손익만 신고하는 것이다. 통산은 사람 단위라서 모든 계좌의 손익을 합쳐야 한다. 일부 증권회사가 무료 신고 대행을 해 주지만 그 회사 계좌만 계산하므로, 다른 계좌가 있으면 직접 합쳐서 신고한다.
+    </div>
+  </section>
+
+  <section id="fx">
+    <h2>환율이 이익을 만들 때</h2>
+    <p>해외 주식의 양도차익은 원화로 계산한다. 살 때 낸 원화와 팔 때 받은 원화의 차이가 차익이다. 정확히는 취득가액은 산 날(대금 결제일)의 기준환율로, 양도가액은 판 날의 기준환율로 환산한다. 그래서 주가가 그대로여도 그 사이 환율이 오르면 원화 차익이 생기고, 그 차익에도 양도세가 붙는다. 반대로 주가가 올라도 환율이 내리면 원화로는 손실일 수 있다.</p>
+    <p>이 차익을 두 조각으로 나누어 볼 수 있다. 주가가 움직여서 생긴 몫(달러 기준 수익 × 살 때 환율)과 환율이 움직여서 생긴 몫(팔 때 달러 금액 × 환율 변화)이다. 세법은 둘을 구분하지 않고 합친 금액에 과세한다. 아래 그래프에서 손잡이를 끌어 팔 때의 환율을 움직여 본다. 원화 1,000만원어치를 샀다고 가정한다.</p>
+
+    <div class="sim" id="sim-fx">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>달러로는 본전, 원화로는 이익</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="fx-cv"></canvas><span class="hint">손잡이를 끌어 팔 때 환율을 바꾼다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>살 때 환율(원/달러) <output id="fx-b-out"></output></span><input type="range" id="fx-b" min="1000" max="1700" step="10" value="1300"></label>
+          <label class="ctrl"><span>달러 기준 주가 변화 <output id="fx-r-out"></output></span><input type="range" id="fx-r" min="-40" max="80" step="1" value="0"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">팔 때 환율</span><span class="v" id="fx-o-x">—</span></div>
+        <div class="stat"><span class="k">주가 몫 / 환율 몫</span><span class="v" id="fx-o-p">—</span></div>
+        <div class="stat"><span class="k">원화 차익</span><span class="v" id="fx-o-g">—</span></div>
+        <div class="stat"><span class="k">양도세(이 거래만 있을 때)</span><span class="v" id="fx-o-t">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 주가 변화 0%에서 팔 때 환율을 살 때보다 높게 끈다. 달러로는 본전인데 원화 차익이 생긴다. 환율이 충분히 오르면 차익이 공제 금액을 넘어 세금이 붙는다. ② 주가 변화를 +20%로 올리고 팔 때 환율을 살 때보다 낮게 끈다. 달러로는 이익인데 환율 몫이 마이너스라 원화 차익이 줄거나 손실이 된다. ③ 살 때 환율을 높게 두고 같은 실험을 한다. 비싸게 환전해 산 주식은 환율이 내릴 때 원화 손실이 커진다. (모델의 가정: 매수 금액 1,000만원, 환전 수수료와 매매 수수료는 넣지 않았다. 실제 계산은 결제일의 기준환율을 쓴다. 이 거래 하나만 있고 같은 해 다른 해외 주식 손익은 없다고 보았다.)</div>
+    </div>
+
+    <p>환율이 만든 이익에 세금이 붙는다는 것은 억울하게 느껴질 수 있다. 달러로는 한 푼도 벌지 않았기 때문이다. 하지만 원화로 사는 사람에게 원화가 늘었다면 그것이 소득이라는 것이 세법의 관점이다. 거꾸로 환율 때문에 생긴 원화 손실도 다른 종목 이익과 통산된다. 해외 주식을 한 해에 여러 번 사고팔았다면 종목별·거래별로 결제일 환율을 따로 적용해야 하므로, 증권회사가 내 주는 양도소득 계산 자료를 기본으로 쓰고 직접 대조하는 것이 현실적이다.</p>
+
+    <div class="callout check">
+      <strong>해외 주식 양도세 신고 전에 확인할 것</strong>
+      <ul>
+        <li><b>모든 계좌의 손익</b>: 증권회사마다 "해외주식 양도소득 내역"을 내려받아 합친다. 해외 상장 ETF도 같은 신고에 들어간다.</li>
+        <li><b>귀속 연도</b>: 12월 말 매도분이 결제일 기준으로 어느 해에 잡혔는지 본다.</li>
+        <li><b>환율</b>: 취득·양도 각각 결제일 기준환율이 적용됐는지, 수수료가 필요경비로 들어갔는지 본다.</li>
+        <li><b>국내 과세 대상 주식</b>: 대주주 주식이나 비상장주식을 판 것이 있으면 함께 통산하고, 기본공제 <span data-t="stock.overseas.deduction" data-f="man"></span>은 한 번만 쓴다.</li>
+        <li><b>기한</b>: <span data-t="year" data-f="raw"></span>년 귀속분은 <span data-t="settleYear" data-f="raw"></span>년 <span data-t="calendar.incomeFiling"></span>에 홈택스에서 양도소득세 확정신고로 낸다. 종합소득세 신고와는 별도 신고다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="etf">
+    <h2>ETF: 어디에 상장됐고, 무엇을 담았나</h2>
+    <p><span class="term">ETF</span><span class="en">(Exchange-traded fund)</span>는 주식처럼 거래소에서 사고파는 펀드다. 그래서 주식처럼 보이지만 세법은 ETF를 "무엇을 담은 펀드인가"로 본다. 국내 거래소에 상장된 ETF는 둘로 나뉜다. 국내 주식만 담은 <b>국내주식형 ETF</b>는 국내 주식처럼 매매차익이 비과세다. 그 밖의 ETF(해외 주식, 채권, 원자재, 레버리지·인버스 등을 담은 것)는 매매차익을 <b>배당소득</b>으로 보아 원천징수 <span data-c="finAll"></span>를 뗀다. 이때 과세 대상은 실제 매매차익과 보유 기간 동안 늘어난 과세표준 기준가격 가운데 작은 금액이다. 이를 <span class="term">보유기간 과세</span>라 한다. 해외 거래소에 상장된 ETF는 해외 주식과 똑같이 양도소득세 대상이다. 분배금은 어느 ETF든 배당소득이다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 300" role="img" aria-label="ETF 과세 갈래: 국내 상장 국내주식형은 차익 비과세, 국내 상장 기타 ETF는 배당소득, 해외 상장 ETF는 양도소득세">
+        <defs><marker id="st-ar3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="170" y="10" width="120" height="36" rx="8" class="f-acc-soft"/>
+        <text x="230" y="33" text-anchor="middle" class="lbl-b">ETF 매매차익</text>
+        <text x="230" y="70" text-anchor="middle" class="lbl-dim">어느 거래소에 상장됐나?</text>
+        <line x1="200" y1="78" x2="110" y2="104" class="s-line" marker-end="url(#st-ar3)"/>
+        <line x1="260" y1="78" x2="360" y2="104" class="s-line" marker-end="url(#st-ar3)"/>
+        <text x="110" y="122" text-anchor="middle" class="lbl-b">국내 상장</text>
+        <text x="110" y="140" text-anchor="middle" class="lbl-dim">무엇을 담았나?</text>
+        <line x1="90" y1="148" x2="60" y2="170" class="s-line" marker-end="url(#st-ar3)"/>
+        <line x1="130" y1="148" x2="170" y2="170" class="s-line" marker-end="url(#st-ar3)"/>
+        <rect x="8" y="172" width="104" height="86" rx="7" class="f-ok-soft"/>
+        <text x="60" y="194" text-anchor="middle" class="lbl-b">국내주식형</text>
+        <text x="60" y="216" text-anchor="middle" class="lbl">차익 비과세</text>
+        <text x="60" y="236" text-anchor="middle" class="lbl-dim">국내 주식처럼</text>
+        <rect x="118" y="172" width="128" height="86" rx="7" class="f-warn-soft"/>
+        <text x="182" y="194" text-anchor="middle" class="lbl-b">그 밖의 ETF</text>
+        <text x="182" y="216" text-anchor="middle" class="lbl">배당소득 <tspan data-c="finAll"></tspan></text>
+        <text x="182" y="236" text-anchor="middle" class="lbl-dim">금융소득에 합산</text>
+        <text x="360" y="122" text-anchor="middle" class="lbl-b">해외 상장</text>
+        <rect x="282" y="172" width="170" height="86" rx="7" class="f-bad-soft"/>
+        <text x="367" y="194" text-anchor="middle" class="lbl-b">해외 주식과 같다</text>
+        <text x="367" y="216" text-anchor="middle" class="lbl">양도소득세 <tspan data-c="osAll"></tspan></text>
+        <text x="367" y="236" text-anchor="middle" class="lbl-dim"><tspan data-t="stock.overseas.deduction" data-f="man"></tspan> 공제, 분류과세</text>
+        <line x1="360" y1="130" x2="360" y2="168" class="s-line" marker-end="url(#st-ar3)"/>
+        <text x="230" y="284" text-anchor="middle" class="lbl-dim">분배금은 세 갈래 모두 배당소득이다</text>
+      </svg>
+      <figcaption><b>그림 3. ETF 과세의 갈래.</b> 같은 "미국 대표지수 ETF"라도 국내에 상장된 것은 매매차익이 배당소득으로, 미국에 상장된 것은 양도소득으로 과세된다. 국내 상장 기타 ETF의 차익은 금융소득에 더해지므로 이자·배당과 합쳐 연 기준금액을 넘으면 종합과세(<a href="interest.html">8장</a>)로 갈 수 있다. 연금계좌·ISA 안에서 사면 과세가 미뤄지거나 줄어든다(<a href="isa.html">9장</a>, <a href="pension.html">10장</a>).</figcaption>
+    </figure>
+
+    <p>그렇다면 같은 지수를 따르는 ETF를 국내 상장으로 사는 것과 해외 상장으로 사는 것 중 어느 쪽 세금이 적을까. 국내 상장 기타 ETF는 공제 없이 첫 1원부터 <span data-c="finAll"></span>이고, 해외 상장 ETF는 <span data-t="stock.overseas.deduction" data-f="man"></span>을 뺀 뒤 <span data-c="osAll"></span>다. 차익이 작으면 해외 상장이, 크면 국내 상장이 유리해지는 <b>교차점</b>이 생긴다. 아래에서 손잡이를 끌어 차익을 바꿔 본다.</p>
+
+    <div class="sim" id="sim-etf">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>같은 차익, 세 가지 ETF</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="etf-cv"></canvas><span class="hint">가로로 끌어 매매차익을 고른다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>같은 해 다른 해외 주식 이익 <output id="etf-o-out"></output></span><input type="range" id="etf-o" min="0" max="500" step="10" value="0"></label>
+          <label class="check"><input type="checkbox" id="etf-fin"> 이자·배당이 이미 기준금액에 가깝다</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">매매차익</span><span class="v" id="etf-o-g">—</span></div>
+        <div class="stat"><span class="k">국내 상장 국내주식형</span><span class="v" id="etf-o-a">—</span></div>
+        <div class="stat"><span class="k">국내 상장 기타 ETF</span><span class="v" id="etf-o-b">—</span></div>
+        <div class="stat"><span class="k">해외 상장 ETF</span><span class="v" id="etf-o-c">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 차익을 작게 둔다. 해외 상장 ETF는 공제 안이라 세금이 0원이고, 국내 상장 기타 ETF는 처음부터 원천징수된다. ② 손잡이를 오른쪽으로 끌어 두 선이 만나는 교차점을 지난다. 그 뒤로는 국내 상장 기타 ETF 쪽이 세금이 적다. ③ '같은 해 다른 해외 주식 이익'을 올린다. 공제를 다른 종목이 먼저 써 버려 해외 상장 ETF의 선이 왼쪽으로 밀리고 교차점이 0에 가까워진다. ④ '이자·배당이 이미 기준금액에 가깝다'를 켠다. 국내 상장 기타 ETF의 차익이 금융소득종합과세로 넘어가 다른 소득과 합산된다는 경고가 뜬다(세액은 사람마다 달라 그리지 않았다). (모델의 가정: 국내 상장 기타 ETF는 과세표준 기준가격 증가분이 매매차익과 같다고 보았다. 분배금, 외국납부세액, 환율, 계좌(ISA·연금) 효과는 넣지 않았다.)</div>
+    </div>
+
+    <p>교차점은 계산으로도 구할 수 있다. 두 세금이 같아지는 차익 \(g\)는 \(g \times\) 원천징수율 \(= (g - \text{공제}) \times\) 양도세율에서 나온다. <span data-t="label"></span> 값으로는 약 <span data-c="cross"></span>이다. 다만 이것은 세금만의 비교다. 국내 상장 ETF는 원화로 사고팔아 환전 비용이 없고, 연금계좌·ISA에 담을 수 있다. 해외 상장 ETF는 신고를 직접 해야 하고 환율 위험을 그대로 진다. 세금은 선택의 한 조각일 뿐이다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>구분</th><th>매매차익</th><th>분배금</th><th>신고</th></tr></thead>
+        <tbody>
+          <tr><td>국내 상장주식(소액주주)</td><td>비과세, 매도 시 증권거래세</td><td>배당소득 <span data-c="finAll"></span></td><td>없음(원천징수로 끝, 금융소득 기준 초과 시 종합과세)</td></tr>
+          <tr><td>국내 상장주식(대주주)</td><td>양도소득세 <span data-t="stock.domestic.majorRates.0.1"></span>·<span data-t="stock.domestic.majorRates.1.1"></span> + 지방세</td><td>배당소득</td><td>양도소득세 신고</td></tr>
+          <tr><td>국내 상장 국내주식형 ETF</td><td>비과세</td><td>배당소득</td><td>없음</td></tr>
+          <tr><td>국내 상장 기타 ETF</td><td>배당소득 <span data-c="finAll"></span>(보유기간 과세)</td><td>배당소득</td><td>없음(금융소득 기준 초과 시 종합과세)</td></tr>
+          <tr><td>해외 주식·해외 상장 ETF</td><td>양도소득세 <span data-c="osAll"></span>, <span data-t="stock.overseas.deduction" data-f="man"></span> 공제</td><td>배당소득(외국 원천징수 반영)</td><td>다음 해 5월 확정신고</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)">국내 상장 ETF의 과세 구조는 소득세법 시행령 제26조의2에 따른다. 이 책은 이 부분을 2차 자료로 확인했다(<a href="../SOURCES.md">SOURCES.md</a>의 '대체로 확인').</p>
+
+    <div class="callout deep">
+      <strong>국내시장 복귀계좌(RIA) 공제: 2026년의 한시 특례</strong>
+      2026년에는 오래 가진 해외 상장주식을 정리하고 국내 주식으로 옮기는 사람을 위한 특례가 새로 생겼다. 정해진 날짜 이전부터 보유한 해외 상장주식을 국내시장 복귀계좌(RIA)로 옮겨 팔고 그 돈을 국내 주식에 투자하면, 그 양도소득의 일부를 공제해 준다. 1인당 매도 금액에 한도가 있고, 공제율은 언제 파느냐에 따라 낮아지며, 계좌에서 일정 기간 안에 돈을 빼면 공제받은 세금을 다시 걷는다. 일반 계좌에서 해외 주식을 새로 사면 공제가 줄어드는 장치도 있다. 이 책은 이 특례를 '대체로 확인' 수준으로만 확인했다. 특히 공제율이 바뀌는 시기의 경계가 자료마다 달라서(분기 기준이라는 자료와 특정 월말 기준이라는 자료가 함께 있다) 공제율 숫자를 적지 않았고, 이 장의 시뮬레이터에도 넣지 않았다. 해당하는 사람은 계좌를 연 증권회사의 안내와 국세청 자료로 기간·한도·추징 요건을 직접 확인한다.
+    </div>
+
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다</strong>
+      이 장의 거래세율, 대주주 기준, 양도세율과 공제는 <span data-t="label"></span>이다(<span data-t="lawVersion"></span>). 증권거래세는 2026년에 다시 올랐고, 대주주 기준은 2025년에 낮추려다 철회됐다. 이렇게 투자 세금은 시장 상황에 따라 자주 바뀐다. 이 장의 계산은 이 책의 모델로 계산한 교육용 단순화이며, 실제 세액은 홈택스 양도소득세 신고 화면이나 전문가에게 확인한다.
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 해외 주식 정리</h2>
+    <p>다온의 숫자로 돌아간다. 다온은 2025년부터 미국 상장 ETF와 주식을 조금씩 샀고, 2026년에 몇 종목을 팔았다. 증권회사 양도소득 내역에 찍힌 원화 기준 실현 손익은 이익 460만원, 손실 90만원이다. 국내 주식은 소액으로 몇 번 사고판 것이 전부다.</p>
+
+    <div class="slip">
+      <div class="row"><span>실현 이익(원화 환산)</span><span>4,600,000원</span></div>
+      <div class="row"><span>실현 손실</span><span>−900,000원</span></div>
+      <div class="row"><span>통산 양도차익</span><span id="cs-net"></span></div>
+      <div class="row"><span>기본공제</span><span id="cs-ded"></span></div>
+      <div class="row"><span>과세표준</span><span id="cs-base"></span></div>
+      <div class="row"><span>양도소득세(<span data-t="stock.overseas.rate"></span>)</span><span id="cs-tax"></span></div>
+      <div class="row"><span>지방소득세</span><span id="cs-local"></span></div>
+      <div class="row total"><span><span data-t="settleYear" data-f="raw"></span>년 5월에 낼 세금</span><span id="cs-total"></span></div>
+    </div>
+
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · 2026년 12월</span></div>
+      <h4>해외 주식은 "번 만큼"이 아니라 "판 만큼" 세금이 정해진다</h4>
+      <p><b>숫자.</b> 이 책의 모델로 계산하면 이익 460만원과 손실 90만원을 통산한 <b id="note-net"></b>에서 기본공제를 빼면 과세표준은 <b id="note-base"></b>, 양도소득세와 지방소득세를 합쳐 <b id="note-tax"></b>이다. <span data-t="settleYear" data-f="raw"></span>년 5월에 홈택스에서 양도소득세 확정신고로 낸다. 연말정산이나 종합소득세 신고와는 별개의 신고라서, <a href="income.html">7장</a>의 종합소득세 신고 때 함께 처리되지 않는다는 점을 노트에 크게 적었다.</p>
+      <p><b>12월에 손실 종목을 정리했다면.</b> 다온의 손실 90만원은 원래 평가손실이었다. 12월 중순 그 종목을 팔고 같은 종목을 다시 산 덕분에 손실이 실현됐다. 팔지 않았다면 이익 460만원만 남아 세금이 <b id="note-nohv"></b>였을 것이다. 손실 실현으로 줄어든 세금은 <b id="note-save"></b>, 대략 손실액 × <span data-c="osAll"></span>이다. 다만 다시 산 종목의 취득가가 90만원만큼 낮아졌으니, 이 차이는 나중에 그 종목을 팔 때 차익으로 돌아온다. 그때 그 해의 공제 안에 들어가면 영영 세금이 없고, 공제를 넘으면 미룬 것일 뿐이다. 결제일을 확인하려고 증권회사 공지를 봤고, 12월 셋째 주에 팔아 올해 결제로 잡혔다.</p>
+      <p><b>국내 주식.</b> 몇 번 사고판 국내 주식에는 양도세가 없었다. 대신 매도할 때마다 증권거래세가 빠져 있었다. 금액은 작지만 거래 내역에서 직접 확인했다.</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>해외 주식 양도세는 한 해 실현 손익 통산 → 공제 → 단일 세율. 손실은 같은 해, 결제일 기준으로만 쓰인다. 국내 주식은 양도세 대신 거래세.</div><div><b>아직 남은 문제</b>다시 산 종목의 낮아진 취득가는 언젠가 차익으로 돌아온다. 다음 해에도 공제를 채울지는 그때의 손익을 보고 정한다. 확인할 것: 다른 증권회사 계좌의 소액 거래 내역.</div><div><b>다음 장</b>12장: 보유 중인 가상자산(원금 300만원)에는 언제부터, 어떤 기준으로 세금이 붙는가.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>국내 상장주식을 증권시장에서 판 소액주주에게는 양도소득세가 없다. 대신 매도 금액에 증권거래세가 붙는다(코스피는 농어촌특별세 포함). 거래세는 이익과 상관없이 매매할 때마다 붙어, 회전 수에 비례해 커진다.</li>
+      <li>직전 연도 말 종목당 보유액이 대주주 기준(<span data-t="stock.domestic.majorThreshold"></span>) 이상이면 대주주로서 양도소득세(<span data-t="stock.domestic.majorRates.0.1"></span>·<span data-t="stock.domestic.majorRates.1.1"></span>, 지방세 별도)를 낸다. 문턱 하나가 세금 전체를 가른다.</li>
+      <li>해외 주식과 해외 상장 ETF는 한 해 실현 손익을 통산해 <span data-t="stock.overseas.deduction" data-f="man"></span>을 공제하고 <span data-c="osAll"></span>(지방세 포함)를 매긴다. 근로소득과 합산하지 않으며 다음 해 5월에 따로 확정신고한다.</li>
+      <li>연말 손실 실현은 같은 해에 공제를 넘는 이익이 있고 그 해 안에 결제될 때만 세금을 줄인다. 양도차손은 다음 해로 넘어가지 않고, 다시 산 종목의 낮아진 취득가는 나중 차익을 키운다.</li>
+      <li>해외 주식의 차익은 원화로 계산하므로 주가가 그대로여도 환율이 오르면 과세되는 차익이 생기고, 환율이 내리면 손실이 생긴다.</li>
+      <li>ETF는 상장 시장과 담은 자산으로 과세가 갈린다. 국내 상장 국내주식형은 차익 비과세, 국내 상장 기타 ETF는 배당소득(보유기간 과세, 금융소득 합산), 해외 상장 ETF는 양도소득세다. 분배금은 모두 배당소득이다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>대주주가 아닌 직장인이 국내 상장주식(코스피)을 증권시장에서 팔아 300만원의 차익을 냈다. 이 거래에 붙는 세금으로 맞는 것은?</p>
+        <div class="opts">
+          <button class="opt">차익 300만원에 양도소득세 <span data-c="osAll"></span></button>
+          <button class="opt" data-correct>차익에는 양도소득세가 없고, 매도 금액에 증권거래세와 농어촌특별세가 붙는다</button>
+          <button class="opt">차익이 기본공제 이하라서 아무 세금도 없다</button>
+          <button class="opt">차익은 근로소득과 합산해 종합소득세로 낸다</button>
+        </div>
+        <div class="quiz-exp">소액주주가 증권시장에서 판 국내 상장주식의 차익은 양도소득세 과세 대상이 아니다. 대신 매도 금액에 증권거래세 <span data-t="stock.domestic.transactionTax.kospi.tax"></span>와 농어촌특별세 <span data-t="stock.domestic.transactionTax.kospi.rural"></span>가 붙는다(코스피, <span data-t="label"></span>). 거래세는 차익이 아니라 판 금액에 매기므로 손해를 보고 팔아도 낸다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>올해 미국 주식에서 실현한 이익이 기본공제(<span data-t="stock.overseas.deduction" data-f="man"></span>)보다 적다. 평가손실이 난 다른 종목이 있는데, 12월에 이 손실 종목을 팔면 올해 양도세는 어떻게 되는가?</p>
+        <div class="opts">
+          <button class="opt">이익에서 손실을 뺀 나머지 금액에 그대로 과세된다</button>
+          <button class="opt">쓰지 못한 손실이 다음 해로 이월되어 내년 세금이 준다</button>
+          <button class="opt">손실을 실현했으므로 환급을 받는다</button>
+          <button class="opt" data-correct>이익이 이미 기본공제 이하라서 팔든 안 팔든 올해 세금은 0원이고, 손실은 쓰이지 못한다</button>
+        </div>
+        <div class="quiz-exp">해외 주식 양도세는 한 해 통산 손익에서 기본공제 <span data-t="stock.overseas.deduction" data-f="man"></span>을 뺀 뒤 과세한다. 이익이 이미 공제 안이라 세금이 없으므로 손실을 실현해도 줄일 세금이 없다. 양도차손은 다음 해로 넘어가지 않는다. 손실 실현은 같은 해에 공제를 넘는 이익이 있을 때만 효과가 있다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>1달러에 1,300원일 때 미국 ETF를 1,000만원어치 샀고, 달러 기준 가격은 그대로인 채 환율이 1,500원일 때 전부 팔았다. 양도세 계산에서 이 거래의 차익은?</p>
+        <div class="opts">
+          <button class="opt" data-correct>원화로 약 154만원의 차익이 생긴다(환율 상승분)</button>
+          <button class="opt">달러 가격이 그대로라서 차익은 0원이다</button>
+          <button class="opt">환율 차익은 외환 거래라서 양도소득세와 무관하다</button>
+          <button class="opt">환율 차익은 이자소득으로 따로 과세된다</button>
+        </div>
+        <div class="quiz-exp">해외 주식의 차익은 양도가액과 취득가액을 각각의 결제일 기준환율로 원화 환산해 계산한다. 1,000만원 ÷ 1,300 × 1,500 ≈ 1,154만원이므로 원화 차익은 약 154만원이다. 다른 손익이 없다면 이 금액에서 기본공제 <span data-t="stock.overseas.deduction" data-f="man"></span>을 뺀 나머지(있다면)에 과세되고, 같은 해 다른 이익이 있으면 함께 통산된다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>같은 미국 대표지수를 따르는 ETF 두 개가 있다. 하나는 국내 거래소, 하나는 미국 거래소에 상장돼 있다. 일반 계좌에서 팔아 차익이 났을 때 과세 방식으로 맞는 것은?</p>
+        <div class="opts">
+          <button class="opt">둘 다 같은 지수를 따르므로 과세 방식도 같다</button>
+          <button class="opt">국내 상장은 비과세, 미국 상장은 양도소득세</button>
+          <button class="opt" data-correct>국내 상장은 차익이 배당소득으로 원천징수되고, 미국 상장은 해외 주식처럼 양도소득세(공제 후)를 신고한다</button>
+          <button class="opt">국내 상장은 양도소득세, 미국 상장은 배당소득</button>
+        </div>
+        <div class="quiz-exp">국내 상장 ETF 가운데 국내주식형만 차익이 비과세다. 해외 주식을 담은 국내 상장 ETF는 차익이 배당소득으로 <span data-c="finAll"></span> 원천징수되고 금융소득에 합산된다. 해외 상장 ETF는 해외 주식과 같이 연 <span data-t="stock.overseas.deduction" data-f="man"></span> 공제 뒤 <span data-c="osAll"></span>의 양도소득세를 다음 해 5월에 신고한다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const won = TB.won, pct = TX.fmt.pct;
+  const LOC = 1 + D.income.localRate;
+  const OS = D.stock.overseas, DS = D.stock.domestic;
+  const taxSpan = (v) => (v > 0.5 ? '<span class="won minus">' + won(v) + "</span>" : '<span class="won plus">0원</span>');
+  const osTax = (g) => TX.overseasStock(g).total;
+  const finRate = D.financial.withholding * LOC;
+  const ttRate = (m) => DS.transactionTax[m].tax + (DS.transactionTax[m].rural || 0);
+  const cross = OS.rate * LOC * OS.deduction / (OS.rate * LOC - finRate);
+
+  /* 장 안에서 계산하는 값 채우기 */
+  const C = { osAll: pct(OS.rate * LOC), finAll: pct1(finRate), cross: cross > 0 && isFinite(cross) ? won(Math.round(cross / 1e4) * 1e4) : "—(교차점 없음)" };
+  function pct1(x) { return +(x * 100).toFixed(1) + "%"; }
+  document.querySelectorAll("[data-c]").forEach((el) => { el.textContent = C[el.getAttribute("data-c")] || "—"; });
+
+  /* 거래세 표 */
+  (function () {
+    const names = { kospi: "코스피", kosdaq: "코스닥", konex: "코넥스" };
+    document.getElementById("tt-table").innerHTML = Object.keys(DS.transactionTax).map((k) => {
+      const t = DS.transactionTax[k];
+      return "<tr><td>" + (names[k] || k) + '</td><td class="num">' + pct(t.tax) + '</td><td class="num">' + (t.rural ? pct(t.rural) : "—") + '</td><td class="num"><b>' + pct(ttRate(k)) + '</b></td><td class="num">' + TX.fmt.wonfull(1e7 * ttRate(k)) + "</td></tr>";
+    }).join("");
+  })();
+
+  /* ---------------------------------------------------------- 1. 회전 수와 거래세 */
+  (function () {
+    const pG = TB.range("turn-p", (v) => won(v * 1e4), draw);
+    const mG = TB.seg("turn-m", draw);
+    const rG = TB.range("turn-r", (v) => v + "%", draw);
+    const NMAX = 60;
+    let n = 12, box = null;
+    function calc() {
+      const p = pG() * 1e4, rate = ttRate(mG());
+      const sell = p * n, tax = sell * rate, exp = p * rG() / 100;
+      return { p, rate, sell, tax, exp };
+    }
+    const cv = TB.canvas("#turn-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc();
+      const ymax = Math.max(c.p * c.rate * NMAX, c.exp) * 1.08;
+      const ch = TB.chart(ctx, { x: 58, y: 18, w: w - 80, h: h - 76 }, {
+        x: [0, NMAX], y: [0, ymax], xTicks: [0, 12, 24, 36, 52], xFmt: (v) => v + "회", yFmt: TB.wonAxis,
+        series: [{ data: [[0, 0], [NMAX, c.p * c.rate * NMAX]], color: P.bad, width: 2.6 }],
+        hlines: c.exp > 0 ? [{ y: c.exp, color: P.ok, label: "기대 수익 " + won(c.exp) }] : [],
+      });
+      box = ch;
+      const be = c.exp > 0 ? c.exp / (c.p * c.rate) : null;
+      if (be != null && be <= NMAX) {
+        ctx.beginPath(); ctx.arc(ch.X(be), ch.Y(c.exp), 5, 0, TAU); ctx.fillStyle = P.warn; ctx.fill();
+        T(ctx, "거래세 = 수익 (" + Math.round(be) + "회)", Math.min(ch.X(be) + 8, w - 150), ch.Y(c.exp) + 18, { size: 11, color: P.warn, weight: 700 });
+      }
+      const px = ch.X(n), py = ch.Y(c.tax);
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, ch.box.y + ch.box.h); ctx.lineTo(px, py); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(px, py, 5, 0, TAU); ctx.fillStyle = P.bad; ctx.fill();
+      knob(ctx, px, ch.box.y + ch.box.h, P);
+      T(ctx, "연간 거래세", ch.box.x + 6, ch.box.y + 12, { size: 11, color: P.bad, weight: 700 });
+      if (w >= 480) T(ctx, "가로축: 한 해 동안 원금 전체를 판 횟수", ch.box.x, ch.box.y + ch.box.h + 36, { size: 11, color: P.dim });
+    }, { get height() { return pw("turn-cv") < 480 ? 270 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; n = TB.clamp(Math.round((x - box.box.x) / box.box.w * NMAX), 0, NMAX); draw(); } });
+    function draw() {
+      const c = calc();
+      TB.stat("turn-o-s", won(c.sell) + " (" + n + "회)");
+      TB.stat("turn-o-t", taxSpan(c.tax));
+      TB.stat("turn-o-p", TB.pct(c.tax / c.p, 2));
+      TB.stat("turn-o-e", c.exp > 0 ? (c.tax >= c.exp ? '<span class="minus">수익 전부 이상</span>' : TB.pct(c.tax / c.exp, 1)) : "—");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 2. 대주주 문턱 */
+  (function () {
+    const gG = TB.range("major-g", (v) => won(v * 1e8), draw);
+    const mG = TB.seg("major-m", draw);
+    const TH = DS.majorThreshold, XMAX = TH * 2;
+    let hold = TH * 0.96, L = null;
+    const taxAt = (hv) => TX.domesticStock({ sell: 0, market: mG(), gain: gG() * 1e8, major: hv >= TH }).cgt;
+    const cv = TB.canvas("#major-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const bx = 60, bw = w - 84, X = (v) => bx + v / XMAX * bw;
+      L = { bx, bw };
+      const y1 = 40;
+      T(ctx, "직전 연말 종목 보유액", bx, 18, { size: 11, color: P.dim, weight: 700 });
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y1 - 6, bw, 12);
+      ctx.fillStyle = hold >= TH ? P.bad : P.ok; ctx.globalAlpha = 0.7; ctx.fillRect(bx, y1 - 6, X(hold) - bx, 12); ctx.globalAlpha = 1;
+      knob(ctx, X(hold), y1, P);
+      const ymax = Math.max(1e6, TX.domesticStock({ gain: gG() * 1e8, major: true }).cgt * 1.15);
+      const pts = [];
+      for (let v = 0; v <= XMAX; v += XMAX / 400) pts.push([v, taxAt(v)]);
+      const ch = TB.chart(ctx, { x: bx, y: 84, w: bw, h: h - 84 - 50 }, {
+        x: [0, XMAX], y: [0, ymax], xTicks: [0, TH / 2, TH, TH * 1.5, XMAX], xFmt: TB.wonAxis, yFmt: TB.wonAxis, yTicks: [0, ymax / 2, ymax],
+        series: [{ data: pts, color: P.bad, width: 2.4 }],
+        vlines: [{ x: TH, color: P.warn, label: "대주주 기준" }],
+      });
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.4; ctx.beginPath(); ctx.moveTo(X(hold), y1 + 8); ctx.lineTo(X(hold), ch.box.y + ch.box.h); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(ch.X(hold), ch.Y(taxAt(hold)), 5, 0, TAU); ctx.fillStyle = P.bad; ctx.fill();
+      T(ctx, "아래: 같은 차익에 대한 양도세", bx, 70, { size: 11, color: P.dim });
+    }, { get height() { return pw("major-cv") < 480 ? 270 : 290; } });
+    TB.drag(cv.canvas, { move(x) { if (!L) return; hold = TB.clamp((x - L.bx) / L.bw * XMAX, 0, XMAX); hold = Math.round(hold / 1e8) * 1e8; draw(); } });
+    function draw() {
+      const t = taxAt(hold), g = gG() * 1e8;
+      TB.stat("major-o-h", won(hold));
+      TB.stat("major-o-j", hold >= TH ? '<span class="minus">대주주</span>' : '<span class="plus">소액주주</span>');
+      TB.stat("major-o-t", taxSpan(t));
+      TB.stat("major-o-x", '<span class="won minus">' + won(g * ttRate(mG())) + "</span>");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 해외 주식 양도세 계단 */
+  (function () {
+    const gG = TB.range("os-g", (v) => won(v * 1e4), draw);
+    const lG = TB.range("os-l", (v) => won(v * 1e4), draw);
+    let L = null;
+    const cv = TB.canvas("#os-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const g = gG() * 1e4, l = lG() * 1e4, r = TX.overseasStock(g - l);
+      const net = g - l, ded = Math.min(Math.max(0, net), OS.deduction);
+      const narrow = w < 480, lx = narrow ? 92 : 118;
+      const box = { x: lx, y: 14, w: w - lx - 18, h: h - 40 };
+      const MAX = Math.max(3e7, g) * 1.0;
+      const X = (v) => box.x + v / MAX * box.w;
+      L = { X, box, MAX };
+      const rows = [
+        { k: "실현 이익", a: 0, b: g, c: P.accent, tot: true },
+        { k: "실현 손실", a: Math.max(0, g - l), b: g, c: P.bad, neg: true },
+        { k: "통산 손익", a: 0, b: Math.max(0, net), c: P.accent, tot: true },
+        { k: "기본공제", a: Math.max(0, net) - ded, b: Math.max(0, net), c: P.ok },
+        { k: "과세표준", a: 0, b: r.base, c: P.accent, tot: true },
+        { k: "양도소득세", a: 0, b: r.tax, c: P.bad },
+        { k: "지방소득세", a: r.tax, b: r.total, c: P.bad },
+        { k: "세후 순이익", a: 0, b: Math.max(0, net - r.total), c: P.ok, tot: true },
+      ];
+      const rowH = box.h / rows.length;
+      ctx.strokeStyle = P.axis; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(box.x, box.y); ctx.lineTo(box.x, box.y + box.h); ctx.stroke();
+      rows.forEach((it, i) => {
+        const y = box.y + i * rowH + rowH * 0.18, bh = rowH * 0.64;
+        const x0 = X(Math.min(it.a, it.b)), x1 = X(Math.max(it.a, it.b)), len = Math.abs(it.b - it.a);
+        ctx.fillStyle = it.c; ctx.globalAlpha = it.tot ? 0.9 : 0.65;
+        if (len > 0) ctx.fillRect(x0, y, Math.max(1.5, x1 - x0), bh);
+        ctx.globalAlpha = 1;
+        T(ctx, it.k, box.x - 8, y + bh / 2, { size: narrow ? 11 : 12, color: it.tot ? P.text : P.dim, align: "right", base: "middle", weight: it.tot ? 700 : 400 });
+        const s = len > 0 ? ((it.neg || it.c === P.ok) && !it.tot ? "−" : "") + TB.wonAxis(len) : "0";
+        T(ctx, s, Math.min(x1 + (i === 0 ? 13 : 5), box.x + box.w - 2), y + bh / 2, { size: 11, mono: true, color: P.text, align: x1 + 60 > box.x + box.w ? "right" : "left", base: "middle", weight: 700 });
+        if (i === 0) knob(ctx, X(g), y + bh / 2, P);
+      });
+      if (net < 0) T(ctx, "남은 손실 " + won(-net) + "은 다음 해로 넘어가지 않는다", box.x + 6, box.y + rowH * 2.5, { size: 11, color: P.warn, base: "middle", weight: 700 });
+      else if (net > 0 && net <= OS.deduction) T(ctx, "쓰지 못한 공제 " + won(OS.deduction - net) + "은 사라진다", box.x + 6, box.y + rowH * 4.5, { size: 11, color: P.warn, base: "middle", weight: 700 });
+      T(ctx, "막대 길이 = 금액", box.x, h - 8, { size: 10, color: P.faint });
+    }, { get height() { return pw("os-cv") < 480 ? 300 : 320; } });
+    TB.drag(cv.canvas, { move(x) { if (!L) return; const v = TB.clamp(Math.round((x - L.box.x) / L.box.w * L.MAX / 1e5) * 10, 0, 3000); gG.set(v); } });
+    function draw() {
+      const g = gG() * 1e4, l = lG() * 1e4, r = TX.overseasStock(g - l);
+      TB.stat("os-o-n", (g - l < 0 ? '<span class="minus">' : "<span>") + won(g - l) + "</span>");
+      TB.stat("os-o-b", won(r.base));
+      TB.stat("os-o-t", taxSpan(r.total));
+      TB.stat("os-o-e", g - l > 0 ? TB.pct(r.total / (g - l), 1) : "—");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 4. 연말 손실 실현 */
+  (function () {
+    const gG = TB.range("hv-g", (v) => won(v * 1e4), draw);
+    const lG = TB.range("hv-l", (v) => won(v * 1e4), draw);
+    const nG = TB.range("hv-n", (v) => won(v * 1e4), draw);
+    const wG = TB.seg("hv-w", draw);
+    const KEYS = ["dec", "jan", "hold"], NAMES = { dec: "12월에 판다", jan: "1월에 판다", hold: "팔지 않는다" };
+    function scen(k) {
+      const g = gG() * 1e4, l = lG() * 1e4, n = nG() * 1e4;
+      if (k === "dec") return [osTax(g - l), osTax(n)];
+      if (k === "jan") return [osTax(g), osTax(n - l)];
+      return [osTax(g), osTax(n)];
+    }
+    let hit = null;
+    const cv = TB.canvas("#hv-cv", (ctx, w, h) => {
+      const P = TB.palette(), sel = wG();
+      const all = KEYS.map(scen);
+      const ymax = Math.max(1e5, ...all.map((a) => a[0] + a[1])) * 1.25;
+      const b = TB.bars(ctx, { x: 58, y: 26, w: w - 74, h: h - 70 }, {
+        labels: KEYS.map((k) => NAMES[k]), y: [0, ymax], yFmt: TB.wonAxis,
+        stacks: [{ label: "올해", color: P.bad, data: all.map((a) => a[0]) }, { label: "내년", color: P.warn, data: all.map((a) => a[1]) }],
+        highlight: KEYS.indexOf(sel), valueFmt: (v) => won(v),
+      });
+      hit = b;
+      ctx.fillStyle = P.bad; ctx.fillRect(64, 10, 12, 8); T(ctx, "올해 세금", 80, 18, { size: 11, color: P.dim });
+      ctx.fillStyle = P.warn; ctx.fillRect(150, 10, 12, 8); T(ctx, "내년 세금", 166, 18, { size: 11, color: P.dim });
+    }, { get height() { return pw("hv-cv") < 480 ? 260 : 290; } });
+    TB.drag(cv.canvas, { start(x) { if (!hit) return; const slot = hit.box.w / KEYS.length; const i = Math.floor((x - hit.box.x) / slot); if (i >= 0 && i < KEYS.length) wG.set(KEYS[i]); } });
+    function draw() {
+      const s = scen(wG()), base = scen("hold");
+      TB.stat("hv-o-1", taxSpan(s[0]));
+      TB.stat("hv-o-2", taxSpan(s[1]));
+      TB.stat("hv-o-t", taxSpan(s[0] + s[1]));
+      const d = base[0] + base[1] - (s[0] + s[1]);
+      TB.stat("hv-o-d", d > 0.5 ? '<span class="won plus">' + won(d) + " 적음</span>" : "차이 없음");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 5. 환율 */
+  (function () {
+    const bG = TB.range("fx-b", (v) => TB.fmt(v, 4) + "원", draw);
+    const rG = TB.range("fx-r", (v) => (v > 0 ? "+" : "") + v + "%", draw);
+    const COST = 1e7, X0 = 1000, X1 = 1800;
+    let sellFx = 1450, box = null;
+    function calc(sfx) {
+      const bfx = bG(), r = rG() / 100;
+      const usd = COST / bfx, usdSell = usd * (1 + r);
+      const proceeds = usdSell * sfx, gain = proceeds - COST;
+      return { gain, price: usd * r * bfx, fx: usdSell * (sfx - bfx), tax: osTax(gain) };
+    }
+    const cv = TB.canvas("#fx-cv", (ctx, w, h) => {
+      const P = TB.palette(), cur = calc(sellFx);
+      const pts = [], tpts = [];
+      let lo = 0, hi = OS.deduction * 1.3;
+      for (let s = X0; s <= X1; s += 5) { const c = calc(s); pts.push([s, c.gain]); tpts.push([s, c.tax]); lo = Math.min(lo, c.gain); hi = Math.max(hi, c.gain); }
+      const ch = TB.chart(ctx, { x: 62, y: 16, w: w - 86, h: h - 76 }, {
+        x: [X0, X1], y: [lo * 1.08, hi * 1.08], xTicks: [1000, 1200, 1400, 1600, 1800], xFmt: (v) => TB.fmt(v, 4), yFmt: TB.wonAxis,
+        series: [{ data: pts, color: P.accent, width: 2.4 }, { data: tpts, color: P.bad, width: 2, dash: [5, 3] }],
+        hlines: [{ y: 0, color: P.axis, dash: [] }, { y: OS.deduction, color: P.ok, label: "기본공제 " + TX.fmt.man(OS.deduction) }],
+        vlines: [{ x: bG(), color: P.faint, label: "살 때" }],
+      });
+      box = ch;
+      const px = ch.X(sellFx);
+      ctx.beginPath(); ctx.arc(px, ch.Y(cur.gain), 5, 0, TAU); ctx.fillStyle = P.accent; ctx.fill();
+      if (cur.tax > 0) { ctx.beginPath(); ctx.arc(px, ch.Y(cur.tax), 4, 0, TAU); ctx.fillStyle = P.bad; ctx.fill(); }
+      knob(ctx, px, ch.box.y + ch.box.h, P);
+      T(ctx, "원화 차익", ch.box.x + 6, ch.box.y + 12, { size: 11, color: P.accent, weight: 700 });
+      T(ctx, "양도세", ch.box.x + 70, ch.box.y + 12, { size: 11, color: P.bad, weight: 700 });
+      if (w >= 480) T(ctx, "가로축: 팔 때 환율(원/달러)", ch.box.x, ch.box.y + ch.box.h + 36, { size: 11, color: P.dim });
+    }, { get height() { return pw("fx-cv") < 480 ? 270 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; sellFx = TB.clamp(Math.round(((x - box.box.x) / box.box.w * (X1 - X0) + X0) / 10) * 10, X0, X1); draw(); } });
+    function draw() {
+      const c = calc(sellFx);
+      const sg = (v) => (v < 0 ? '<span class="minus">' + won(v) + "</span>" : won(v));
+      TB.stat("fx-o-x", TB.fmt(sellFx, 4) + "원");
+      TB.stat("fx-o-p", sg(c.price) + " / " + sg(c.fx));
+      TB.stat("fx-o-g", sg(c.gain));
+      TB.stat("fx-o-t", taxSpan(c.tax));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 6. ETF 세 갈래 */
+  (function () {
+    const oG = TB.range("etf-o", (v) => won(v * 1e4), draw);
+    const fin = document.getElementById("etf-fin");
+    fin.addEventListener("change", draw);
+    const XMAX = 2e7;
+    let g = 5e6, box = null;
+    const ovs = (x) => osTax(x + oG() * 1e4) - osTax(oG() * 1e4);
+    const dom = (x) => x * finRate;
+    const cv = TB.canvas("#etf-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const a = [], b = [], c = [];
+      for (let x = 0; x <= XMAX; x += XMAX / 200) { a.push([x, 0]); b.push([x, dom(x)]); c.push([x, ovs(x)]); }
+      const ymax = Math.max(dom(XMAX), ovs(XMAX)) * 1.08;
+      const ch = TB.chart(ctx, { x: 58, y: 34, w: w - 90, h: h - 92 }, {
+        x: [0, XMAX], y: [0, ymax], xTicks: [0, 5e6, 1e7, 1.5e7, 2e7], xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [{ data: a, color: P.ok, width: 2.4 }, { data: b, color: P.warn, width: 2.4 }, { data: c, color: P.bad, width: 2.4 }],
+      });
+      box = ch;
+      // 교차점
+      let cx = null;
+      for (let i = 1; i < b.length; i++) { const d0 = b[i - 1][1] - c[i - 1][1], d1 = b[i][1] - c[i][1]; if ((d0 > 0 && d1 <= 0) || (d0 < 0 && d1 >= 0)) { cx = b[i][0]; break; } }
+      if (cx != null) { ctx.beginPath(); ctx.arc(ch.X(cx), ch.Y(dom(cx)), 5, 0, TAU); ctx.strokeStyle = P.text; ctx.lineWidth = 2; ctx.stroke(); T(ctx, "교차점 약 " + TB.wonAxis(cx), ch.X(cx) + 8, ch.Y(dom(cx)) - 8, { size: 11, color: P.text, weight: 700 }); }
+      const px = ch.X(g);
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.4; ctx.beginPath(); ctx.moveTo(px, ch.box.y); ctx.lineTo(px, ch.box.y + ch.box.h); ctx.stroke(); ctx.restore();
+      [[dom(g), P.warn], [ovs(g), P.bad], [0, P.ok]].forEach(([v, col]) => { ctx.beginPath(); ctx.arc(px, ch.Y(v), 4.5, 0, TAU); ctx.fillStyle = col; ctx.fill(); });
+      knob(ctx, px, ch.box.y + ch.box.h, P);
+      const lg = [["국내주식형", P.ok], ["국내 기타 ETF", P.warn], ["해외 상장", P.bad]];
+      let lx = 62;
+      lg.forEach(([s, col]) => { ctx.fillStyle = col; ctx.fillRect(lx, 12, 12, 3); T(ctx, s, lx + 16, 16, { size: 11, color: P.dim, base: "middle" }); ctx.font = TB.font(11); lx += ctx.measureText(s).width + 32; });
+      if (fin.checked) T(ctx, "국내 기타 ETF 차익 → 금융소득종합과세로 합산될 수 있다", ch.box.x + 6, ch.box.y + 14, { size: 11, color: P.warn, weight: 700 });
+    }, { get height() { return pw("etf-cv") < 480 ? 280 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; g = TB.clamp(Math.round((x - box.box.x) / box.box.w * XMAX / 1e5) * 1e5, 0, XMAX); draw(); } });
+    function draw() {
+      TB.stat("etf-o-g", won(g));
+      TB.stat("etf-o-a", taxSpan(0));
+      TB.stat("etf-o-b", fin.checked ? '<span class="minus">원천징수 ' + won(dom(g)) + ' + 종합과세 가능</span>' : taxSpan(dom(g)));
+      TB.stat("etf-o-c", taxSpan(ovs(g)));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 다온의 노트 */
+  (function () {
+    const K = TX.CASE.us, r = TX.overseasStock(K.gain - K.loss), nohv = TX.overseasStock(K.gain);
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set("cs-net", TX.fmt.wonfull(K.gain - K.loss));
+    set("cs-ded", "−" + TX.fmt.wonfull(Math.min(OS.deduction, K.gain - K.loss)));
+    set("cs-base", TX.fmt.wonfull(r.base));
+    set("cs-tax", TX.fmt.wonfull(r.tax));
+    set("cs-local", TX.fmt.wonfull(r.local));
+    set("cs-total", TX.fmt.wonfull(r.total));
+    set("note-net", won(K.gain - K.loss));
+    set("note-base", won(r.base));
+    set("note-tax", won(r.total));
+    set("note-nohv", won(nohv.total));
+    set("note-save", won(nohv.total - r.total));
+  })();
+});
+</script>
+</body>
+</html>

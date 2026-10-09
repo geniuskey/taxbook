@@ -1,0 +1,725 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "연봉이 세율표에 들어가기 전에 거치는 계단을 따라간다. 비과세 소득, 근로소득공제의 다섯 구간, 기본공제와 추가공제, 부양가족의 나이·소득 요건과 중복 공제 금지, 연금보험료공제를 거쳐 과세표준이 되는 과정과 소득공제 100만원의 값을 시뮬레이터로 계산한다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>총급여에서 과세표준까지 · TaxBook</title>
+<meta name="description" content="연봉이 세율표에 들어가기 전에 거치는 계단을 따라간다. 비과세 소득, 근로소득공제의 다섯 구간, 기본공제와 추가공제, 부양가족의 나이·소득 요건과 중복 공제 금지, 연금보험료공제를 거쳐 과세표준이 되는 과정과 소득공제 100만원의 값을 시뮬레이터로 계산한다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/taxbase.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="총급여에서 과세표준까지 · TaxBook">
+<meta property="og:description" content="연봉이 세율표에 들어가기 전에 거치는 계단을 따라간다. 비과세 소득, 근로소득공제의 다섯 구간, 기본공제와 추가공제, 부양가족의 나이·소득 요건과 중복 공제 금지, 연금보험료공제를 거쳐 과세표준이 되는 과정과 소득공제 100만원의 값을 시뮬레이터로 계산한다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/taxbase.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/taxbase.html#chapter","name":"총급여에서 과세표준까지","headline":"총급여에서 과세표준까지 · TaxBook","description":"연봉이 세율표에 들어가기 전에 거치는 계단을 따라간다. 비과세 소득, 근로소득공제의 다섯 구간, 기본공제와 추가공제, 부양가족의 나이·소득 요건과 중복 공제 금지, 연금보험료공제를 거쳐 과세표준이 되는 과정과 소득공제 100만원의 값을 시뮬레이터로 계산한다.","url":"https://taxbook.euiyun.com/chapters/taxbase.html","position":3,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"3. 총급여에서 과세표준까지","item":"https://taxbook.euiyun.com/chapters/taxbase.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="taxbase">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 03 · <span data-t="label"></span></div>
+    <h1>총급여에서 과세표준까지</h1>
+    <p class="lead">1장의 세율표는 연봉에 바로 곱하는 표가 아니다. 세율을 곱하는 금액인 과세표준은 연봉에서 여러 번 덜어 낸 뒤에야 나온다. 그래서 연봉이 똑같은 두 사람의 세금이 크게 다를 수 있다. 한 사람은 혼자 살고, 다른 사람은 소득 없는 부모님을 모시고 있다면 과세표준이 수백만원 차이 난다. 이 장은 연봉에서 과세표준까지 내려가는 계단을 한 칸씩 밟는다. 비과세, 근로소득공제, 인적공제, 연금보험료공제. 그리고 가장 많이 틀리는 부분인 부양가족 요건을 판정해 본다. 기준은 <span data-t="label"></span>이다.</p>
+    <ul class="objectives">
+      <li>연봉 → 총급여 → 근로소득금액 → 과세표준의 계단을 순서대로 계산한다.</li>
+      <li>근로소득공제가 총급여 구간마다 다른 비율로 붙는 구조와 한도를 설명한다.</li>
+      <li>기본공제·추가공제의 금액과 부양가족의 나이·소득 요건을 판정하고, 한 사람을 두 사람이 공제받을 수 없다는 원칙을 적용한다.</li>
+      <li>소득공제 100만원이 줄여 주는 세금이 한계세율로 정해진다는 것을 계산하고, 맞벌이 부부가 부양가족을 누구에게 올릴지 판단한다.</li>
+    </ul>
+  </header>
+
+  <section id="stairs">
+    <h2>연봉에서 과세표준까지의 계단</h2>
+    <p>근로소득만 있는 직장인의 과세표준은 다음 순서로 계산한다. 계단마다 이름이 있고, 이름마다 다른 법 조문이 있다.</p>
+    <ol>
+      <li><b>연봉(지급 총액)</b>에서 <b>비과세 소득</b>(식대 등, <a href="payslip.html">2장</a>)을 빼면 <span class="term">총급여</span><span class="en">(Gross wage)</span>다. 연말정산의 많은 기준(카드 공제 문턱, 월세 공제 자격)이 이 숫자를 쓴다.</li>
+      <li>총급여에서 <span class="term">근로소득공제</span><span class="en">(Earned income deduction)</span>를 빼면 <span class="term">근로소득금액</span>이다. 근로자가 일하며 쓰는 비용을 증빙 없이 일정 비율로 인정해 주는 공제다.</li>
+      <li>근로소득금액에서 <span class="term">인적공제</span><span class="en">(Personal deductions)</span>(본인과 부양가족 1인당 기본공제, 조건에 따라 추가공제)를 뺀다.</li>
+      <li>낸 국민연금보험료 전액(<span class="term">연금보험료공제</span>)과 건강·장기요양·고용보험료 전액(특별소득공제)을 뺀다.</li>
+      <li>주택자금 공제, 신용카드 등 사용액 공제 같은 그 밖의 소득공제를 뺀다(<a href="deduction.html">4장</a>). 남은 금액이 <span class="term">과세표준</span><span class="en">(Tax base)</span>이다.</li>
+    </ol>
+    <div class="formula">
+      $$\text{과세표준} = \underbrace{\text{연봉} - \text{비과세}}_{\text{총급여}} - \text{근로소득공제} - \text{인적공제} - \text{보험료 공제} - \text{그 밖의 소득공제}$$
+      <div class="where">빼는 순서는 결과에 영향을 주지 않지만, 각 단계의 중간값(총급여, 근로소득금액)이 다른 공제의 자격과 한도를 정하는 기준으로 쓰이기 때문에 이름을 붙여 기억해 두면 좋다. 과세표준이 음수가 되면 0으로 본다.</div>
+    </div>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 320" role="img" aria-label="연봉에서 비과세, 근로소득공제, 인적공제, 보험료 공제, 그 밖의 소득공제를 차례로 빼서 과세표준에 이르는 계단">
+        <rect x="16" y="20" width="428" height="34" rx="6" class="f-acc-soft"/>
+        <text x="28" y="42" class="lbl-b">연봉(지급 총액)</text>
+        <rect x="16" y="64" width="400" height="34" rx="6" class="f-surface"/>
+        <text x="28" y="86" class="lbl-b">총급여</text>
+        <rect x="420" y="64" width="24" height="34" rx="4" class="f-ok-soft"/>
+        <text x="412" y="86" text-anchor="end" class="lbl-dim">비과세</text>
+        <rect x="16" y="108" width="300" height="34" rx="6" class="f-surface"/>
+        <text x="28" y="130" class="lbl-b">근로소득금액</text>
+        <rect x="320" y="108" width="96" height="34" rx="4" class="f-ok-soft"/>
+        <text x="368" y="130" text-anchor="middle" class="lbl">근로소득공제</text>
+        <rect x="16" y="152" width="268" height="34" rx="6" class="f-surface"/>
+        <rect x="288" y="152" width="28" height="34" rx="4" class="f-ok-soft"/>
+        <text x="28" y="174" class="lbl-dim">인적공제 뺀 뒤</text>
+        <text x="302" y="174" text-anchor="middle" class="lbl-dim">인적</text>
+        <rect x="16" y="196" width="226" height="34" rx="6" class="f-surface"/>
+        <rect x="246" y="196" width="38" height="34" rx="4" class="f-ok-soft"/>
+        <text x="28" y="218" class="lbl-dim">보험료 공제 뺀 뒤</text>
+        <text x="265" y="218" text-anchor="middle" class="lbl-dim">보험</text>
+        <rect x="16" y="240" width="190" height="34" rx="6" class="f-acc"/>
+        <rect x="210" y="240" width="32" height="34" rx="4" class="f-ok-soft"/>
+        <text x="28" y="262" class="lbl-b" style="fill:#fff">과세표준</text>
+        <text x="226" y="262" text-anchor="middle" class="lbl-dim">4장</text>
+        <text x="230" y="300" text-anchor="middle" class="lbl-dim">막대 길이는 다온의 숫자에 맞춘 대략적 비율</text>
+      </svg>
+      <figcaption><b>그림 1. 과세표준까지의 계단.</b> 연봉에서 가장 큰 덩어리를 덜어 내는 것은 근로소득공제다. 인적공제와 보험료 공제가 그다음이고, 카드·주택자금 같은 그 밖의 소득공제는 4장에서 다룬다. 1장의 누진세율은 맨 아래 막대에만 곱한다.</figcaption>
+    </figure>
+
+    <p>아래 시뮬레이터는 이 계단을 숫자로 내려간다. 기본값은 다온의 2026년이다. 연봉과 비과세, 기본공제 인원을 바꿔 맨 아래 과세표준과 한계세율이 어떻게 바뀌는지 본다. 4장의 소득공제는 아직 넣지 않았다.</p>
+
+    <div class="sim" id="sim-chain">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>연봉에서 과세표준까지 내려가기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="ch-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>연봉(지급 총액) <output id="ch-s-out"></output></span><input type="range" id="ch-s" min="2000" max="15000" step="10" value="5240"></label>
+          <label class="ctrl"><span>월 비과세 <output id="ch-n-out"></output></span><input type="range" id="ch-n" min="0" max="60" step="1" value="20"></label>
+          <label class="ctrl"><span>기본공제 인원(본인 포함) <output id="ch-p-out"></output></span><input type="range" id="ch-p" min="1" max="6" step="1" value="1"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">총급여</span><span class="v" id="ch-o-g">—</span></div>
+        <div class="stat"><span class="k">근로소득금액</span><span class="v" id="ch-o-e">—</span></div>
+        <div class="stat"><span class="k">과세표준(4장 공제 전)</span><span class="v" id="ch-o-b">—</span></div>
+        <div class="stat"><span class="k">한계세율(지방세 포함)</span><span class="v" id="ch-o-m">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(다온: 연봉 5,240만원, 식대 월 20만원, 본인 1명)에서 근로소득공제가 가장 큰 덩어리임을 본다. ② 기본공제 인원을 1명씩 늘린다. 과세표준이 1인당 같은 금액만큼 줄지만, 줄어든 세금은 한계세율에 따라 달라진다. ③ 연봉을 2,000만원대로 내리고 인원을 늘린다. 과세표준이 0에 닿으면 더 늘린 공제는 아무 효과가 없다. (보험료는 월 과세 급여 × 12로 2장의 요율을 적용했다. 국민연금 상한은 1~6월 값을 1년 내내 쓴다고 보았다. 추가공제와 4장의 소득공제는 넣지 않았다.)</div>
+    </div>
+
+    <p>계단의 첫 두 칸, 비과세와 근로소득공제는 아무 서류 없이 자동으로 적용된다. 사람마다 크게 달라지는 칸은 인적공제다. 그 전에 가장 큰 덩어리인 근로소득공제의 모양부터 본다.</p>
+  </section>
+
+  <section id="earned">
+    <h2>근로소득공제: 다섯 구간의 비율</h2>
+    <p>사업자는 장부에 쓴 비용을 빼고 세금을 계산하지만, 근로자는 출퇴근 비용이나 옷값을 일일이 증명할 수 없다. 그래서 세법은 총급여에 따라 정해진 비율만큼을 근로자의 비용으로 보고 빼 준다(<a data-src="wage.earnedDeduction"></a>). 비율은 총급여 구간마다 다르고, 높은 구간일수록 낮다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>총급여 구간</th><th class="num">그 구간에 붙는 공제율</th><th class="num">구간 시작까지의 공제</th></tr></thead>
+        <tbody id="tb-ed"></tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)">근로소득공제는 <span data-t="wage.earnedDeductionMax" data-f="man"></span>을 넘지 못한다. 1장의 누진세율과 같은 계단 구조이지만 방향이 반대다. 위 구간일수록 덜 빼 준다.</p>
+
+    <p>근로소득공제가 누진세율과 같은 방식으로 작동한다는 점에 주목한다. 총급여의 각 몫에 그 구간의 공제율이 붙는다. 그래서 총급여가 늘면 공제액은 늘지만 공제율(공제액 ÷ 총급여)은 떨어진다. 아래 그래프의 손잡이를 끌어 다섯 구간과 한도를 지나가 본다.</p>
+
+    <div class="sim" id="sim-earned">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>근로소득공제의 구간 그림</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="ed-cv"></canvas><span class="hint">아래 손잡이를 끈다</span></div>
+        <div class="sim-controls">
+          <div class="seg" id="ed-z"><button data-value="1.2" class="on">~1.2억</button><button data-value="4.5">~4.5억</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">총급여</span><span class="v" id="ed-o-g">—</span></div>
+        <div class="stat"><span class="k">근로소득공제</span><span class="v" id="ed-o-d">—</span></div>
+        <div class="stat"><span class="k">평균 공제율</span><span class="v" id="ed-o-r">—</span></div>
+        <div class="stat"><span class="k">다음 1만원의 공제율</span><span class="v" id="ed-o-m">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 왼쪽 끝 가까이 둔다. 첫 구간에서는 총급여의 대부분이 공제되어 근로소득금액이 아주 작다. ② 다온의 총급여 5,000만원으로 옮긴다. 평균 공제율은 4분의 1 언저리인데 다음 1만원에는 그보다 훨씬 낮은 비율만 붙는다. ③ 범위를 '~4.5억'으로 바꾸고 끝까지 끈다. 공제가 한도에 닿으면 선이 수평이 되고, 그 뒤로는 번 돈 전부가 근로소득금액에 더해진다. (근로소득만 있고 1년 내내 근무한 경우의 공제다. 일용근로자 공제는 다루지 않는다.)</div>
+    </div>
+
+    <p>총급여 5,000만원이면 근로소득공제는 <b id="ed-daon"></b>, 근로소득금액은 <b id="ed-daon2"></b>이다. 연봉이 오를 때 실제로 세금이 붙는 몫은 근로소득공제를 덜 받는 만큼 조금 더 커진다. 1장에서 본 한계세율에 이 장의 '다음 1만원의 공제율'을 함께 고려하면, 연봉 1만원이 늘 때 늘어나는 세금은 \(1\text{만원}\times(1-\text{공제율})\times\text{한계세율}\)이다.</p>
+  </section>
+
+  <section id="personal">
+    <h2>인적공제: 기본공제와 추가공제</h2>
+    <p>세법은 같은 소득이라도 먹여 살릴 사람이 많으면 세금을 낼 힘이 약하다고 본다. 그래서 본인과 부양가족의 머릿수만큼 소득에서 빼 준다(<a data-src="personal"></a>).</p>
+    <ul>
+      <li><b>기본공제</b>: 1인당 <span data-t="personal.basic" data-f="man"></span>. 본인은 무조건, 배우자와 부양가족은 아래 요건을 채우면 받는다.</li>
+      <li><b>경로우대 추가공제</b>: 기본공제 대상자가 <span data-t="personal.elderlyAge" data-f="num"></span>세 이상이면 1인당 <span data-t="personal.elderly" data-f="man"></span>을 더한다.</li>
+      <li><b>장애인 추가공제</b>: 기본공제 대상자가 장애인이면 1인당 <span data-t="personal.disabled" data-f="man"></span>을 더한다.</li>
+      <li><b>부녀자 추가공제</b>: 종합소득금액 <span data-t="personal.womanIncomeMax" data-f="man"></span> 이하인 여성이 배우자가 있거나, 부양가족이 있는 세대주이면 <span data-t="personal.woman" data-f="man"></span>.</li>
+      <li><b>한부모 추가공제</b>: 배우자 없이 기본공제 대상 직계비속(자녀)이나 입양자가 있으면 <span data-t="personal.single" data-f="man"></span>. 부녀자공제와 겹치면 한부모 하나만 받는다.</li>
+    </ul>
+    <p>기본공제 대상인 <span class="term">부양가족</span><span class="en">(Dependents)</span>은 관계에 따라 나이 요건이 있고, 모두에게 소득 요건이 있다. 그리고 원칙적으로 생계를 같이 해야 한다.</p>
+    <ul>
+      <li><b>나이</b>: 직계존속(부모·조부모)은 <span data-t="personal.parentAgeMin" data-f="num"></span>세 이상, 직계비속(자녀·손자녀)은 <span data-t="personal.childAgeMax" data-f="num"></span>세 이하, 형제자매도 <span data-t="personal.childAgeMax" data-f="num"></span>세 이하이거나 <span data-t="personal.parentAgeMin" data-f="num"></span>세 이상. 배우자에게는 나이 요건이 없다. 장애인은 나이와 관계없이 대상이 된다.</li>
+      <li><b>소득</b>: 연간 소득금액 합계가 <span data-t="personal.depIncomeMax" data-f="man"></span> 이하. 근로소득만 있다면 총급여 <span data-t="personal.depWageGrossMax" data-f="man"></span> 이하. 여기서 '소득금액'은 수입이 아니라 필요경비나 공제를 뺀 금액이다. 비과세 소득과 분리과세로 끝난 소득(일정 금액 이하 예금 이자 등)은 넣지 않는다.</li>
+      <li><b>생계</b>: 배우자와 자녀는 따로 살아도 된다. 부모는 주거 형편상 따로 살더라도 실제로 부양하고 있으면 공제받을 수 있다. 형제자매는 원칙적으로 함께 살아야 한다.</li>
+      <li><b>중복 금지</b>: 한 사람은 한 명의 납세자에게만 기본공제 대상이 된다. 형제가 부모 한 분을 동시에 공제받을 수 없다.</li>
+    </ul>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 296" role="img" aria-label="부양가족 판정 순서: 관계, 나이, 소득, 중복 여부를 차례로 확인하고 모두 통과하면 기본공제와 추가공제">
+        <defs><marker id="tb-ar1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="14" y="16" width="134" height="52" rx="8" class="f-acc-soft"/>
+        <text x="81" y="38" text-anchor="middle" class="lbl-b">1. 관계</text>
+        <text x="81" y="58" text-anchor="middle" class="lbl-dim">배우자·부모·자녀·형제</text>
+        <line x1="148" y1="42" x2="176" y2="42" class="s-line" marker-end="url(#tb-ar1)"/>
+        <rect x="178" y="16" width="130" height="52" rx="8" class="f-surface"/>
+        <text x="243" y="38" text-anchor="middle" class="lbl-b">2. 나이</text>
+        <text x="243" y="58" text-anchor="middle" class="lbl-dim">장애인은 무관</text>
+        <line x1="308" y1="42" x2="336" y2="42" class="s-line" marker-end="url(#tb-ar1)"/>
+        <rect x="338" y="16" width="108" height="52" rx="8" class="f-surface"/>
+        <text x="392" y="38" text-anchor="middle" class="lbl-b">3. 소득</text>
+        <text x="392" y="58" text-anchor="middle" class="lbl-dim">소득금액 기준</text>
+        <line x1="392" y1="68" x2="392" y2="98" class="s-line" marker-end="url(#tb-ar1)"/>
+        <rect x="292" y="100" width="154" height="52" rx="8" class="f-surface"/>
+        <text x="369" y="122" text-anchor="middle" class="lbl-b">4. 중복 없음</text>
+        <text x="369" y="142" text-anchor="middle" class="lbl-dim">다른 가족이 공제 안 함</text>
+        <line x1="292" y1="126" x2="256" y2="126" class="s-line" marker-end="url(#tb-ar1)"/>
+        <rect x="90" y="100" width="164" height="52" rx="8" class="f-ok-soft"/>
+        <text x="172" y="122" text-anchor="middle" class="lbl-b">기본공제</text>
+        <text x="172" y="142" text-anchor="middle" class="lbl-dim">1인당 <tspan data-t="personal.basic" data-f="man"></tspan></text>
+        <line x1="172" y1="152" x2="172" y2="182" class="s-line" marker-end="url(#tb-ar1)"/>
+        <rect x="14" y="184" width="432" height="56" rx="8" class="f-ok-soft"/>
+        <text x="230" y="206" text-anchor="middle" class="lbl-b">추가공제(기본공제 대상자만)</text>
+        <text x="230" y="228" text-anchor="middle" class="lbl-dim">경로 <tspan data-t="personal.elderlyAge" data-f="num"></tspan>세+ <tspan data-t="personal.elderly" data-f="man"></tspan> · 장애인 <tspan data-t="personal.disabled" data-f="man"></tspan> · 부녀자·한부모</text>
+        <text x="230" y="272" text-anchor="middle" class="lbl-bad">하나라도 걸리면 그 사람은 공제 대상이 아니다</text>
+        <text x="230" y="290" text-anchor="middle" class="lbl-dim">(의료비·교육비 등 일부 세액공제는 나이·소득 요건을 따로 본다)</text>
+      </svg>
+      <figcaption><b>그림 2. 부양가족 판정의 순서.</b> 관계 → 나이 → 소득 → 중복의 네 관문을 모두 지나야 기본공제가 되고, 추가공제는 기본공제 대상자에게만 붙는다. 판정 기준일은 원칙적으로 그 해 12월 31일이며, 나이는 그 해 중 하루라도 요건에 해당하면 인정된다.</figcaption>
+    </figure>
+
+    <p>아래 판정기에서 관계와 나이, 소득을 바꿔 가며 어느 관문에서 걸리는지 본다. 위쪽 띠의 손잡이를 끌어 나이를, 아래쪽 띠의 손잡이를 끌어 소득을 바꿀 수 있다.</p>
+
+    <div class="sim" id="sim-dep">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>부양가족 요건 판정기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="dp-cv"></canvas><span class="hint">손잡이를 끈다</span></div>
+        <div class="sim-controls">
+          <div class="seg" id="dp-r"><button data-value="parent" class="on">부모</button><button data-value="child">자녀</button><button data-value="sib">형제자매</button><button data-value="spouse">배우자</button></div>
+          <div class="seg" id="dp-k"><button data-value="wage" class="on">근로소득만</button><button data-value="other">그 밖의 소득</button></div>
+          <label class="check"><input type="checkbox" id="dp-d"> 장애인</label>
+          <label class="check"><input type="checkbox" id="dp-x"> 다른 가족이 이미 공제받고 있다</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">나이</span><span class="v" id="dp-o-a">—</span></div>
+        <div class="stat"><span class="k">소득 요건</span><span class="v" id="dp-o-i">—</span></div>
+        <div class="stat"><span class="k">판정</span><span class="v" id="dp-o-r">—</span></div>
+        <div class="stat"><span class="k">인적공제 합계</span><span class="v" id="dp-o-t">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값은 다온의 아버지(64세, 근로소득이 있음)다. 나이는 통과하지만 소득 띠의 손잡이가 기준선을 넘어 탈락한다. 손잡이를 기준선 왼쪽으로 끌면 통과한다. ② '부모'에서 나이 손잡이를 경로우대 나이 이상으로 옮긴다. 경로우대 추가공제가 붙어 공제가 커진다. ③ '형제자매'로 바꾸고 나이를 30세쯤에 둔다. 나이에서 걸리지만 '장애인'을 체크하면 나이 요건이 사라진다. ④ '다른 가족이 이미 공제받고 있다'를 체크한다. 다른 요건을 다 채워도 탈락한다. (판정은 기본 요건만 본다. 생계 요건, 연도 중 사망·출생, 위탁아동, 수급자 등 세부 규정은 생략했다. '그 밖의 소득'은 사업·연금·기타소득처럼 필요경비나 공제를 뺀 소득금액으로 넣는다.)</div>
+    </div>
+
+    <p>판정기에서 보듯 탈락의 대부분은 소득 관문에서 일어난다. 특히 은퇴한 부모가 연금을 받거나 소일거리로 일하는 경우가 많다. 근로소득만 있다면 총급여 <span data-t="personal.depWageGrossMax" data-f="man"></span>이 기준이라 한 달에 <span id="tb-mo"></span> 남짓만 벌어도 경계에 닿는다. 연금소득은 공적연금이면 받은 연금에서 연금소득공제를 뺀 금액이 소득금액이라 받는 연금보다 작게 잡힌다. 연금을 받는 부모가 대상인지는 국민연금공단에서 연금 지급 내역(과세 대상 연금액)을 확인한 뒤 판단한다.</p>
+
+    <div class="callout pro">
+      <strong>부양가족 공제에서 가장 흔한 실수 세 가지</strong>
+      <ul>
+        <li><b>형제 중복 공제</b>: 형과 동생이 각자 회사에서 같은 부모를 공제받는 경우다. 회사는 서로를 모르니 연말정산은 통과하지만, 국세청이 지급명세서를 맞춰 보면 바로 드러난다. 한 사람의 공제가 취소되고 덜 낸 세금에 가산세가 붙는다. 가족끼리 누가 올릴지 먼저 정한다.</li>
+        <li><b>소득 요건 착각</b>: '소득이 없다'고 생각한 부모에게 퇴직 후 받은 퇴직금, 집을 팔아 생긴 양도소득, 일정 금액이 넘는 금융소득이 있는 경우다. 퇴직소득과 양도소득도 소득금액에 들어간다. 그 해에 부모가 집을 팔았다면 특히 확인한다.</li>
+        <li><b>나이 요건과 다른 세액공제를 혼동</b>: 나이 요건 때문에 기본공제를 못 받는 부모라도 의료비 세액공제는 나이·소득과 관계없이 받을 수 있다(<a href="credit.html">5장</a>). 반대로 기본공제 대상이 아닌 가족의 카드 사용액은 내 카드 공제에 넣을 수 없다(<a href="deduction.html">4장</a>). 항목마다 요건이 다르다는 것이 실무의 함정이다.</li>
+      </ul>
+      잘못 받은 공제는 연말정산이 끝난 뒤에도 5월 종합소득세 신고 때 바로잡을 수 있다(수정신고). 반대로 받을 수 있었는데 빠뜨린 공제는 경정청구 기간 안에 경정청구로 돌려받을 수 있다.
+    </div>
+  </section>
+
+  <section id="value">
+    <h2>소득공제 100만원의 값</h2>
+    <p>인적공제든 카드 공제든 <b>소득공제</b>는 세금이 아니라 과세표준을 줄인다. 그래서 공제 100만원이 줄여 주는 세금은 100만원이 아니라, 과세표준의 맨 위 100만원에 붙어 있던 세금이다. 1장에서 본 한계세율이 바로 그것이다.</p>
+    <div class="formula">
+      $$\Delta\text{세금} \approx \text{소득공제액}\times\text{한계세율}\times(1+\text{지방소득세율})$$
+      <div class="where">공제액이 크거나 과세표준이 구간 경계 근처에 있으면 공제액이 두 구간에 걸쳐 두 세율로 계산된다. 과세표준이 공제액보다 작으면 0 아래로는 내려가지 않으므로 공제의 일부가 버려진다.</div>
+    </div>
+    <p>같은 기본공제 <span data-t="personal.basic" data-f="man"></span>이 사람에 따라 얼마짜리인지 아래 그래프로 확인한다. 가로축은 공제 전 과세표준, 세로축은 공제로 줄어드는 세금이다.</p>
+
+    <div class="sim" id="sim-value">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>소득공제의 값 = 한계세율</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="vl-cv"></canvas><span class="hint">그래프를 좌우로 끈다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>소득공제액 <output id="vl-a-out"></output></span><input type="range" id="vl-a" min="10" max="1000" step="10" value="100"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">공제 전 과세표준</span><span class="v" id="vl-o-b">—</span></div>
+        <div class="stat"><span class="k">한계세율(지방세 포함)</span><span class="v" id="vl-o-m">—</span></div>
+        <div class="stat"><span class="k">줄어드는 세금</span><span class="v" id="vl-o-s">—</span></div>
+        <div class="stat"><span class="k">공제액 대비</span><span class="v" id="vl-o-r">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 공제액 100만원에서 손잡이를 좌우로 옮긴다. 줄어드는 세금이 계단 모양으로 바뀐다. 계단의 높이가 한계세율이다. ② 손잡이를 구간 경계 바로 위에 둔다. 공제액 일부는 위 구간, 일부는 아래 구간 세율로 계산되어 계단 사이의 비탈이 생긴다. ③ 손잡이를 왼쪽 끝 가까이(과세표준이 공제액보다 작은 곳)로 옮긴다. 공제를 다 쓰지 못해 '공제액 대비' 비율이 뚝 떨어진다. (산출세액 기준이다. 실제 결정세액은 근로소득세액공제 등과 얽혀 이보다 작게 변할 수 있다.)</div>
+    </div>
+
+    <p>같은 공제가 과세표준 <span data-t="income.rates.0.0" data-f="man"></span> 이하인 사람에게는 공제액의 <span id="vl-low"></span>, 높은 구간의 사람에게는 그 몇 배다. 소득공제가 고소득자에게 더 유리하다는 말은 이 그래프를 두고 하는 말이다. 반면 5장의 <b>세액공제</b>는 세금 자체에서 빼므로 한계세율과 무관하게 같은 금액이다. 공제 이야기를 읽을 때는 언제나 "소득공제인가, 세액공제인가"부터 확인한다.</p>
+  </section>
+
+  <section id="couple">
+    <h2>맞벌이 부부의 부양가족은 누구에게</h2>
+    <p>맞벌이 부부는 부양가족을 한쪽에만 올릴 수 있다. 한 부모를 남편과 아내가 나눠 공제받을 수 없고, 어느 쪽에 올리느냐에 따라 그 공제의 값이 달라진다. 소득공제의 값이 한계세율이므로 <b>인적공제는 대개 소득이 높은(한계세율이 높은) 쪽에 올리는 것이 유리하다.</b> 현장에서 "몰아주기"라고 부르는 판단이다. 아래에서 두 사람의 총급여를 바꿔 같은 부양가족 한 명의 공제가 각자에게 얼마짜리인지 비교한다.</p>
+
+    <div class="sim" id="sim-couple">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>맞벌이: 부양가족 공제를 누구에게</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cp-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>배우자 A 총급여 <output id="cp-a-out"></output></span><input type="range" id="cp-a" min="1000" max="15000" step="50" value="9000"></label>
+          <label class="ctrl"><span>배우자 B 총급여 <output id="cp-b-out"></output></span><input type="range" id="cp-b" min="1000" max="15000" step="50" value="3500"></label>
+          <label class="check"><input type="checkbox" id="cp-e"> 부양가족이 경로우대 나이 이상</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">공제액</span><span class="v" id="cp-o-d">—</span></div>
+        <div class="stat"><span class="k">A에게 올리면</span><span class="v" id="cp-o-a">—</span></div>
+        <div class="stat"><span class="k">B에게 올리면</span><span class="v" id="cp-o-b">—</span></div>
+        <div class="stat"><span class="k">유리한 쪽</span><span class="v" id="cp-o-w">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값에서 A의 막대가 더 긴 것을 본다. 두 사람의 한계세율 차이가 그대로 공제의 값 차이다. ② B의 총급여를 A와 같은 구간까지 올린다. 차이가 사라진다. 같은 구간이면 누구에게 올려도 같다. ③ B의 총급여를 아주 낮게 내린다. B는 이미 결정세액이 0에 가까워 공제가 더 줄여 줄 세금이 없다. (각자 근로소득만 있고 본인 기본공제와 4대보험료 공제만 받는다고 보았다. 근로소득세액공제를 뺀 결정세액의 차이로 계산했다. 의료비처럼 총급여 문턱이 있는 세액공제는 반대로 소득이 낮은 쪽이 유리할 수 있다.)</div>
+    </div>
+
+    <p>몰아주기에는 예외가 있다. 의료비 세액공제는 총급여의 일정 비율을 넘는 금액부터 공제되므로 문턱이 낮은 쪽(소득이 낮은 쪽)이 유리할 수 있다. 다만 의료비는 부양가족을 기본공제한 사람만 그 가족의 의료비를 공제받을 수 있어서, 인적공제와 의료비를 따로 떼어 나눌 수 없다. 큰 의료비가 있는 해에는 두 경우를 모두 계산해 비교한다(<a href="yearend.html">6장</a>의 계산기로 할 수 있다).</p>
+
+    <div class="callout check">
+      <strong>부양가족을 올리기 전에 확인할 것</strong>
+      <ul>
+        <li><b>가족의 소득</b>: 홈택스에서 부양가족의 소득 자료를 직접 볼 수는 없다. 가족에게 그 해의 원천징수영수증, 연금 지급 내역, 사업소득 수입을 물어 소득금액을 계산한다.</li>
+        <li><b>다른 가족의 공제 여부</b>: 형제자매나 배우자가 이미 같은 사람을 올렸는지 미리 정한다. 간소화 자료 조회 동의는 한 명에게만 할 수 있는 것이 아니므로 동의만으로는 중복을 막지 못한다.</li>
+        <li><b>증빙 서류</b>: 주민등록이 다른 부모는 가족관계증명서, 장애인은 장애인증명서나 장애인등록증 사본이 필요하다. 회사마다 요구 서류가 조금씩 다르다.</li>
+        <li><b>나이의 기준</b>: 그 해 12월 31일 기준으로 판단하되, 그 해 중 하루라도 요건에 해당하면 된다. 생일이 지난 해의 나이가 아니라 출생 연도로 계산한다.</li>
+      </ul>
+    </div>
+
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다</strong>
+      이 장의 근로소득공제 구간과 한도, 인적공제 금액, 부양가족 나이·소득 요건은 <span data-t="label"></span>이며 <code>data/tax-<span data-t="year" data-f="raw"></span>.json</code>에서 읽는다. 부양가족 소득 요건을 완화하는 안이 2026년 세법개정안에 들어 있으나 국회를 통과하지 않은 <b>확정 전</b> 내용이라 이 책의 계산에 넣지 않았다. 이 장의 계산은 교육용 모델의 결과이며, 실제 세액은 국세청 홈택스 모의계산이나 전문가에게 확인한다.
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 과세표준</h2>
+    <p>2월 첫 주말, 다온은 원천징수영수증 대신 이 장의 계단을 직접 내려가 보기로 했다. 그리고 지난 설에 부모님 댁에서 나온 질문 하나를 확인했다. "엄마 아빠를 부양가족으로 올리면 세금이 줄지 않니?"</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 230" role="img" aria-label="다온의 가족: 아버지는 소득 요건 때문에, 어머니는 동생이 이미 공제받고 있어 다온은 본인만 공제받는다">
+        <rect x="20" y="18" width="190" height="78" rx="10" class="f-bad-soft"/>
+        <text x="115" y="42" text-anchor="middle" class="lbl-b">아버지 정명호(64)</text>
+        <text x="115" y="62" text-anchor="middle" class="lbl-dim">나이 통과 · 근로·연금소득</text>
+        <text x="115" y="82" text-anchor="middle" class="lbl-bad">소득 요건 넘음</text>
+        <rect x="250" y="18" width="190" height="78" rx="10" class="f-warn-soft"/>
+        <text x="345" y="42" text-anchor="middle" class="lbl-b">어머니 김은숙(61)</text>
+        <text x="345" y="62" text-anchor="middle" class="lbl-dim">나이·소득 통과</text>
+        <text x="345" y="82" text-anchor="middle" class="lbl-acc2">동생이 이미 공제</text>
+        <rect x="20" y="134" width="190" height="64" rx="10" class="f-acc-soft"/>
+        <text x="115" y="160" text-anchor="middle" class="lbl-b">정다온(32)</text>
+        <text x="115" y="182" text-anchor="middle" class="lbl-dim">본인 기본공제 1명</text>
+        <rect x="250" y="134" width="190" height="64" rx="10" class="f-surface"/>
+        <text x="345" y="160" text-anchor="middle" class="lbl-b">동생 정민재(29)</text>
+        <text x="345" y="182" text-anchor="middle" class="lbl-dim">부모와 함께 삶 · 어머니 공제</text>
+        <line x1="345" y1="96" x2="345" y2="132" class="s-acc2" stroke-width="2"/>
+        <line x1="115" y1="96" x2="115" y2="132" class="s-dash"/>
+        <text x="122" y="120" class="lbl-dim">공제 불가</text>
+        <text x="230" y="222" text-anchor="middle" class="lbl-dim">한 사람은 한 명에게만 기본공제 대상이 된다</text>
+      </svg>
+      <figcaption><b>그림 3. 다온 가족의 부양가족 판정.</b> 아버지는 나이(<span data-t="personal.parentAgeMin" data-f="num"></span>세 이상)는 통과하지만 근로소득과 연금소득이 있어 소득 요건을 넘는다. 어머니는 요건을 채우지만 함께 사는 동생이 이미 공제받고 있어 다온이 중복해 받을 수 없다.</figcaption>
+    </figure>
+
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · 2026년 2월 7일</span></div>
+      <h4>연봉 5,240만원 가운데 세율표에 들어가는 몫은 생각보다 작았다</h4>
+      <p><b>계단을 내려가 보니.</b> 연봉 5,240만원에서 식대 240만원(월 20만원 × 12)이 비과세로 빠져 총급여 <b id="n3-g"></b>. 근로소득공제 <span id="n3-ed"></span>를 빼면 근로소득금액 <b id="n3-e"></b>. 인적공제는 본인 기본공제 <span id="n3-p"></span>뿐이고, 1년치 국민연금보험료 <span id="n3-pen"></span>와 건강·장기요양·고용보험료 <span id="n3-hi"></span>를 빼면 과세표준(4장 공제 전)은 <b id="n3-b"></b>이다. 이 책의 모델로 계산한 값이다. 연봉의 <span id="n3-share"></span>만 세율표에 들어간다.</p>
+      <p><b>부모님을 올릴 수 있나.</b> 아버지(64)는 나이 요건은 넘었지만, 퇴직 후 관리 사무소에서 계약직으로 일해 연 근로소득이 약 1,800만원이고 국민연금도 받는다. 근로소득만으로도 총급여 기준(<span data-t="personal.depWageGrossMax" data-f="man"></span>)을 넘으니 소득 요건에서 탈락이다. 어머니(61)는 나이와 소득 요건을 모두 채운다. 부모님과 따로 살아도 실제로 부양하면 공제받을 수 있다. 하지만 성남 집에서 부모님과 함께 사는 동생 민재가 작년부터 어머니를 부양가족으로 올리고 있었다. 한 사람은 한 명에게만 공제 대상이 되므로 다온은 올릴 수 없다. 만약 다온이 올린다면 기본공제 <span data-t="personal.basic" data-f="man"></span>은 다온에게 <span id="n3-v"></span>쯤의 세금을 줄여 줄 공제지만, 민재에게서 공제를 빼앗는 것일 뿐 가족 전체로는 이득이 거의 없다. 민재와 이야기해 지금처럼 두기로 했다.</p>
+      <p><b>공제 100만원의 값.</b> 다온의 과세표준은 <span id="n3-br"></span> 구간에 있어 소득공제 100만원이 줄여 주는 세금은 지방소득세까지 약 <b id="n3-100"></b>이다. 4장에서 카드 공제를 볼 때 이 숫자를 기준으로 삼는다.</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>총급여 → 근로소득공제 → 본인 기본공제 → 보험료 공제로 과세표준(4장 공제 전)을 계산. 부모님은 아버지는 소득 요건, 어머니는 중복 금지 때문에 공제 대상이 아님을 확인.</div><div><b>아직 남은 문제</b>카드 1,380만원, 체크카드 460만원을 쓰는데 카드 공제는 얼마나 되는가. 청약저축 월 20만원도 소득공제가 된다던데.</div><div><b>다음 장</b>4장: 신용카드 등 사용액 공제의 문턱과 한도, 청약저축 공제를 다온의 숫자로 계산한다.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>과세표준 = 총급여(연봉 − 비과세) − 근로소득공제 − 인적공제 − 보험료 공제 − 그 밖의 소득공제. 세율표는 맨 마지막 금액에만 곱한다.</li>
+      <li>근로소득공제는 증빙 없이 총급여 구간별 비율로 자동 적용되며, 위 구간일수록 비율이 낮고 한도는 <span data-t="wage.earnedDeductionMax" data-f="man"></span>이다.</li>
+      <li>기본공제는 1인당 <span data-t="personal.basic" data-f="man"></span>. 부양가족은 나이(부모 <span data-t="personal.parentAgeMin" data-f="num"></span>세 이상, 자녀 <span data-t="personal.childAgeMax" data-f="num"></span>세 이하, 장애인은 무관)와 소득(소득금액 <span data-t="personal.depIncomeMax" data-f="man"></span> 이하, 근로소득만이면 총급여 <span data-t="personal.depWageGrossMax" data-f="man"></span> 이하) 요건을 모두 채워야 한다. 추가공제는 기본공제 대상자에게만 붙는다.</li>
+      <li>한 사람은 한 명에게만 기본공제 대상이 된다. 형제 중복 공제는 나중에 가산세와 함께 바로잡힌다.</li>
+      <li>소득공제의 값은 한계세율이 정한다. 공제 100만원은 한계세율 × 100만원(지방세 포함 그 1.1배)만큼 세금을 줄이고, 과세표준이 0에 닿으면 남은 공제는 버려진다.</li>
+      <li>맞벌이의 인적공제는 대개 한계세율이 높은 쪽에 올리는 것이 유리하다. 다만 문턱이 있는 세액공제가 함께 움직이므로 두 경우를 계산해 비교한다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>근로소득공제에 대한 설명으로 옳은 것은?</p>
+        <div class="opts">
+          <button class="opt">출퇴근 교통비 영수증을 낸 만큼 공제된다</button>
+          <button class="opt" data-correct>총급여만으로 자동 계산되며, 총급여가 늘수록 공제액은 늘지만 공제율은 낮아진다</button>
+          <button class="opt">총급여 전체에 같은 비율이 적용된다</button>
+          <button class="opt">한도 없이 총급여에 비례해 계속 늘어난다</button>
+        </div>
+        <div class="quiz-exp">근로소득공제는 증빙 없이 총급여 구간별 비율로 계산된다. 낮은 구간일수록 높은 비율이 붙고, 공제액에는 <span data-t="wage.earnedDeductionMax" data-f="man"></span> 한도가 있다. 그래서 공제율(공제 ÷ 총급여)은 총급여가 늘수록 낮아진다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>62세 어머니는 소득이 전혀 없다. 형과 나 모두 직장인이고, 형이 이미 어머니를 부양가족으로 올렸다. 내가 어머니를 기본공제 받을 수 있는가?</p>
+        <div class="opts">
+          <button class="opt">요건을 채우므로 형과 나 모두 받을 수 있다</button>
+          <button class="opt">반씩 나눠 받을 수 있다</button>
+          <button class="opt" data-correct>받을 수 없다. 한 사람은 한 명의 납세자에게만 기본공제 대상이 된다</button>
+          <button class="opt">어머니와 함께 사는 사람만 받을 수 있으므로 형도 받을 수 없다</button>
+        </div>
+        <div class="quiz-exp">부양가족은 한 납세자에게만 공제된다. 둘 다 올리면 나중에 한 쪽의 공제가 취소되고 가산세가 붙는다. 직계존속은 주거 형편상 따로 살더라도 실제로 부양하면 공제받을 수 있으므로, 함께 사는지보다 누가 공제받을지를 가족이 정하는 것이 먼저다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>66세 아버지가 근로소득만 있고, 그 총급여가 부양가족 소득 요건 기준(<span data-t="personal.depWageGrossMax" data-f="man"></span>)보다 100만원 많다. 기본공제는 어떻게 되는가?</p>
+        <div class="opts">
+          <button class="opt" data-correct>소득 요건을 넘어 기본공제 대상이 아니다</button>
+          <button class="opt">기준을 넘은 100만원만큼만 공제가 줄어든다</button>
+          <button class="opt">나이가 <span data-t="personal.parentAgeMin" data-f="num"></span>세 이상이므로 소득과 관계없이 공제된다</button>
+          <button class="opt">경로우대 추가공제만 받을 수 있다</button>
+        </div>
+        <div class="quiz-exp">소득 요건은 문턱이다. 기준을 1원이라도 넘으면 기본공제 대상에서 빠지고, 추가공제도 기본공제 대상자에게만 붙으므로 함께 사라진다. 다만 그 아버지를 위해 쓴 의료비는 의료비 세액공제에 넣을 수 있다(5장).</div>
+      </div>
+      <div class="quiz-q">
+        <p>과세표준이 한 구간의 한가운데 있는 사람이 소득공제 100만원을 더 받았다. 줄어드는 소득세(지방소득세 제외)는?</p>
+        <div class="opts">
+          <button class="opt">100만원</button>
+          <button class="opt">100만원 × 실효세율</button>
+          <button class="opt">줄어들지 않는다</button>
+          <button class="opt" data-correct>100만원 × 그 구간의 세율(한계세율)</button>
+        </div>
+        <div class="quiz-exp">소득공제는 과세표준의 맨 위 100만원을 덜어 내므로 그 100만원에 붙어 있던 세율, 즉 한계세율만큼 세금이 준다. 지방소득세까지 합치면 그 1.1배다. 100만원이 그대로 줄어드는 것은 세액공제다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function rrect(ctx, x, y, w, h, r) {
+    r = Math.max(0, Math.min(r, Math.abs(w) / 2, Math.abs(h) / 2));
+    ctx.beginPath(); ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const LR = D.income.localRate, PS = D.personal, ED = D.wage.earnedDeduction;
+  const minus = (v) => '<span class="minus">' + TB.won(v) + "</span>";
+  const plus = (v) => '<span class="plus">' + TB.won(v) + "</span>";
+  const set = (id, s) => { const el = document.getElementById(id); if (el) el.textContent = s; };
+  /** 연간 보험료(월 과세 급여 기준, 2장 요율) */
+  const insYear = (gross) => { const s = TX.social(gross / 12); return { pension: s.pension * 12, other: (s.health + s.care + s.employ) * 12 }; };
+  /** 총급여 → 과세표준(4장 공제 전), 인적공제 total 입력 */
+  const baseOf = (gross, personal) => { const ins = insYear(gross); return Math.max(0, gross - TX.earnedDeduction(gross) - personal - ins.pension - ins.other); };
+  /** 결정세액(근로소득세액공제까지) */
+  const decided = (base, gross) => { const t = TX.incomeTax(base).tax; return Math.max(0, t - TX.earnedCredit(t, gross).credit); };
+
+  /* ---------------------------------------------------------- 근로소득공제 표 */
+  (function () {
+    let prev = 0;
+    document.getElementById("tb-ed").innerHTML = ED.map(([up, r, acc]) => {
+      const rng = up == null ? TB.won(prev) + " 초과" : (prev ? TB.won(prev) + " 초과 ~ " : "") + TB.won(up) + " 이하";
+      const row = "<tr><td>" + rng + "</td><td class=\"num\">" + TX.fmt.pct(r) + "</td><td class=\"num\">" + (acc ? TB.won(acc) : "—") + "</td></tr>";
+      prev = up; return row;
+    }).join("");
+    set("ed-daon", TB.won(TX.earnedDeduction(5e7)));
+    set("ed-daon2", TB.won(5e7 - TX.earnedDeduction(5e7)));
+    set("tb-mo", TB.won(PS.depWageGrossMax / 12));
+    set("vl-low", TX.fmt.pct(D.income.rates[0][1] * (1 + LR)));
+  })();
+
+  /* ---------------------------------------------------------- 1. 계단 내려가기 */
+  (function () {
+    const sG = TB.range("ch-s", (v) => TB.won(v * 1e4), draw);
+    const nG = TB.range("ch-n", (v) => TB.won(v * 1e4), draw);
+    const pG = TB.range("ch-p", (v) => v + "명", draw);
+    function calc() {
+      const sal = sG() * 1e4, non = Math.min(nG() * 1e4 * 12, sal), gross = sal - non;
+      const ed = TX.earnedDeduction(gross), earned = gross - ed, pers = pG() * PS.basic, ins = insYear(gross);
+      const base = Math.max(0, earned - pers - ins.pension - ins.other);
+      return { sal, non, gross, ed, earned, pers, ins, base, lost: Math.max(0, pers + ins.pension + ins.other - earned) };
+    }
+    const cv = TB.canvas("#ch-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc(), narrow = w < 440;
+      const lx = narrow ? 92 : 118, bw = w - lx - 66;
+      let cur = c.sal;
+      const steps = [
+        { k: "연봉", a: 0, b: c.sal, col: P.accent, tot: true },
+        { k: "− 비과세", d: c.non, col: P.ok },
+        { k: "총급여", tot: true, col: P.accent2 },
+        { k: "− 근로소득공제", d: c.ed, col: P.ok },
+        { k: "근로소득금액", tot: true, col: P.accent2 },
+        { k: "− 인적공제", d: c.pers, col: P.ok },
+        { k: "− 연금보험료", d: c.ins.pension, col: P.ok },
+        { k: "− 건강·고용 등", d: c.ins.other, col: P.ok },
+        { k: "과세표준", tot: true, col: P.bad, last: true },
+      ];
+      const rh = (h - 18) / steps.length, X = (v) => lx + Math.max(0, v) / c.sal * bw;
+      steps.forEach((s, i) => {
+        const y = 9 + i * rh + rh * 0.16, bh = rh * 0.68;
+        let a, b, label;
+        if (s.d != null) { const d = Math.min(s.d, Math.max(0, cur)); a = cur - d; b = cur; cur = a; label = "−" + TB.wonAxis(s.d); }
+        else if (s.last) { a = 0; b = c.base; label = TB.wonAxis(c.base); }
+        else if (s.tot && i > 0) { a = 0; b = cur; label = TB.wonAxis(cur); }
+        else { a = 0; b = c.sal; label = TB.wonAxis(c.sal); }
+        T(ctx, s.k, lx - 8, y + bh / 2, { size: narrow ? 11 : 12, color: s.tot ? P.text : P.dim, align: "right", base: "middle", weight: s.tot ? 700 : 400 });
+        ctx.fillStyle = s.col; ctx.globalAlpha = s.tot ? 0.85 : 0.6;
+        ctx.fillRect(X(a), y, Math.max(1.5, X(b) - X(a)), bh); ctx.globalAlpha = 1;
+        const tx = X(b) + 5, right = tx + 48 > w;
+        T(ctx, label, right ? X(b) - 5 : tx, y + bh / 2, { size: 11, mono: true, color: right ? "#fff" : P.text, base: "middle", weight: 700, align: right ? "right" : "left" });
+      });
+    }, { get height() { return pw("ch-cv") < 440 ? 320 : 320; } });
+    function draw() {
+      const c = calc(), r = TX.incomeTax(c.base).rate;
+      TB.stat("ch-o-g", TB.won(c.gross));
+      TB.stat("ch-o-e", TB.won(c.earned));
+      TB.stat("ch-o-b", TB.won(c.base) + (c.lost > 0 ? ' <small style="color:var(--warn)">공제 ' + TB.wonAxis(c.lost) + " 버려짐</small>" : ""));
+      TB.stat("ch-o-m", c.base > 0 ? TX.fmt.pct(r * (1 + LR)) : "0%");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 2. 근로소득공제 구간 */
+  (function () {
+    const zG = TB.seg("ed-z", () => { g = Math.min(g, +zG() * 1e8); draw(); });
+    let g = 5e7, box = null;
+    const marginal = (x) => { let prev = 0; for (const [up, r] of ED) { const top = up == null ? Infinity : up; if (x < top) return TX.earnedDeduction(x) >= D.wage.earnedDeductionMax ? 0 : r; prev = top; } return 0; };
+    const cv = TB.canvas("#ed-cv", (ctx, w, h) => {
+      const P = TB.palette(), XMAX = +zG() * 1e8;
+      const xs = []; for (let x = 0; x <= XMAX; x += XMAX / 300) xs.push(x);
+      const ymax = Math.max(TX.earnedDeduction(XMAX), 4e6) * 1.15;
+      const bands = []; let prev = 0;
+      ED.forEach(([up], i) => { const top = up == null ? XMAX : Math.min(up, XMAX); if (prev < XMAX) bands.push({ x0: prev, x1: top, color: i % 2 ? P.grid : "transparent" }); prev = up == null ? Infinity : up; });
+      const c = TB.chart(ctx, { x: 52, y: 16, w: w - 66, h: h - 76 }, {
+        x: [0, XMAX], y: [0, ymax], xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        xTicks: XMAX > 2e8 ? [0, 1e8, 2e8, 3e8, 4e8] : [0, 3e7, 6e7, 9e7],
+        bands,
+        series: [{ data: xs.map((x) => [x, TX.earnedDeduction(x)]), color: P.ok, width: 2.6 }, { data: xs.map((x) => [x, x]), color: P.faint, width: 1, dash: [3, 4] }],
+        hlines: [{ y: D.wage.earnedDeductionMax, color: P.warn, label: "한도" }],
+      });
+      box = c;
+      prev = 0;
+      ED.forEach(([up, r]) => { const top = up == null ? XMAX : Math.min(up, XMAX); if (prev < XMAX && c.X(top) - c.X(prev) > 26) T(ctx, TX.fmt.pct(r), (c.X(prev) + c.X(top)) / 2, c.box.y + c.box.h - 8, { size: 10, mono: true, color: P.dim, align: "center" }); prev = up == null ? Infinity : up; });
+      const d = TX.earnedDeduction(g), px = c.X(g);
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, c.box.y + c.box.h); ctx.lineTo(px, c.Y(d)); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(px, c.Y(d), 5, 0, TAU); ctx.fillStyle = P.ok; ctx.fill();
+      knob(ctx, px, c.box.y + c.box.h + 30, P);
+      T(ctx, "근로소득공제", c.box.x + 6, c.box.y + 10, { size: 11, color: P.ok, base: "middle", weight: 700 });
+      T(ctx, "점선: 총급여 = 공제(100%)", c.box.x + 6, c.box.y + 26, { size: 10, color: P.faint, base: "middle" });
+    }, { get height() { return pw("ed-cv") < 440 ? 290 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; const XMAX = +zG() * 1e8; g = TB.clamp(Math.round((x - box.box.x) / box.box.w * XMAX / 5e5) * 5e5, 0, XMAX); draw(); } });
+    function draw() {
+      const d = TX.earnedDeduction(g);
+      TB.stat("ed-o-g", TB.won(g));
+      TB.stat("ed-o-d", plus(d));
+      TB.stat("ed-o-r", g ? TB.pct(d / g, 1) : "—");
+      TB.stat("ed-o-m", TX.fmt.pct(marginal(g)) + (d >= D.wage.earnedDeductionMax ? " (한도)" : ""));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 부양가족 판정기 */
+  (function () {
+    const rG = TB.seg("dp-r", () => { if (rG() === "child") age = 15; else if (rG() === "sib") age = 30; else if (rG() === "parent") age = 64; else age = 35; draw(); });
+    const kG = TB.seg("dp-k", draw);
+    const dEl = document.getElementById("dp-d"), xEl = document.getElementById("dp-x");
+    dEl.addEventListener("change", draw); xEl.addEventListener("change", draw);
+    let age = 64, inc = 1.8e7, L = null;
+    const AMAX = 95, IMAX = 3e7;
+    function judge() {
+      const r = rG(), dis = dEl.checked;
+      let ageOk;
+      if (r === "spouse") ageOk = true;
+      else if (dis) ageOk = true;
+      else if (r === "parent") ageOk = age >= PS.parentAgeMin;
+      else if (r === "child") ageOk = age <= PS.childAgeMax;
+      else ageOk = age <= PS.childAgeMax || age >= PS.parentAgeMin;
+      const lim = kG() === "wage" ? PS.depWageGrossMax : PS.depIncomeMax;
+      const incOk = inc <= lim, dupOk = !xEl.checked;
+      const ok = ageOk && incOk && dupOk;
+      let total = 0; const rows = [];
+      if (ok) {
+        rows.push(["기본공제", PS.basic]); total += PS.basic;
+        if (age >= PS.elderlyAge) { rows.push(["경로우대", PS.elderly]); total += PS.elderly; }
+        if (dis) { rows.push(["장애인", PS.disabled]); total += PS.disabled; }
+      }
+      return { ageOk, incOk, dupOk, ok, lim, total, rows };
+    }
+    const ageBand = (r, dis) => {
+      if (r === "spouse" || dis) return [[0, AMAX]];
+      if (r === "parent") return [[PS.parentAgeMin, AMAX]];
+      if (r === "child") return [[0, PS.childAgeMax]];
+      return [[0, PS.childAgeMax], [PS.parentAgeMin, AMAX]];
+    };
+    const cv = TB.canvas("#dp-cv", (ctx, w, h) => {
+      const P = TB.palette(), j = judge(), narrow = w < 440;
+      const bx = 18, bw = w - 36;
+      // 나이 띠
+      const y1 = 40;
+      T(ctx, "2. 나이", bx, 20, { size: 12, color: P.text, weight: 700 });
+      T(ctx, j.ageOk ? "통과" : "탈락", bx + bw, 20, { size: 12, color: j.ageOk ? P.ok : P.bad, align: "right", weight: 700 });
+      const AX = (a) => bx + a / AMAX * bw;
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y1 - 8, bw, 16);
+      ageBand(rG(), dEl.checked).forEach(([a0, a1]) => { ctx.fillStyle = P.ok; ctx.globalAlpha = 0.45; ctx.fillRect(AX(a0), y1 - 8, AX(a1) - AX(a0), 16); ctx.globalAlpha = 1; });
+      if (rG() === "parent" || rG() === "spouse") { ctx.fillStyle = P.accent; ctx.globalAlpha = 0.35; ctx.fillRect(AX(PS.elderlyAge), y1 - 8, AX(AMAX) - AX(PS.elderlyAge), 16); ctx.globalAlpha = 1; T(ctx, "경로", AX(PS.elderlyAge) + 3, y1, { size: 10, color: P.text, base: "middle", weight: 700 }); }
+      [0, 20, 40, 60, 80].forEach((a) => T(ctx, a + "세", AX(a), y1 + 22, { size: 10, mono: true, color: P.faint, align: a ? "center" : "left" }));
+      knob(ctx, AX(age), y1, P);
+      // 소득 띠
+      const y2 = 112;
+      T(ctx, "3. 소득(" + (kG() === "wage" ? "총급여" : "소득금액") + ")", bx, y2 - 20, { size: 12, color: P.text, weight: 700 });
+      T(ctx, j.incOk ? "통과" : "탈락", bx + bw, y2 - 20, { size: 12, color: j.incOk ? P.ok : P.bad, align: "right", weight: 700 });
+      const IX = (v) => bx + Math.sqrt(v / IMAX) * bw;
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y2 - 8, bw, 16);
+      ctx.fillStyle = P.ok; ctx.globalAlpha = 0.45; ctx.fillRect(bx, y2 - 8, IX(j.lim) - bx, 16); ctx.globalAlpha = 1;
+      ctx.strokeStyle = P.text; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(IX(j.lim), y2 - 14); ctx.lineTo(IX(j.lim), y2 + 14); ctx.stroke(); ctx.setLineDash([]);
+      T(ctx, "기준 " + TB.wonAxis(j.lim), IX(j.lim) + 4, y2 + 24, { size: 10, color: P.text, weight: 700 });
+      [0, 1e7, 3e7].filter((v) => Math.abs(IX(v) - IX(j.lim)) > 70 || v === 0).forEach((v) => T(ctx, TB.wonAxis(v), IX(v), y2 + 24, { size: 10, mono: true, color: P.faint, align: v ? (v === IMAX ? "right" : "center") : "left" }));
+      knob(ctx, IX(inc), y2, P);
+      L = { bx, bw, y1, y2, AX, IX };
+      // 결과
+      const gy = 156, gh = h - gy - 30;
+      const gates = [["1. 관계", true], ["2. 나이", j.ageOk], ["3. 소득", j.incOk], ["4. 중복", j.dupOk]];
+      const gw = (bw - 3 * 8) / 4;
+      gates.forEach(([s, ok], i) => {
+        const x = bx + i * (gw + 8);
+        rrect(ctx, x, gy, gw, 30, 7); ctx.fillStyle = ok ? P.ok : P.bad; ctx.globalAlpha = 0.18; ctx.fill(); ctx.globalAlpha = 1; ctx.strokeStyle = ok ? P.ok : P.bad; ctx.stroke();
+        T(ctx, s + (ok ? " ✓" : " ✗"), x + gw / 2, gy + 15, { size: narrow ? 10 : 12, color: P.text, align: "center", base: "middle", weight: 700 });
+      });
+      const ry = gy + 42, rh = Math.max(40, gh - 42);
+      rrect(ctx, bx, ry, bw, rh, 9); ctx.fillStyle = j.ok ? P.ok : P.bad; ctx.globalAlpha = 0.12; ctx.fill(); ctx.globalAlpha = 1;
+      T(ctx, j.ok ? "기본공제 대상" : "기본공제 대상 아님", bx + 12, ry + 22, { size: 14, color: j.ok ? P.ok : P.bad, weight: 700 });
+      const why = !j.ageOk ? "나이 요건" : !j.incOk ? "소득 요건" : !j.dupOk ? "중복 공제 금지" : "";
+      T(ctx, j.ok ? j.rows.map((r) => r[0] + " " + TB.wonAxis(r[1])).join(" + ") : "걸린 관문: " + why, bx + 12, ry + 42, { size: 12, color: P.dim });
+      if (j.ok) T(ctx, TB.wonAxis(j.total), bx + bw - 12, ry + 24, { size: 18, mono: true, color: P.text, align: "right", weight: 700 });
+    }, { get height() { return pw("dp-cv") < 440 ? 290 : 280; } });
+    let mode = null;
+    TB.drag(cv.canvas, {
+      start(x, y) { if (!L) return; mode = Math.abs(y - L.y1) < 24 ? "a" : Math.abs(y - L.y2) < 24 ? "i" : null; },
+      move(x) {
+        if (!L || !mode) return;
+        const t = TB.clamp((x - L.bx) / L.bw, 0, 1);
+        if (mode === "a") age = Math.round(t * AMAX);
+        else { const v = t * t * IMAX; inc = v < 2e6 ? Math.round(v / 1e5) * 1e5 : Math.round(v / 5e5) * 5e5; }
+        draw();
+      },
+      end() { mode = null; },
+    });
+    function draw() {
+      const j = judge();
+      TB.stat("dp-o-a", age + "세 " + (j.ageOk ? '<span class="plus">통과</span>' : '<span class="minus">탈락</span>'));
+      TB.stat("dp-o-i", TB.won(inc) + " " + (j.incOk ? '<span class="plus">통과</span>' : '<span class="minus">탈락</span>'));
+      TB.stat("dp-o-r", j.ok ? '<span class="plus">대상</span>' : '<span class="minus">대상 아님</span>');
+      TB.stat("dp-o-t", j.ok ? plus(j.total) : "0원");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 4. 소득공제의 값 */
+  (function () {
+    const aG = TB.range("vl-a", (v) => TB.won(v * 1e4), draw);
+    let b = 31e6, box = null;
+    const XMAX = 1.6e8;
+    const save = (base, d) => (TX.incomeTax(base).tax - TX.incomeTax(Math.max(0, base - d)).tax) * (1 + LR);
+    const cv = TB.canvas("#vl-cv", (ctx, w, h) => {
+      const P = TB.palette(), d = aG() * 1e4;
+      const xs = []; for (let x = 0; x <= XMAX; x += XMAX / 400) xs.push(x);
+      const ymax = d * RATES_TOP() * 1.15;
+      const c = TB.chart(ctx, { x: 52, y: 14, w: w - 66, h: h - 76 }, {
+        x: [0, XMAX], y: [0, ymax], xFmt: TB.wonAxis, yFmt: TB.wonAxis, xTicks: [0, 4e7, 8e7, 1.2e8],
+        series: [{ data: xs.map((x) => [x, save(x, d)]), color: P.ok, width: 2.6, fill: TB.color("ok-soft") || undefined }],
+      });
+      box = c;
+      const s = save(b, d), px = c.X(b);
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, c.box.y + c.box.h); ctx.lineTo(px, c.Y(s)); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(px, c.Y(s), 5, 0, TAU); ctx.fillStyle = P.ok; ctx.fill();
+      knob(ctx, px, c.box.y + c.box.h + 30, P);
+      T(ctx, "공제 " + TB.wonAxis(d) + "로 줄어드는 세금(지방세 포함)", c.box.x + 6, c.box.y + 10, { size: 11, color: P.dim, base: "middle" });
+    }, { get height() { return pw("vl-cv") < 440 ? 280 : 300; } });
+    function RATES_TOP() { const R = D.income.rates; let r = R[0][1]; R.forEach(([up, rr]) => { if (up == null || up <= 1.6e8 + 1) r = Math.max(r, rr); }); return r * (1 + LR); }
+    TB.drag(cv.canvas, { move(x) { if (!box) return; b = TB.clamp(Math.round((x - box.box.x) / box.box.w * XMAX / 1e5) * 1e5, 0, XMAX); draw(); } });
+    function draw() {
+      const d = aG() * 1e4, s = save(b, d);
+      TB.stat("vl-o-b", TB.won(b));
+      TB.stat("vl-o-m", b > 0 ? TX.fmt.pct(TX.incomeTax(b).rate * (1 + LR)) : "0%");
+      TB.stat("vl-o-s", plus(s));
+      TB.stat("vl-o-r", TB.pct(s / d, 1));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 5. 맞벌이 몰아주기 */
+  (function () {
+    const aG = TB.range("cp-a", (v) => TB.won(v * 1e4), draw);
+    const bG = TB.range("cp-b", (v) => TB.won(v * 1e4), draw);
+    const eEl = document.getElementById("cp-e"); eEl.addEventListener("change", draw);
+    function calc() {
+      const ded = PS.basic + (eEl.checked ? PS.elderly : 0);
+      const one = (g) => { const b0 = baseOf(g, PS.basic), t0 = decided(b0, g), t1 = decided(Math.max(0, b0 - ded), g); return { g, b0, t0, s: (t0 - t1) * (1 + LR), rate: TX.incomeTax(b0).rate }; };
+      return { ded, A: one(aG() * 1e4), B: one(bG() * 1e4) };
+    }
+    const cv = TB.canvas("#cp-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc(), narrow = w < 440;
+      const mx = c.ded * D.income.rates[D.income.rates.length - 1][1] * (1 + LR) * 0.75;
+      const top = 30, bh = 46, lx = narrow ? 70 : 90, bw = w - lx - 80;
+      T(ctx, "부양가족 1명의 공제 " + TB.wonAxis(c.ded) + "가 줄여 주는 세금", 14, 18, { size: 11, color: P.dim, weight: 700 });
+      [["A", c.A], ["B", c.B]].forEach(([k, r], i) => {
+        const y = top + 14 + i * (bh + 40), win = (k === "A" ? c.A.s >= c.B.s : c.B.s > c.A.s) && Math.abs(c.A.s - c.B.s) > 1;
+        T(ctx, "배우자 " + k, lx - 10, y + bh / 2 - 7, { size: 13, color: P.text, align: "right", base: "middle", weight: 700 });
+        T(ctx, TX.fmt.pct(r.rate * (1 + LR)) + " 구간", lx - 10, y + bh / 2 + 10, { size: 10, color: P.dim, align: "right", base: "middle" });
+        ctx.fillStyle = P.grid; ctx.fillRect(lx, y, bw, bh);
+        const len = Math.max(1.5, bw * Math.min(1, r.s / mx));
+        ctx.fillStyle = P.ok; ctx.globalAlpha = win ? 0.9 : 0.45; ctx.fillRect(lx, y, len, bh); ctx.globalAlpha = 1;
+        T(ctx, TB.wonAxis(r.s), lx + len + 6, y + bh / 2, { size: 13, mono: true, color: P.text, base: "middle", weight: 700 });
+        T(ctx, "총급여 " + TB.wonAxis(r.g) + " · 과세표준 " + TB.wonAxis(r.b0), lx, y + bh + 14, { size: 10, color: P.faint });
+      });
+    }, { get height() { return pw("cp-cv") < 440 ? 230 : 230; } });
+    function draw() {
+      const c = calc();
+      TB.stat("cp-o-d", TB.won(c.ded));
+      TB.stat("cp-o-a", plus(c.A.s));
+      TB.stat("cp-o-b", plus(c.B.s));
+      const d = c.A.s - c.B.s;
+      TB.stat("cp-o-w", Math.abs(d) < 1000 ? "차이 없음" : (d > 0 ? "A" : "B") + " (" + TB.won(Math.abs(d)) + " 더)");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 다온의 노트 */
+  (function () {
+    const C = TX.CASE, pr = TX.casePayroll(1);
+    const gross = (C.monthly - C.mealMonthly) * 12, ed = TX.earnedDeduction(gross), earned = gross - ed;
+    const pen = pr.ins.pension * 12, hi = (pr.ins.health + pr.ins.care + pr.ins.employ) * 12;
+    const base = Math.max(0, earned - PS.basic - pen - hi);
+    set("n3-g", TB.won(gross)); set("n3-ed", TB.won(ed)); set("n3-e", TB.won(earned));
+    set("n3-p", TB.won(PS.basic)); set("n3-pen", TX.fmt.wonfull(pen)); set("n3-hi", TX.fmt.wonfull(hi));
+    set("n3-b", TX.fmt.wonfull(base)); set("n3-share", TB.pct(base / C.salaryContract, 0));
+    const r = TX.incomeTax(base).rate;
+    set("n3-br", TX.fmt.pct(r));
+    set("n3-100", TB.won(((TX.incomeTax(base).tax - TX.incomeTax(base - 1e6).tax) * (1 + LR))));
+    const t0 = decided(base, gross), t1 = decided(Math.max(0, base - PS.basic), gross);
+    set("n3-v", TB.won((t0 - t1) * (1 + LR)));
+  })();
+});
+</script>
+</body>
+</html>

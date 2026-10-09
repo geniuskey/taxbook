@@ -1,0 +1,664 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "상속세는 돌아가신 분이 남긴 재산 전체에 한 번 매기는 세금이다. 과세가액 계산, 일괄공제와 배우자공제, 금융재산·동거주택 공제, 공제 종합한도, 재산 평가, 연부연납, 1차 상속과 2차 상속의 시소를 시뮬레이터로 따라간다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>상속세 · TaxBook</title>
+<meta name="description" content="상속세는 돌아가신 분이 남긴 재산 전체에 한 번 매기는 세금이다. 과세가액 계산, 일괄공제와 배우자공제, 금융재산·동거주택 공제, 공제 종합한도, 재산 평가, 연부연납, 1차 상속과 2차 상속의 시소를 시뮬레이터로 따라간다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/inherit.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="상속세 · TaxBook">
+<meta property="og:description" content="상속세는 돌아가신 분이 남긴 재산 전체에 한 번 매기는 세금이다. 과세가액 계산, 일괄공제와 배우자공제, 금융재산·동거주택 공제, 공제 종합한도, 재산 평가, 연부연납, 1차 상속과 2차 상속의 시소를 시뮬레이터로 따라간다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/inherit.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/inherit.html#chapter","name":"상속세","headline":"상속세 · TaxBook","description":"상속세는 돌아가신 분이 남긴 재산 전체에 한 번 매기는 세금이다. 과세가액 계산, 일괄공제와 배우자공제, 금융재산·동거주택 공제, 공제 종합한도, 재산 평가, 연부연납, 1차 상속과 2차 상속의 시소를 시뮬레이터로 따라간다.","url":"https://taxbook.euiyun.com/chapters/inherit.html","position":14,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"14. 상속세","item":"https://taxbook.euiyun.com/chapters/inherit.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="inherit">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 14 · <span data-t="label"></span></div>
+    <h1>상속세</h1>
+    <p class="lead">결혼 자금 증여를 정리하던 다온에게 동생 민재가 물었다. "그럼 나중에 집이랑 예금이 다 넘어올 때는 세금이 얼마야? 상속세는 엄청 많이 낸다던데." 다온은 부모 재산이 경기 성남시 아파트(시가 약 9억 2,000만원)와 예금 약 3억 1,000만원이라는 것을 알고 있다. 아버지는 건강하다. 그래도 "만약"을 계산해 두면 부모의 노후와 재산 이야기를 숫자로 할 수 있다. 상속세는 증여세와 세율이 같지만 계산의 단위가 다르다. 증여세가 받는 사람 한 명을 보는 세금이라면, 상속세는 <b>돌아가신 분이 남긴 재산 전체</b>를 한 덩어리로 보고 한 번 매긴다. 이 장은 그 덩어리가 어떻게 계산되는지, 어떤 공제가 얼마나 큰지, 그리고 배우자에게 얼마를 남기느냐가 왜 다음 상속까지 바꾸는지를 따라간다. 이 장의 값은 <span data-t="label"></span>이다.</p>
+    <ul class="objectives">
+      <li>상속세 과세가액을 상속재산 − 채무 − 장례비 + 사전증여재산으로 계산하고, 상속인과 비상속인의 합산 기간 차이를 설명한다.</li>
+      <li>기초·인적공제와 일괄공제 중 큰 것을 고르는 규칙, 배우자공제의 최소·최대와 법정상속분 한도, 금융재산·동거주택 공제를 적용한다.</li>
+      <li>공제 종합한도, 세율과 신고세액공제, 신고기한, 연부연납·분납·물납을 정리한다.</li>
+      <li>1차 상속에서 배우자 몫을 늘리면 2차 상속세가 커지는 시소를 시뮬레이터로 확인한다.</li>
+      <li>상속세를 실제로 내는 사람이 얼마나 되는지 국세통계로 확인한다.</li>
+    </ul>
+  </header>
+
+  <section id="whole">
+    <h2>남긴 재산 전체에 매기는 세금</h2>
+    <p><span class="term">상속세</span><span class="en">(Inheritance tax)</span>는 사람이 세상을 떠나면서 남긴 재산에 매기는 세금이다. 돌아가신 분을 <span class="term">피상속인</span>, 재산을 받는 가족을 <span class="term">상속인</span>이라고 한다. 한국의 상속세는 <span class="term">유산세</span><span class="en">(Estate tax)</span> 방식이다. 상속인이 몇 명이든, 누가 얼마를 받든 먼저 <b>남긴 재산 전체</b>로 세금 총액을 정하고, 그 세금을 상속인들이 받은 몫의 비율대로 나눠 낸다. 상속인들은 서로의 몫에 대한 세금까지 받은 재산 한도 안에서 함께 책임진다(연대납세의무).</p>
+    <p>이 방식의 결과는 단순하다. 재산이 같으면 상속인이 한 명이든 세 명이든 세금 총액이 거의 같다. 누진세율이 재산 전체에 걸리기 때문이다. 상속인 한 사람이 실제로 받은 몫에 세금을 매기는 <span class="term">유산취득세</span> 방식이라면 여러 명이 나눠 받을수록 각자 낮은 세율 구간에 머물러 세금 총액이 줄어든다. 증여세가 바로 받는 사람 기준이라 이런 구조다(<a href="gift.html">13장</a>).</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 300" role="img" aria-label="유산세 방식은 재산 전체에 세율을 곱한 뒤 상속인에게 나누고, 유산취득세 방식은 상속인별로 받은 몫에 각각 세율을 곱한다">
+        <defs><marker id="ih-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <text x="115" y="22" text-anchor="middle" class="lbl-acc">유산세(현행)</text>
+        <text x="345" y="22" text-anchor="middle" class="lbl-acc2">유산취득세(정부안, 확정 전)</text>
+        <line x1="230" y1="10" x2="230" y2="290" class="s-dash"/>
+        <rect x="45" y="36" width="140" height="40" rx="8" class="f-acc-soft"/>
+        <text x="115" y="61" text-anchor="middle" class="lbl-b">남긴 재산 전체</text>
+        <line x1="115" y1="76" x2="115" y2="102" class="s-line" marker-end="url(#ih-ar)"/>
+        <rect x="35" y="104" width="160" height="40" rx="8" class="f-bad-soft"/>
+        <text x="115" y="129" text-anchor="middle" class="lbl">공제 → 세율 → 세금 총액</text>
+        <line x1="115" y1="144" x2="60" y2="196" class="s-line" marker-end="url(#ih-ar)"/>
+        <line x1="115" y1="144" x2="115" y2="196" class="s-line" marker-end="url(#ih-ar)"/>
+        <line x1="115" y1="144" x2="170" y2="196" class="s-line" marker-end="url(#ih-ar)"/>
+        <rect x="26" y="198" width="60" height="34" rx="6" class="f-surface"/><text x="56" y="219" text-anchor="middle" class="lbl">배우자</text>
+        <rect x="90" y="198" width="50" height="34" rx="6" class="f-surface"/><text x="115" y="219" text-anchor="middle" class="lbl">다온</text>
+        <rect x="144" y="198" width="60" height="34" rx="6" class="f-surface"/><text x="174" y="219" text-anchor="middle" class="lbl">민재</text>
+        <text x="115" y="256" text-anchor="middle" class="lbl-dim">받은 몫의 비율로 세금을 나눈다</text>
+        <text x="115" y="274" text-anchor="middle" class="lbl-dim">나눠 받아도 총액은 그대로</text>
+        <rect x="275" y="36" width="140" height="40" rx="8" class="f-acc2-soft"/>
+        <text x="345" y="61" text-anchor="middle" class="lbl-b">남긴 재산</text>
+        <line x1="345" y1="76" x2="290" y2="102" class="s-line" marker-end="url(#ih-ar)"/>
+        <line x1="345" y1="76" x2="345" y2="102" class="s-line" marker-end="url(#ih-ar)"/>
+        <line x1="345" y1="76" x2="400" y2="102" class="s-line" marker-end="url(#ih-ar)"/>
+        <rect x="256" y="104" width="60" height="34" rx="6" class="f-surface"/><text x="286" y="125" text-anchor="middle" class="lbl">배우자</text>
+        <rect x="320" y="104" width="50" height="34" rx="6" class="f-surface"/><text x="345" y="125" text-anchor="middle" class="lbl">다온</text>
+        <rect x="374" y="104" width="60" height="34" rx="6" class="f-surface"/><text x="404" y="125" text-anchor="middle" class="lbl">민재</text>
+        <line x1="286" y1="138" x2="286" y2="194" class="s-line" marker-end="url(#ih-ar)"/>
+        <line x1="345" y1="138" x2="345" y2="194" class="s-line" marker-end="url(#ih-ar)"/>
+        <line x1="404" y1="138" x2="404" y2="194" class="s-line" marker-end="url(#ih-ar)"/>
+        <rect x="256" y="196" width="60" height="36" rx="6" class="f-bad-soft"/><text x="286" y="218" text-anchor="middle" class="lbl-dim">각자 세율</text>
+        <rect x="320" y="196" width="50" height="36" rx="6" class="f-bad-soft"/><text x="345" y="218" text-anchor="middle" class="lbl-dim">각자</text>
+        <rect x="374" y="196" width="60" height="36" rx="6" class="f-bad-soft"/><text x="404" y="218" text-anchor="middle" class="lbl-dim">각자 세율</text>
+        <text x="345" y="256" text-anchor="middle" class="lbl-dim">받은 몫마다 공제·세율 적용</text>
+        <text x="345" y="274" text-anchor="middle" class="lbl-dim">나눌수록 낮은 구간에 머문다</text>
+      </svg>
+      <figcaption><b>그림 1. 유산세와 유산취득세.</b> 현행 상속세는 왼쪽이다. 오른쪽 방식으로 바꾸는 정부안이 국회에 제출됐지만 2026년 10월 현재 처리되지 않았다. 이 장의 계산은 모두 왼쪽 방식이다.</figcaption>
+    </figure>
+
+    <div class="callout deep">
+      <strong>유산취득세 전환은 어디까지 왔나</strong>
+      정부는 2025년에 상속세를 상속인별 취득분에 과세하는 유산취득세로 바꾸는 법안을 국회에 냈다. 상속인별 공제를 새로 짜는 내용이 함께 들어 있다. 이 법안은 국회 조세소위원회에서 "지금 당장 추진하기 어렵다"는 평가를 받고 2025년 말 세법개정에서 빠졌으며, 2026년 10월 현재 <b>추진 중이지만 사실상 보류</b>된 상태다. 일괄공제 상향 같은 의원 발의안도 처리되지 않았다. 확정되지 않은 안은 이 책의 계산에 넣지 않는다. 개정 상황은 <a href="revision.html">16장</a>에서 다룬다.
+    </div>
+  </section>
+
+  <section id="stats">
+    <h2>상속세는 부자만 내는 세금인가</h2>
+    <p>"상속세는 엄청나게 많이 낸다"는 말과 "상속세는 부자들 이야기"라는 말이 동시에 돈다. 숫자로 확인해 보자. 국세통계에 따르면 2024년 결정 기준으로 상속세를 낸 피상속인은 <b>21,193명</b>으로 처음 2만 명을 넘었다. 같은 해 사망한 전체 피상속인 358,979명의 <b>5.90%</b>다(2023년은 6.82%). 재정경제부도 "전체 피상속인 중 5.9%('24년 결정 기준)"라고 밝혔다. 돌아가신 분 100명 가운데 약 6명의 가족이 상속세를 낸다는 뜻이다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 250" role="img" aria-label="2024년 결정 기준 전체 피상속인 100명 가운데 약 6명이 상속세 과세 대상">
+        <g id="ih-waffle"></g>
+        <text x="300" y="70" class="lbl-b">100명 중 약 6명</text>
+        <text x="300" y="92" class="lbl-dim">과세 피상속인 21,193명</text>
+        <text x="300" y="110" class="lbl-dim">전체 피상속인 358,979명</text>
+        <text x="300" y="128" class="lbl-dim">비율 5.90% (2024년 결정)</text>
+        <rect x="300" y="150" width="14" height="14" rx="3" class="f-bad"/><text x="320" y="162" class="lbl">상속세를 낸 경우</text>
+        <rect x="300" y="174" width="14" height="14" rx="3" class="f-elev"/><text x="320" y="186" class="lbl">공제 안이라 세금 없음</text>
+        <text x="300" y="214" class="lbl-dim">출처: 국세통계, 재정경제부</text>
+        <text x="300" y="230" class="lbl-dim">(2023년 비율 6.82%)</text>
+      </svg>
+      <figcaption><b>그림 2. 상속세를 낸 피상속인의 비율.</b> 국세통계 2024년 결정 기준. 나머지 약 94%는 공제(일괄공제·배우자공제 등) 안에 들어 세금이 없었다. 과세 인원은 해마다 늘고 있어 "남의 일"이라고만 볼 수는 없다. 2025년 수치는 확정치를 확인하지 못해 쓰지 않았다.</figcaption>
+    </figure>
+
+    <p>대부분의 상속에 세금이 없는 이유는 공제가 크기 때문이다. 배우자가 있으면 최소 <span data-t="inherit.lump"></span>(일괄공제) + <span data-t="inherit.spouse.min"></span>(배우자공제)를 빼고 시작한다. 그래도 과세 인원이 늘어나는 것은 집값 때문이다. 공제 금액은 그대로인데 아파트 한 채의 시가가 오르면, 다른 재산이 많지 않아도 공제선을 넘는 가족이 생긴다. 다온의 부모처럼 수도권 아파트 한 채와 노후 예금이 전부인 집이 바로 그 경계에 있다.</p>
+  </section>
+
+  <section id="base">
+    <h2>과세가액: 무엇을 더하고 무엇을 빼나</h2>
+    <p>상속세 계산은 증여세보다 계단이 하나 많다. 먼저 세금을 매길 재산의 크기, <span class="term">상속세 과세가액</span>을 정한다.</p>
+    <ol>
+      <li><b>상속재산</b>: 돌아가신 날 현재 피상속인 명의의 모든 재산. 부동산, 예금, 주식, 자동차, 받을 돈. 피상속인이 보험료를 낸 사망보험금이나 퇴직금처럼 돌아가시면서 생기는 돈도 상속재산으로 본다(간주상속재산). 돌아가시기 전 일정 기간 안에 인출하거나 처분한 재산 중 쓴 곳이 확인되지 않는 금액도 상속받은 것으로 추정할 수 있다.</li>
+      <li><b>− 채무</b>: 대출금, 임대보증금(돌려줄 전세보증금), 미납 세금과 병원비 같은 피상속인이 갚아야 했던 돈.</li>
+      <li><b>− 장례비</b>: 최소 <span data-t="inherit.funeral.min"></span>은 증빙 없이도 빼 주고, 증빙이 있으면 <span data-t="inherit.funeral.max"></span>까지 뺀다. 봉안시설이나 자연장지 비용은 <span data-t="inherit.funeral.enshrine"></span>까지 따로 더 뺀다.</li>
+      <li><b>+ 사전증여재산</b>: 돌아가시기 전에 미리 준 재산을 다시 더한다. 상속인에게 준 것은 <span data-t="inherit.priorHeirYears" data-f="num"></span>년, 손주·사위·며느리처럼 상속인이 아닌 사람에게 준 것은 <span data-t="inherit.priorOtherYears" data-f="num"></span>년 안의 증여를 <b>증여 당시의 가액</b>으로 더한다(<a data-src="inherit.prior"></a>). 그때 낸 증여세는 나중에 상속세에서 빼 준다.</li>
+    </ol>
+    <div class="formula">
+      $$\text{과세표준} = \underbrace{\text{상속재산}-\text{채무}-\text{장례비}+\text{사전증여재산}}_{\text{과세가액}} - \min\big(\text{상속공제 합계},\ \text{공제 종합한도}\big)$$
+      <div class="where">상속공제는 일괄공제(또는 기초+인적공제), 배우자공제, 금융재산공제, 동거주택공제 등의 합이다. 공제 종합한도는 대략 과세가액에서 사전증여재산(증여공제를 뺀 것)과 상속인이 아닌 사람에게 남긴 몫을 뺀 금액이다. 과세표준에 증여세와 같은 세율표를 곱하고, 사전증여분의 증여세와 신고세액공제(<span data-t="transfer.filingCredit" data-f="pct"></span>)를 뺀다.</div>
+    </div>
+    <p>아래 시뮬레이터는 이 계단을 막대로 그린 것이다. 기본값은 다온의 부모 재산과 같은 12억 3,000만원, 배우자가 있고 자녀가 둘이며 배우자는 법정상속분만큼 받는 경우다. 재산 총액을 움직이고, 배우자 유무를 바꾸고, 사전증여를 늘려 본다.</p>
+
+    <div class="sim" id="sim-flow">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>상속세 계단 내려가기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="flow-cv"></canvas></div>
+        <div class="sim-controls">
+          <div class="seg" id="flow-sp"><button data-value="yes" class="on">배우자 있음</button><button data-value="no">배우자 없음</button></div>
+          <label class="ctrl"><span>상속재산 <output id="flow-e-out"></output></span><input type="range" id="flow-e" min="2" max="60" step="0.1" value="12.3"></label>
+          <label class="ctrl"><span>합산 기간 안 자녀에게 한 증여 <output id="flow-p-out"></output></span><input type="range" id="flow-p" min="0" max="10" step="0.1" value="0"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">과세가액</span><span class="v" id="flow-o-t">—</span></div>
+        <div class="stat"><span class="k">상속공제(한도 적용)</span><span class="v" id="flow-o-d">—</span></div>
+        <div class="stat"><span class="k">과세표준</span><span class="v" id="flow-o-b">—</span></div>
+        <div class="stat"><span class="k">납부세액 / 재산 대비</span><span class="v" id="flow-o-x">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(12억 3,000만원, 배우자 있음)에서 공제 막대 두 개(일괄공제와 배우자공제)가 과세가액 대부분을 덮어 과세표준이 작게 남는 것을 본다. ② '배우자 없음'으로 바꾼다. 배우자공제가 사라져 같은 재산의 세금이 몇 배로 커진다. 2차 상속(어머니가 돌아가실 때)이 바로 이 모양이다. ③ 상속재산을 3억원으로 낮추고 사전증여를 5억원으로 올린다. 사전증여가 과세가액에 더해지지만 공제 종합한도가 줄어 공제를 다 쓰지 못하는 지점이 생긴다. (자녀 둘, 장례비 1,000만원, 배우자는 법정상속분만큼 받는다고 가정했다. 금융재산·동거주택 공제와 채무는 넣지 않았다. 이 책의 엔진은 공제 종합한도를 과세가액 − 사전증여재산으로 단순화했다. 실제 한도는 사전증여에서 증여재산공제를 뺀 금액만 빼고, 과세가액이 일정 금액 이하이면 빼지 않는다.)</div>
+    </div>
+
+    <p>같은 12억원대 재산이라도 배우자가 있느냐 없느냐로 세금이 크게 갈린다. 배우자공제가 상속세에서 가장 큰 공제이기 때문이다. 사전증여는 "미리 줘서 상속재산을 줄이는" 효과가 <span data-t="inherit.priorHeirYears" data-f="num"></span>년(비상속인은 <span data-t="inherit.priorOtherYears" data-f="num"></span>년) 동안 없다는 것도 보인다. 상속 직전의 증여는 상속세를 거의 줄이지 못한다. 이 이야기는 <a href="transfer.html">15장</a>에서 자세히 한다.</p>
+  </section>
+
+  <section id="deduction">
+    <h2>공제 1: 일괄공제와 기초·인적공제</h2>
+    <p>상속공제의 첫 번째 묶음은 사람 수에 따라 정해지는 공제다. 상속인은 둘 중 큰 쪽을 고른다.</p>
+    <ul>
+      <li><b>기초공제 + 그 밖의 인적공제</b>: 기초공제 <span data-t="inherit.basic"></span>에, 자녀 1명마다 <span data-t="inherit.child"></span>, 미성년자는 만 <span data-t="inherit.minorAge" data-f="num"></span>세가 될 때까지 남은 해마다 <span data-t="inherit.minorPerYear"></span>, <span data-t="inherit.elderlyAge" data-f="num"></span>세 이상 가족(배우자 제외) 1명마다 <span data-t="inherit.elderly"></span>, 장애인은 기대여명에 따라 더한다.</li>
+      <li><b>일괄공제</b>: 사람 수와 관계없이 <span data-t="inherit.lump"></span>(<a data-src="inherit.deduction"></a>).</li>
+    </ul>
+    <p>자녀가 둘이면 기초공제와 자녀공제를 합쳐도 일괄공제보다 작다. 그래서 대부분의 가족은 일괄공제를 쓴다. 자녀가 많거나 어린 자녀가 있으면 계산이 뒤집힐 수 있다. 아래에서 자녀 수와 미성년 자녀의 나이를 바꿔 본다. 배우자공제는 이 묶음과 <b>별도</b>로 더해진다는 것도 기억한다. 단, 배우자 혼자 상속받으면 일괄공제를 쓸 수 없고 기초·인적공제만 쓴다. 기한 안에 신고하지 않으면 일괄공제만 적용된다.</p>
+
+    <div class="sim" id="sim-lump">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>일괄공제와 기초·인적공제 중 큰 것</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="lump-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>자녀 수 <output id="lump-n-out"></output></span><input type="range" id="lump-n" min="0" max="8" step="1" value="2"></label>
+          <label class="ctrl"><span>그중 미성년 자녀 <output id="lump-m-out"></output></span><input type="range" id="lump-m" min="0" max="8" step="1" value="0"></label>
+          <label class="ctrl"><span>미성년 자녀의 나이 <output id="lump-a-out"></output></span><input type="range" id="lump-a" min="0" max="18" step="1" value="8"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">기초 + 인적공제</span><span class="v" id="lump-o-b">—</span></div>
+        <div class="stat"><span class="k">일괄공제</span><span class="v" id="lump-o-l">—</span></div>
+        <div class="stat"><span class="k">적용되는 공제</span><span class="v" id="lump-o-u">—</span></div>
+        <div class="stat"><span class="k">일괄공제선까지 남은 거리</span><span class="v" id="lump-o-g">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(자녀 둘, 모두 성년)에서 기초·인적공제 막대가 일괄공제선에 한참 못 미치는 것을 본다. ② 자녀 수를 늘린다. 자녀 한 명마다 막대가 자라 어느 순간 일괄공제선을 넘고, 그때부터 기초·인적공제가 적용된다. ③ 미성년 자녀를 두고 나이를 0세로 내린다. 미성년자공제는 남은 해 수만큼 커져 자녀가 적어도 일괄공제를 넘길 수 있다. (<span data-t="inherit.elderlyAge" data-f="num"></span>세 이상 가족과 장애인공제는 넣지 않았다. 미성년 자녀는 모두 같은 나이로 가정했다. 배우자공제는 이 비교와 별도로 더해진다.)</div>
+    </div>
+  </section>
+
+  <section id="spouse">
+    <h2>공제 2: 배우자공제의 최소·최대와 실제 상속분</h2>
+    <p><span class="term">배우자상속공제</span>는 배우자가 <b>실제로 상속받은 금액</b>을 빼 주는 공제다(<a data-src="inherit.spouse"></a>). 다만 세 가지 울타리가 있다.</p>
+    <ol>
+      <li><b>최소</b>: 배우자가 실제로 받은 것이 적거나 없어도 <span data-t="inherit.spouse.min"></span>은 빼 준다.</li>
+      <li><b>법정상속분 한도</b>: 실제로 받은 금액이 아무리 커도 민법의 법정상속분(배우자는 자녀 몫의 1.5배)으로 계산한 금액까지만 공제한다. 자녀가 둘이면 배우자 몫은 1.5 ÷ (1.5 + 1 + 1) = 3/7이다. 배우자가 그 전에 증여받은 재산의 과세표준은 이 한도에서 뺀다.</li>
+      <li><b>최대</b>: 어떤 경우에도 <span data-t="inherit.spouse.max"></span>까지다.</li>
+    </ol>
+    <p>그래서 배우자공제는 "실제 받은 금액"을 따라 올라가다가 법정상속분에서 멈춘다. 배우자에게 법정상속분보다 많이 줘도 공제는 늘지 않는다. 아래 그래프에서 배우자가 받는 금액의 손잡이를 끌어 본다.</p>
+
+    <div class="sim" id="sim-sp">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>배우자공제의 울타리</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="sp-cv"></canvas><span class="hint">끌어서 배우자 몫을 바꾼다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>상속재산 <output id="sp-e-out"></output></span><input type="range" id="sp-e" min="5" max="100" step="0.5" value="20"></label>
+          <label class="ctrl"><span>자녀 수 <output id="sp-n-out"></output></span><input type="range" id="sp-n" min="1" max="4" step="1" value="2"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">배우자가 실제로 받는 몫</span><span class="v" id="sp-o-s">—</span></div>
+        <div class="stat"><span class="k">법정상속분 한도</span><span class="v" id="sp-o-l">—</span></div>
+        <div class="stat"><span class="k">배우자공제</span><span class="v" id="sp-o-d">—</span></div>
+        <div class="stat"><span class="k">이번 상속세</span><span class="v" id="sp-o-t">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(20억원, 자녀 둘)에서 손잡이를 왼쪽 끝으로 민다. 배우자가 한 푼도 받지 않아도 공제선은 <span data-t="inherit.spouse.min"></span>에서 바닥을 친다. ② 손잡이를 법정상속분(세로 점선) 너머로 민다. 공제선이 평평해지고 이번 상속세는 더 줄지 않는다. ③ 상속재산을 100억원으로 올린다. 법정상속분이 커도 공제는 <span data-t="inherit.spouse.max"></span>에서 막힌다. (배우자의 사전증여는 없고, 채무·금융재산공제는 넣지 않았다. 배우자가 공제를 받으려면 기한 안에 상속재산을 실제로 나눠 등기 등을 마쳐야 한다는 요건은 충족했다고 본다.)</div>
+    </div>
+
+    <div class="callout pro">
+      <strong>배우자공제는 '나눠야' 받는다</strong>
+      배우자공제를 최소 금액보다 많이 받으려면 배우자가 실제로 상속받았다는 것이 서류로 확인돼야 한다. 상속인들이 상속재산 분할협의서를 쓰고, 부동산은 배우자 명의로 상속등기를, 예금은 명의 이전을 법이 정한 <b>배우자상속재산분할기한</b>까지 마치고 신고해야 한다. 이 기한을 넘기면 실제로 배우자가 다 받더라도 최소 금액만 공제되는 경우가 많다. 상속세 신고 실무에서 가장 흔한 실수 가운데 하나가 "나중에 정리하자"며 분할을 미루는 것이다. 반대로 배우자에게 법정상속분보다 많이 몰아주면 이번 공제는 늘지 않고 다음 상속(2차 상속) 재산만 커진다. 이 장의 마지막 시뮬레이터가 그 이야기다.
+    </div>
+  </section>
+
+  <section id="fin">
+    <h2>공제 3: 금융재산공제와 동거주택공제</h2>
+    <p><span class="term">금융재산상속공제</span>는 예금·적금·주식·채권 같은 금융재산에서 금융부채를 뺀 순금융재산에 주는 공제다(<a data-src="inherit.financial"></a>). 부동산은 시가 파악이 어려워 실제보다 낮게 평가되는 경우가 있는 반면 금융재산은 한 푼까지 드러나니, 그 차이를 일부 메워 주려는 공제다. 순금융재산이 <span data-t="inherit.financial.fullUpTo"></span> 이하면 전액, 넘으면 <span data-t="inherit.financial.rate" data-f="pct"></span>(최소 <span data-t="inherit.financial.fullUpTo"></span>)를 빼 주고, 한도는 <span data-t="inherit.financial.max"></span>이다. 손잡이를 끌어 계단과 기울기, 한도를 확인한다.</p>
+
+    <div class="sim" id="sim-fin">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>금융재산공제의 계단과 한도</h3></div>
+      <div class="sim-body">
+        <div class="sim-view"><canvas id="fin-cv"></canvas><span class="hint">끌어서 순금융재산을 바꾼다</span></div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">순금융재산</span><span class="v" id="fin-o-f">—</span></div>
+        <div class="stat"><span class="k">금융재산공제</span><span class="v" id="fin-o-d">—</span></div>
+        <div class="stat"><span class="k">재산 대비 공제율</span><span class="v" id="fin-o-r">—</span></div>
+        <div class="stat"><span class="k">구간</span><span class="v" id="fin-o-z">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 왼쪽 끝 근처로 옮긴다. 아주 작은 금융재산은 전액이 공제된다. ② 첫 번째 점선까지 끈다. 그 사이에서는 공제가 바닥값에 머물러 평평하다. ③ 두 번째 점선을 넘겨 끈다. 공제가 한도에서 멈춰 재산 대비 공제율이 다시 줄어든다. (최대주주 보유 주식과 기한 안에 신고하지 않은 차명 금융재산은 이 공제에서 빠진다. 순금융재산은 금융재산에서 금융기관 채무를 뺀 금액이다.)</div>
+    </div>
+
+    <p>부모 예금 3억 1,000만원이 그대로 상속되면 이 공제가 <b id="fin-case"></b>다. 예금을 미리 현금으로 나눠 주면 그만큼 이 공제도 줄어든다는 것을 기억해 둔다.</p>
+    <p><span class="term">동거주택상속공제</span>는 피상속인과 자녀가 오래 한집에 살았을 때 그 집에 주는 공제다(<a data-src="inherit.cohabit"></a>). 상속개시일부터 거슬러 <span data-t="inherit.cohabit.years" data-f="num"></span>년 이상 계속 한 집에 같이 살았고, 그동안 1세대 1주택이었으며, 상속받는 자녀가 무주택자(또는 피상속인과 공동 소유)인 경우 주택 가액(담보 채무를 뺀 금액)의 <span data-t="inherit.cohabit.rate" data-f="pct"></span>를 <span data-t="inherit.cohabit.max"></span>까지 공제한다. 배우자가 받는 몫에는 적용되지 않는다. 다온과 민재는 부모와 따로 살고 있어서 이 공제는 해당하지 않는다.</p>
+  </section>
+
+  <section id="cap">
+    <h2>공제 종합한도: 공제가 과세가액을 넘을 수는 없다</h2>
+    <p>공제를 모두 더한 금액이 아무리 커도 그대로 빼 주지는 않는다. <span class="term">상속공제 종합한도</span>는 "상속인이 실제로 상속받은 재산" 범위 안에서만 공제한다는 울타리다. 과세가액에서 상속인이 아닌 사람에게 유언으로 남긴 재산, 상속을 포기해 다음 순위로 넘어간 재산, 그리고 사전증여로 더한 재산(증여재산공제를 뺀 금액)을 뺀 금액이 한도다.</p>
+    <p>이 한도가 문제가 되는 대표적인 경우가 <b>큰 사전증여</b>다. 재산 대부분을 돌아가시기 몇 년 전에 자녀에게 증여했다면, 그 증여는 상속재산에 다시 더해지는데 공제는 남은 재산 범위 안에서만 쓸 수 있다. 결과적으로 일괄공제나 배우자공제를 다 쓰지 못한다. 앞의 계단 시뮬레이터에서 상속재산을 낮추고 사전증여를 키워 보면 공제 막대가 잘리는 모습이 보인다.</p>
+  </section>
+
+  <section id="rates">
+    <h2>세율, 신고세액공제, 신고기한</h2>
+    <p>세율표는 증여세와 같다(<a data-src="transfer.rates"></a>).</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>과세표준</th><th class="num">세율</th><th class="num">누진공제</th></tr></thead>
+        <tbody id="inh-rate-tb"></tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)"><span data-t="label"></span> 상속세 세율. 상속인이나 수유자가 피상속인의 자녀가 아닌 직계비속(손주)이면 그 몫에 해당하는 산출세액에 세대생략 할증이 붙는다(대습상속 제외).</p>
+    <p>신고기한은 <b><span data-t="calendar.inheritFiling" data-f="raw"></span></b>이다(<a data-src="transfer.filing"></a>). 3월 15일에 돌아가셨다면 3월 31일부터 <span data-t="transfer.inheritFilingMonths" data-f="num"></span>개월을 센다. 기한 안에 신고하면 산출세액의 <span data-t="transfer.filingCredit" data-f="pct"></span>를 신고세액공제로 빼 주고, 신고하지 않으면 증여세와 같은 가산세가 붙는다. 상속세는 신고한다고 끝나지 않는다. 증여세와 달리 세무서가 신고 내용을 조사해 세액을 결정하는 것이 원칙이고, 재산이 큰 경우에는 세무조사가 함께 진행되는 일이 많다.</p>
+  </section>
+
+  <section id="valuation">
+    <h2>재산 평가: 아파트는 시가, 공시가격은 예외</h2>
+    <p>상속재산은 돌아가신 날 현재의 <span class="term">시가</span>로 평가한다(<a data-src="inherit.valuation"></a>). 시가는 평가기간 안에 그 재산이 실제로 거래된 값, 감정평가액, 경매·공매·수용 가격이다. 그런 값이 없으면 비슷한 재산의 거래 가격, 곧 <span class="term">유사매매사례가액</span>을 시가로 본다. 아파트는 같은 단지에 면적과 공시가격이 비슷한 집이 많아 거의 언제나 유사매매사례가액이 있다. 그래서 아파트는 공시가격이 아니라 시세에 가까운 값으로 평가된다.</p>
+    <p>공시가격(기준시가)은 시가를 찾을 수 없을 때 쓰는 <span class="term">보충적 평가</span>다. 거래가 드문 단독주택이나 토지, 상가에서 주로 쓰인다. 공시가격은 보통 시세보다 낮아서 "공시가격으로 신고하면 세금이 줄어든다"는 말이 나오지만, 신고 뒤에 국세청이 감정평가를 받아 시가로 다시 평가하는 일이 있다. 그리고 상속받은 집을 나중에 팔 때는 상속 당시 평가액이 취득가액이 되므로, 낮게 평가하면 상속세는 줄어도 양도소득세가 커질 수 있다. 집을 팔 때의 세금은 EstateBook <a href="https://estatebook.euiyun.com/chapters/tradetax.html">14장</a>에 있다.</p>
+
+    <div class="callout check" style="display:block">
+      <strong>상속세 신고 전에</strong>
+      ① 피상속인의 재산을 빠짐없이 찾는다. 정부24·주민센터의 "안심상속 원스톱 서비스"로 금융거래, 토지·건물, 자동차, 국세·지방세, 연금 가입 내역을 한 번에 조회한다. ② 아파트는 상속개시일 전후 같은 단지·비슷한 면적·비슷한 공시가격의 거래를 찾아 유사매매사례가액을 확인한다. 홈택스의 상속·증여재산 평가 안내를 함께 본다. ③ 돌아가시기 전 <span data-t="inherit.priorHeirYears" data-f="num"></span>년(상속인)·<span data-t="inherit.priorOtherYears" data-f="num"></span>년(그 밖의 사람) 안의 증여 신고서를 모아 합산할 금액과 이미 낸 증여세를 적는다. ④ 채무(대출, 돌려줄 보증금, 병원비)와 장례비 영수증을 모은다. ⑤ 배우자공제를 최소 금액보다 많이 받을 계획이면 분할협의서와 등기 일정을 신고기한과 분할기한에 맞춘다. ⑥ 큰 금액을 한 번에 내기 어렵다면 아래 연부연납을 신고와 함께 신청한다.
+    </div>
+  </section>
+
+  <section id="payment">
+    <h2>세금을 나눠 내는 방법: 연부연납·분납·물납</h2>
+    <p>상속세는 돈이 아니라 집으로 남는 경우가 많아, 세금을 낼 현금이 부족한 일이 흔하다. 그래서 나눠 내는 제도가 세 가지 있다(<a data-src="inherit.payment"></a>).</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>방법</th><th>내용</th><th>요건과 비용</th></tr></thead>
+        <tbody>
+          <tr><td>분납</td><td>신고기한 뒤 짧은 기간 안에 일부를 나눠 낸다</td><td>납부세액이 <span data-t="transfer.splitMin"></span>을 넘을 때. 이자 없음. 연부연납과 함께 쓸 수 없다</td></tr>
+          <tr><td>연부연납</td><td>세무서 허가를 받아 해마다 나눠 낸다. 일반 상속은 최대 <span data-t="inherit.installmentYears" data-f="num"></span>년</td><td>납부세액이 <span data-t="inherit.installmentMin"></span>을 넘을 때. 납세담보(부동산 등)를 제공하고, 나눠 내는 기간의 가산금(이자)을 낸다</td></tr>
+          <tr><td>물납</td><td>세금을 부동산이나 유가증권으로 낸다</td><td>상속세만 가능(증여세는 불가). 상속재산 중 부동산·유가증권 비중이 크고, 납부세액이 금융재산으로 낼 수 있는 금액을 넘는 등의 요건. 세무서 허가 필요</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>연부연납은 집을 급하게 팔지 않고 세금을 낼 시간을 벌어 주지만, 가산금이 붙는 빚이다. 이 책의 엔진은 가산금을 계산하지 않는다. 세금을 낼 현금 계획은 상속이 생기기 전에 미리 생각해 둘 문제이고, 15장에서 사전증여와 함께 다시 본다.</p>
+  </section>
+
+  <section id="second">
+    <h2>1차 상속과 2차 상속의 시소</h2>
+    <p>부부 중 한 사람이 먼저 돌아가시면 <b>1차 상속</b>, 남은 배우자가 나중에 돌아가시면 <b>2차 상속</b>이다. 1차 상속에서는 배우자공제가 있지만 2차 상속에서는 배우자가 없으니 배우자공제도 없다. 그래서 1차에서 배우자에게 많이 줄수록 1차 상속세는 줄고, 그 재산이 2차 상속에 그대로 얹혀 2차 상속세가 커진다. 두 상속을 합친 세금이 가장 작은 지점이 어딘가에 있다.</p>
+    <p>아래 그래프의 가로축은 1차 상속에서 배우자가 받는 금액이다. 손잡이를 끌어 본다. 빨간 선은 1차, 주황 선은 2차, 굵은 선은 둘의 합이다. 배우자 자신의 재산도 2차 상속에 더해진다.</p>
+
+    <div class="sim" id="sim-seesaw">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>배우자 몫의 시소: 1차 + 2차 상속세</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="ss-cv"></canvas><span class="hint">끌어서 배우자 몫을 바꾼다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>1차 상속재산 <output id="ss-e-out"></output></span><input type="range" id="ss-e" min="5" max="60" step="0.5" value="20"></label>
+          <label class="ctrl"><span>배우자 본인 재산 <output id="ss-m-out"></output></span><input type="range" id="ss-m" min="0" max="20" step="0.5" value="2"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">1차에서 배우자 몫</span><span class="v" id="ss-o-s">—</span></div>
+        <div class="stat"><span class="k">1차 상속세</span><span class="v" id="ss-o-1">—</span></div>
+        <div class="stat"><span class="k">2차 상속세</span><span class="v" id="ss-o-2">—</span></div>
+        <div class="stat"><span class="k">합계 (최소 지점)</span><span class="v" id="ss-o-t">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(1차 재산 20억원, 배우자 본인 재산 2억원, 자녀 둘)에서 손잡이를 왼쪽에서 오른쪽으로 천천히 끈다. 법정상속분(점선)까지는 1차가 줄고 2차가 늘어 합계가 움푹 들어간다. ② 법정상속분 너머로 끈다. 1차 공제는 더 늘지 않는데 2차 재산만 커져 합계가 다시 올라간다. ③ 1차 상속재산을 일괄공제와 배우자 최소공제의 합 아래로 낮춘다. 일괄공제와 배우자 최소공제만으로 1차 세금이 0원이 되면, 배우자에게 덜 주는 쪽이 2차를 줄여 합계가 작아진다. (자녀 둘, 두 상속 사이 재산의 증감·생활비 지출 없음, 2차 상속은 1차 뒤 충분히 시간이 지나 단기재상속 세액공제가 없다고 가정했다. 금융재산·동거주택 공제와 장례비 차이는 넣지 않았다. 세금만 본 계산이며 배우자의 노후 생활비는 따로 따져야 한다.)</div>
+    </div>
+
+    <p>시소를 보면 "배우자에게 몰아주면 세금이 없다"는 말이 반만 맞다는 것이 드러난다. 1차 상속세만 보면 맞지만, 배우자도 언젠가 상속을 남긴다. 2차 상속 시점이 1차 바로 뒤라면 짧은 기간 안에 같은 재산에 두 번 과세되는 부담을 줄여 주는 단기재상속 세액공제가 있다(이 책의 모델은 생략했다). 그리고 무엇보다 배우자의 남은 삶에 필요한 돈이 세금 계산보다 먼저다. 아파트를 배우자가 받는 것은 대개 세금 때문이 아니라 그 집에 계속 살기 위해서다.</p>
+
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다</strong>
+      이 장의 공제·세율·기한은 <span data-t="label"></span>이다(data/tax-<span data-t="year" data-f="raw"></span>.json). 일괄공제와 배우자공제 금액, 세율은 2026년에도 바뀌지 않았지만, 일괄공제·배우자공제 상향과 유산취득세 전환이 계속 논의되고 있다. 국회를 통과하지 않은 안은 계산에 넣지 않았다. 상속세는 재산 평가, 사전증여, 분할 방식, 예외 규정에 따라 결과가 크게 달라진다. 이 장의 숫자는 이 책의 교육용 모델로 계산한 것이며, 실제 상속이 생기면 국세청 홈택스의 상속세 모의계산과 세무 전문가의 확인을 거친다.
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 세금 노트: '만약'의 상속세</h2>
+    <p>다온은 부모님과 저녁을 먹으며 이 계산을 보여 드렸다. 아버지는 웃으며 "아직 한참 멀었다"고 했다. 맞는 말이다. 아래는 가정이다. 아버지 정명호(64)는 건강하고, 이 노트는 "만약 지금 아버지가 먼저 돌아가신다면"을 숫자로 적어 둔 것이다. 재산은 모두 아버지 명의로 가정한다.</p>
+
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · 2027년 1월</span></div>
+      <h4>1차 상속세는 생각보다 작다. 문제는 그다음이다</h4>
+      <p><b>가정.</b> 아버지 명의 재산은 성남시 아파트 9억 2,000만원(시가, 같은 단지 거래 기준)과 예금 3억 1,000만원, 합계 12억 3,000만원. 채무는 없고 장례비는 1,000만원. 상속인은 어머니 김은숙(61), 다온, 민재. 법정상속분은 어머니 3/7, 다온과 민재 각 2/7이다.</p>
+      <p><b>1차 상속.</b> 이 책의 모델로 계산하면 과세가액 <b id="nc-tax"></b>에서 일괄공제 <span data-t="inherit.lump"></span>, 배우자공제 <b id="nc-sp"></b>(법정상속분 한도), 금융재산공제 <b id="nc-fin"></b>를 빼면 과세표준은 <b id="nc-base"></b>이다. 신고세액공제까지 반영한 상속세는 <b id="nc-pay"></b>, 재산의 <b id="nc-eff"></b>다. 어머니가 아파트를 받고 다온과 민재가 예금을 나누든, 셋이 법정상속분대로 나누든 1차 세금은 같다. 배우자공제가 법정상속분에서 막히기 때문이다. 만약 어머니가 먼저 돌아가셔서 배우자공제가 없다면 같은 재산의 상속세는 <b id="nc-nosp"></b>이다.</p>
+      <p><b>2차 상속(어머니가 나중에 돌아가실 때).</b> 어머니 본인 재산은 없다고 가정한다. 어머니가 아파트를 받았다면 2차 상속재산은 그 아파트 9억 2,000만원이고, 배우자공제 없이 일괄공제만 쓰니 2차 상속세가 <b id="nc-2a"></b>다. 법정상속분대로 아파트와 예금의 3/7씩을 받았다면 2차 상속재산이 공제 안에 들어 <b id="nc-2b"></b>이다. 두 상속을 합치면 아파트를 어머니가 받는 경우가 <b id="nc-diff"></b> 더 많다. 그래도 어머니가 그 집에 계속 사셔야 한다면 세금 차이보다 그쪽이 먼저다. 집값이 오르면 2차 세금은 더 커진다.</p>
+      <p><b>13장의 결혼 자금.</b> 결혼 자금 중 아버지가 준 몫(<b id="nc-g"></b>)은 상속인에게 한 <span data-t="inherit.priorHeirYears" data-f="num"></span>년 안의 증여라 상속재산에 다시 더해진다. 그만큼 예금이 줄어 금융재산공제도 줄어드니, 모델로 계산한 1차 상속세는 오히려 <b id="nc-gift"></b>로 조금 커진다. 미리 준 돈이 <span data-t="inherit.priorHeirYears" data-f="num"></span>년 안에는 상속세를 줄이지 못한다는 것을 확인했다.</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>상속세는 재산 전체에 한 번. 일괄공제와 배우자공제(법정상속분 한도)가 대부분을 덮어 1차 세금은 작다. 2차 상속에서는 배우자공제가 없다.</div><div><b>아직 남은 문제</b>미리 나눠 주면 2차까지 합친 세금이 줄까. 아파트 같은 오를 자산과 예금은 다르게 봐야 하나. 부모의 생활비는 얼마가 남아야 하나.</div><div><b>다음 장</b>15장: <span data-t="gift.windowYears" data-f="num"></span>년 단위로 나눠 주는 계획과 기다리는 경우의 세금 합계를 비교한다.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>상속세는 유산세 방식이다. 남긴 재산 전체로 세금 총액을 정하고 상속인이 받은 비율대로 나눠 낸다. 유산취득세 전환 정부안은 추진 중이지만 사실상 보류 상태다.</li>
+      <li>과세가액 = 상속재산 − 채무 − 장례비(<span data-t="inherit.funeral.min"></span>~<span data-t="inherit.funeral.max"></span>) + 사전증여재산(상속인 <span data-t="inherit.priorHeirYears" data-f="num"></span>년, 그 밖의 사람 <span data-t="inherit.priorOtherYears" data-f="num"></span>년, 증여 당시 가액).</li>
+      <li>기초공제 <span data-t="inherit.basic"></span> + 인적공제와 일괄공제 <span data-t="inherit.lump"></span> 중 큰 것을 쓴다. 배우자공제는 별도로 실제 받은 금액을 법정상속분 한도 안에서, 최소 <span data-t="inherit.spouse.min"></span>·최대 <span data-t="inherit.spouse.max"></span>로 공제한다.</li>
+      <li>금융재산공제는 순금융재산의 <span data-t="inherit.financial.rate" data-f="pct"></span>(최소 <span data-t="inherit.financial.fullUpTo"></span>, 한도 <span data-t="inherit.financial.max"></span>), 동거주택공제는 <span data-t="inherit.cohabit.years" data-f="num"></span>년 이상 동거한 자녀에게 <span data-t="inherit.cohabit.max"></span>까지. 공제 합계는 종합한도를 넘지 못한다.</li>
+      <li>신고기한은 <span data-t="calendar.inheritFiling" data-f="raw"></span>, 신고세액공제 <span data-t="transfer.filingCredit" data-f="pct"></span>. 아파트는 유사매매사례가액으로 시가 평가된다. 현금이 부족하면 분납·연부연납(최대 <span data-t="inherit.installmentYears" data-f="num"></span>년)·물납을 쓴다.</li>
+      <li>1차 상속에서 배우자에게 많이 줄수록 1차는 줄고 2차는 커진다. 법정상속분을 넘기면 1차 공제는 늘지 않고 2차만 커진다.</li>
+      <li>2024년 결정 기준 상속세를 낸 피상속인은 전체의 5.90%(21,193명)다(국세통계).</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>상속재산이 같을 때, 상속인이 2명에서 4명으로 늘면 현행 상속세 총액은 어떻게 되는가? (공제는 일괄공제를 쓴다고 하자)</p>
+        <div class="opts">
+          <button class="opt">각자 낮은 세율 구간에 머물러 총액이 크게 줄어든다</button>
+          <button class="opt" data-correct>재산 전체에 세율을 곱하는 유산세 방식이라 총액은 거의 그대로다</button>
+          <button class="opt">상속인마다 일괄공제를 받아 총액이 절반이 된다</button>
+          <button class="opt">상속인이 많을수록 할증이 붙어 늘어난다</button>
+        </div>
+        <div class="quiz-exp">현행 상속세는 유산세 방식이라 남긴 재산 전체로 세금 총액을 먼저 정한다. 일괄공제 <span data-t="inherit.lump"></span>도 상속인 수와 관계없이 하나다. 자녀공제가 늘어 기초·인적공제가 일괄공제를 넘는 경우가 아니면 총액은 같다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>자녀 둘과 배우자가 상속인이고 상속재산이 14억원이다. 배우자가 14억원 전부를 받으면 배우자공제는?</p>
+        <div class="opts">
+          <button class="opt">14억원 전부</button>
+          <button class="opt"><span data-t="inherit.spouse.max"></span></button>
+          <button class="opt" data-correct>법정상속분 한도인 14억원 × 3/7 = 6억원</button>
+          <button class="opt"><span data-t="inherit.spouse.min"></span>(최소 금액)</button>
+        </div>
+        <div class="quiz-exp">배우자공제는 실제로 받은 금액을 공제하되 법정상속분으로 계산한 금액이 한도다. 자녀가 둘이면 배우자 몫은 1.5 ÷ 3.5 = 3/7이다. 6억원은 최소 <span data-t="inherit.spouse.min"></span>보다 크고 최대 <span data-t="inherit.spouse.max"></span>보다 작아 그대로 적용된다. 법정상속분을 넘긴 몫은 2차 상속 재산만 키운다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>아버지가 돌아가시기 4년 전 자녀에게 2억원을 증여하고 증여세를 냈다. 상속세 계산에서 이 증여는?</p>
+        <div class="opts">
+          <button class="opt" data-correct>상속인에게 <span data-t="inherit.priorHeirYears" data-f="num"></span>년 안에 한 증여라 증여 당시 가액으로 과세가액에 더하고, 낸 증여세는 상속세에서 뺀다</button>
+          <button class="opt">이미 증여세를 냈으므로 상속세와 상관없다</button>
+          <button class="opt">상속 당시의 시가로 다시 평가해 더한다</button>
+          <button class="opt"><span data-t="inherit.priorOtherYears" data-f="num"></span>년이 지나지 않았으므로 두 배로 더한다</button>
+        </div>
+        <div class="quiz-exp">상속인에게 한 증여는 <span data-t="inherit.priorHeirYears" data-f="num"></span>년, 상속인이 아닌 사람에게 한 증여는 <span data-t="inherit.priorOtherYears" data-f="num"></span>년 안의 것을 증여 당시의 가액으로 더한다. 이미 낸 증여세는 이중과세가 되지 않도록 상속세에서 뺀다. 그 사이에 값이 올랐더라도 증여 당시 가액으로 더한다는 점이 15장의 "가치 고정"이다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>서울의 아파트를 상속받았다. 상속재산 평가로 가장 알맞은 것은?</p>
+        <div class="opts">
+          <button class="opt">항상 공시가격으로 평가한다</button>
+          <button class="opt">상속인이 시가와 공시가격 중 낮은 쪽을 고른다</button>
+          <button class="opt">최초 분양가로 평가한다</button>
+          <button class="opt" data-correct>시가가 원칙이고, 같은 단지의 비슷한 집 거래가(유사매매사례가액)가 있으면 그 값이 시가가 된다</button>
+        </div>
+        <div class="quiz-exp">상속재산은 상속개시일 현재 시가로 평가한다. 아파트는 같은 단지에 면적·공시가격이 비슷한 집의 거래가 대개 있어 유사매매사례가액이 시가가 된다. 공시가격은 시가를 찾을 수 없을 때 쓰는 보충적 평가다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const W = TB.won, I = D.inherit, R = D.transfer;
+  const eok = (v) => W(v * 1e8);
+  const minus = (v) => '<span class="minus">' + W(v) + "</span>";
+  const taxSpan = (v) => (v > 0 ? minus(v) : '<span class="plus">0원</span>');
+  const shareOf = (n) => 1.5 / (1.5 + n);   // 민법 법정상속분: 배우자는 자녀의 1.5배
+  const FUNERAL = 1e7;
+
+  /* 세율표, 그림 2 */
+  (function () {
+    const tb = document.getElementById("inh-rate-tb");
+    tb.innerHTML = TX.quickTable(R.rates).map((r) => {
+      const lab = r.to == null ? W(r.from) + " 초과" : r.from === 0 ? W(r.to) + " 이하" : W(r.from) + " 초과 ~ " + W(r.to) + " 이하";
+      return "<tr><td>" + lab + '</td><td class="num">' + TB.pct(r.rate, 0) + '</td><td class="num">' + (r.quick ? W(r.quick) : "—") + "</td></tr>";
+    }).join("");
+    const g = document.getElementById("ih-waffle"), NS = "http://www.w3.org/2000/svg";
+    for (let i = 0; i < 100; i++) {
+      const r = document.createElementNS(NS, "rect"), row = Math.floor(i / 10), col = i % 10;
+      r.setAttribute("x", 24 + col * 24); r.setAttribute("y", 12 + (9 - row) * 23); r.setAttribute("width", 19); r.setAttribute("height", 19); r.setAttribute("rx", 3);
+      r.setAttribute("class", i < 6 ? "f-bad" : "f-elev");
+      g.appendChild(r);
+    }
+  })();
+
+  /* ---------------------------------------------------------- 1. 상속세 계단 */
+  (function () {
+    const sG = TB.seg("flow-sp", draw);
+    const eG = TB.range("flow-e", eok, draw), pG = TB.range("flow-p", eok, draw);
+    function calc() {
+      const E = eG() * 1e8, P = pG() * 1e8, sp = sG() === "yes", sh = shareOf(2);
+      const r = TX.inheritTax({ estate: E, priorGifts: P, funeral: FUNERAL, children: 2, spouse: sp ? (E + P) * sh : null, spouseShare: sh });
+      return { E, P, sp, r };
+    }
+    const cv = TB.canvas("#flow-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc(), r = c.r, narrow = w < 460;
+      const lx = narrow ? 92 : 118, bx = lx + 8, bw = w - bx - 16;
+      const full = c.E + c.P, X = (v) => bx + (v / full) * bw;
+      const d1 = Math.min(r.personal, r.deduction), d2 = Math.min(r.spouse, r.deduction - d1), cut = r.personal + r.spouse - r.deduction;
+      const rows = [
+        { k: "상속재산", a: 0, b: c.E, c: P.accent, tot: true },
+        { k: "+ 사전증여", a: c.E, b: full, c: P.accent2 },
+        { k: "− 장례비", a: full - r.funeral, b: full, c: P.ok },
+        { k: "과세가액", a: 0, b: r.taxable, c: P.accent, tot: true },
+        { k: r.lumpUsed ? "− 일괄공제" : "− 기초·인적", a: r.taxable - d1, b: r.taxable, c: P.ok },
+        { k: "− 배우자공제", a: r.taxable - d1 - d2, b: r.taxable - d1, c: P.ok },
+        { k: "과세표준", a: 0, b: r.base, c: P.accent, tot: true },
+        { k: "상속세(신고)", a: 0, b: r.pay, c: P.bad, tot: true },
+      ];
+      const top = 8, rowH = (h - top - 26) / rows.length;
+      rows.forEach((it, i) => {
+        const y = top + i * rowH + rowH * 0.18, bh = rowH * 0.64, len = Math.max(0, it.b - it.a);
+        const x0 = X(Math.min(it.a, it.b)), x1 = X(Math.max(it.a, it.b));
+        ctx.fillStyle = it.c; ctx.globalAlpha = it.tot ? 0.92 : 0.7;
+        if (len > 0) ctx.fillRect(x0, y, Math.max(1.5, x1 - x0), bh);
+        ctx.globalAlpha = 1;
+        T(ctx, it.k, lx, y + bh / 2, { size: narrow ? 11 : 12, color: it.tot ? P.text : P.dim, align: "right", base: "middle", weight: it.tot ? 700 : 400 });
+        const s = len > 0 ? (it.tot ? "" : it.c === P.ok ? "−" : "+") + TB.wonAxis(len) : "0";
+        ctx.font = TB.font(11, true, 700); const tw = ctx.measureText(s).width;
+        const right = x1 + 6 + tw < w - 4;
+        T(ctx, s, right ? x1 + 5 : x1 - 5, y + bh / 2, { size: 11, mono: true, weight: 700, color: right ? P.text : "#fff", align: right ? "left" : "right", base: "middle" });
+        if (i === 5 && cut > 1) {
+          const cx0 = X(r.taxable - d1 - d2 - cut), cx1 = X(r.taxable - d1 - d2);
+          ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.bad; ctx.strokeRect(Math.max(bx, cx0), y, cx1 - Math.max(bx, cx0), bh); ctx.restore();
+          T(ctx, "한도로 잘림", Math.max(bx, cx0) + 3, y - 2, { size: 10, color: P.bad });
+        }
+      });
+      T(ctx, "막대 길이 = (상속재산 + 사전증여) 대비", bx, h - 8, { size: 10, color: P.faint });
+    }, { get height() { return pw("flow-cv") < 460 ? 300 : 320; } });
+    function draw() {
+      const c = calc(), r = c.r;
+      TB.stat("flow-o-t", W(r.taxable));
+      TB.stat("flow-o-d", W(r.deduction) + (r.personal + r.spouse > r.deduction + 1 ? ' <span class="minus" style="font-size:12px">한도</span>' : ""));
+      TB.stat("flow-o-b", W(r.base));
+      TB.stat("flow-o-x", taxSpan(r.pay) + " · " + TB.pct(r.pay / Math.max(1, c.E + c.P), 1));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 2. 일괄공제 vs 기초·인적 */
+  (function () {
+    const nG = TB.range("lump-n", (v) => v + "명", draw), mG = TB.range("lump-m", (v) => v + "명", draw), aG = TB.range("lump-a", (v) => v + "세", draw);
+    function calc() {
+      const n = nG(), m = Math.min(mG(), n), a = aG();
+      const child = n * I.child, minor = m * Math.max(0, I.minorAge - a) * I.minorPerYear;
+      const sum = I.basic + child + minor;
+      return { n, m, a, child, minor, sum, use: Math.max(sum, I.lump) };
+    }
+    const cv = TB.canvas("#lump-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc(), narrow = w < 460;
+      const bx = 16, bw = w - 32, max = Math.max(I.lump * 1.6, c.sum * 1.1), X = (v) => bx + (v / max) * bw;
+      const y1 = 60, bh = 40;
+      T(ctx, "기초 + 인적공제", bx, y1 - 10, { size: 12, color: P.text, weight: 700 });
+      const segs = [[I.basic, P.accent, "기초"], [c.child, P.accent2, "자녀 " + c.n + "명"], [c.minor, P.warn, "미성년"]];
+      let x = 0;
+      segs.forEach(([v, col, lab]) => {
+        if (v <= 0) return;
+        ctx.fillStyle = col; ctx.globalAlpha = 0.85; ctx.fillRect(X(x), y1, X(x + v) - X(x), bh); ctx.globalAlpha = 1;
+        ctx.font = TB.font(11, false, 700);
+        if (X(x + v) - X(x) > ctx.measureText(lab).width + 8) T(ctx, lab, (X(x) + X(x + v)) / 2, y1 + bh / 2, { size: 11, weight: 700, color: "#fff", align: "center", base: "middle" });
+        x += v;
+      });
+      T(ctx, TB.wonAxis(c.sum), X(c.sum) + 5, y1 + bh / 2, { size: 12, mono: true, weight: 700, color: P.text, base: "middle" });
+      const y2 = y1 + bh + 52;
+      T(ctx, "일괄공제", bx, y2 - 10, { size: 12, color: P.text, weight: 700 });
+      ctx.fillStyle = P.ok; ctx.globalAlpha = 0.8; ctx.fillRect(X(0), y2, X(I.lump) - X(0), bh); ctx.globalAlpha = 1;
+      T(ctx, TB.wonAxis(I.lump), X(I.lump) + 5, y2 + bh / 2, { size: 12, mono: true, weight: 700, color: P.text, base: "middle" });
+      ctx.save(); ctx.setLineDash([4, 3]); ctx.strokeStyle = P.ok; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(X(I.lump), 30); ctx.lineTo(X(I.lump), y2 + bh + 8); ctx.stroke(); ctx.restore();
+      const win = c.sum > I.lump ? "기초 + 인적공제가 더 크다 → 그쪽을 쓴다" : "일괄공제가 더 크다 → 일괄공제를 쓴다";
+      T(ctx, win, bx, h - 18, { size: narrow ? 12 : 13, weight: 700, color: c.sum > I.lump ? P.accent2 : P.ok });
+    }, { get height() { return 250; } });
+    function draw() {
+      const c = calc();
+      TB.stat("lump-o-b", W(c.sum));
+      TB.stat("lump-o-l", W(I.lump));
+      TB.stat("lump-o-g", c.sum >= I.lump ? "넘었다" : W(I.lump - c.sum));
+      TB.stat("lump-o-u", '<span class="plus">' + W(c.use) + "</span>");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 배우자공제 */
+  (function () {
+    const eG = TB.range("sp-e", eok, draw), nG = TB.range("sp-n", (v) => v + "명", draw);
+    let frac = 0.3, C = null;
+    const dedOf = (s, E, n) => TB.clamp(Math.min(s, E * shareOf(n)), I.spouse.min, I.spouse.max);
+    const cv = TB.canvas("#sp-cv", (ctx, w, h) => {
+      const P = TB.palette(), E = eG() * 1e8, n = nG(), legal = E * shareOf(n);
+      const ymax = Math.max(I.spouse.min * 1.6, Math.min(E, I.spouse.max * 1.15));
+      const pts = []; for (let i = 0; i <= 200; i++) { const s = (E * i) / 200; pts.push([s, dedOf(s, E, n)]); }
+      const diag = [[0, 0], [E, E]];
+      C = TB.chart(ctx, { x: 54, y: 26, w: w - 70, h: h - 72 }, {
+        x: [0, E], y: [0, ymax], xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [{ data: diag, color: P.faint, width: 1.2, dash: [4, 4] }, { data: pts, color: P.ok, width: 2.8 }],
+        vlines: [{ x: Math.min(legal, E), color: P.accent, label: "법정상속분" }],
+        hlines: [{ y: I.spouse.min, color: P.faint, label: "최소" }].concat(ymax > I.spouse.max ? [{ y: I.spouse.max, color: P.bad, label: "최대" }] : []),
+      });
+      const s = E * frac, px = C.X(s);
+      ctx.beginPath(); ctx.arc(px, C.Y(dedOf(s, E, n)), 5, 0, TAU); ctx.fillStyle = P.ok; ctx.fill();
+      knob(ctx, px, C.box.y + C.box.h, P);
+      T(ctx, "배우자공제", C.box.x + 4, 14, { size: 11, color: P.ok, weight: 700 });
+      if (w >= 460) T(ctx, "점선: 받은 금액 그대로", C.box.x + 80, 14, { size: 11, color: P.faint });
+      T(ctx, "가로축: 배우자 몫", C.box.x + C.box.w, 14, { size: 11, color: P.dim, align: "right" });
+    }, { get height() { return pw("sp-cv") < 460 ? 270 : 290; } });
+    TB.drag(cv.canvas, { move(x) { if (!C) return; frac = TB.clamp((x - C.box.x) / C.box.w, 0, 1); draw(); } });
+    function draw() {
+      const E = eG() * 1e8, n = nG(), s = E * frac, sh = shareOf(n);
+      const r = TX.inheritTax({ estate: E, funeral: FUNERAL, children: n, spouse: s, spouseShare: sh });
+      TB.stat("sp-o-s", W(s) + " (" + Math.round(frac * 100) + "%)");
+      TB.stat("sp-o-l", W(E * sh));
+      TB.stat("sp-o-d", '<span class="plus">' + W(r.spouse) + "</span>");
+      TB.stat("sp-o-t", taxSpan(r.pay));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 4. 금융재산공제 */
+  (function () {
+    const F = I.financial, XMAX = 15e8;
+    let f = 3.1e8, C = null;
+    const ded = (x) => (x <= F.fullUpTo ? x : Math.min(F.max, Math.max(F.fullUpTo, x * F.rate)));
+    const cv = TB.canvas("#fin-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const pts = []; for (let i = 0; i <= 300; i++) { const x = (XMAX * i) / 300; pts.push([x, ded(x)]); }
+      pts.splice(1, 0, [F.fullUpTo, F.fullUpTo]);
+      pts.sort((a, b) => a[0] - b[0]);
+      const k1 = F.fullUpTo / F.rate, k2 = F.max / F.rate;
+      C = TB.chart(ctx, { x: 56, y: 22, w: w - 72, h: h - 64 }, {
+        x: [0, XMAX], y: [0, F.max * 1.25], xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [{ data: pts, color: P.ok, width: 2.8 }],
+        vlines: [{ x: k1, color: P.faint, label: TB.wonAxis(k1) }, { x: k2, color: P.faint, label: TB.wonAxis(k2) }],
+        hlines: [{ y: F.max, color: P.bad, label: "한도" }],
+      });
+      const px = C.X(f);
+      ctx.beginPath(); ctx.arc(px, C.Y(ded(f)), 5, 0, TAU); ctx.fillStyle = P.ok; ctx.fill();
+      knob(ctx, px, C.box.y + C.box.h, P);
+      T(ctx, "가로축: 순금융재산", C.box.x + C.box.w, 14, { size: 11, color: P.dim, align: "right" });
+    }, { get height() { return pw("fin-cv") < 460 ? 250 : 270; } });
+    TB.drag(cv.canvas, { move(x) { if (!C) return; const raw = TB.clamp((x - C.box.x) / C.box.w, 0, 1) * XMAX; const st = raw < 1e8 ? 1e6 : 1e7; f = Math.round(raw / st) * st; draw(); } });
+    function draw() {
+      const d = ded(f);
+      TB.stat("fin-o-f", W(f));
+      TB.stat("fin-o-d", '<span class="plus">' + W(d) + "</span>");
+      TB.stat("fin-o-r", f > 0 ? TB.pct(d / f, 1) : "—");
+      TB.stat("fin-o-z", f <= F.fullUpTo ? "전액 공제" : d === F.fullUpTo ? "바닥값" : d >= F.max ? "한도" : TB.pct(F.rate, 0) + " 공제");
+      cv.redraw();
+    }
+    draw();
+    const el = document.getElementById("fin-case"); if (el) el.textContent = W(ded(TX.CASE.parents.deposits));
+  })();
+
+  /* ---------------------------------------------------------- 5. 1차·2차 시소 */
+  (function () {
+    const eG = TB.range("ss-e", eok, draw), mG = TB.range("ss-m", eok, draw);
+    let frac = 3 / 7, C = null;
+    const N = 2, sh = shareOf(N);
+    function at(E, M, s) {
+      const a = TX.inheritTax({ estate: E, funeral: FUNERAL, children: N, spouse: s, spouseShare: sh });
+      const b = TX.inheritTax({ estate: s + M, funeral: FUNERAL, children: N, spouse: null });
+      return { a: a.pay, b: b.pay, t: a.pay + b.pay };
+    }
+    const cv = TB.canvas("#ss-cv", (ctx, w, h) => {
+      const P = TB.palette(), E = eG() * 1e8, M = mG() * 1e8;
+      const A = [], B = [], S = []; let ymax = 1e7, best = { s: 0, t: Infinity };
+      for (let i = 0; i <= 200; i++) { const s = (E * i) / 200, r = at(E, M, s); A.push([s, r.a]); B.push([s, r.b]); S.push([s, r.t]); ymax = Math.max(ymax, r.t); if (r.t < best.t - 1) best = { s, t: r.t }; }
+      C = TB.chart(ctx, { x: 56, y: 26, w: w - 72, h: h - 72 }, {
+        x: [0, E], y: [0, ymax * 1.08], xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [{ data: A, color: P.bad, width: 2 }, { data: B, color: P.warn, width: 2 }, { data: S, color: P.accent, width: 3 }],
+        vlines: [{ x: E * sh, color: P.faint, label: "법정상속분" }],
+        points: [{ x: best.s, y: best.t, color: P.accent, r: 4 }],
+      });
+      const s = E * frac, r = at(E, M, s), px = C.X(s);
+      [[r.a, P.bad], [r.b, P.warn], [r.t, P.accent]].forEach(([v, col]) => { ctx.beginPath(); ctx.arc(px, C.Y(v), 5, 0, TAU); ctx.fillStyle = col; ctx.fill(); });
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.45; ctx.beginPath(); ctx.moveTo(px, C.box.y); ctx.lineTo(px, C.box.y + C.box.h); ctx.stroke(); ctx.restore();
+      knob(ctx, px, C.box.y + C.box.h, P);
+      const lg = [["1차", P.bad], ["2차", P.warn], ["합계", P.accent]];
+      let lx = C.box.x + 4;
+      lg.forEach(([t, col]) => { ctx.fillStyle = col; ctx.fillRect(lx, 11, 14, 3); T(ctx, t, lx + 18, 13, { size: 11, color: P.dim, base: "middle" }); lx += 60; });
+      T(ctx, "가로축: 1차 배우자 몫", C.box.x + C.box.w, 14, { size: 11, color: P.dim, align: "right" });
+    }, { get height() { return pw("ss-cv") < 460 ? 280 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!C) return; frac = TB.clamp((x - C.box.x) / C.box.w, 0, 1); draw(); } });
+    function draw() {
+      const E = eG() * 1e8, M = mG() * 1e8, s = E * frac, r = at(E, M, s);
+      let best = Infinity; for (let i = 0; i <= 200; i++) best = Math.min(best, at(E, M, (E * i) / 200).t);
+      TB.stat("ss-o-s", W(s) + " (" + Math.round(frac * 100) + "%)");
+      TB.stat("ss-o-1", taxSpan(r.a));
+      TB.stat("ss-o-2", taxSpan(r.b));
+      TB.stat("ss-o-t", taxSpan(r.t) + ' <span style="font-size:12px">(' + W(best) + ")</span>");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 다온의 노트 */
+  (function () {
+    const P = TX.CASE.parents, E = P.house + P.deposits, sh = shareOf(2);
+    const set = (id, s) => { const el = document.getElementById(id); if (el) el.textContent = s; };
+    const a = TX.inheritTax({ estate: E, funeral: FUNERAL, spouse: P.house, spouseShare: sh, children: 2, financial: P.deposits });
+    const b = TX.inheritTax({ estate: E, funeral: FUNERAL, spouse: E * sh, spouseShare: sh, children: 2, financial: P.deposits });
+    const nosp = TX.inheritTax({ estate: E, funeral: FUNERAL, spouse: null, children: 2, financial: P.deposits });
+    const a2 = TX.inheritTax({ estate: P.house, funeral: FUNERAL, children: 2, spouse: null });
+    const b2 = TX.inheritTax({ estate: E * sh, funeral: FUNERAL, children: 2, spouse: null, financial: P.deposits * sh });
+    const g = TX.giftDeduction("parentToAdult", { marriage: true }) / 2;  // 13장: 아버지가 준 결혼 자금(공제 한도의 절반)
+    set("nc-g", W(g));
+    const v = TX.inheritTax({ estate: P.house + P.deposits - g, priorGifts: g, funeral: FUNERAL, spouse: P.house, spouseShare: sh, children: 2, financial: P.deposits - g });
+    set("nc-tax", W(a.taxable)); set("nc-sp", W(a.spouse)); set("nc-fin", W(a.fin)); set("nc-base", W(a.base));
+    set("nc-pay", W(a.pay)); set("nc-eff", TB.pct(a.pay / E, 1)); set("nc-nosp", W(nosp.pay));
+    set("nc-2a", W(a2.pay)); set("nc-2b", b2.pay > 0 ? W(b2.pay) : "0원");
+    set("nc-diff", W((a.pay + a2.pay) - (b.pay + b2.pay)));
+    set("nc-gift", W(v.pay));
+  })();
+});
+</script>
+</body>
+</html>

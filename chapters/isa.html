@@ -1,0 +1,655 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "ISA는 계좌 안의 이익과 손실을 합쳐 순이익에만, 그것도 비과세 한도를 넘는 몫에만 낮은 세율로 분리과세하는 바구니다. 손익 통산, 비과세 한도와 9.9%, 납입 한도와 의무 기간, 국내주식형 ETF의 함정, 만기 후 연금계좌 전환을 시뮬레이터로 따라간다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ISA: 비과세 바구니 · TaxBook</title>
+<meta name="description" content="ISA는 계좌 안의 이익과 손실을 합쳐 순이익에만, 그것도 비과세 한도를 넘는 몫에만 낮은 세율로 분리과세하는 바구니다. 손익 통산, 비과세 한도와 9.9%, 납입 한도와 의무 기간, 국내주식형 ETF의 함정, 만기 후 연금계좌 전환을 시뮬레이터로 따라간다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/isa.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="ISA: 비과세 바구니 · TaxBook">
+<meta property="og:description" content="ISA는 계좌 안의 이익과 손실을 합쳐 순이익에만, 그것도 비과세 한도를 넘는 몫에만 낮은 세율로 분리과세하는 바구니다. 손익 통산, 비과세 한도와 9.9%, 납입 한도와 의무 기간, 국내주식형 ETF의 함정, 만기 후 연금계좌 전환을 시뮬레이터로 따라간다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/isa.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/isa.html#chapter","name":"ISA: 비과세 바구니","headline":"ISA: 비과세 바구니 · TaxBook","description":"ISA는 계좌 안의 이익과 손실을 합쳐 순이익에만, 그것도 비과세 한도를 넘는 몫에만 낮은 세율로 분리과세하는 바구니다. 손익 통산, 비과세 한도와 9.9%, 납입 한도와 의무 기간, 국내주식형 ETF의 함정, 만기 후 연금계좌 전환을 시뮬레이터로 따라간다.","url":"https://taxbook.euiyun.com/chapters/isa.html","position":9,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"9. ISA: 비과세 바구니","item":"https://taxbook.euiyun.com/chapters/isa.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="isa">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 09 · <span data-t="label"></span></div>
+    <h1>ISA: 비과세 바구니</h1>
+    <p class="lead">다온은 2025년에 중개형 ISA를 열었다. 잔액은 약 1,800만원, 올해 계좌 안에서 난 순이익은 약 160만원이다. 그런데 증권사 앱의 ISA 화면에는 세금이 한 푼도 빠져 있지 않다. 같은 상품을 일반 계좌에서 샀다면 분배금과 매매차익에서 세금이 빠졌을 것이다. 세금은 어디로 갔을까. 없어진 것일까, 미뤄진 것일까. 이 장은 ISA(개인종합자산관리계좌)라는 바구니가 세금을 어떻게 계산하는지, 그 혜택이 어디서 커지고 어디서 사라지는지를 <span data-t="label"></span>으로 따라간다.</p>
+    <ul class="objectives">
+      <li>ISA가 계좌 안의 이익과 손실을 합치는 손익 통산과, 일반 계좌에서 상품마다 따로 과세하는 방식의 차이를 설명한다.</li>
+      <li>비과세 한도(일반형 <span data-t="isa.freeGeneral" data-f="man"></span>, 서민형 <span data-t="isa.freeLow" data-f="man"></span>)와 넘는 몫의 <span data-x="over"></span> 분리과세로 절세액을 계산한다.</li>
+      <li>납입 한도, 의무 기간(<span data-t="isa.minYears" data-f="num"></span>년), 가입 제한을 확인하고 의무 기간 전에 해지하면 무엇을 잃는지 안다.</li>
+      <li>국내주식형 ETF처럼 원래 비과세인 상품에는 ISA 효과가 작다는 것을 숫자로 확인한다.</li>
+      <li>만기 자금을 연금계좌로 옮길 때 추가되는 세액공제 한도를 계산하고, 다온의 만기 해 선택지를 정리한다.</li>
+    </ul>
+  </header>
+
+  <section id="basket">
+    <h2>계좌가 세금을 바꾼다</h2>
+    <p><a href="interest.html">8장</a>에서 본 것처럼 일반 증권 계좌에서는 이자·배당이 생길 때마다 <span data-x="wh"></span>를 뗀다. 국내 상장 해외지수 ETF나 채권형 ETF를 팔아 생긴 차익도 배당소득으로 보아 같은 비율로 뗀다. 중요한 것은 <b>상품마다 따로</b> 뗀다는 점이다. A에서 200만원을 벌고 B에서 150만원을 잃어도 A의 200만원에서 세금을 떼고, B의 손실은 세금 계산에 아무 역할을 하지 못한다.</p>
+    <p><span class="term">ISA</span><span class="en">(Individual Savings Account, 개인종합자산관리계좌)</span>는 이 계산을 계좌 단위로 바꾼다(<a data-src="isa"></a>). 계좌 안에서 생긴 이자·배당·차익과 손실을 모두 더해 <b>순이익</b>을 만들고(<span class="term">손익 통산</span><span class="en">(Netting)</span>), 그 순이익 가운데 비과세 한도까지는 세금이 없으며, 넘는 몫에만 <span data-t="isa.overRate" data-f="pct"></span>(지방소득세를 더해 <span data-x="over"></span>)를 매긴다. 이 세금은 다른 소득과 합치지 않는 분리과세라 <a href="interest.html">8장</a>의 금융소득 합계에도 들어가지 않는다. 세금은 계좌를 해지하거나 만기가 될 때 한 번에 계산한다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 300" role="img" aria-label="일반 계좌와 ISA의 과세 비교: 일반 계좌는 이익 난 상품마다 원천징수, ISA는 이익과 손실을 합친 순이익에서 비과세 한도를 빼고 남은 몫에만 과세">
+        <defs><marker id="isa-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <text x="110" y="22" text-anchor="middle" class="lbl-b">일반 계좌</text>
+        <text x="345" y="22" text-anchor="middle" class="lbl-b">ISA 바구니</text>
+        <line x1="228" y1="10" x2="228" y2="290" class="s-dash"/>
+        <rect x="20" y="40" width="80" height="30" rx="5" class="f-ok-soft"/><text x="60" y="60" text-anchor="middle" class="lbl">A +200</text>
+        <rect x="20" y="80" width="80" height="30" rx="5" class="f-ok-soft"/><text x="60" y="100" text-anchor="middle" class="lbl">B +100</text>
+        <rect x="20" y="120" width="80" height="30" rx="5" class="f-bad-soft"/><text x="60" y="140" text-anchor="middle" class="lbl">C −150</text>
+        <line x1="100" y1="55" x2="128" y2="55" class="s-line" marker-end="url(#isa-ar)"/>
+        <line x1="100" y1="95" x2="128" y2="95" class="s-line" marker-end="url(#isa-ar)"/>
+        <rect x="132" y="40" width="84" height="30" rx="5" class="f-bad-soft"/><text x="174" y="60" text-anchor="middle" class="lbl-bad"><tspan data-x="wh"></tspan></text>
+        <rect x="132" y="80" width="84" height="30" rx="5" class="f-bad-soft"/><text x="174" y="100" text-anchor="middle" class="lbl-bad"><tspan data-x="wh"></tspan></text>
+        <text x="158" y="140" text-anchor="middle" class="lbl-dim">손실은 무시</text>
+        <text x="20" y="188" class="lbl">세금이 붙는 금액: 300</text>
+        <text x="20" y="210" class="lbl-dim">순이익은 150인데</text>
+        <text x="20" y="230" class="lbl-dim">이익 난 몫 전체에 과세</text>
+        <rect x="244" y="36" width="200" height="124" rx="12" class="f-acc-soft"/>
+        <text x="270" y="64" class="lbl">A +200</text>
+        <text x="270" y="90" class="lbl">B +100</text>
+        <text x="270" y="116" class="lbl">C −150</text>
+        <line x1="262" y1="128" x2="426" y2="128" class="s-line"/>
+        <text x="270" y="148" class="lbl-b">순이익 150</text>
+        <line x1="344" y1="160" x2="344" y2="186" class="s-line" marker-end="url(#isa-ar)"/>
+        <rect x="244" y="190" width="200" height="34" rx="6" class="f-ok-soft"/>
+        <text x="344" y="212" text-anchor="middle" class="lbl">비과세 한도까지는 0</text>
+        <rect x="244" y="232" width="200" height="34" rx="6" class="f-warn-soft"/>
+        <text x="344" y="254" text-anchor="middle" class="lbl">넘는 몫만 <tspan data-x="over"></tspan></text>
+        <text x="344" y="288" text-anchor="middle" class="lbl-dim">만기·해지 때 한 번 계산</text>
+      </svg>
+      <figcaption><b>그림 1. 일반 계좌와 ISA 바구니.</b> 일반 계좌는 이익이 난 상품마다 따로 떼고 손실은 쓸모가 없다. ISA는 계좌 전체의 이익과 손실을 먼저 합치고, 그 순이익에서 비과세 한도를 뺀 몫에만 낮은 세율로 분리과세한다. 숫자는 만원 단위 예시다.</figcaption>
+    </figure>
+
+    <div class="formula">
+      $$\text{ISA 세금} = \max\big(0,\ \textstyle\sum \text{손익} - F\big)\times t_I \qquad \text{일반 계좌 세금} = \textstyle\sum \max(0,\ \text{상품별 이익})\times t_w$$
+      <div class="where">\(F\)는 비과세 한도(일반형 <span data-t="isa.freeGeneral" data-f="man"></span>, 서민형 <span data-t="isa.freeLow" data-f="man"></span>), \(t_I\)는 넘는 몫의 세율(<span data-x="over"></span>, 지방소득세 포함), \(t_w\)는 일반 계좌의 원천징수율(<span data-x="wh"></span>)이다. 일반 계좌 쪽은 배당소득으로 과세되는 상품만 센다. 국내 상장주식과 국내주식형 ETF의 매매차익은 일반 계좌에서도 과세하지 않는다.</div>
+    </div>
+
+    <p>절세는 두 군데서 나온다. 손실을 이익과 합쳐 과세 대상을 줄이는 것, 그리고 남은 순이익에 한도와 낮은 세율을 쓰는 것이다. 아래 시뮬레이터에서 왼쪽 세 막대를 위아래로 끌어 상품별 손익을 바꿔 본다. 손실 막대를 아래로 키울수록 일반 계좌의 세금은 그대로인데 ISA의 과세 대상은 줄어든다.</p>
+
+    <div class="sim" id="sim-net">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>손익 통산: 손실도 쓸모가 있다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="net-cv"></canvas><span class="hint">막대 끝을 위아래로 끈다</span></div>
+        <div class="sim-controls">
+          <div class="seg" id="net-t"><button data-value="general" class="on">일반형</button><button data-value="low">서민형</button></div>
+          <div class="btn-row"><button class="btn" id="net-re">처음 값으로</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">계좌 순이익</span><span class="v" id="net-o-n">—</span></div>
+        <div class="stat"><span class="k">일반 계좌였다면 세금</span><span class="v" id="net-o-a">—</span></div>
+        <div class="stat"><span class="k">ISA 세금</span><span class="v" id="net-o-b">—</span></div>
+        <div class="stat"><span class="k">ISA로 아낀 세금</span><span class="v" id="net-o-s">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 처음 값(이익 200만·150만원, 손실 100만원)에서 일반 계좌는 이익 350만원 전부에 세금이 붙고, ISA는 순이익 250만원에서 한도를 뺀 몫에만 붙는다. ② 손실 막대(C)를 −300만원까지 내린다. 일반 계좌 세금은 변하지 않지만 ISA는 순이익이 한도 아래로 내려가 세금이 0이 된다. ③ 서민형으로 바꾼다. 한도가 커져 같은 순이익에서 세금이 사라진다. 모든 막대를 손실로 내리면 두 계좌 모두 세금이 없다. ISA의 손실은 돌려받지 못하고 그냥 손실이다. (세 상품 모두 일반 계좌에서 배당소득으로 과세되는 상품으로 가정. 일반 계좌는 상품별 원천징수, ISA는 만기 한 번 계산.)</div>
+    </div>
+
+    <p>손실이 있는 해의 ISA는 '손실이 세금을 깎아 주는' 효과가 생긴다. 일반 계좌에서는 버려지던 손실이 다른 상품의 이익을 지운다. 다만 이 효과는 순이익이 한도를 넘을 때만 돈이 된다. 순이익이 이미 한도 아래라면 손실은 세금에 아무 영향을 주지 못한다.</p>
+  </section>
+
+  <section id="limit">
+    <h2>비과세 한도와 넘는 몫의 세율</h2>
+    <p>비과세 한도는 <b>한 해가 아니라 계약 기간 전체</b>에 대한 한도다. 일반형 ISA를 5년 굴려 순이익 500만원이 났다면 그중 <span data-t="isa.freeGeneral" data-f="man"></span>까지 비과세, 나머지에 <span data-x="over"></span>다. 서민형은 직전 연도 소득이 일정 금액 이하인 사람이 가입하는 유형으로 한도가 <span data-t="isa.freeLow" data-f="man"></span>이다(서민형 소득 기준은 이 책의 세법 파일에 없어 확인 필요).</p>
+    <p>그래서 ISA의 절세액은 순이익이 커질수록 처음에는 빠르게, 한도를 넘은 뒤에는 느리게 는다. 한도까지는 1원마다 <span data-x="wh"></span>를 아끼고, 한도를 넘은 뒤에는 1원마다 두 세율의 차이(<span data-x="gap"></span>p)만 아낀다. 아래 그래프의 손잡이를 끌어 계약 기간 전체의 순이익을 바꿔 본다.</p>
+
+    <div class="sim" id="sim-free">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>한도를 넘으면 기울기가 꺾인다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="free-cv"></canvas><span class="hint">손잡이를 끌어 순이익을 바꾼다</span></div>
+        <div class="sim-controls">
+          <div class="seg" id="free-t"><button data-value="general" class="on">일반형</button><button data-value="low">서민형</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">계약 기간 순이익</span><span class="v" id="free-o-p">—</span></div>
+        <div class="stat"><span class="k">일반 계좌였다면</span><span class="v" id="free-o-a">—</span></div>
+        <div class="stat"><span class="k">ISA 세금</span><span class="v" id="free-o-b">—</span></div>
+        <div class="stat"><span class="k">아낀 세금 / 이익 대비</span><span class="v" id="free-o-s">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 비과세 한도 바로 아래에 둔다. ISA 세금은 0이고 아낀 세금이 일반 계좌 세금 전체다. ② 한도를 넘겨 오른쪽으로 끈다. ISA 세금 선이 0에서 떠오르고, 아낀 세금 선의 기울기가 꺾인다. ③ 순이익을 끝까지 키운다. 이익 대비 절세율이 줄어들며 두 세율의 차이에 가까워진다. 서민형으로 바꾸면 꺾이는 점이 오른쪽으로 옮겨 간다. (순이익 전부가 일반 계좌에서 배당소득으로 과세되는 상품에서 났다고 가정. 일반 계좌에서 금융소득종합과세에 걸리는 경우는 넣지 않았다.)</div>
+    </div>
+
+    <p>여기에 하나 더 있다. 일반 계좌에서는 이 이익이 <a href="interest.html">8장</a>의 금융소득 합계에 들어가지만, ISA 안의 이익은 들어가지 않는다. 금융소득이 기준금액 근처인 사람에게는 이 효과가 세율 차이보다 더 클 수 있다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>항목</th><th><span data-t="label"></span></th></tr></thead>
+        <tbody>
+          <tr><td>비과세 한도(계약 기간 전체)</td><td>일반형 <span data-t="isa.freeGeneral" data-f="man"></span> · 서민형 <span data-t="isa.freeLow" data-f="man"></span></td></tr>
+          <tr><td>한도를 넘는 순이익</td><td><span data-t="isa.overRate" data-f="pct"></span> 분리과세(지방소득세 포함 <span data-x="over"></span>), 금융소득종합과세 합산 제외</td></tr>
+          <tr><td>납입 한도</td><td>연 <span data-t="isa.yearLimit" data-f="man"></span>, 총 <span data-t="isa.totalLimit" data-f="won"></span>(그 해에 못 채운 한도는 다음 해로 넘어간다)</td></tr>
+          <tr><td>의무 가입 기간</td><td><span data-t="isa.minYears" data-f="num"></span>년(이 기간 전에 해지하면 특례를 잃는다)</td></tr>
+          <tr><td>가입 제한</td><td>직전 3개 과세기간 중 한 번이라도 금융소득종합과세 대상이었던 사람은 가입할 수 없다</td></tr>
+          <tr><td>만기 자금의 연금계좌 전환</td><td>전환액의 <span data-t="pension.isaTransferRate" data-f="pct"></span>(최대 <span data-t="pension.isaTransferLimit" data-f="man"></span>)를 연금계좌 세액공제 대상 한도에 더한다</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)">조세특례제한법 제91조의18, 소득세법 제59조의3. 납입 한도·의무 기간·가입 제한은 이 책의 근거 자료(SOURCES.md)에서 2차 자료로 대체로 확인한 값이다.</p>
+
+    <div class="callout pro">
+      <strong>ISA를 열기 전과 굴리는 동안</strong>
+      <ul>
+        <li><b>유형 고르기</b>: 직접 상품을 고르는 중개형, 금융회사에 운용을 맡기는 신탁형·일임형이 있다. 세금 계산은 같고, 담을 수 있는 상품과 수수료가 다르다. 한 사람이 ISA를 하나만 가질 수 있다.</li>
+        <li><b>담을 수 없는 것</b>: 해외 거래소에 상장된 주식·ETF는 ISA에 담을 수 없다. 해외 시장에 투자하려면 국내에 상장된 해외지수 ETF를 쓴다.</li>
+        <li><b>납입 원금 안의 인출</b>: 의무 기간 중이라도 낸 원금 범위 안에서는 해지하지 않고 꺼낼 수 있다. 인출 뒤의 납입 한도 처리 같은 세부는 금융회사 안내로 확인한다(확인 필요).</li>
+        <li><b>가입 제한의 기준 시점</b>: 금융소득종합과세 대상 여부는 5월 신고가 끝나야 확정된다. 기준금액 근처였던 해의 다음 해에는 금융회사가 가입 가능 여부를 다시 조회한다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="domestic">
+    <h2>국내주식형 ETF에는 효과가 작다</h2>
+    <p>ISA를 열고 국내 주식이나 국내주식형 ETF만 사는 사람이 많다. 그런데 소액주주가 국내 상장주식과 국내주식형 ETF를 팔아 생긴 차익은 일반 계좌에서도 세금이 없다(증권거래세만 낸다, <a href="stock.html">11장</a>). 원래 0원인 세금은 ISA에 넣어도 줄일 수 없다. ISA의 효과가 남는 곳은 그 상품의 배당·분배금, 그리고 국내 상장 해외지수·채권형 ETF처럼 일반 계좌에서 배당소득으로 과세되는 차익이다.</p>
+    <p>계산에서 하나 더 갈리는 점이 있다. ISA 안에서 국내주식형 상품의 <b>차익</b>은 원래 비과세라 통산할 이익에 들어가지 않지만, <b>손실</b>은 통산에 반영된다고 안내하는 자료가 많다(2차 자료로 대체로 확인). 아래 시뮬레이터에서 국내주식형 손익을 이익 쪽과 손실 쪽으로 움직여 본다.</p>
+
+    <div class="sim" id="sim-dom">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>무엇을 담느냐가 ISA의 값을 정한다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="dom-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>국내주식형 손익 <output id="dom-d-out"></output></span><input type="range" id="dom-d" min="-500" max="1500" step="10" value="600"></label>
+          <label class="ctrl"><span>해외지수·채권형 등 손익 <output id="dom-o-out"></output></span><input type="range" id="dom-o" min="0" max="1500" step="10" value="250"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">계좌 전체 손익</span><span class="v" id="dom-r-t">—</span></div>
+        <div class="stat"><span class="k">일반 계좌였다면 세금</span><span class="v" id="dom-r-a">—</span></div>
+        <div class="stat"><span class="k">ISA 세금</span><span class="v" id="dom-r-b">—</span></div>
+        <div class="stat"><span class="k">ISA 효과 / 전체 이익 대비</span><span class="v" id="dom-r-s">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 국내주식형 이익을 1,500만원까지 올린다. 계좌 전체 이익은 커지지만 두 계좌의 세금도, ISA 효과도 그대로다. 원래 비과세인 몫이기 때문이다. ② 해외지수·채권형 손익을 0으로 내린다. 효과가 0이 된다. 국내주식형만 담은 ISA는 세금 면에서 일반 계좌와 같다(배당·분배금 몫은 이 그림에서 생략). ③ 해외지수·채권형 손익을 한도 위로 올리고 국내주식형을 손실로 내린다. 손실이 과세 대상 순이익을 줄여 ISA 세금이 내려간다. (국내주식형의 배당·분배금은 넣지 않았다. 국내주식형 손실이 통산에 들어가는 방식은 금융회사 안내로 확인.)</div>
+    </div>
+
+    <p>정리하면 ISA의 세금 효과가 큰 순서는 이렇다. 일반 계좌에서 <span data-x="wh"></span>가 붙는 이자·배당·해외지수 ETF 차익이 많고, 손실과 이익이 섞여 있으며, 금융소득이 기준금액 근처인 사람. 반대로 국내 주식 차익만 노리는 사람에게 ISA는 세금보다 의무 기간이라는 제약이 먼저 보인다.</p>
+  </section>
+
+  <section id="years">
+    <h2>의무 기간과 납입 한도</h2>
+    <p>ISA의 특례는 계좌를 일정 기간 유지하는 조건으로 준다. <span class="term">의무 가입 기간</span><span class="en">(Minimum holding period)</span>은 <span data-t="isa.minYears" data-f="num"></span>년이다. 이 기간이 지나기 전에 계좌를 해지하면 비과세와 저율 분리과세를 받지 못하고, 계좌 안의 이익을 일반 계좌처럼 <span data-x="wh"></span>로 과세한다. 다만 사망, 해외 이주, 천재지변 같은 부득이한 사유로 해지하면 특례를 유지하는 예외가 있다(구체 사유는 금융회사 안내로 확인).</p>
+    <p>납입은 연 <span data-t="isa.yearLimit" data-f="man"></span>, 계약 기간 전체 <span data-t="isa.totalLimit" data-f="won"></span>까지다. 첫해에 다 채우지 못한 한도는 다음 해로 넘어간다. 아래 그래프는 해지 시점에 따라 '아낀 세금'이 어떻게 바뀌는지 보여 준다. 가로축의 손잡이를 끌어 해지 시점을 옮겨 본다.</p>
+
+    <div class="sim" id="sim-yrs">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>의무 기간 하루 전의 절벽</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="yrs-cv"></canvas><span class="hint">손잡이를 끌어 해지 시점을 고른다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>해마다 넣는 돈 <output id="yrs-a-out"></output></span><input type="range" id="yrs-a" min="100" max="2000" step="50" value="600"></label>
+          <label class="ctrl"><span>연 수익률(가정) <output id="yrs-r-out"></output></span><input type="range" id="yrs-r" min="0" max="10" step="0.5" value="5"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">해지 시점</span><span class="v" id="yrs-o-y">—</span></div>
+        <div class="stat"><span class="k">그때의 순이익</span><span class="v" id="yrs-o-p">—</span></div>
+        <div class="stat"><span class="k">내는 세금</span><span class="v" id="yrs-o-t">—</span></div>
+        <div class="stat"><span class="k">일반 계좌 대비 아낀 세금</span><span class="v" id="yrs-o-s">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 의무 기간 바로 앞에 둔다. 아낀 세금이 0이다. 일반 계좌와 같은 세율로 과세되기 때문이다. ② 의무 기간을 넘기면 아낀 세금이 한 번에 뛰어오른다. 이것이 '해지 시점의 절벽'이다. ③ 해마다 넣는 돈을 연 납입 한도까지 올리고 오래 둔다. 순이익이 한도를 크게 넘으면 아낀 세금의 증가가 두 세율 차이만큼으로 느려진다. 총 납입 한도에 닿으면 더 넣을 수 없다. (일반형, 해마다 연초 납입, 수익률은 가정이며 모두 일반 계좌에서 배당소득으로 과세되는 상품으로 가정. 일반 계좌는 해마다 과세되는 효과와 부득이한 사유 예외를 생략했다.)</div>
+    </div>
+
+    <p>의무 기간의 절벽은 ISA를 비상금 통장으로 쓰면 안 되는 이유다. 급하게 큰돈이 필요해 의무 기간 전에 해지하면 그동안 쌓은 특례가 한꺼번에 사라진다. 의무 기간이 지나면 언제 해지해도 특례가 유지되고, 계약 기간을 늘려 계속 굴릴 수도 있다. 다만 비과세 한도는 하나의 계약에 하나다. 기간을 연장하면 한도가 새로 생기지 않고, 해지하고 새로 가입하면 새 계약의 한도가 생긴다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 250" role="img" aria-label="ISA의 시간표: 가입, 의무 기간, 만기 후 세 가지 선택지(해지 후 재가입, 연장, 60일 안에 연금계좌로 전환)">
+        <defs><marker id="yr-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <line x1="20" y1="70" x2="440" y2="70" class="s-line" marker-end="url(#yr-ar)"/>
+        <circle cx="40" cy="70" r="7" class="f-acc"/>
+        <text x="40" y="50" text-anchor="middle" class="lbl-b">가입</text>
+        <rect x="40" y="62" width="180" height="16" rx="4" class="f-bad-soft"/>
+        <text x="130" y="100" text-anchor="middle" class="lbl-bad">이 안에 해지하면 특례 상실</text>
+        <text x="130" y="118" text-anchor="middle" class="lbl-dim">(부득이한 사유 예외)</text>
+        <circle cx="220" cy="70" r="7" class="f-ok"/>
+        <text x="220" y="40" text-anchor="middle" class="lbl-b">의무 기간 <tspan data-t="isa.minYears" data-f="num"></tspan>년</text>
+        <text x="220" y="56" text-anchor="middle" class="lbl-dim">만기를 정할 수 있다</text>
+        <text x="410" y="56" text-anchor="end" class="lbl-dim">시간</text>
+        <path d="M220 78 C220 120 120 140 100 160" class="s-dash" marker-end="url(#yr-ar)"/>
+        <path d="M220 78 L230 160" class="s-dash" marker-end="url(#yr-ar)"/>
+        <path d="M220 78 C230 120 340 140 360 160" class="s-dash" marker-end="url(#yr-ar)"/>
+        <rect x="14" y="164" width="136" height="70" rx="8" class="f-surface"/>
+        <text x="82" y="188" text-anchor="middle" class="lbl-b">해지 · 재가입</text>
+        <text x="82" y="208" text-anchor="middle" class="lbl-dim">세금 정산 후</text>
+        <text x="82" y="224" text-anchor="middle" class="lbl-dim">새 계약에 새 한도</text>
+        <rect x="162" y="164" width="136" height="70" rx="8" class="f-surface"/>
+        <text x="230" y="188" text-anchor="middle" class="lbl-b">연장</text>
+        <text x="230" y="208" text-anchor="middle" class="lbl-dim">계속 굴린다</text>
+        <text x="230" y="224" text-anchor="middle" class="lbl-dim">한도는 그대로 하나</text>
+        <rect x="310" y="164" width="140" height="70" rx="8" class="f-acc-soft"/>
+        <text x="380" y="188" text-anchor="middle" class="lbl-b">연금계좌로 전환</text>
+        <text x="380" y="208" text-anchor="middle" class="lbl-dim">만기 후 60일 안에</text>
+        <text x="380" y="224" text-anchor="middle" class="lbl-dim">세액공제 한도 추가</text>
+      </svg>
+      <figcaption><b>그림 2. ISA의 시간표.</b> 의무 기간 전의 해지는 특례를 잃는다. 의무 기간이 지난 뒤의 만기에는 해지 후 다시 가입하거나, 계약 기간을 연장하거나, 만기 자금을 연금계좌로 옮기는 길이 있다. 세 길은 세금만이 아니라 돈이 묶이는 기간이 서로 다르다.</figcaption>
+    </figure>
+  </section>
+
+  <section id="transfer">
+    <h2>만기 자금을 연금계좌로</h2>
+    <p>ISA 만기 자금을 만기일부터 60일 안에 연금저축이나 IRP로 옮기면 두 가지가 생긴다. 하나는 옮긴 돈이 연금계좌 안에서 계속 세금 없이 굴러간다는 것, 다른 하나는 옮긴 금액의 <span data-t="pension.isaTransferRate" data-f="pct"></span>를, 최대 <span data-t="pension.isaTransferLimit" data-f="man"></span>까지 그 해 연금계좌 세액공제 대상 금액에 더해 준다는 것이다(<a data-src="credits.pension"></a>). 이 추가 한도는 연금저축·IRP의 기본 한도와 따로 계산된다.</p>
+    <p>추가 한도는 전환 금액이 커질수록 늘다가 상한에서 멈춘다. 상한에 닿는 전환 금액은 <span data-x="trCap"></span>이다. 아래에서 손잡이를 끌어 전환 금액을 바꿔 본다. 공제율은 총급여에 따라 다르다(<a href="pension.html">10장</a>).</p>
+
+    <div class="sim" id="sim-tr">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>전환 금액과 추가 세액공제</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="tr-cv"></canvas><span class="hint">손잡이를 끌어 전환 금액을 바꾼다</span></div>
+        <div class="sim-controls">
+          <div class="seg" id="tr-g"><button data-value="low" class="on">총급여 기준 이하</button><button data-value="high">기준 초과</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">연금계좌로 옮긴 금액</span><span class="v" id="tr-o-a">—</span></div>
+        <div class="stat"><span class="k">추가되는 공제 대상</span><span class="v" id="tr-o-e">—</span></div>
+        <div class="stat"><span class="k">추가 세액공제(지방세 포함)</span><span class="v" id="tr-o-c">—</span></div>
+        <div class="stat"><span class="k">옮긴 금액 대비</span><span class="v" id="tr-o-r">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 다온의 현재 잔액 근처(1,800만원)에 둔다. 추가 공제 대상은 그 금액의 일정 비율이다. ② 상한에 닿는 금액보다 오른쪽으로 끈다. 추가 공제가 더 늘지 않고, 옮긴 금액 대비 비율이 떨어진다. ③ '기준 초과'로 바꾼다. 같은 금액에서 공제율이 낮아진다. (산출세액이 충분해 공제를 모두 쓸 수 있다고 가정. 세액공제가 산출세액을 넘으면 남는 공제는 사라진다, <a href="pension.html">10장</a>.)</div>
+    </div>
+
+    <p>이 길에는 대가가 있다. 연금계좌로 옮긴 돈은 원칙적으로 55세 이후 연금으로 받아야 세금 혜택이 유지된다. 그 전에 꺼내면 공제받은 금액과 운용수익에 기타소득세가 붙는다(<a href="pension.html">10장</a>). 추가 공제는 '돈이 수십 년 묶이는 값'과 함께 저울에 올려야 한다.</p>
+
+    <div class="callout check">
+      <strong>ISA 만기 전에 확인할 것</strong>
+      <ul>
+        <li>가입일과 의무 기간이 끝나는 날, 계약 만기일을 금융회사 앱에서 확인한다. 의무 기간과 만기일은 다를 수 있다.</li>
+        <li>계약 기간 전체의 누적 순이익(이익과 손실을 통산한 값)과 그중 비과세 한도를 넘는 금액을 확인한다.</li>
+        <li>연금계좌로 옮길 생각이면 만기 후 60일 이내에 이전 신청을 해야 한다. 해지해서 현금으로 받은 뒤 넣으면 전환으로 인정되지 않을 수 있다.</li>
+        <li>다시 가입할 생각이면 직전 3개 과세기간에 금융소득종합과세 대상이 된 해가 없는지 확인한다.</li>
+      </ul>
+    </div>
+
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다</strong>
+      이 장의 비과세 한도, 초과분 세율, 납입 한도, 의무 기간, 연금 전환 추가 한도는 <span data-t="label"></span>이다. ISA는 개편 논의가 잦은 제도다. 비과세 한도를 크게 늘리는 안은 과거에 국회에서 처리되지 않았고, 2026년 정부 세법개정안의 '생산적 금융 ISA'(국내 주식·국내 주식형 펀드 등에 투자하면 이자·배당 전액 비과세, 2027년 이후 신규 가입분 대상으로 추진)는 국회 심사 중인 <b>확정 전</b> 내용이다. 일반 ISA는 현행 유지로 정리되었지만 최종 결과는 국회 처리 뒤에 확인한다. 이 장의 계산에는 확정된 현행 규정만 넣었다.
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 ISA 노트</h2>
+    <p>다온의 ISA에 이 장의 계산을 적용한다. 다온은 ISA 안에서 국내 상장 해외지수 ETF와 채권형 ETF를 주로 굴렸고, 올해 순이익 약 160만원은 이익 난 상품과 손실 난 상품을 통산한 값이다. 같은 상품을 일반 계좌에서 굴렸다면 이익 난 상품마다 원천징수가 붙었을 것이다. 아래는 손실 없이 순이익 160만원이 모두 이익이었다고 단순하게 본 비교다.</p>
+
+    <div class="slip">
+      <div class="row"><span>2026년 ISA 순이익(약)</span><span>1,600,000원</span></div>
+      <div class="row"><span>일반 계좌였다면 원천징수(<span data-x="wh"></span>)</span><span id="case-plain">—</span></div>
+      <div class="row"><span>ISA에서 올해 낸 세금</span><span>0원</span></div>
+      <div class="row total"><span>올해 몫의 차이(최소)</span><span id="case-saved">—</span></div>
+    </div>
+
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · 2026년 12월</span></div>
+      <h4>세금이 없는 게 아니라 만기에 한 번 계산된다. 한도는 1년이 아니라 계약 전체에 하나</h4>
+      <p><b>올해의 ISA.</b> 순이익 약 160만원을 일반 계좌에서 냈다면 원천징수로 적어도 <b id="note-plain"></b>이 빠졌다. 손실 난 상품의 손실까지 생각하면 실제 차이는 더 크다(일반 계좌에서는 손실이 이익을 지워 주지 않는다). ISA 화면에 세금이 없는 것은 면제가 아니라 계산이 만기로 미뤄졌기 때문이다. 만기에 계약 기간 전체 순이익에서 비과세 한도 <span data-t="isa.freeGeneral" data-f="man"></span>을 빼고 남은 몫에 <span data-x="over"></span>가 붙는다. 2025년 수익까지 더하면 누적 순이익이 한도에 가까워지고 있다는 점을 적어 둔다. 한도를 넘은 뒤에도 일반 계좌보다는 낮은 세율이다.</p>
+      <p><b>만기 해의 선택지.</b> 2025년에 가입했으니 의무 기간 <span data-t="isa.minYears" data-f="num"></span>년이 끝나는 해는 <b id="note-year"></b>년이다. 그때 고를 길은 셋이다. ① 해지해서 세금을 정산하고 새 ISA에 다시 가입하면 새 계약의 비과세 한도가 다시 생긴다. ② 연장해서 계속 굴리면 계좌는 그대로지만 한도는 새로 생기지 않는다. ③ 만기 자금을 60일 안에 연금계좌로 옮기면 그 해 세액공제 대상이 늘어난다. 잔액이 <span data-x="trCap"></span>이면 추가 한도 상한(<span data-t="pension.isaTransferLimit" data-f="man"></span>)에 닿고, 이 책의 모델로 공제액은 <b id="note-tr"></b>(지방세 포함, 공제를 모두 쓸 수 있을 때)이다. 대신 그 돈은 55세 이후까지 묶인다.</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>ISA는 손익을 통산하고 한도까지 비과세, 넘는 몫은 낮은 세율로 분리과세한다. 의무 기간 전 해지는 금지 구역이다. 국내주식형 ETF 차익은 원래 비과세라 ISA 효과가 작다.</div><div><b>아직 남은 문제</b>2025년 수익을 포함한 누적 순이익을 확인할 것. 2028년에 연금계좌로 옮길지는 연금계좌 세액공제의 실제 값과 돈이 묶이는 기간을 보고 정한다.</div><div><b>다음 장</b><a href="pension.html">10장</a>: 연금저축 300만원을 한도까지 채우면 공제가 얼마나 늘어나는지, 세액공제가 '미뤄진 세금'인 이유.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>일반 계좌는 이익 난 상품마다 <span data-x="wh"></span>를 따로 떼고 손실은 쓸모가 없다. ISA는 계좌 안의 이익과 손실을 통산한 순이익에만 과세한다.</li>
+      <li>ISA 순이익 가운데 일반형 <span data-t="isa.freeGeneral" data-f="man"></span>, 서민형 <span data-t="isa.freeLow" data-f="man"></span>까지는 비과세이고, 넘는 몫은 <span data-x="over"></span>로 분리과세한다. 한도는 한 해가 아니라 계약 기간 전체에 하나다.</li>
+      <li>ISA 안의 이익은 금융소득종합과세 합계에 들어가지 않는다. 세금은 만기·해지 때 한 번 계산한다.</li>
+      <li>납입은 연 <span data-t="isa.yearLimit" data-f="man"></span>, 총 <span data-t="isa.totalLimit" data-f="won"></span>까지(못 채운 한도는 이월), 의무 기간은 <span data-t="isa.minYears" data-f="num"></span>년이다. 의무 기간 전에 해지하면 특례가 사라진다. 직전 3개 과세기간에 금융소득종합과세 대상이었으면 가입할 수 없다.</li>
+      <li>국내 상장주식·국내주식형 ETF 차익은 원래 비과세라 ISA의 효과가 작다. 효과는 이자·배당과 해외지수·채권형 ETF 차익에서 나온다.</li>
+      <li>만기 자금을 60일 안에 연금계좌로 옮기면 전환액의 <span data-t="pension.isaTransferRate" data-f="pct"></span>(최대 <span data-t="pension.isaTransferLimit" data-f="man"></span>)만큼 세액공제 대상이 늘지만, 그 돈은 연금 수령 때까지 묶인다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>일반형 ISA에서 해외지수 ETF로 300만원 이익, 채권형 ETF로 100만원 손실이 났다. 의무 기간 뒤 해지할 때 세금이 붙는 금액은?</p>
+        <div class="opts">
+          <button class="opt">300만원 전체</button>
+          <button class="opt">200만원(순이익)</button>
+          <button class="opt" data-correct>순이익 200만원에서 비과세 한도를 뺀 금액</button>
+          <button class="opt">100만원(손실만큼)</button>
+        </div>
+        <div class="quiz-exp">ISA는 계좌 안의 손익을 통산한다. 순이익은 300만 − 100만 = 200만원이고, 일반형은 그중 <span data-t="isa.freeGeneral" data-f="man"></span>까지 비과세, 넘는 몫이 있으면 <span data-x="over"></span>로 분리과세한다. 일반 계좌였다면 이익 난 300만원에 <span data-x="wh"></span>가 붙고 손실은 반영되지 않는다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>ISA에 국내 상장 국내주식형 ETF만 담아 1,000만원의 매매차익을 냈다. 일반 계좌와 비교한 ISA의 세금 효과로 맞는 것은?</p>
+        <div class="opts">
+          <button class="opt" data-correct>국내주식형 ETF 매매차익은 일반 계좌에서도 과세되지 않으므로 차익에 대한 ISA 효과는 거의 없다</button>
+          <button class="opt">일반 계좌에서는 1,000만원 전체에 원천징수되므로 ISA 효과가 크다</button>
+          <button class="opt">ISA에서는 1,000만원 전체에 <span data-x="over"></span>가 붙어 오히려 불리하다</button>
+          <button class="opt">금융소득종합과세 대상이 되므로 ISA가 필수다</button>
+        </div>
+        <div class="quiz-exp">소액주주의 국내 상장주식과 국내주식형 ETF 매매차익은 일반 계좌에서도 과세 대상이 아니다. 원래 0원인 세금은 ISA로 줄일 수 없다. 효과는 분배금 같은 배당소득 몫에서만 남는다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>의무 기간이 끝나기 한 달 전에 급한 돈이 필요해 ISA를 해지했다(부득이한 사유 아님). 어떻게 되는가?</p>
+        <div class="opts">
+          <button class="opt">한 달 차이라 특례가 그대로 유지된다</button>
+          <button class="opt">비과세 한도만 절반으로 줄어든다</button>
+          <button class="opt">해지 자체가 불가능하다</button>
+          <button class="opt" data-correct>특례를 잃고 계좌 안의 이익에 일반 계좌처럼 원천징수 세율이 적용된다</button>
+        </div>
+        <div class="quiz-exp">의무 기간(<span data-t="isa.minYears" data-f="num"></span>년) 전에 해지하면 비과세와 저율 분리과세를 받지 못하고 일반 과세(<span data-x="wh"></span>)로 돌아간다. 사망·해외 이주 같은 부득이한 사유는 예외다. 그래서 ISA는 비상금 통장으로 쓰기 어렵다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>ISA 만기 자금 5,000만원을 만기 후 60일 안에 연금계좌로 옮겼다. 그 해 연금계좌 세액공제 대상에 추가되는 금액은?</p>
+        <div class="opts">
+          <button class="opt">5,000만원 전부</button>
+          <button class="opt" data-correct>전환액의 일정 비율이되 상한(<span data-t="pension.isaTransferLimit" data-f="man"></span>)까지</button>
+          <button class="opt">추가되는 금액은 없다</button>
+          <button class="opt">연금저축 한도와 합쳐서 그 안에서만</button>
+        </div>
+        <div class="quiz-exp">전환액의 <span data-t="pension.isaTransferRate" data-f="pct"></span>를 기본 한도와 별도로 공제 대상에 더하되 최대 <span data-t="pension.isaTransferLimit" data-f="man"></span>까지다. 5,000만원이면 비율로는 상한을 넘으므로 상한까지만 더해진다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  const I = D.isa, F = D.financial, Pn = D.pension, L = D.income.localRate, C = TX.CASE;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  function legend(ctx, items, x0, y0, maxW, P) {
+    let lx = x0, ly = y0;
+    items.forEach(([s, col, dash]) => {
+      ctx.font = TB.font(11); const tw = ctx.measureText(s).width;
+      if (lx + tw + 22 > x0 + maxW && lx > x0) { lx = x0; ly += 16; }
+      ctx.strokeStyle = col; ctx.lineWidth = 2.4; ctx.setLineDash(dash || []); ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(lx + 14, ly); ctx.stroke(); ctx.setLineDash([]);
+      T(ctx, s, lx + 18, ly, { size: 11, color: P.dim, base: "middle" }); lx += tw + 32;
+    });
+    return ly - y0 + 16;
+  }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const minus = (v) => (v > 0.5 ? '<span class="minus">' + TB.won(v) + "</span>" : '<span class="plus">0원</span>');
+  const plus = (v) => '<span class="plus">' + TB.won(v) + "</span>";
+  const WH = F.withholding * (1 + L), OV = I.overRate * (1 + L);
+  // ISA 세금(지방세 포함)과 일반 계좌 원천징수(지방세 포함)
+  const isaTax = (net, type) => TX.isa({ profit: net, type }).tax * (1 + L);
+  const plainTax = (gains) => gains.reduce((s, g) => s + Math.max(0, g), 0) * WH;
+  const trCap = Pn.isaTransferLimit / Pn.isaTransferRate;
+
+  /* ---------------------------------------------------------- 합성 값 */
+  const X = {
+    wh: TX.fmt.pct(WH), over: TX.fmt.pct(OV),
+    gap: TX.fmt.pct(WH - OV).replace("%", "%"),
+    trCap: TB.won(trCap),
+  };
+  document.querySelectorAll("[data-x]").forEach((el) => { const v = X[el.getAttribute("data-x")]; el.textContent = v == null ? "확인 필요" : v; el.classList.add("tval"); });
+
+  /* ---------------------------------------------------------- 노트 */
+  (function () {
+    const p = C.isa.profit2026, plain = p * WH;
+    TB.stat("case-plain", "−" + TX.fmt.wonfull(Math.round(plain)));
+    TB.stat("case-saved", TX.fmt.wonfull(Math.round(plain)));
+    TB.stat("note-plain", TX.fmt.wonfull(Math.round(plain)));
+    TB.stat("note-year", String(C.isa.opened + I.minYears));
+    const pc = TX.pensionCredit({ isaTransfer: trCap }, TX.CASE.monthly * 12 - TX.CASE.mealMonthly * 12);
+    TB.stat("note-tr", TB.won(pc.credit + pc.local));
+  })();
+
+  /* ---------------------------------------------------------- 1. 손익 통산 */
+  (function () {
+    const tG = TB.seg("net-t", draw);
+    const init = [2e6, 1.5e6, -1e6];
+    let vals = init.slice(), drag = -1, L0 = null;
+    const VMAX = 5e6, names = ["A 해외지수 ETF", "B 채권형 ETF", "C 손실 종목"];
+    const cv = TB.canvas("#net-cv", (ctx, w, h) => {
+      const P = TB.palette(), type = tG();
+      const narrow = w < 480;
+      const top = 28, bot = h - 40, Y = (v) => top + (VMAX - v) / (2 * VMAX) * (bot - top);
+      const leftW = narrow ? w * 0.56 : w * 0.55, slot = (leftW - 48) / 3, bx = 48;
+      ctx.strokeStyle = P.grid; ctx.lineWidth = 1;
+      [-5e6, -2.5e6, 0, 2.5e6, 5e6].forEach((v) => { ctx.beginPath(); ctx.moveTo(bx, Y(v)); ctx.lineTo(leftW, Y(v)); ctx.stroke(); T(ctx, TB.wonAxis(v), bx - 6, Y(v), { size: 10, color: P.dim, align: "right", base: "middle", mono: true }); });
+      ctx.strokeStyle = P.axis; ctx.beginPath(); ctx.moveTo(bx, Y(0)); ctx.lineTo(leftW, Y(0)); ctx.stroke();
+      T(ctx, "상품별 손익", bx, 16, { size: 11, color: P.dim, weight: 700 });
+      vals.forEach((v, i) => {
+        const cx = bx + slot * (i + 0.5), bw = slot * 0.5;
+        ctx.fillStyle = v >= 0 ? P.ok : P.bad; ctx.globalAlpha = 0.75;
+        ctx.fillRect(cx - bw / 2, Math.min(Y(v), Y(0)), bw, Math.max(1, Math.abs(Y(v) - Y(0)))); ctx.globalAlpha = 1;
+        knob(ctx, cx, Y(v), P);
+        T(ctx, names[i].split(" ")[0], cx, bot + 16, { size: 11, color: P.text, align: "center", weight: 700 });
+        T(ctx, TB.wonAxis(v), cx, v >= 0 ? Y(v) - 14 : Y(v) + 18, { size: 10, color: P.dim, align: "center", mono: true });
+      });
+      L0 = { bx, slot, Y, top, bot };
+      // 오른쪽: 두 계좌의 과세 대상과 세금
+      const net = vals.reduce((s, v) => s + v, 0), free = type === "low" ? I.freeLow : I.freeGeneral;
+      const gainsSum = vals.reduce((s, v) => s + Math.max(0, v), 0);
+      const rx = leftW + 20, rw = w - rx - 12, rowH = (bot - top) / 2;
+      const SM = Math.max(VMAX * 3 * 0.6, gainsSum, net);
+      const XR = (v) => rx + Math.max(0, v) / SM * rw;
+      [["일반 계좌: 이익 난 몫 전체", gainsSum, 0], ["ISA: 순이익 − 한도", Math.max(0, net), free]].forEach(([lab, amt, fr], k) => {
+        const y = top + k * rowH + 6;
+        T(ctx, lab, rx, y + 8, { size: 11, color: P.dim, weight: 700 });
+        const yb = y + 18, bh = 18;
+        ctx.fillStyle = P.grid; ctx.fillRect(rx, yb, rw, bh);
+        if (k === 0) { ctx.fillStyle = P.bad; ctx.globalAlpha = 0.7; ctx.fillRect(rx, yb, XR(amt) - rx, bh); ctx.globalAlpha = 1; }
+        else {
+          const f = Math.min(amt, fr);
+          ctx.fillStyle = P.ok; ctx.globalAlpha = 0.6; ctx.fillRect(rx, yb, XR(f) - rx, bh);
+          ctx.fillStyle = P.warn; ctx.globalAlpha = 0.85; ctx.fillRect(XR(f), yb, XR(amt) - XR(f), bh); ctx.globalAlpha = 1;
+          ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.beginPath(); ctx.moveTo(XR(fr), yb - 4); ctx.lineTo(XR(fr), yb + bh + 4); ctx.stroke(); ctx.restore();
+          T(ctx, "한도", Math.min(XR(fr) + 3, rx + rw - 22), yb + bh + 14, { size: 10, color: P.faint });
+        }
+        const tax = k === 0 ? plainTax(vals) : isaTax(net, type);
+        T(ctx, "세금 " + TB.won(tax), rx, yb + bh + (k === 1 ? 30 : 16), { size: 12, color: tax > 0 ? P.bad : P.ok, weight: 700, mono: false });
+      });
+    }, { get height() { return pw("net-cv") < 480 ? 300 : 300; } });
+    TB.drag(cv.canvas, {
+      start(x) { if (!L0) return; const i = Math.floor((x - L0.bx) / L0.slot); drag = i >= 0 && i < 3 ? i : -1; },
+      move(x, y) { if (drag < 0 || !L0) return; const v = VMAX - (y - L0.top) / (L0.bot - L0.top) * 2 * VMAX; vals[drag] = TB.clamp(Math.round(v / 1e5) * 1e5, -VMAX, VMAX); draw(); },
+      end() { drag = -1; },
+    });
+    document.getElementById("net-re").addEventListener("click", () => { vals = init.slice(); draw(); });
+    function draw() {
+      const type = tG(), net = vals.reduce((s, v) => s + v, 0);
+      const a = plainTax(vals), b = isaTax(net, type);
+      TB.stat("net-o-n", (net < 0 ? '<span class="minus">' : "<span>") + TB.won(net) + "</span>");
+      TB.stat("net-o-a", minus(a));
+      TB.stat("net-o-b", minus(b));
+      TB.stat("net-o-s", a - b > 0.5 ? plus(a - b) : "0원");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 2. 비과세 한도 */
+  (function () {
+    const tG = TB.seg("free-t", draw);
+    const PMAX = 1.5e7;
+    let p = C.isa.profit2026, box = null;
+    const cv = TB.canvas("#free-cv", (ctx, w, h) => {
+      const P = TB.palette(), type = tG(), free = type === "low" ? I.freeLow : I.freeGeneral;
+      const a = [], b = [], s = [];
+      for (let x = 0; x <= PMAX + 1; x += PMAX / 150) { const ta = x * WH, tb = isaTax(x, type); a.push([x, ta]); b.push([x, tb]); s.push([x, ta - tb]); }
+      const lh = legend(ctx, [["일반 계좌 세금", P.bad], ["ISA 세금", P.warn], ["아낀 세금", P.ok]], 58, 12, w - 74, P);
+      const ymax = PMAX * WH * 1.06;
+      const c = TB.chart(ctx, { x: 58, y: lh + 14, w: w - 74, h: h - lh - 62 }, {
+        x: [0, PMAX], y: [0, ymax], xTicks: [0, 3e6, 6e6, 9e6, 1.2e7, 1.5e7].filter((v, i) => w > 420 || i % 2 === 0), xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [{ data: a, color: P.bad, width: 2 }, { data: b, color: P.warn, width: 2 }, { data: s, color: P.ok, width: 2.8 }],
+        vlines: [{ x: free, color: P.text }],
+      });
+      box = c;
+      T(ctx, "비과세 한도", c.X(free) + 4, c.box.y + 12, { size: 11, color: P.text });
+      const sv = p * WH - isaTax(p, type);
+      ctx.beginPath(); ctx.arc(c.X(p), c.Y(p * WH), 4, 0, TAU); ctx.fillStyle = P.bad; ctx.fill();
+      knob(ctx, c.X(p), c.Y(sv), P);
+      if (w >= 480) T(ctx, "가로축: 계약 기간 전체 순이익", c.box.x, h - 8, { size: 11, color: P.faint });
+    }, { get height() { return pw("free-cv") < 480 ? 290 : 310; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; p = TB.clamp(Math.round((x - box.box.x) / box.box.w * PMAX / 5e4) * 5e4, 0, PMAX); draw(); } });
+    function draw() {
+      const type = tG(), a = p * WH, b = isaTax(p, type);
+      TB.stat("free-o-p", TB.won(p));
+      TB.stat("free-o-a", minus(a));
+      TB.stat("free-o-b", minus(b));
+      TB.stat("free-o-s", plus(a - b) + (p > 0 ? " · " + TB.pct((a - b) / p, 1) : ""));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 국내주식형 */
+  (function () {
+    const dG = TB.range("dom-d", (v) => TB.won(v * 1e4), draw);
+    const oG = TB.range("dom-o", (v) => TB.won(v * 1e4), draw);
+    function calc() {
+      const d = dG() * 1e4, o = oG() * 1e4;
+      const a = Math.max(0, o) * WH;                    // 일반 계좌: 국내주식형 차익 비과세, 그 밖의 이익에만 원천징수
+      const net = o + Math.min(0, d);                   // ISA: 국내주식형 차익은 통산 제외, 손실은 반영
+      const b = isaTax(Math.max(0, net), "general");
+      return { d, o, a, b, net, total: d + o };
+    }
+    const cv = TB.canvas("#dom-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc();
+      const bx = 20, bw = w - 40, MAX = 3e7;
+      const X = (v) => bx + (v + 5e6) / (MAX + 5e6) * bw;
+      T(ctx, "계좌 안의 손익", bx, 18, { size: 11, color: P.dim, weight: 700 });
+      // 손익 띠
+      const y1 = 32, bh = 20;
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y1, bw, bh);
+      let x0 = X(0);
+      ctx.strokeStyle = P.axis; ctx.beginPath(); ctx.moveTo(x0, y1 - 4); ctx.lineTo(x0, y1 + bh + 4); ctx.stroke();
+      if (c.d >= 0) { ctx.fillStyle = P.accent2; ctx.globalAlpha = 0.75; ctx.fillRect(x0, y1, X(c.d) - x0, bh); ctx.globalAlpha = 1; ctx.fillStyle = P.accent; ctx.globalAlpha = 0.75; ctx.fillRect(X(c.d), y1, X(c.d + c.o) - X(c.d), bh); ctx.globalAlpha = 1; }
+      else { ctx.fillStyle = P.bad; ctx.globalAlpha = 0.6; ctx.fillRect(X(c.d), y1, x0 - X(c.d), bh); ctx.globalAlpha = 1; ctx.fillStyle = P.accent; ctx.globalAlpha = 0.75; ctx.fillRect(x0, y1, X(c.o) - x0, bh); ctx.globalAlpha = 1; }
+      const lg = [["국내주식형", c.d >= 0 ? P.accent2 : P.bad], ["해외지수·채권형 등", P.accent]];
+      let lx = bx; lg.forEach(([s, col]) => { ctx.fillStyle = col; ctx.fillRect(lx, y1 + bh + 10, 10, 10); T(ctx, s, lx + 14, y1 + bh + 15, { size: 11, color: P.dim, base: "middle" }); ctx.font = TB.font(11); lx += ctx.measureText(s).width + 30; });
+      // 세금 막대 둘
+      const rows = [["일반 계좌 세금", c.a, "과세 대상: 해외지수·채권형 등 이익 " + TB.wonAxis(c.o)], ["ISA 세금", c.b, "과세 대상: " + TB.wonAxis(Math.max(0, c.net)) + " − 한도 " + TB.wonAxis(I.freeGeneral)]];
+      const TMAX = 1.5e7 * WH, y2 = y1 + bh + 46, rh = (h - y2 - 16) / 2;
+      rows.forEach(([lab, t, sub], k) => {
+        const y = y2 + k * rh;
+        T(ctx, lab, bx, y + 10, { size: 12, color: P.text, weight: 700 });
+        T(ctx, TB.won(t), bx + bw, y + 10, { size: 12, color: t > 0 ? P.bad : P.ok, align: "right", weight: 700, mono: true });
+        ctx.fillStyle = P.grid; ctx.fillRect(bx, y + 18, bw, 14);
+        ctx.fillStyle = P.bad; ctx.globalAlpha = 0.75; ctx.fillRect(bx, y + 18, Math.max(0, t) / TMAX * bw, 14); ctx.globalAlpha = 1;
+        T(ctx, sub, bx, y + 46, { size: 11, color: P.faint });
+      });
+    }, { get height() { return pw("dom-cv") < 480 ? 250 : 240; } });
+    function draw() {
+      const c = calc();
+      TB.stat("dom-r-t", TB.won(c.total));
+      TB.stat("dom-r-a", minus(c.a));
+      TB.stat("dom-r-b", minus(c.b));
+      TB.stat("dom-r-s", (c.a - c.b > 0.5 ? plus(c.a - c.b) : "0원") + (c.total > 0 ? " · " + TB.pct(Math.max(0, c.a - c.b) / c.total, 1) : ""));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 4. 의무 기간 */
+  (function () {
+    const aG = TB.range("yrs-a", (v) => TB.won(v * 1e4), draw);
+    const rG = TB.range("yrs-r", (v) => v.toFixed(1) + "%", draw);
+    const YMAX = 8;
+    let yr = I.minYears - 0.25, box = null;
+    // 해마다 연초 납입, t년 뒤 해지할 때의 순이익
+    function state(t) {
+      const a = aG() * 1e4, r = rG() / 100;
+      let bal = 0, paid = 0;
+      const n = Math.ceil(t - 1e-9);
+      for (let k = 0; k < n; k++) {
+        const put = Math.min(a, I.totalLimit - paid); paid += put; bal += put;
+        const dt = Math.min(1, t - k); bal *= Math.pow(1 + r, dt);
+      }
+      return { paid, bal, profit: Math.max(0, bal - paid) };
+    }
+    function taxAt(t) {
+      const s = state(t), plain = s.profit * WH;
+      const tax = t < I.minYears ? plain : isaTax(s.profit, "general");
+      return { s, plain, tax, saved: plain - tax };
+    }
+    const cv = TB.canvas("#yrs-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const pts = [], tx = []; let ymax = 1e5;
+      for (let t = 0.05; t <= YMAX + 1e-9; t += 0.05) { const r = taxAt(t); pts.push([t, r.saved]); tx.push([t, r.plain]); ymax = Math.max(ymax, r.plain); }
+      const lh = legend(ctx, [["일반 계좌였다면 세금", P.bad, [5, 4]], ["ISA로 아낀 세금", P.ok]], 58, 12, w - 74, P);
+      const c = TB.chart(ctx, { x: 58, y: lh + 14, w: w - 74, h: h - lh - 62 }, {
+        x: [0, YMAX], y: [0, ymax * 1.08], xTicks: [0, 1, 2, 3, 4, 5, 6, 7, 8], xFmt: (v) => v + "년", yFmt: TB.wonAxis,
+        series: [{ data: tx, color: P.bad, width: 1.6, dash: [5, 4] }, { data: pts, color: P.ok, width: 2.8 }],
+        bands: [{ x0: 0, x1: I.minYears, color: TB.color("bad-soft") }],
+      });
+      box = c;
+      T(ctx, "의무 기간", c.X(I.minYears / 2), c.box.y + 14, { size: 11, color: P.bad, align: "center", weight: 700 });
+      const r = taxAt(yr), px = c.X(yr), hy = c.box.y + c.box.h;
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, hy); ctx.lineTo(px, c.Y(r.plain)); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(px, c.Y(r.saved), 5, 0, TAU); ctx.fillStyle = P.ok; ctx.fill();
+      knob(ctx, px, hy, P);
+    }, { get height() { return pw("yrs-cv") < 480 ? 280 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; yr = TB.clamp(Math.round((x - box.box.x) / box.box.w * YMAX * 12) / 12, 1 / 12, YMAX); draw(); } });
+    function draw() {
+      const r = taxAt(yr), m = Math.round(yr * 12);
+      TB.stat("yrs-o-y", Math.floor(m / 12) + "년 " + (m % 12) + "개월" + (yr < I.minYears ? ' <small class="minus">(의무 기간 전)</small>' : ""));
+      TB.stat("yrs-o-p", TB.won(r.s.profit));
+      TB.stat("yrs-o-t", minus(r.tax));
+      TB.stat("yrs-o-s", r.saved > 0.5 ? plus(r.saved) : "0원");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 5. 연금계좌 전환 */
+  (function () {
+    const gG = TB.seg("tr-g", draw);
+    const AMAX = 6e7;
+    let amt = C.isa.balance, box = null;
+    const grossOf = () => (gG() === "low" ? Pn.lowGrossMax : Pn.lowGrossMax + 1e7);
+    const cr = (a) => { const r = TX.pensionCredit({ isaTransfer: a }, grossOf()); return { e: r.eligible, c: r.credit + r.local, rate: r.rate }; };
+    const cv = TB.canvas("#tr-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const pts = []; for (let a = 0; a <= AMAX + 1; a += AMAX / 150) pts.push([a, cr(a).c]);
+      const ymax = cr(AMAX).c * 1.25 || 1;
+      const lh = legend(ctx, [["추가 세액공제(지방세 포함)", P.ok]], 58, 12, w - 74, P);
+      const c = TB.chart(ctx, { x: 58, y: lh + 14, w: w - 74, h: h - lh - 62 }, {
+        x: [0, AMAX], y: [0, ymax], xTicks: [0, 1e7, 2e7, 3e7, 4e7, 5e7, 6e7].filter((v, i) => w > 420 || i % 2 === 0), xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [{ data: pts, color: P.ok, width: 2.8 }],
+        vlines: [{ x: trCap, color: P.text }],
+      });
+      box = c;
+      T(ctx, "상한", c.X(trCap) + 4, c.box.y + c.box.h - 10, { size: 11, color: P.text });
+      knob(ctx, c.X(amt), c.Y(cr(amt).c), P);
+      if (w >= 480) T(ctx, "가로축: 연금계좌로 옮긴 ISA 만기 자금", c.box.x, h - 8, { size: 11, color: P.faint });
+    }, { get height() { return pw("tr-cv") < 480 ? 270 : 290; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; amt = TB.clamp(Math.round((x - box.box.x) / box.box.w * AMAX / 5e5) * 5e5, 0, AMAX); draw(); } });
+    function draw() {
+      const r = cr(amt);
+      TB.stat("tr-o-a", TB.won(amt));
+      TB.stat("tr-o-e", TB.won(r.e) + (amt * Pn.isaTransferRate > Pn.isaTransferLimit ? ' <small>(상한)</small>' : ""));
+      TB.stat("tr-o-c", plus(r.c) + " <small>(" + TX.fmt.pct(r.rate * (1 + L)) + ")</small>");
+      TB.stat("tr-o-r", amt > 0 ? TB.pct(r.c / amt, 2) : "—");
+      cv.redraw();
+    }
+    draw();
+  })();
+});
+</script>
+</body>
+</html>

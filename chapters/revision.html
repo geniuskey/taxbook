@@ -1,0 +1,657 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "이 책의 기준 연도에 바뀐 세법을 직장인·투자·상속증여로 나누어 무엇이 무엇으로, 언제부터, 어느 장에 반영됐는지 정리하고, 같은 입력을 개정 전 값과 비교하는 계산기와 국회 심사 중인 개정안을 함께 보여 준다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>올해 바뀐 세법 · TaxBook</title>
+<meta name="description" content="이 책의 기준 연도에 바뀐 세법을 직장인·투자·상속증여로 나누어 무엇이 무엇으로, 언제부터, 어느 장에 반영됐는지 정리하고, 같은 입력을 개정 전 값과 비교하는 계산기와 국회 심사 중인 개정안을 함께 보여 준다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/revision.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="올해 바뀐 세법 · TaxBook">
+<meta property="og:description" content="이 책의 기준 연도에 바뀐 세법을 직장인·투자·상속증여로 나누어 무엇이 무엇으로, 언제부터, 어느 장에 반영됐는지 정리하고, 같은 입력을 개정 전 값과 비교하는 계산기와 국회 심사 중인 개정안을 함께 보여 준다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/revision.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/revision.html#chapter","name":"올해 바뀐 세법","headline":"올해 바뀐 세법 · TaxBook","description":"이 책의 기준 연도에 바뀐 세법을 직장인·투자·상속증여로 나누어 무엇이 무엇으로, 언제부터, 어느 장에 반영됐는지 정리하고, 같은 입력을 개정 전 값과 비교하는 계산기와 국회 심사 중인 개정안을 함께 보여 준다.","url":"https://taxbook.euiyun.com/chapters/revision.html","position":16,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"16. 올해 바뀐 세법","item":"https://taxbook.euiyun.com/chapters/revision.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="revision">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 16 · <span data-t="label"></span></div>
+    <h1>올해 바뀐 세법</h1>
+    <p class="lead">세법은 해마다 바뀐다. 대부분은 12월에 국회를 통과해 다음 해 1월 1일부터 적용되고, 일부는 한 해 중간에 바뀐다. 이 장은 이 책의 기준인 <b><span data-t="label"></span></b>에서 무엇이 달라졌는지를 한곳에 모은다. 기준 법령은 <span data-t="lawVersion"></span> 세법 수치를 확인한 날은 <span data-t="asOf"></span>이다. 바뀐 항목마다 무엇이 무엇으로, 언제부터 바뀌었는지, 이 책의 어느 장과 어느 세법 값(JSON 키)에 반영됐는지를 적었다. 그리고 아직 국회를 통과하지 않은 개정안은 따로 떼어 "추진 중"으로만 보인다.</p>
+    <ul class="objectives">
+      <li>기준 연도에 바뀐 세법을 직장인·투자·상속증여로 나누어, 적용 시점과 이 책의 반영 위치와 함께 읽는다.</li>
+      <li>같은 입력(자녀, 카드 사용, 고향사랑기부, 주식 매도)을 올해 값과 개정 전 값으로 계산해 차이가 어디서 생기는지 본다.</li>
+      <li>개정이 국회 통과 → 공포 → 시행 → 한 해 중간 개정 → 다음 해 개정안 발표로 이어지는 시간표를 따라간다.</li>
+      <li>자녀세액공제 대상 연령의 단계적 상향을 확인된 부분과 확인이 필요한 부분으로 나누어 본다.</li>
+      <li>바뀌지 않은 것과 확정 전인 개정안을 구분한다.</li>
+    </ul>
+  </header>
+
+  <section id="how">
+    <h2>이 장을 읽는 법</h2>
+    <p>이 책은 세율, 공제율, 한도, 기준 금액, 시행 연도를 본문에 직접 쓰지 않는다. 모든 값은 세법 수치 파일 하나(<code>data/tax-<span data-t="year" data-f="raw"></span>.json</code>)에 있고, 각 장의 문장과 시뮬레이터가 그 파일에서 값을 읽는다. 그래서 새 귀속 연도가 오면 고칠 곳은 두 군데뿐이다. 세법 수치 파일, 그리고 이 장이다.</p>
+    <p>개정 하나가 이 책에 들어오는 길은 그림 1과 같다. 국회를 통과하고 시행일이 정해진 개정은 세법 수치 파일의 값을 바꾸고, 그 값을 쓰는 모든 장의 계산이 함께 바뀐다. 아직 국회를 통과하지 않은 개정안은 수치 파일에 넣지 않고 이 장의 '추진 중' 표에만 적는다. 이 책의 계산이 "지금 법"과 어긋나지 않게 하려는 원칙이다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 300" role="img" aria-label="개정 한 건이 책에 들어오는 길: 국회 통과와 공포를 거친 개정은 세법 수치 파일을 바꾸고 각 장의 계산에 반영된다. 확정 전 개정안은 이 장의 추진 중 표에만 적는다">
+        <defs><marker id="rv-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="14" y="18" width="128" height="46" rx="8" class="f-acc-soft"/>
+        <text x="78" y="38" text-anchor="middle" class="lbl-b">정부안·의원안</text>
+        <text x="78" y="56" text-anchor="middle" class="lbl-dim">발표·국회 제출</text>
+        <line x1="142" y1="41" x2="172" y2="41" class="s-line" marker-end="url(#rv-ar)"/>
+        <rect x="174" y="18" width="112" height="46" rx="8" class="f-surface"/>
+        <text x="230" y="38" text-anchor="middle" class="lbl-b">국회 통과</text>
+        <text x="230" y="56" text-anchor="middle" class="lbl-dim">공포·시행일</text>
+        <line x1="286" y1="41" x2="316" y2="41" class="s-line" marker-end="url(#rv-ar)"/>
+        <rect x="318" y="18" width="128" height="46" rx="8" class="f-ok-soft"/>
+        <text x="382" y="38" text-anchor="middle" class="lbl-b">세법 수치 파일</text>
+        <text x="382" y="56" text-anchor="middle" class="lbl-dim t-mono">data/tax-<tspan data-t="year" data-f="raw"></tspan>.json</text>
+        <line x1="382" y1="64" x2="382" y2="110" class="s-line" marker-end="url(#rv-ar)"/>
+        <rect x="262" y="112" width="184" height="62" rx="8" class="f-surface"/>
+        <text x="354" y="134" text-anchor="middle" class="lbl-b">각 장의 문장·시뮬레이터</text>
+        <text x="354" y="154" text-anchor="middle" class="lbl-dim">값을 읽어 계산이 함께 바뀐다</text>
+        <rect x="262" y="196" width="184" height="62" rx="8" class="f-acc2-soft"/>
+        <text x="354" y="218" text-anchor="middle" class="lbl-b">이 장(16장)</text>
+        <text x="354" y="238" text-anchor="middle" class="lbl-dim">무엇이 바뀌었나, 어디에 반영됐나</text>
+        <line x1="382" y1="174" x2="382" y2="194" class="s-line" marker-end="url(#rv-ar)"/>
+        <line x1="78" y1="64" x2="78" y2="194" class="s-dash" marker-end="url(#rv-ar)"/>
+        <text x="86" y="122" class="lbl-bad">국회 통과 전</text>
+        <text x="86" y="140" class="lbl-dim">계산에 넣지 않는다</text>
+        <rect x="14" y="196" width="200" height="62" rx="8" class="f-warn-soft"/>
+        <text x="114" y="218" text-anchor="middle" class="lbl-b">'추진 중' 표</text>
+        <text x="114" y="238" text-anchor="middle" class="lbl-dim">확정 전·적용 예정 시기만 적는다</text>
+        <line x1="214" y1="227" x2="260" y2="227" class="s-dash" marker-end="url(#rv-ar)"/>
+        <text x="230" y="286" text-anchor="middle" class="lbl-dim">통과되면 다음 해 파일의 값이 되고, 이 장의 '바뀐 것' 표로 옮겨 간다</text>
+      </svg>
+      <figcaption><b>그림 1. 개정 한 건이 책에 들어오는 길.</b> 확정된 개정은 세법 수치 파일의 값이 되어 모든 장의 계산에 들어간다. 확정 전 개정안은 이 장에만 "추진 중"으로 적고 계산에 넣지 않는다. 그래서 이 책의 시뮬레이터는 언제나 그 해의 확정된 법을 따른다.</figcaption>
+    </figure>
+
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다</strong>
+      이 장의 표와 계산은 <span data-t="label"></span>이다. 기준 법령은 <span data-t="lawVersion"></span> 이 책은 국가법령정보센터·국세청·재정경제부 원문을 정부 도메인 검색 색인과 언론 보도로 교차 확인했고, 출처와 확인 상태(확인·대체로 확인·확인 필요)는 <a href="../SOURCES.md">SOURCES.md</a>에 있다. 실제 신고와 연말정산은 그 해 국세청 안내와 홈택스로 다시 확인한다.
+    </div>
+  </section>
+
+  <section id="changed">
+    <h2>2026년 귀속부터 달라진 것</h2>
+    <p>아래 세 표는 이 책의 기준 연도에 적용이 시작된 개정이다. '무엇이'는 개정 전 값이고, '무엇으로'는 세법 수치 파일의 현재 값이다. JSON 키가 '—'인 항목은 금액이 아니라 요건이 바뀐 것이어서 수치 파일에 따로 키가 없거나, 이 책의 엔진이 계산하지 않는 규정이다.</p>
+
+    <h3>직장인</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>무엇이 → 무엇으로</th><th>적용 시점</th><th>이 책에서</th><th>JSON 키</th></tr></thead>
+        <tbody>
+          <tr><td>자녀세액공제 대상 연령</td><td><span data-p="childAgeMin"></span>세 이상 → <b><span data-t="credits.child.ageMin" data-f="num"></span>세 이상</b>. 2030년까지 해마다 올려 13세 이상(금액은 그대로)</td><td>2026년 과세기간분(법률 제21548호, 2026.4.21)</td><td><a href="credit.html">5장</a>, <a href="yearend.html">6장</a>, 아래 <a href="#sim-age">연령 시뮬레이터</a></td><td><code>credits.child.ageMin</code></td></tr>
+          <tr><td>신용카드 등 기본공제 한도</td><td>자녀 가산 없음 → 총급여 <span data-t="card.limits.0.upTo"></span> 이하 자녀 1명당 <span data-t="card.limits.0.perChild" data-f="man"></span>(최대 <span data-t="card.limits.0.childMax" data-f="man"></span>), 초과 1명당 <span data-t="card.limits.1.perChild" data-f="man"></span>(최대 <span data-t="card.limits.1.childMax" data-f="man"></span>) 가산. 공제 일몰 <span data-t="card.sunset" data-f="raw"></span>년 말로 연장</td><td>2026년 사용분</td><td><a href="deduction.html">4장</a>, 아래 <a href="#sim-cmp">비교기</a></td><td><code>card.limits.*.perChild</code>, <code>childMax</code>, <code>card.sunset</code></td></tr>
+          <tr><td>수영장·체력단련장 이용료</td><td>2025년 7월부터 문화체육 사용분(공제율 <span data-t="card.rates.culture"></span>) → 2026년에는 한 해 전체 적용</td><td>2025.7.1 시행, 2026년 첫 전체 연도</td><td><a href="deduction.html">4장</a></td><td><code>card.rates.culture</code>, <code>card.cultureGrossMax</code></td></tr>
+          <tr><td>출산·보육수당 비과세</td><td>근로자 1인당 월 20만원 → 6세 이하 자녀 1인당 월 <span data-t="wage.nontax.childcareMonthly" data-f="man"></span></td><td>2026.1.1 지급분</td><td><a href="taxbase.html">3장</a></td><td><code>wage.nontax.childcareMonthly</code></td></tr>
+          <tr><td>교육비 세액공제</td><td>초등 1~2학년 예체능 학원·체육시설 비용 추가, 대학생 교육비의 부양가족 소득요건 폐지(공제율·한도는 그대로)</td><td>2026.1.1 지출분</td><td><a href="credit.html">5장</a></td><td>—</td></tr>
+          <tr><td>고향사랑기부금 <span data-t="credits.donation.hometownFull" data-f="man"></span> 초과~<span data-t="credits.donation.hometownMid" data-f="man"></span> 구간</td><td><span data-p="hometownMidRate"></span> → <b><span data-t="credits.donation.hometownMidRate"></span></b>(<span data-t="credits.donation.hometownFull" data-f="man"></span>까지 100/110은 그대로)</td><td>2026.1.1 기부분</td><td><a href="credit.html">5장</a>, 아래 <a href="#sim-cmp">비교기</a></td><td><code>credits.donation.hometownMid</code>, <code>hometownMidRate</code></td></tr>
+          <tr><td>월세 세액공제 요건</td><td>주거를 달리하는 배우자도 각자 공제(부부 합산 한도), 자녀 3명 이상 가구는 100㎡ 이하까지</td><td><b>확인 필요</b>(2026.1.1인지 시행령 시행일인지)</td><td><a href="credit.html">5장</a>(엔진은 요건을 단순화)</td><td><code>credits.rent._note</code></td></tr>
+          <tr><td>근로소득 간이세액표</td><td>자녀 차감액 개정: 1명 <span data-t="simplified.childMonthly.one" data-f="wonfull"></span>, 2명 <span data-t="simplified.childMonthly.two" data-f="wonfull"></span>, 3명부터 1명당 <span data-t="simplified.childMonthly.extraPerChild" data-f="wonfull"></span></td><td><span data-t="simplified.childMonthly.since"></span> 이후 원천징수분</td><td><a href="payslip.html">2장</a></td><td><code>simplified.childMonthly</code></td></tr>
+          <tr><td>국민연금 보험료율</td><td>9%(근로자 4.5%) → 근로자·회사 각 <span data-t="social.pension"></span>. 기준소득월액 상한은 7월부터 <span data-t="social.pensionMaxBaseFromJuly" data-f="man"></span></td><td>2026년 1월(상·하한은 7월)</td><td><a href="payslip.html">2장</a></td><td><code>social.pension</code>, <code>pensionMaxBaseFromJuly</code></td></tr>
+          <tr><td>건강보험·장기요양</td><td>건강보험료율 인상(2025년 7.09%, 올해 근로자 부담 <span data-t="social.health"></span>), 장기요양은 건강보험료의 <span data-t="social.careOfHealth"></span></td><td>2026년 1월</td><td><a href="payslip.html">2장</a></td><td><code>social.health</code>, <code>careOfHealth</code></td></tr>
+          <tr><td>혼인세액공제</td><td>금액 <span data-t="credits.marriage" data-f="man"></span> 그대로, <span data-t="credits.marriageUntil" data-f="raw"></span>년 혼인신고분이 마지막(일몰)</td><td>2026년 혼인신고분까지</td><td><a href="credit.html">5장</a></td><td><code>credits.marriageUntil</code></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>투자</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>무엇이 → 무엇으로</th><th>적용 시점</th><th>이 책에서</th><th>JSON 키</th></tr></thead>
+        <tbody>
+          <tr><td>고배당기업 배당소득 분리과세</td><td>없음 → 신설. 4단계 세율(<span data-t="financial.highDividend.rates.0.1"></span>~<span data-t="financial.highDividend.rates.3.1"></span>), 다른 종합소득과 합산하지 않음, 신청서 제출 필요</td><td><span data-t="financial.highDividend.from" data-f="raw"></span>~<span data-t="financial.highDividend.until" data-f="raw"></span>년 지급분</td><td><a href="interest.html">8장</a></td><td><code>financial.highDividend.*</code></td></tr>
+          <tr><td>증권거래세(코스피)</td><td>거래세 0% + 농특세 0.15% = <span data-p="tx.kospi"></span> → 거래세 <span data-t="stock.domestic.transactionTax.kospi.tax"></span> + 농특세 <span data-t="stock.domestic.transactionTax.kospi.rural"></span> = <b><span data-c="kospiNow"></span></b></td><td>2026.1.1 이후 양도분</td><td><a href="stock.html#sim-turn">11장 거래세 시뮬레이터</a>, 아래 비교기</td><td><code>stock.domestic.transactionTax.kospi</code></td></tr>
+          <tr><td>증권거래세(코스닥·K-OTC)</td><td><span data-p="tx.kosdaq"></span> → <b><span data-t="stock.domestic.transactionTax.kosdaq.tax"></span></b></td><td>2026.1.1 이후 양도분</td><td><a href="stock.html#sim-turn">11장</a>, 아래 비교기</td><td><code>stock.domestic.transactionTax.kosdaq</code></td></tr>
+          <tr><td>종신형 사적연금 연금소득세</td><td><span data-p="lifetimeAnnuity"></span> → <b><span data-t="pension.payoutRates.lifetime"></span></b>(지방세 별도)</td><td>2026.1.1 이후 수령분</td><td><a href="pension.html">10장</a></td><td><code>pension.payoutRates.lifetime</code></td></tr>
+          <tr><td>이연퇴직소득 연금 수령</td><td>실제 수령 연차 20년 초과분 감면 구간 신설(퇴직소득세의 60% → 50%)</td><td>2026.1.1 이후 수령분</td><td><a href="pension.html">10장</a>(엔진 미반영)</td><td>—</td></tr>
+          <tr><td>국내시장 복귀계좌(RIA)</td><td>없음 → 해외 상장주식을 팔아 국내 주식에 투자하면 양도소득 일부 공제(한시). 공제율 구간 경계는 출처마다 달라 '대체로 확인'</td><td>2026년 양도분</td><td><a href="stock.html">11장</a>(심화 상자, 계산 미반영)</td><td>—</td></tr>
+          <tr><td>청년미래적금</td><td>이자 비과세 상품 신설(연령 요건은 시행령)</td><td>2026년</td><td><a href="interest.html">8장</a></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>상속·증여</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>무엇이 → 무엇으로</th><th>적용 시점</th><th>이 책에서</th><th>JSON 키</th></tr></thead>
+        <tbody>
+          <tr><td>영리법인 유증</td><td>상속인이 주주인 영리법인에 유증·사인증여하면 상속인과 그 직계비속이 지분상당액을 납부. 시행령으로 상속인의 배우자 등까지 확대</td><td>2026.1.1 이후 상속분(확대 시행령은 2026.10.1 시행으로 표시, 대조 필요)</td><td><a href="inherit.html">14장</a></td><td>—</td></tr>
+          <tr><td>다자간매매체결회사(ATS) 거래</td><td>배우자·직계존비속 간 유가증권 양도 시 증여추정 배제 대상에 포함</td><td>2026.1.1 이후 거래분</td><td><a href="gift.html">13장</a></td><td>—</td></tr>
+          <tr><td>특정법인 거래이익·공익법인</td><td>증여자 범위에 지배주주 본인 포함 명확화, 공익법인 사후관리 대상 확대</td><td><b>확인 필요</b></td><td>다루지 않음</td><td>—</td></tr>
+          <tr><td>조정대상지역 확대</td><td>세율은 그대로(<span data-t="acqGift.heavyRate"></span>), 2025.10.16부터 조정대상지역이 넓어져 주택 증여 취득세 중과 대상이 늘어남</td><td>2025.10.16~</td><td><a href="transfer.html">15장</a></td><td><code>acqGift.heavyRate</code>, <code>heavyMinValue</code></td></tr>
+          <tr><td>가족 간 저가 거래 취득세</td><td>배우자·직계존비속 간 대가가 현저히 낮은 거래는 무상(증여) 취득세율 적용 강화</td><td>2026.7.1(정부 제출안 기준, 대조 필요)</td><td><a href="transfer.html">15장</a></td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="compare">
+    <h2>작년 기준이면 얼마였을까</h2>
+    <p>표만 보면 개정이 내 세금을 얼마나 바꾸는지 알기 어렵다. 그래서 같은 사람의 같은 한 해를 두 번 계산해 본다. 한 번은 올해 세법 수치 파일로, 한 번은 이 장이 따로 가진 <b>개정 전 값</b>으로 바꿔서다. 개정 전 값은 세법 수치 파일에 넣지 않고 이 장 안에만 둔 비교용 자료다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>비교에 쓰는 값</th><th>개정 전 값(2025년 귀속 비교용)</th><th>올해 값(<span data-t="label"></span>)</th></tr></thead>
+        <tbody>
+          <tr><td>자녀세액공제 대상 연령</td><td><span data-p="childAgeMin"></span>세 이상</td><td><span data-t="credits.child.ageMin" data-f="num"></span>세 이상</td></tr>
+          <tr><td>카드 기본공제 한도 자녀 가산</td><td>없음</td><td>자녀 1명당 <span data-t="card.limits.0.perChild" data-f="man"></span>(총급여 <span data-t="card.limits.0.upTo"></span> 이하)</td></tr>
+          <tr><td>고향사랑기부 <span data-t="credits.donation.hometownFull" data-f="man"></span> 초과 구간 공제율</td><td><span data-p="hometownMidRate"></span></td><td><span data-t="credits.donation.hometownMidRate"></span>(<span data-t="credits.donation.hometownMid" data-f="man"></span>까지)</td></tr>
+          <tr><td>증권거래세 코스피 / 코스닥</td><td><span data-p="tx.kospi"></span> / <span data-p="tx.kosdaq"></span></td><td><span data-c="kospiNow"></span> / <span data-c="kosdaqNow"></span></td></tr>
+          <tr><td>종신형 연금소득세</td><td><span data-p="lifetimeAnnuity"></span></td><td><span data-t="pension.payoutRates.lifetime"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)">개정 전 값의 근거는 <a href="../SOURCES.md">SOURCES.md</a>의 "2026년 귀속부터 달라진 것" 항목(직장인 1·2·6번, 투자 2·3번: 자녀세액공제 연령, 카드 한도 자녀별 상향, 고향사랑 구간 공제율, 증권거래세, 종신형 연금소득세)이다.</p>
+
+    <p>아래 비교기에서 자녀 수, 카드 사용액, 고향사랑기부액, 국내 주식 매도액을 바꿔 본다. 막대 하나가 개정 하나의 효과다. 오른쪽(초록)으로 뻗으면 올해 세금이 줄어든 것, 왼쪽(빨강)이면 늘어난 것이다.</p>
+
+    <div class="sim" id="sim-cmp">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>작년 기준이면?</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cmp-cv"></canvas></div>
+        <div class="sim-controls">
+          <div class="seg" id="cmp-g"><button data-value="35000000">총급여 3,500만</button><button data-value="50000000" class="on">5,000만</button><button data-value="80000000">8,000만</button></div>
+          <label class="ctrl"><span>기본공제 대상 자녀 <output id="cmp-k-out"></output></span><input type="range" id="cmp-k" min="0" max="4" step="1" value="2"></label>
+          <label class="check"><input type="checkbox" id="cmp-8" checked> 그중 한 명이 올해 8세</label>
+          <label class="ctrl"><span>카드 등 사용액 <output id="cmp-c-out"></output></span><input type="range" id="cmp-c" min="0" max="8000" step="50" value="4000"></label>
+          <label class="ctrl"><span>고향사랑기부 <output id="cmp-h-out"></output></span><input type="range" id="cmp-h" min="0" max="50" step="1" value="20"></label>
+          <label class="ctrl"><span>국내 주식 연간 매도액 <output id="cmp-s-out"></output></span><input type="range" id="cmp-s" min="0" max="50000" step="100" value="5000"></label>
+          <div class="seg" id="cmp-m"><button data-value="kospi" class="on">코스피</button><button data-value="kosdaq">코스닥</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">올해 값으로 낸 세금</span><span class="v" id="cmp-o-n">—</span></div>
+        <div class="stat"><span class="k">개정 전 값이었다면</span><span class="v" id="cmp-o-p">—</span></div>
+        <div class="stat"><span class="k">차이(올해 − 개정 전)</span><span class="v" id="cmp-o-d">—</span></div>
+        <div class="stat"><span class="k">가장 큰 차이</span><span class="v" id="cmp-o-b">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(총급여 5,000만원, 자녀 둘 중 한 명이 8세)에서 막대를 본다. 8세 자녀가 올해 자녀세액공제에서 빠져 그 막대는 빨강이고, 카드 사용액이 많아 한도 자녀 가산은 초록이다. 개정은 한 방향으로만 작동하지 않는다. ② 카드 사용액을 줄인다. 공제가 원래 한도 아래면 한도를 올려 줘도 효과가 없어 초록 막대가 사라진다. ③ 고향사랑기부를 <span data-t="credits.donation.hometownFull" data-f="man"></span> 아래로 내린다. 그 금액까지는 개정 전후가 같아서 막대가 없다. 넘는 몫부터 차이가 생기고, 구간 상한을 넘으면 더 커지지 않는다. ④ 주식 매도액을 늘린다. 거래세 차이는 매도액에 정비례한다. (모델의 가정: 근로소득만 있는 사람, 4대보험은 이 책의 근사식, 카드 사용은 신용카드 70%·체크카드 30%, 8세가 아닌 자녀는 공제 대상 연령 안에 있다고 보았다. 개정 전 계산은 위 표의 값만 바꾸고 나머지는 올해 값을 그대로 썼다. 증권거래세는 연말정산과 별개로 매도할 때 낸 세금이다. 종신형 연금은 비교기에 넣지 않았다.)</div>
+    </div>
+
+    <p>비교기는 세 가지를 보여 준다. 첫째, 같은 개정이 사람에 따라 효과가 0일 수 있다. 카드 한도 가산은 공제액이 원래 한도를 넘는 사람에게만, 고향사랑 구간 상향은 <span data-t="credits.donation.hometownFull" data-f="man"></span> 넘게 기부한 사람에게만 닿는다. 둘째, 개정의 방향이 섞여 있다. 자녀세액공제 연령 상향은 8세 자녀를 둔 집의 세금을 늘리고, 카드 한도 가산은 줄인다. 셋째, 세금이 늘거나 주는 곳이 연말정산만이 아니다. 증권거래세처럼 매도할 때 이미 빠져나간 세금도 개정의 영향을 받는다.</p>
+
+    <div class="callout pro">
+      <strong>간이세액표와 연말정산의 차이</strong>
+      자녀세액공제 대상 연령은 2026년 4월 개정으로 바뀌었지만, 매달 원천징수에 쓰는 근로소득 간이세액표의 자녀 기준은 개정 시점에 따라 다를 수 있다. 이 책이 확인한 시점에 간이세액표 별표에는 '8세 이상' 문구가 남아 있었다. 그러면 매달 떼는 세금은 8세 자녀를 공제 대상으로 보고 계산되고, 연말정산에서는 대상이 아니어서 그만큼 덜 뗀 세금을 2월에 더 낼 수 있다. 급여 담당자라면 올해 8세가 되는 자녀를 둔 직원에게 미리 알려 주는 것이 좋다. 반대로 신용카드 한도의 자녀 가산은 연말정산 때 부양가족 자녀 수로 자동 반영되므로, 부양가족 등록이 빠지지 않았는지가 더 중요하다.
+    </div>
+  </section>
+
+  <section id="childage">
+    <h2>자녀세액공제 연령, 해마다 한 살씩</h2>
+    <p>이번 개정에서 가장 오래 영향을 주는 것은 자녀세액공제 대상 연령이다. 아동수당 지급 연령이 8세 미만에서 13세 미만으로 단계적으로 넓어지는 데 맞춰, 수당을 받는 나이와 세액공제를 받는 나이가 겹치지 않게 공제 시작 연령을 해마다 올린다. 2026년은 <span data-t="credits.child.ageMin" data-f="num"></span>세 이상이고, 법률 부칙에 따라 2030년에는 13세 이상이 된다. 그 사이 해의 연령은 "해마다 1세씩"이라는 설명이 있지만, 이 책은 2027년(10세)·2028년(11세) 연령을 정한 부칙 문언을 원문으로 확인하지 못했다. 그래서 아래 그림에서 그 사이는 점선(확인 필요)으로 그렸다. 부칙에 2017년생에 관한 특례 문구가 있다는 것도 확인했지만 정확한 뜻은 확인 필요다.</p>
+    <p>슬라이더로 자녀의 출생연도를 바꿔 본다. 한 아이가 몇 해 동안 자녀세액공제를 받는지가 개정 전후로 어떻게 달라지는지 보인다.</p>
+
+    <div class="sim" id="sim-age">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>공제받는 해가 몇 해 줄어드나</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="age-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>자녀 출생연도 <output id="age-b-out"></output></span><input type="range" id="age-b" min="2006" max="2025" step="1" value="2019"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">개정 전 규칙으로 공제받는 해</span><span class="v" id="age-o-p">—</span></div>
+        <div class="stat"><span class="k">개정 후(확인된 연령 기준)</span><span class="v" id="age-o-n">—</span></div>
+        <div class="stat"><span class="k">줄어든 해</span><span class="v" id="age-o-d">—</span></div>
+        <div class="stat"><span class="k">첫째 한 명 기준 공제액 차이</span><span class="v" id="age-o-w">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 2018년생을 고른다. 2026년에 8세라 올해는 공제를 받지 못하고, 다음 해들도 대상 연령이 함께 올라가 몇 해를 잃는다. ② 2022년생 이후를 고른다. 2030년 이후에 공제 연령에 닿으므로 13세부터 받는다. 개정 전보다 줄어든 해 수가 가장 크다. ③ 2012년생 이전을 고른다. 이미 대상 연령을 넘어 개정의 영향이 없다. (모델의 가정: 나이는 그 해 연도 − 출생연도, 공제 대상 상한은 기본공제 자녀 나이 <span data-t="personal.childAgeMax" data-f="num"></span>세. 2027~2029년의 연령은 "해마다 1세씩" 설명에 따른 추정이며 확인 필요. 2017년생 특례는 반영하지 않았다. 공제액은 자녀 한 명일 때 금액(<span data-t="credits.child.one" data-f="man"></span>)으로 계산했고, 자녀가 둘 이상이면 금액이 달라진다. 2030년 이후의 법 개정은 알 수 없다.)</div>
+    </div>
+
+    <p>막대 둘의 길이 차이가 개정으로 줄어든 공제 연수다. 대신 그 몇 해 동안에는 아동수당이 이어진다. 세금만 보면 손해지만 가계 전체로 보면 현금 지원과 세액공제의 자리를 바꾼 것에 가깝다. 아동수당 금액과 지급 연령의 세부는 이 책의 범위 밖이라 계산에 넣지 않았다.</p>
+  </section>
+
+  <section id="timeline">
+    <h2>개정의 시간표</h2>
+    <p>개정은 한 번에 끝나지 않는다. <span data-t="year" data-f="raw"></span>년 귀속 세법만 봐도 2025년 12월 국회 통과로 대부분이 정해졌고, 2026년 1월에 시행됐지만, 3월에 간이세액표가 바뀌고 4월에 자녀세액공제 연령이 다시 바뀌었다. 그리고 8월에는 다음 해를 위한 개정안이 나왔다. 아래 시간 축의 손잡이를 끌어 날짜를 옮기면, 그 날짜에 무엇이 확정됐고 무엇이 아직 추진 중인지 보인다. 세로 점선은 이 책의 세법 수치를 확인한 날이다.</p>
+
+    <div class="sim" id="sim-tl">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>그날까지 확정된 것</h3></div>
+      <div class="sim-body">
+        <div class="sim-view"><canvas id="tl-cv"></canvas><span class="hint">아래 손잡이를 끌어 날짜를 옮긴다</span></div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">고른 날짜</span><span class="v" id="tl-o-d">—</span></div>
+        <div class="stat"><span class="k">가장 최근 단계</span><span class="v" id="tl-o-e">—</span></div>
+        <div class="stat"><span class="k">그날의 2026년 귀속 세법</span><span class="v" id="tl-o-s">—</span></div>
+        <div class="stat"><span class="k">다음 해 개정안</span><span class="v" id="tl-o-n">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 2026년 1월에 둔다. 2026년 귀속 세법의 큰 틀은 정해졌지만 자녀세액공제 연령은 아직 개정 전이다. ② 4월 하순으로 옮긴다. 연령 개정이 공포되어 같은 해 과세기간 전체에 적용된다. 한 해 중간의 개정이 그 해 1월부터의 소득에 소급되는 경우다. ③ 이 책의 확인일(점선) 뒤로 옮긴다. 국회 처리 결과는 아직 알 수 없어 점선 칸으로 남는다. (날짜는 SOURCES.md의 공포·발표일 기준이며, 국회 처리 일정은 예정이다. 정부안이 국회에서 바뀔 수 있다.)</div>
+    </div>
+  </section>
+
+  <section id="unchanged">
+    <h2>바뀌지 않은 것</h2>
+    <p>개정 소식은 많아도 세금의 뼈대는 대부분 그대로다. 다음은 2026년에 바뀌지 않은 값이다. 바뀔 것이라는 보도나 의원안이 있었지만 통과되지 않은 것도 있다.</p>
+    <ul>
+      <li><b>종합소득세 기본세율</b>: <span data-t="income.rates.0.1"></span>~<span data-t="income.rates.7.1"></span>의 8단계와 구간(<a href="overview.html">1장</a>). 2026 개정안에도 세율 조정은 없다.</li>
+      <li><b>근로소득공제와 근로소득세액공제</b>: 공제율과 한도 그대로(<a href="taxbase.html">3장</a>, <a href="credit.html">5장</a>).</li>
+      <li><b>기본공제</b>: 1인당 <span data-t="personal.basic" data-f="man"></span>. 상향 의원안은 반영되지 않았다.</li>
+      <li><b>연금계좌 세액공제</b>: 연금저축 <span data-t="pension.savingLimit" data-f="man"></span>, IRP 합산 <span data-t="pension.totalLimit" data-f="man"></span>, 공제율 <span data-t="pension.rateLow"></span>·<span data-t="pension.rateHigh"></span>(<a href="pension.html">10장</a>).</li>
+      <li><b>의료비·보험료 세액공제와 표준세액공제</b>: 의료비 문턱 총급여의 <span data-t="credits.medical.threshold"></span>, 표준세액공제 <span data-t="credits.standardWage" data-f="man"></span>.</li>
+      <li><b>금융소득종합과세 기준</b>: 연 <span data-t="financial.threshold"></span>(<a href="interest.html">8장</a>).</li>
+      <li><b>ISA 비과세 한도</b>: 일반형 <span data-t="isa.freeGeneral" data-f="man"></span>, 서민형 <span data-t="isa.freeLow" data-f="man"></span>. 확대 정부안은 2024년 말 국회에서 무산됐다(<a href="isa.html">9장</a>).</li>
+      <li><b>해외 주식 양도소득세</b>: 기본공제 <span data-t="stock.overseas.deduction" data-f="man"></span>, 세율 <span data-t="stock.overseas.rate"></span>(<a href="stock.html">11장</a>).</li>
+      <li><b>대주주 기준</b>: 종목당 <span data-t="stock.domestic.majorThreshold"></span> 유지. 2025년 하반기에 낮추려던 정부안은 철회됐다.</li>
+      <li><b>가상자산 과세 시작 연도</b>: <span data-t="crypto.startYear" data-f="raw"></span>년 그대로(2024년 12월에 정해짐, <a href="crypto.html">12장</a>).</li>
+      <li><b>상속세·증여세</b>: 세율 <span data-t="transfer.rates.0.1"></span>~<span data-t="transfer.rates.4.1"></span>, 일괄공제 <span data-t="inherit.lump"></span>, 자녀공제 <span data-t="inherit.child"></span>, 배우자공제 <span data-t="inherit.spouse.min"></span>~<span data-t="inherit.spouse.max"></span>, 증여재산공제(배우자 <span data-t="gift.deduction.spouse"></span>, 성년 자녀 <span data-t="gift.deduction.parentToAdult"></span>), 혼인·출산 공제 <span data-t="gift.marriageBirth"></span>(<a href="gift.html">13장</a>, <a href="inherit.html">14장</a>). 유산취득세 전환과 상속공제 상향은 국회를 통과하지 않았다.</li>
+    </ul>
+  </section>
+
+  <section id="proposed">
+    <h2>추진 중인 개정안(확정 전)</h2>
+    <p>정부는 2026년 8월 3일 세법개정안을 발표했고, 9월 1일 국무회의를 거쳐 국회에 제출했다. 이 장을 쓰는 시점에 국회 심사 중이며, 국회에서 내용과 시행일이 바뀔 수 있다. 아래 값은 모두 정부안이고, 이 책의 세법 수치 파일과 계산에는 넣지 않았다. '현행' 칸만 수치 파일의 값이다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>분야·항목</th><th>현행(이 책의 계산)</th><th>정부안(확정 전)</th><th>적용 예정</th></tr></thead>
+        <tbody>
+          <tr><td>직장인 · 부양가족 소득요건</td><td>소득금액 <span data-t="personal.depIncomeMax" data-f="man"></span> 이하(근로소득만 있으면 총급여 <span data-t="personal.depWageGrossMax" data-f="man"></span>)</td><td>300만원 이하(총급여 750만원)</td><td>2027년 과세기간</td></tr>
+          <tr><td>직장인 · 월세 세액공제</td><td>한도 <span data-t="credits.rent.limit" data-f="man"></span></td><td>한도 1,200만원, 청년 우대 공제율(3년 한시, 요건은 보도마다 다름)</td><td>2027.1.1 이후 지급분</td></tr>
+          <tr><td>직장인 · 카드 대중교통</td><td>공제율 <span data-t="card.rates.transit"></span></td><td>우대 폐지, 일반 공제율 적용</td><td>2027년 과세기간</td></tr>
+          <tr><td>직장인 · 카드 도서·공연 등</td><td>총급여 <span data-t="card.cultureGrossMax"></span> 이하만</td><td>총급여 요건 폐지, 추가공제 한도 축소(수치 확인 필요)</td><td>2027년~</td></tr>
+          <tr><td>직장인 · 혼인·출산 세액공제</td><td>혼인 <span data-t="credits.marriage" data-f="man"></span>(<span data-t="credits.marriageUntil" data-f="raw"></span>년까지), 출산 첫째 <span data-t="credits.birth.0" data-f="man"></span></td><td>폐지하고 재정지원(현금)으로 전환</td><td>시기 확인 필요</td></tr>
+          <tr><td>직장인 · 인적용역 원천징수</td><td><span data-t="business.withholding"></span>(지방세 포함 <span data-c="bizAll"></span>)</td><td>2%(2.2%)</td><td>2027.1.1 이후 지급분</td></tr>
+          <tr><td>직장인 · 청약저축 소득공제</td><td>일몰 있음</td><td>상시화</td><td>2027년~</td></tr>
+          <tr><td>투자 · 생산적 금융 ISA</td><td>없음</td><td>국내 투자형 ISA 신설(이자·배당 비과세, 납입 한도 별도)</td><td>2027.1.1 이후 가입분</td></tr>
+          <tr><td>투자 · 일반 ISA</td><td>비과세 <span data-t="isa.freeGeneral" data-f="man"></span>/<span data-t="isa.freeLow" data-f="man"></span></td><td>현행 유지(8월 발표안의 기간 제한·이월 폐지는 9월 정부안에서 철회)</td><td>—</td></tr>
+          <tr><td>투자 · 청년 IRP</td><td>공제율 <span data-t="pension.rateLow"></span>/<span data-t="pension.rateHigh"></span></td><td>15~34세 15%(해석 확인 필요)</td><td>2027년 납입분</td></tr>
+          <tr><td>투자 · 가상자산</td><td><span data-t="crypto.startYear" data-f="raw"></span>년 시행</td><td>추가 유예 없음(국회 유예 의원안 보도 있음)</td><td>—</td></tr>
+          <tr><td>상속 · 가업상속공제</td><td>현행 유지</td><td>경영기간 요건·한도·사후관리 전면 재설계, 업종 한정</td><td>2027.7.1 이후 상속개시분</td></tr>
+          <tr><td>상속 · 제3자 사업승계</td><td>없음</td><td>제3자에게 넘기는 중소·중견기업 주식 양도세 감면 신설</td><td>확인 필요</td></tr>
+          <tr><td>상속·증여 · 일반 세율과 공제</td><td>현행 유지</td><td>포함되지 않은 것으로 보임(확인 필요)</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout check">
+      <strong>2026년 귀속 연말정산 전에 확인할 개정 항목</strong>
+      <ul>
+        <li><b>자녀 나이</b>: 올해 8세 자녀는 자녀세액공제 대상이 아니다. 매달 원천징수가 개정 전 기준으로 계산됐다면 2월에 추가 납부가 생길 수 있다.</li>
+        <li><b>카드 한도 자녀 가산</b>: 부양가족 자녀가 등록돼 있어야 반영된다. 맞벌이라면 자녀를 기본공제로 올린 쪽에서 가산된다.</li>
+        <li><b>고향사랑기부 영수증</b>: <span data-t="credits.donation.hometownFull" data-f="man"></span> 넘게 기부했다면 구간별 공제율이 바뀐 것을 간소화 자료로 확인한다.</li>
+        <li><b>출산·보육수당</b>: 회사가 자녀 수만큼 비과세했는지 원천징수영수증으로 확인한다.</li>
+        <li><b>혼인세액공제</b>: <span data-t="credits.marriageUntil" data-f="raw"></span>년 혼인신고분이 마지막이다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 연말정산과 개정</h2>
+    <p>다온의 연말정산(<a href="yearend.html">6장</a>)에서 이번 개정이 바꾼 것이 있는지 비교기와 같은 방법으로 계산해 본다. 6장의 입력을 그대로 두고 개정 전 값으로만 바꿔 다시 계산한다.</p>
+
+    <div class="slip">
+      <div class="row"><span>올해 값으로 계산한 결정세액 + 지방소득세</span><span id="cs-now"></span></div>
+      <div class="row"><span>개정 전 값으로 계산했다면</span><span id="cs-prev"></span></div>
+      <div class="row total"><span>차이</span><span id="cs-diff"></span></div>
+    </div>
+
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · 2027년 2월</span></div>
+      <h4>올해 개정은 다온의 연말정산을 비켜 갔다</h4>
+      <p><b>숫자.</b> 이 책의 모델로 다온의 연말정산을 올해 값과 개정 전 값으로 두 번 계산하면 각각 <b id="note-now"></b>, <b id="note-prev"></b>이고 차이는 <b id="note-diff"></b>이다.</p>
+      <p><b>항목별로.</b> 자녀세액공제 연령과 카드 한도 자녀 가산은 다온에게 자녀가 없어 해당이 없다. 고향사랑기부는 10만원이라 그대로 100/110 구간(<span data-t="credits.donation.hometownFull" data-f="man"></span>까지) 안이어서, 그 위 구간 공제율이 올랐어도 공제액은 같다(<b id="note-ht"></b>). 수영장·체력단련장 이용료는 쓰지 않았다. 4대보험 보험료율 인상은 매달 실수령액을 조금 줄였지만 연말정산의 결정세액에 주는 영향은 작다(<a href="payslip.html">2장</a>). 국내 주식은 소액으로 몇 번 사고팔아 증권거래세가 조금 올랐을 뿐이다.</p>
+      <p><b>내년을 위해 적어 둔 것.</b> 2026 세법개정안이 통과되면 다온이 쓰는 대중교통 카드 공제율이 바뀌고(<span data-t="card.rates.transit"></span>의 우대 폐지안), 부업 외주의 원천징수율이 낮아질 수 있다. 혼인신고를 2027년 봄에 할 계획이라 혼인세액공제(<span data-t="credits.marriageUntil" data-f="raw"></span>년 신고분까지)는 받지 못한다. 모두 확정 전이거나 다온의 계획에 달린 일이라, 내년 이 장을 다시 읽고 확인하기로 했다.</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>올해 개정 가운데 다온에게 닿은 것은 거의 없다. 개정의 효과는 사람마다 0일 수 있고, 방향도 섞여 있다.</div><div><b>아직 남은 문제</b>2027년 혼인 뒤의 공제(배우자 기본공제, 월세 공제의 부부 합산)와 국회를 통과할 개정안. 확인할 것: 12월 국회 처리 결과.</div><div><b>다음 장</b>17장: 이 책에 나온 세금 용어를 한곳에서 찾아본다.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>이 책은 확정된 개정만 세법 수치 파일에 넣어 계산하고, 국회를 통과하지 않은 개정안은 이 장의 '추진 중' 표에만 적는다.</li>
+      <li>2026년 귀속 직장인 개정의 중심은 자녀(세액공제 연령 <span data-t="credits.child.ageMin" data-f="num"></span>세 이상, 카드 한도 자녀 가산, 출산·보육수당 비과세 자녀별)와 고향사랑기부 <span data-t="credits.donation.hometownFull" data-f="man"></span> 초과 구간(<span data-t="credits.donation.hometownMidRate"></span>)이다.</li>
+      <li>투자 쪽은 고배당기업 배당소득 분리과세 신설, 증권거래세 인상, 종신형 연금소득세 인하, 국내시장 복귀계좌(RIA) 한시 공제가 있다.</li>
+      <li>상속·증여는 세율과 공제가 그대로이고, 영리법인 유증·ATS 거래 같은 회피 방지·정비 규정이 바뀌었다.</li>
+      <li>같은 개정이 사람에 따라 효과가 0일 수 있고, 한 가구 안에서도 늘리는 개정과 줄이는 개정이 섞인다. 같은 입력을 개정 전후로 계산해 보면 어디서 차이가 나는지 보인다.</li>
+      <li>한 해 중간의 개정(2026년 4월 자녀세액공제 연령)도 그 해 과세기간 전체에 적용될 수 있다. 2026 세법개정안은 국회 심사 중인 확정 전 안이다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>2026년에 8세인 자녀 한 명만 둔 근로자다. 2026년 귀속 연말정산의 자녀세액공제는?</p>
+        <div class="opts">
+          <button class="opt">8세 이상이므로 자녀 한 명 금액을 공제받는다</button>
+          <button class="opt" data-correct>2026년 과세기간부터 대상 연령이 올라 이 자녀는 공제 대상이 아니다</button>
+          <button class="opt">4월 개정 전 소득분만 공제받는다</button>
+          <button class="opt">간이세액표 기준을 따르므로 공제받는다</button>
+        </div>
+        <div class="quiz-exp">2026년 4월 개정(법률 제21548호)으로 자녀세액공제 대상이 <span data-t="credits.child.ageMin" data-f="num"></span>세 이상으로 바뀌었고, 2026년 과세기간분부터 적용된다. 한 해 중간의 개정이지만 그 해 전체에 적용되며 월 단위로 나누지 않는다. 간이세액표가 개정 전 기준으로 원천징수했다면 연말정산에서 차이가 정산된다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>2026년에 고향사랑기부금을 <span data-t="credits.donation.hometownFull" data-f="man"></span>만 낸 사람의 기부금 세액공제는 개정 전과 비교해 어떻게 되는가?</p>
+        <div class="opts">
+          <button class="opt">그 위 구간 공제율이 올랐으므로 공제액이 늘었다</button>
+          <button class="opt">공제율이 내려 공제액이 줄었다</button>
+          <button class="opt">고향사랑기부금은 2026년부터 공제가 없다</button>
+          <button class="opt" data-correct>이 금액까지는 개정 전후 모두 100/110이라 공제액이 같다</button>
+        </div>
+        <div class="quiz-exp">바뀐 것은 <span data-t="credits.donation.hometownFull" data-f="man"></span> 초과~<span data-t="credits.donation.hometownMid" data-f="man"></span> 구간의 공제율(<span data-p="hometownMidRate"></span> → <span data-t="credits.donation.hometownMidRate"></span>)이다. 그 아래는 100/110(지방세 포함 사실상 전액)으로 그대로라, 10만원만 낸 다온 같은 사람은 공제액이 같다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>2026년 8월 정부가 발표한 세법개정안의 월세 세액공제 한도 상향에 대해 이 책이 하는 일로 맞는 것은?</p>
+        <div class="opts">
+          <button class="opt" data-correct>국회를 통과하지 않은 확정 전 안이므로 '추진 중' 표에만 적고 세법 수치 파일과 계산에는 넣지 않는다</button>
+          <button class="opt">발표된 날부터 세법 수치 파일의 한도를 바꾼다</button>
+          <button class="opt">2026년 귀속 연말정산 계산에 미리 반영한다</button>
+          <button class="opt">정부안은 반드시 통과되므로 본문에 확정된 값으로 쓴다</button>
+        </div>
+        <div class="quiz-exp">정부안은 국회 심사에서 바뀔 수 있다. 이 책은 확정된 법만 세법 수치 파일(<code>credits.rent.limit</code> = <span data-t="credits.rent.limit" data-f="man"></span>)에 두고 계산하며, 개정안은 적용 예정 시기와 함께 "추진 중"으로만 적는다. 통과되면 그 해 파일의 값을 고치고 이 장의 '바뀐 것' 표로 옮긴다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>코스피 주식을 1억원어치 판 사람의 증권거래세(농어촌특별세 포함)는 개정 전과 비교해 어떻게 바뀌었나?</p>
+        <div class="opts">
+          <button class="opt">양도소득세로 바뀌어 차익에 과세된다</button>
+          <button class="opt">변화 없다</button>
+          <button class="opt" data-correct>개정 전 <span data-p="tx.kospi" data-k="1e8"></span>에서 올해 <span data-c="kospi1e8"></span>로 늘었다</button>
+          <button class="opt">거래세가 폐지되어 0원이 됐다</button>
+        </div>
+        <div class="quiz-exp">코스피 증권거래세는 개정 전 0%(농어촌특별세 0.15%만)에서 2026년 1월 1일 양도분부터 <span data-t="stock.domestic.transactionTax.kospi.tax"></span>(농어촌특별세 <span data-t="stock.domestic.transactionTax.kospi.rural"></span> 별도)로 올랐다. 매도 금액에 매기므로 1억원을 팔면 합계 세율 <span data-c="kospiNow"></span>만큼 낸다. 소액주주의 국내 상장주식 양도차익은 여전히 양도소득세 대상이 아니다.</div>
+      </div>
+    </div>
+
+    <div class="callout deep">
+      <strong>이 장은 해마다 다시 쓴다</strong>
+      새 귀속 연도가 오면 이 장을 다음 순서로 고친다. ① 새 세법 수치 파일(<code>data/tax-YYYY.json</code>)을 만든 뒤, 이 장 첫머리의 기준(<code>label</code>, <code>lawVersion</code>)은 파일에서 자동으로 바뀌는지 확인한다. ② '달라진 것' 세 표를 그 해의 개정으로 새로 쓴다. 지난해 '추진 중' 표에서 통과된 항목은 이리로 옮기고, 무산된 항목은 '바뀌지 않은 것'에 한 줄로 남긴다. ③ 스크립트 맨 위의 <code>PREV</code>(개정 전 비교값)를 직전 연도의 값으로 바꾸고, 비교기가 다루는 개정 항목(자녀·카드·기부·거래세)을 그 해의 주요 개정으로 바꾼다. 비교값은 세법 수치 파일에 넣지 않고 이 장 안에만 둔다. ④ 자녀세액공제 연령표(<code>AGE_PLAN</code>)와 개정 시간표(<code>EVENTS</code>)를 새 연도로 고친다. 원문으로 확인하지 못한 값은 점선과 "확인 필요"로 둔다. ⑤ '추진 중' 표를 그 해 정부안으로 새로 쓴다. ⑥ 다온의 노트는 그 해 다온의 연말정산 입력으로 다시 계산되는지 확인한다. ⑦ SOURCES.md의 "달라진 것" 항목과 이 장의 표가 서로 맞는지 대조한다.
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const won = TB.won, pct = TX.fmt.pct;
+
+  /* ----------------------------------------------------------------------
+     개정 전 비교값(2025년 귀속 비교용). 세법 수치 파일이 아니라 이 장 고유의 자료다.
+     근거: SOURCES.md "2026년 귀속부터 달라진 것"(직장인 1·2·6, 투자 2·3). 해마다 직전 연도 값으로 바꾼다.
+     ---------------------------------------------------------------------- */
+  const PREV = {
+    label: "2025년 귀속(개정 전 값)",
+    childAgeMin: 8,                 // 자녀세액공제 대상: 8세 이상
+    cardChildAdd: false,            // 카드 기본공제 한도 자녀 가산 없음
+    hometownMidRate: 0.15,          // 고향사랑기부 10만원 초과분 15%
+    tx: { kospi: 0.0015, kosdaq: 0.0015, konex: 0.001 },  // 증권거래세+농특세 합계(코스피 0%+0.15%, 코스닥 0.15%)
+    lifetimeAnnuity: 0.04,          // 종신형 사적연금 연금소득세
+  };
+  // 자녀세액공제 대상 연령표(법률 제21548호 부칙). 2026년은 세법 수치 파일 값, 2030년 13세는 SOURCES.md, 그 사이는 확인 필요.
+  const AGE_PLAN = [
+    { y: 2026, age: D.credits.child.ageMin, ok: true },
+    { y: 2027, age: D.credits.child.ageMin + 1, ok: false },
+    { y: 2028, age: D.credits.child.ageMin + 2, ok: false },
+    { y: 2029, age: D.credits.child.ageMin + 3, ok: false },
+    { y: 2030, age: 13, ok: true },
+  ];
+  const ageMinIn = (y) => { if (y < 2026) return PREV.childAgeMin; const r = AGE_PLAN.find((a) => a.y === y); return r ? r.age : AGE_PLAN[AGE_PLAN.length - 1].age; };
+  // 개정 시간표(SOURCES.md 기준 공포·발표일)
+  const EVENTS = [
+    { d: "2025-12-02", t: "국회 본회의 통과(2025 세법개정)", k: "law" },
+    { d: "2025-12-23", t: "소득세법·조특법·상증법 공포", k: "law" },
+    { d: "2025-12-31", t: "증권거래세법 시행령 개정", k: "law" },
+    { d: "2026-01-01", t: "2026년 귀속 시행(대부분)", k: "law" },
+    { d: "2026-03-01", t: "간이세액표 개정분 원천징수", k: "law" },
+    { d: "2026-04-21", t: "자녀세액공제 연령 개정 공포", k: "law" },
+    { d: "2026-08-03", t: "2026 세법개정안 발표", k: "plan" },
+    { d: "2026-09-01", t: "국무회의 확정·국회 제출", k: "plan" },
+    { d: "2026-12-15", t: "국회 처리(예정, 미정)", k: "plan" },
+    { d: "2027-01-01", t: "개정안 적용 예정", k: "plan" },
+    { d: "2027-02-01", t: "2026년 귀속 연말정산", k: "law" },
+    { d: "2027-05-01", t: "종합소득세·해외주식 신고", k: "law" },
+  ];
+
+  /* 비교값·계산값 채우기 */
+  const T2 = D.stock.domestic.transactionTax;
+  const nowTx = (m) => T2[m].tax + (T2[m].rural || 0);
+  const C = { kospiNow: pct(nowTx("kospi")), kosdaqNow: pct(nowTx("kosdaq")), kospi1e8: won(1e8 * nowTx("kospi")), bizAll: pct(D.business.withholding * (1 + D.income.localRate)) };
+  document.querySelectorAll("[data-c]").forEach((el) => { el.textContent = C[el.getAttribute("data-c")] || "—"; });
+  document.querySelectorAll("[data-p]").forEach((el) => {
+    const v = TX.v(el.getAttribute("data-p"), PREV), k = el.getAttribute("data-k");
+    el.textContent = v == null ? "—" : k ? won(v * Number(k)) : (typeof v === "number" && v < 1 ? pct(v) : String(v));
+    el.classList.add("tval"); el.title = PREV.label + " · 이 장의 비교용 값";
+  });
+
+  /* 개정 전 값으로 엔진을 잠시 돌린다(끝나면 반드시 되돌린다) */
+  function withPrev(fn, only) {
+    const L = D.card.limits.map((l) => [l.perChild, l.childMax]), H = D.credits.donation.hometownMidRate;
+    try {
+      if (!only || only === "card") D.card.limits.forEach((l) => { l.perChild = 0; l.childMax = 0; });
+      if (!only || only === "hometown") D.credits.donation.hometownMidRate = PREV.hometownMidRate;
+      return fn();
+    } finally {
+      D.card.limits.forEach((l, i) => { l.perChild = L[i][0]; l.childMax = L[i][1]; });
+      D.credits.donation.hometownMidRate = H;
+    }
+  }
+
+  /* ---------------------------------------------------------- 1. 작년 기준이면? */
+  (function () {
+    const gG = TB.seg("cmp-g", draw);
+    const kG = TB.range("cmp-k", (v) => v + "명", draw);
+    const e8 = document.getElementById("cmp-8"); e8.addEventListener("change", draw);
+    const cG = TB.range("cmp-c", (v) => won(v * 1e4), draw);
+    const hG = TB.range("cmp-h", (v) => won(v * 1e4), draw);
+    const sG = TB.range("cmp-s", (v) => won(v * 1e4), draw);
+    const mG = TB.seg("cmp-m", draw);
+    function input(prevKids) {
+      const g = Number(gG()), n = kG(), eight = e8.checked && n > 0, s = TX.social(g / 12);
+      const card = cG() * 1e4;
+      return {
+        gross: g, people: { children: n },
+        ins: { pension: s.pension * 12, health: (s.health + s.care) * 12, employ: s.employ * 12 },
+        card: { credit: card * 0.7, debit: card * 0.3 },
+        kids8: n - (eight && !prevKids ? 1 : 0),
+        special: { donation: { hometown: hG() * 1e4 } },
+      };
+    }
+    function calc() {
+      const now = TX.yearEnd(input(false)).total;
+      const sell = sG() * 1e4, m = mG();
+      const txNow = TX.domesticStock({ sell, market: m }).txTax, txPrev = sell * PREV.tx[m];
+      const items = [
+        { k: "자녀세액공제 연령", d: now - TX.yearEnd(input(true)).total },
+        { k: "카드 한도 자녀 가산", d: now - withPrev(() => TX.yearEnd(input(false)).total, "card") },
+        { k: "고향사랑 " + TB.wonAxis(D.credits.donation.hometownFull) + " 초과", d: now - withPrev(() => TX.yearEnd(input(false)).total, "hometown") },
+        { k: "증권거래세", d: txNow - txPrev },
+      ];
+      const prevAll = withPrev(() => TX.yearEnd(input(true)).total);
+      return { now: now + txNow, prev: prevAll + txPrev, items };
+    }
+    const cv = TB.canvas("#cmp-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc();
+      const rows = c.items.concat([{ k: "합계", d: c.now - c.prev, tot: true }]);
+      const narrow = w < 480, lx = narrow ? 8 : 150;
+      const mx = Math.max(1e4, ...rows.map((r) => Math.abs(r.d))) * 1.45;
+      const top = 30, rowH = (h - top - 16) / rows.length;
+      const cx = narrow ? w / 2 : lx + (w - lx - 16) / 2, half = narrow ? w / 2 - 16 : (w - lx - 16) / 2;
+      T(ctx, "← 올해 세금이 늘었다", cx - 6, 16, { size: 11, color: P.bad, align: "right" });
+      T(ctx, "줄었다 →", cx + 6, 16, { size: 11, color: P.ok });
+      ctx.strokeStyle = P.axis; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(cx, top - 4); ctx.lineTo(cx, h - 10); ctx.stroke();
+      rows.forEach((r, i) => {
+        const y = top + i * rowH, bh = Math.min(22, rowH * 0.42), by = narrow ? y + rowH * 0.48 : y + (rowH - bh) / 2;
+        const len = Math.abs(r.d) / mx * half, save = -r.d;  // 줄어든 세금 = 양수
+        if (narrow) T(ctx, r.k, 8, y + rowH * 0.36, { size: 11, color: r.tot ? P.text : P.dim, weight: r.tot ? 700 : 400 });
+        else T(ctx, r.k, lx - 10, by + bh / 2, { size: 12, color: r.tot ? P.text : P.dim, align: "right", base: "middle", weight: r.tot ? 700 : 400 });
+        if (Math.abs(r.d) < 0.5) { T(ctx, "차이 없음", cx + 8, by + bh / 2, { size: 11, color: P.faint, base: "middle" }); return; }
+        ctx.fillStyle = save > 0 ? P.ok : P.bad; ctx.globalAlpha = r.tot ? 0.95 : 0.7;
+        ctx.fillRect(save > 0 ? cx : cx - len, by, len, bh); ctx.globalAlpha = 1;
+        const s = (save > 0 ? "−" : "+") + won(Math.abs(r.d));
+        const right = save > 0;
+        T(ctx, s, right ? Math.min(cx + len + 6, w - 70) : Math.max(cx - len - 6, 70), by + bh / 2, { size: 11, mono: true, color: P.text, align: right ? "left" : "right", base: "middle", weight: 700 });
+      });
+    }, { get height() { return pw("cmp-cv") < 480 ? 330 : 320; } });
+    function draw() {
+      const c = calc();
+      TB.stat("cmp-o-n", won(c.now));
+      TB.stat("cmp-o-p", won(c.prev));
+      const d = c.now - c.prev;
+      TB.stat("cmp-o-d", Math.abs(d) < 0.5 ? "0원" : d > 0 ? '<span class="won minus">+' + won(d) + "</span>" : '<span class="won plus">−' + won(-d) + "</span>");
+      const big = c.items.slice().sort((a, b) => Math.abs(b.d) - Math.abs(a.d))[0];
+      TB.stat("cmp-o-b", Math.abs(big.d) < 0.5 ? "없음" : big.k);
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 2. 자녀 연령 */
+  (function () {
+    const bG = TB.range("age-b", (v) => v + "년생", draw);
+    const Y0 = 2024, Y1 = 2046, MAXAGE = D.personal.childAgeMax;
+    function years(b) {
+      const prev = [], now = [];
+      for (let y = Y0; y <= Y1; y++) {
+        const a = y - b;
+        if (a >= PREV.childAgeMin && a <= MAXAGE) prev.push(y);
+        if (y < 2026 ? a >= PREV.childAgeMin && a <= MAXAGE : a >= ageMinIn(y) && a <= MAXAGE) now.push(y);
+      }
+      return { prev, now };
+    }
+    const cv = TB.canvas("#age-cv", (ctx, w, h) => {
+      const P = TB.palette(), b = bG(), r = years(b);
+      const bx = 52, bw = w - bx - 14, X = (y) => bx + (y - Y0) / (Y1 - Y0 + 1) * bw, cw = bw / (Y1 - Y0 + 1);
+      // 위: 연도별 최소 연령(계단)
+      const top = 18, th = Math.max(80, h * 0.42), A0 = 6, A1 = 15, YA = (a) => top + th - (a - A0) / (A1 - A0) * th;
+      ctx.strokeStyle = P.grid; ctx.lineWidth = 1;
+      [8, 10, 13].forEach((a) => { ctx.beginPath(); ctx.moveTo(bx, YA(a)); ctx.lineTo(bx + bw, YA(a)); ctx.stroke(); T(ctx, a + "세", bx - 6, YA(a), { size: 11, color: P.dim, align: "right", base: "middle", mono: true }); });
+      ctx.strokeStyle = P.faint; ctx.setLineDash([5, 4]); ctx.beginPath(); ctx.moveTo(X(Y0), YA(PREV.childAgeMin)); ctx.lineTo(X(Y1 + 1), YA(PREV.childAgeMin)); ctx.stroke(); ctx.setLineDash([]);
+      T(ctx, "개정 전 " + PREV.childAgeMin + "세", X(Y1 + 1) - 4, YA(PREV.childAgeMin) + 13, { size: 11, color: P.dim, align: "right" });
+      for (let y = Y0; y <= Y1; y++) {
+        const a = ageMinIn(y), plan = AGE_PLAN.find((p) => p.y === y), ok = y < 2026 || !plan || plan.ok;
+        ctx.strokeStyle = P.accent; ctx.lineWidth = 2.6; ctx.setLineDash(ok ? [] : [4, 3]);
+        ctx.beginPath(); ctx.moveTo(X(y), YA(a)); ctx.lineTo(X(y + 1), YA(a)); ctx.stroke(); ctx.setLineDash([]);
+        if (y >= 2026 && y <= 2030) T(ctx, a + "", X(y) + cw / 2, YA(a) - 6, { size: 10, color: ok ? P.accent : P.warn, align: "center", mono: true, weight: 700 });
+      }
+      T(ctx, "공제 시작 연령(점선 구간은 확인 필요)", bx, top + 2, { size: 11, color: P.dim });
+      // 아래: 이 아이가 공제받는 해
+      const ry = top + th + 34, rh = 18;
+      [["개정 전 규칙", r.prev, P.faint], ["개정 후", r.now, P.ok]].forEach(([name, list, col], i) => {
+        const y = ry + i * (rh + 22);
+        T(ctx, name, bx, y - 5, { size: 11, color: P.dim, weight: 700 });
+        list.forEach((yy) => { const plan = AGE_PLAN.find((p) => p.y === yy); ctx.fillStyle = col; ctx.globalAlpha = i === 1 && plan && !plan.ok ? 0.45 : 0.85; ctx.fillRect(X(yy) + 1, y, cw - 2, rh); ctx.globalAlpha = 1; });
+      });
+      const ty = ry + 2 * (rh + 22) + 4;
+      [Y0, 2026, 2030, 2035, 2040, 2045].forEach((y) => { T(ctx, String(y), X(y) + cw / 2, ty, { size: 10, color: P.dim, align: "center", mono: true }); });
+      if (b >= Y0) { ctx.beginPath(); ctx.arc(X(b) + cw / 2, ty + 12, 4, 0, TAU); ctx.fillStyle = P.accent2; ctx.fill(); }
+    }, { get height() { return pw("age-cv") < 480 ? 290 : 300; } });
+    function draw() {
+      const r = years(bG()), lost = r.prev.length - r.now.length;
+      TB.stat("age-o-p", r.prev.length + "해");
+      TB.stat("age-o-n", r.now.length + "해");
+      TB.stat("age-o-d", lost > 0 ? '<span class="minus">' + lost + "해</span>" : "0해");
+      TB.stat("age-o-w", lost > 0 ? '<span class="won minus">약 ' + won(lost * D.credits.child.one) + "</span>" : "차이 없음");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 개정 시간표 */
+  (function () {
+    const ms = (s) => Date.parse(s + "T00:00:00Z");
+    const T0 = ms("2025-11-01"), T1 = ms("2027-06-30"), AS = ms(D.asOf || "2026-10-09");
+    let cur = ms("2026-05-01"), L = null;
+    const fmtD = (t) => { const d = new Date(t); return d.getUTCFullYear() + "." + (d.getUTCMonth() + 1) + "." + d.getUTCDate(); };
+    const cv = TB.canvas("#tl-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const bx = 20, bw = w - 40, X = (t) => bx + (t - T0) / (T1 - T0) * bw, ay = h - 40;
+      L = { X, bx, bw };
+      ctx.strokeStyle = P.axis; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(bx, ay); ctx.lineTo(bx + bw, ay); ctx.stroke();
+      ["2026-01-01", "2026-07-01", "2027-01-01"].forEach((s) => { const x = X(ms(s)); ctx.beginPath(); ctx.moveTo(x, ay - 4); ctx.lineTo(x, ay + 4); ctx.stroke(); T(ctx, s.slice(0, 7).replace("-", "."), x, ay + 18, { size: 10, color: P.dim, align: "center", mono: true }); });
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.warn; ctx.beginPath(); ctx.moveTo(X(AS), 8); ctx.lineTo(X(AS), ay); ctx.stroke(); ctx.restore();
+      T(ctx, "이 책 확인일", X(AS) + 4, 16, { size: 10, color: P.warn });
+      // 글자가 겹치지 않게 줄을 고른다(왼쪽부터 빈 줄에 배치)
+      ctx.font = TB.font(10.5, false, 700);
+      const place = EVENTS.map((e) => {
+        const x = X(ms(e.d)), label = e.d.slice(2).replace(/-/g, ".") + " " + e.t, tw = ctx.measureText(label).width;
+        const right = x + 8 + tw <= w - 4;
+        return { e, x, label, a: right ? x - 6 : x - tw - 14, b: right ? x + tw + 14 : x + 6, right };
+      });
+      const ends = [];
+      place.forEach((p) => { let r = ends.findIndex((end) => end < p.a); if (r < 0) { r = ends.length; ends.push(-1e9); } ends[r] = p.b; p.row = r; });
+      const rows = Math.max(1, ends.length), rowH = Math.min(30, (ay - 34) / rows);
+      place.forEach((p) => {
+        const t = ms(p.e.d), x = p.x, y = 34 + p.row * rowH + rowH * 0.5;
+        const done = t <= cur, future = t > AS;
+        ctx.strokeStyle = P.grid; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x, ay); ctx.stroke();
+        ctx.beginPath(); ctx.arc(x, y, 5, 0, TAU);
+        const col = p.e.k === "plan" ? P.warn : P.accent;
+        if (done) { ctx.fillStyle = col; ctx.fill(); } else { ctx.fillStyle = P.bg; ctx.fill(); ctx.setLineDash(future ? [2, 2] : []); ctx.strokeStyle = col; ctx.lineWidth = 1.5; ctx.stroke(); ctx.setLineDash([]); }
+        T(ctx, p.label, p.right ? x + 8 : x - 8, y + 4, { size: 10.5, color: done ? P.text : P.faint, align: p.right ? "left" : "right", weight: done ? 700 : 400 });
+      });
+      ctx.save(); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(X(cur), 24); ctx.lineTo(X(cur), ay); ctx.stroke(); ctx.restore();
+      knob(ctx, X(cur), ay, P);
+    }, { get height() { return pw("tl-cv") < 560 ? 420 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!L) return; cur = TB.clamp(T0 + (x - L.bx) / L.bw * (T1 - T0), T0, T1); cur = Math.round(cur / 864e5) * 864e5; draw(); } });
+    function draw() {
+      const past = EVENTS.filter((e) => ms(e.d) <= cur);
+      const last = past[past.length - 1];
+      TB.stat("tl-o-d", fmtD(cur));
+      TB.stat("tl-o-e", last ? last.t : "2025 세법개정 국회 심사 중");
+      let s;
+      if (cur < ms("2025-12-02")) s = "국회 심사 중(확정 전)";
+      else if (cur < ms("2026-01-01")) s = "확정, 시행 전";
+      else if (cur < ms("2026-04-21")) s = "시행 중(자녀 연령은 개정 전)";
+      else s = "시행 중(자녀 연령 개정 반영)";
+      TB.stat("tl-o-s", s);
+      let n;
+      if (cur < ms("2026-08-03")) n = "아직 없음";
+      else if (cur > AS) n = '<span style="color:var(--warn)">국회 처리 결과 알 수 없음</span>';
+      else n = "추진 중(확정 전)";
+      TB.stat("tl-o-n", n);
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 다온의 노트 */
+  (function () {
+    const x = TX.caseYearEnd();
+    const now = TX.yearEnd(x), prev = withPrev(() => TX.yearEnd(TX.caseYearEnd()));  // 다온은 자녀가 없어 연령 변화와 무관
+    const htNow = TX.specialCredits({ donation: { hometown: TX.CASE.donation.hometown } }, now.gross).rows.find((r) => r.key === "donation").value;
+    const set = (id, s) => { const el = document.getElementById(id); if (el) el.textContent = s; };
+    const d = now.total - prev.total;
+    set("cs-now", TX.fmt.wonfull(now.total));
+    set("cs-prev", TX.fmt.wonfull(prev.total));
+    set("cs-diff", Math.abs(d) < 0.5 ? "0원" : (d > 0 ? "+" : "−") + TX.fmt.wonfull(Math.abs(d)));
+    set("note-now", won(now.total));
+    set("note-prev", won(prev.total));
+    set("note-diff", Math.abs(d) < 0.5 ? "0원" : won(d));
+    set("note-ht", won(htNow));
+  })();
+});
+</script>
+</body>
+</html>

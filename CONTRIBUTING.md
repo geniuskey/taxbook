@@ -13,7 +13,7 @@
 2. **`chapters/revision.html`(16장 올해 바뀐 세법)** — 그 해 개정의 요약과, 어느 장·시뮬레이터가 영향을 받는지.
 
 그래서 본문과 시뮬레이터에는 **세법 숫자를 직접 쓰지 않는다.**
-- 본문의 세법 값은 `<span data-t="card.threshold" data-f="pct"></span>`처럼 JSON 경로로 쓴다. `TX.fill`이 채운다. 형식 `data-f`: `won`(기본, "1억 2,346만원"), `wonfull`("1,234,567원"), `man`("300만원"), `pct`("15%"), `pct1`, `num`, `raw`(문자열 그대로).
+- 본문의 세법 값은 `<span data-t="card.threshold" data-f="pct"></span>`처럼 JSON 경로로 쓴다. `TX.fill`이 채운다. 형식 `data-f`(생략하면 1 미만은 `pct`, 1900~2100 정수는 연도 그대로, 나머지 숫자는 `won`): `won`("1억 2,346만원"), `wonfull`("1,234,567원"), `man`("300만원"), `pct`("15%"), `pct1`, `num`, `raw`(문자열 그대로).
 - 기준 연도는 `<span data-t="label"></span>`("2026년 귀속 기준"), `<span data-t="year"></span>`("2026"), 신고·정산 연도는 `<span data-t="settleYear"></span>`("2027")로 쓴다. 장마다 첫머리(lead 또는 첫 절)와 `.callout.warn`에서 한 번씩 기준 연도를 밝힌다.
 - 법령 근거는 `<a data-src="income.rates"></a>`처럼 쓰면 `refs`의 조문 이름과 원문 링크가 들어간다.
 - 시뮬레이터 코드는 `TX.D`(JSON)와 `TX.*` 함수만 쓴다. 상수가 필요하면 JSON에 키를 더하고, 그 키를 [SOURCES.md](SOURCES.md)에도 적는다.

@@ -1,0 +1,690 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "부업과 프리랜서 소득은 3.3%를 떼고 끝나지 않는다. 사업소득·기타소득·근로소득의 구분, 단순경비율과 장부, 기타소득 분리과세 선택, 근로소득과 합산할 때 오르는 한계세율, 5월 신고와 가산세를 시뮬레이터로 따라간다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>종합소득세: 부업과 프리랜서 · TaxBook</title>
+<meta name="description" content="부업과 프리랜서 소득은 3.3%를 떼고 끝나지 않는다. 사업소득·기타소득·근로소득의 구분, 단순경비율과 장부, 기타소득 분리과세 선택, 근로소득과 합산할 때 오르는 한계세율, 5월 신고와 가산세를 시뮬레이터로 따라간다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/income.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="종합소득세: 부업과 프리랜서 · TaxBook">
+<meta property="og:description" content="부업과 프리랜서 소득은 3.3%를 떼고 끝나지 않는다. 사업소득·기타소득·근로소득의 구분, 단순경비율과 장부, 기타소득 분리과세 선택, 근로소득과 합산할 때 오르는 한계세율, 5월 신고와 가산세를 시뮬레이터로 따라간다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/income.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/income.html#chapter","name":"종합소득세: 부업과 프리랜서","headline":"종합소득세: 부업과 프리랜서 · TaxBook","description":"부업과 프리랜서 소득은 3.3%를 떼고 끝나지 않는다. 사업소득·기타소득·근로소득의 구분, 단순경비율과 장부, 기타소득 분리과세 선택, 근로소득과 합산할 때 오르는 한계세율, 5월 신고와 가산세를 시뮬레이터로 따라간다.","url":"https://taxbook.euiyun.com/chapters/income.html","position":7,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"7. 종합소득세: 부업과 프리랜서","item":"https://taxbook.euiyun.com/chapters/income.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="income">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 07 · <span data-t="label"></span></div>
+    <h1>종합소득세: 부업과 프리랜서</h1>
+    <p class="lead"><span data-t="settleYear" data-f="raw"></span>년 5월 초, 다온의 휴대전화에 "종합소득세 확정신고 안내"가 왔다. 2월에 연말정산을 마쳤는데 또 신고를 하라니. 이유는 주말에 한 일러스트 외주(한 해 680만원)와 한 번 나간 강연(100만원)이다. 외주비는 받을 때마다 3.3%가 떼였고, 강연료에서도 세금이 떼였다. 떼였으니 끝난 것 아닌가. 그렇지 않다. 그 떼인 돈도 2장의 월급 원천징수처럼 "미리 낸 세금"이고, 진짜 세금은 근로소득과 합쳐 5월에 다시 계산한다. 이 장은 6장의 연말정산 결과를 출발점으로 부업 소득을 더하는 계산을 따라간다. 이 장의 값은 모두 <span data-t="label"></span>이다.</p>
+    <ul class="objectives">
+      <li>같은 돈이 근로소득·사업소득·기타소득 가운데 무엇이냐에 따라 원천징수와 최종 세금이 어떻게 달라지는지 비교한다.</li>
+      <li>3.3% 원천징수가 최종 세금이 아니라 미리 낸 세금이라는 것을 다온의 숫자로 확인한다.</li>
+      <li>단순경비율·기준경비율·간편장부·복식부기를 구분하고, 실제 경비율에 따라 장부가 유리해지는 지점과 기장세액공제·무기장 가산세를 설명한다.</li>
+      <li>기타소득의 필요경비 의제와 분리과세 선택을 한계세율과 비교해 판단한다.</li>
+      <li>근로소득과 합산하면 부업 소득에 붙는 한계세율이 올라가는 이유, 5월 신고 일정과 무신고·과소신고·납부지연 가산세, 지방소득세의 별도 신고를 정리한다.</li>
+    </ul>
+  </header>
+
+  <section id="kinds">
+    <h2>같은 돈, 세 가지 이름</h2>
+    <p>세법은 돈이 들어온 "이유"로 소득에 이름을 붙인다. 회사에 고용되어 지시를 받고 일한 대가는 <span class="term">근로소득</span><span class="en">(Wage income)</span>, 고용되지 않고 독립적으로 계속·반복해서 일한 대가는 <span class="term">사업소득</span><span class="en">(Business income)</span>, 어쩌다 한 번 생긴 대가는 <span class="term">기타소득</span><span class="en">(Other income)</span>이다. 다온의 일러스트 외주는 해마다 여러 건을 계속 받으니 사업소득이고, 강연은 한 번 나간 것이니 기타소득이다. 같은 강연이라도 강연을 업으로 하는 강사라면 사업소득이 된다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 300" role="img" aria-label="소득 구분: 고용 관계가 있으면 근로소득, 없으면서 계속·반복이면 사업소득, 일시·우발이면 기타소득">
+        <defs><marker id="in-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="150" y="12" width="160" height="38" rx="8" class="f-surface"/>
+        <text x="230" y="36" text-anchor="middle" class="lbl-b">일을 하고 받은 돈</text>
+        <line x1="230" y1="52" x2="230" y2="74" class="s-line" marker-end="url(#in-ar)"/>
+        <rect x="120" y="76" width="220" height="38" rx="8" class="f-elev"/>
+        <text x="230" y="100" text-anchor="middle" class="lbl">고용되어 지시를 받고 일했나?</text>
+        <line x1="150" y1="116" x2="80" y2="156" class="s-line" marker-end="url(#in-ar)"/>
+        <text x="96" y="132" text-anchor="end" class="lbl-acc">예</text>
+        <line x1="310" y1="116" x2="320" y2="150" class="s-line" marker-end="url(#in-ar)"/>
+        <text x="330" y="134" class="lbl-acc">아니오</text>
+        <rect x="14" y="158" width="130" height="58" rx="8" class="f-acc-soft"/>
+        <text x="79" y="182" text-anchor="middle" class="lbl-b">근로소득</text>
+        <text x="79" y="202" text-anchor="middle" class="lbl-dim">연말정산(6장)</text>
+        <rect x="230" y="152" width="200" height="38" rx="8" class="f-elev"/>
+        <text x="330" y="176" text-anchor="middle" class="lbl">계속·반복해서 하나?</text>
+        <line x1="280" y1="192" x2="250" y2="226" class="s-line" marker-end="url(#in-ar)"/>
+        <text x="256" y="210" text-anchor="end" class="lbl-acc">예</text>
+        <line x1="380" y1="192" x2="400" y2="226" class="s-line" marker-end="url(#in-ar)"/>
+        <text x="400" y="210" class="lbl-acc">한 번</text>
+        <rect x="170" y="228" width="140" height="62" rx="8" class="f-acc2-soft"/>
+        <text x="240" y="252" text-anchor="middle" class="lbl-b">사업소득</text>
+        <text x="240" y="272" text-anchor="middle" class="lbl-dim">외주·프리랜서 · <tspan data-js="biz33"></tspan></text>
+        <rect x="320" y="228" width="130" height="62" rx="8" class="f-warn-soft"/>
+        <text x="385" y="252" text-anchor="middle" class="lbl-b">기타소득</text>
+        <text x="385" y="272" text-anchor="middle" class="lbl-dim">일시 강연·원고 · <tspan data-js="oth88"></tspan></text>
+      </svg>
+      <figcaption><b>그림 1. 소득을 가르는 두 질문.</b> 고용 관계가 있으면 근로소득, 없으면 계속성으로 사업소득과 기타소득을 나눈다. 아래 퍼센트는 지급할 때 떼는 원천징수(지방소득세 포함)다. 실제 판단은 계약 형태와 활동의 실질로 하고, 애매하면 홈택스 상담이나 세무서에 묻는다.</figcaption>
+    </figure>
+
+    <p>이름이 다르면 세 가지가 달라진다. 첫째, <b>지급할 때 떼는 세금</b>. 사업소득은 지급액의 <span data-t="business.withholding" data-f="pct"></span>(지방소득세를 더해 <span data-js="biz33"></span>, 현장 말로 <span class="term">3.3%</span>)를 떼고, 기타소득은 필요경비를 뺀 소득의 <span data-t="other.withholding" data-f="pct"></span>(지급액 기준으로는 지방소득세 포함 <span data-js="oth88"></span>)를 뗀다. 둘째, <b>빼 주는 비용</b>. 근로소득은 근로소득공제를 자동으로 빼고, 사업소득은 실제 경비나 경비율을, 기타소득은 강연료·원고료 같은 경우 지급액의 <span data-t="other.expenseRate" data-f="pct"></span>를 필요경비로 본다. 셋째, <b>신고 방법</b>. 근로소득은 회사가 연말정산으로 끝내고, 사업소득은 5월에 직접 신고하며, 기타소득은 소득금액이 <span data-t="other.separateMax"></span> 이하면 떼인 세금으로 끝낼지(분리과세) 5월에 합칠지 고를 수 있다.</p>
+    <p>아래 시뮬레이터는 다온의 연말정산 결과 위에 같은 금액을 세 가지 이름으로 더해 본다. 막대 둘이 한 쌍이다. 왼쪽은 지급할 때 떼인 돈, 오른쪽은 최종적으로 늘어난 세금이다.</p>
+
+    <div class="sim" id="sim-kind">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>같은 금액, 어느 소득이냐에 따라</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="kind-cv"></canvas><span class="hint">막대 위쪽을 위아래로 끌면 금액이 바뀐다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>더하는 금액(지급액) <output id="kind-a-out"></output></span><input type="range" id="kind-a" min="50" max="3000" step="10" value="680"></label>
+          <label class="ctrl"><span>다온의 연봉(식대 포함) <output id="kind-s-out"></output></span><input type="range" id="kind-s" min="2500" max="12000" step="10" value="5240"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">근로소득이면</span><span class="v" id="kind-o-w">—</span></div>
+        <div class="stat"><span class="k">사업소득이면</span><span class="v" id="kind-o-b">—</span></div>
+        <div class="stat"><span class="k">기타소득이면</span><span class="v" id="kind-o-o">—</span></div>
+        <div class="stat"><span class="k">사업소득의 5월 정산</span><span class="v" id="kind-o-m">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 680만원(다온의 외주비)에서 사업소득 한 쌍을 본다. 떼인 3.3%보다 최종 세금이 커서 5월에 차이를 더 낸다. ② 금액을 300만원 아래로 줄이고 기타소득을 본다. 분리과세를 고를 수 있어 둘 중 적은 쪽이 최종 세금이 된다. 금액을 올리면 기타소득금액이 기준을 넘어 분리과세가 사라지는 지점이 있다. ③ 연봉을 올린다. 같은 부업 소득에 붙는 세금이 커진다. 근로소득과 합쳐 계산하기 때문이다. (교육용 가정: 사업소득은 단순경비율 <span data-t="business.simpleRateIllustration" data-f="pct1"></span>(예시 값, 확인 필요)로 추계, 기타소득은 강연료처럼 필요경비 <span data-t="other.expenseRate" data-f="pct"></span>, 근로소득은 연봉에 더한다. 금액은 모두 지방소득세 포함이고, 4대보험·건강보험 지역 보험료 변화는 넣지 않았다. 근로소득의 원천징수는 매달 간이세액표 근사로 늘어난 몫이다.)</div>
+    </div>
+
+    <p>세 쌍의 막대 높이가 다른 이유는 빼 주는 비용이 다르기 때문이다. 사업소득의 단순경비율과 기타소득의 필요경비 <span data-t="other.expenseRate" data-f="pct"></span>는 근로소득공제보다 크게 빼 준다. 대신 그 경비율은 "실제로 비용이 들었을 것"이라는 가정이고, 경비율을 쓸 수 있는 사람과 금액이 정해져 있다. 그리고 어느 이름이든 마지막에 붙는 세율은 근로소득과 합친 과세표준의 한계세율이다.</p>
+  </section>
+
+  <section id="withholding">
+    <h2>3.3%는 미리 낸 세금이다</h2>
+    <p>외주를 맡긴 회사는 다온에게 680만원을 주면서 <span data-js="biz33"></span>를 떼어 대신 냈다. 이것은 사업소득의 원천징수(소득세법 제129조)다. 회사는 이 지급 내역을 국세청에 제출하므로 국세청은 다온이 어디서 얼마를 받았는지 이미 안다. 5월 신고는 그 자료 위에 경비와 공제를 더해 1년치 세금을 확정하는 일이다.</p>
+    <div class="formula">
+      $$\text{5월에 낼 세금} = \underbrace{\text{종합소득 결정세액}}_{\text{근로+사업+(기타)}} - \underbrace{\text{연말정산 결정세액}}_{\text{2월에 이미 정산}} - \underbrace{\text{사업소득 원천징수}}_{\text{지급 때 떼인 몫}}$$
+      <div class="where">음수면 환급이다. 지방소득세는 같은 방식으로 따로 계산해 신고한다. 기타소득을 합산하기로 했다면 그때 떼인 세금도 빼고, 분리과세를 골랐다면 떼인 세금으로 끝이라 이 식에 넣지 않는다.</div>
+    </div>
+    <p>그래서 3.3%를 떼인 사람의 5월 결과는 둘로 갈린다. 부업 소득이 작고 다른 소득이 없는 사람은 경비율을 빼고 나면 세금이 3.3%보다 적어 환급을 받는다. "3.3% 환급"이라는 말이 여기서 나왔다. 반대로 다온처럼 근로소득이 이미 <span data-t="income.rates.1.1" data-f="pct"></span> 구간에 있는 사람은 부업 소득에 그 세율이 붙어 3.3%로는 모자라고 5월에 더 낸다.</p>
+    <div class="callout deep">
+      <strong>인적용역 원천징수 3%를 2%로 낮추는 개정안(추진 중)</strong>
+      2026년 8월 정부가 발표한 세법개정안에는 프리랜서 같은 인적용역 사업소득의 원천징수세율을 3%에서 2%(지방소득세 포함 3.3%에서 2.2%)로 낮추는 내용이 들어 있다. 보도된 안은 2027년 1월 1일 이후 지급분부터이고, 보험설계사처럼 연말정산을 하는 사업소득은 제외한다. 2026년 10월 현재 국회 심사 중인 <b>확정 전</b> 안이다. 원천징수율은 미리 내는 몫만 바꾸고 최종 세금은 바꾸지 않는다는 점은 6장에서 본 원천징수 비율 선택과 같다. 낮아지면 5월에 더 낼 몫이 커지거나 환급이 줄어든다. 이 책의 계산은 현행 <span data-t="business.withholding" data-f="pct"></span>를 쓴다.
+    </div>
+  </section>
+
+  <section id="expense">
+    <h2>경비: 경비율로 할까, 장부를 쓸까</h2>
+    <p>사업소득은 번 돈(<span class="term">수입금액</span>) 전부가 아니라 비용을 뺀 <span class="term">소득금액</span>에 세금을 매긴다. 비용을 계산하는 방법은 장부가 있느냐로 나뉜다.</p>
+    <ul>
+      <li><b>추계(장부 없이)</b>: 국세청이 업종별로 정한 경비율로 비용을 추정한다. 직전 연도 수입금액이 작은 사업자는 <span class="term">단순경비율</span><span class="en">(Simple expense rate)</span>을 쓴다. 수입금액 × 단순경비율이 비용이 된다. 인적용역 사업자는 직전 연도 수입금액 <span data-t="business.simpleThresholdServices"></span> 미만이 기준이다(신규 사업자는 따로 정한 기준). 그보다 크면 <span class="term">기준경비율</span>을 쓰는데, 이때는 임차료·인건비 같은 주요 경비를 증빙으로 따로 빼고 나머지에만 낮은 경비율을 적용하므로 단순경비율보다 훨씬 불리하다.</li>
+      <li><b>간편장부</b>: 수입과 비용을 날짜별로 적는 가계부 같은 장부. 실제 비용을 증빙(세금계산서, 카드 영수증)과 함께 뺀다. 수입이 업종별 기준 금액 미만인 사업자가 쓸 수 있다.</li>
+      <li><b>복식부기</b>: 회계 원리에 따라 재무제표를 만드는 장부. 간편장부를 써도 되는 사업자가 복식부기로 신고하면 <span class="term">기장세액공제</span>로 사업소득에 해당하는 산출세액의 <span data-t="business.bookkeepingCreditRate" data-f="pct"></span>(한도 <span data-t="business.bookkeepingCreditLimit"></span>)를 빼 준다.</li>
+    </ul>
+    <p>장부를 쓰지 않고 추계로 신고하면 <span class="term">무기장 가산세</span>로 사업소득에 해당하는 산출세액의 <span data-t="business.noBooksPenalty" data-f="pct"></span>가 붙는다. 다만 직전 연도 수입금액이 작은 소규모 사업자와 신규 사업자는 이 가산세가 없다. 다온처럼 주말 부업 수입이 몇백만원인 사람은 대개 단순경비율로 신고해도 가산세가 없다.</p>
+    <p>그러면 장부는 언제 이득일까. 실제로 든 비용의 비율이 경비율보다 높을 때다. 아래 그래프의 가로축은 "실제 경비율"(실제 비용 ÷ 수입금액)이다. 손잡이를 끌어 다온의 실제 비용이 수입의 몇 %였는지 고른다.</p>
+
+    <div class="sim" id="sim-exp">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>단순경비율 vs 장부</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="exp-cv"></canvas><span class="hint">가로축 손잡이를 끌어 실제 경비율을 고른다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>사업 수입금액 <output id="exp-r-out"></output></span><input type="range" id="exp-r" min="100" max="6000" step="10" value="680"></label>
+          <label class="check"><input type="checkbox" id="exp-big"> 소규모 사업자가 아님(무기장 가산세 대상)</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">추계(단순경비율)</span><span class="v" id="exp-o-s">—</span></div>
+        <div class="stat"><span class="k">간편장부(실제 경비)</span><span class="v" id="exp-o-l">—</span></div>
+        <div class="stat"><span class="k">복식부기(+기장세액공제)</span><span class="v" id="exp-o-d">—</span></div>
+        <div class="stat"><span class="k">고른 실제 경비율</span><span class="v" id="exp-o-e">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(수입 680만원)에서 손잡이를 20%에 둔다. 장부를 쓰면 비용이 경비율보다 작게 잡혀 5월에 낼 세금이 오히려 커진다. ② 손잡이를 오른쪽으로 끈다. 실제 경비율이 단순경비율을 넘는 지점에서 장부 선이 추계 선 아래로 내려간다. 복식부기 선은 기장세액공제만큼 더 아래에 있다. ③ 수입을 <span data-t="business.simpleThresholdServices"></span> 위로 올린다. 다음 해부터 단순경비율을 쓸 수 없는 구간(빗금)이 되고, "소규모 사업자가 아님"을 켜면 추계 선에 무기장 가산세가 얹힌다. (교육용 가정: 다온의 연말정산 결과 위에 사업소득만 더한다. 세로축은 5월에 더 낼 세금(지방소득세 포함, 3.3% 원천징수 차감, 음수면 환급)이다. 단순경비율 <span data-t="business.simpleRateIllustration" data-f="pct1"></span>은 업종 코드 <span data-t="business.simpleRateCode" data-f="raw"></span>의 예시 값으로 확인 필요이며 해마다 고시로 바뀐다. 기준경비율 추계, 세무 대리 비용, 감가상각 등은 넣지 않았다.)</div>
+    </div>
+
+    <p>교차점이 거의 단순경비율 자리에 있다는 것이 핵심이다. 그림 그리기처럼 장비와 소프트웨어 구독 정도가 비용인 일은 실제 경비율이 낮아 단순경비율이 넉넉하다. 반대로 재료비·외주비·임차료가 큰 일은 장부를 써야 손해를 보지 않는다. 그리고 수입이 커지면 단순경비율을 쓸 수 없게 되어(빗금) 장부가 사실상 필수가 된다. 장부는 그 해에 바로 만들어야 하므로 "내년에 수입이 늘 것 같다"면 올해부터 영수증을 모으는 쪽이 안전하다.</p>
+
+    <div class="callout pro">
+      <strong>실무 노트: 프리랜서 5월 신고에서 흔한 실수</strong>
+      ① <b>업종 코드</b>: 홈택스 안내문에 찍힌 업종 코드가 실제 일과 다르면 경비율이 달라진다. 일러스트·디자인 외주를 "기타자영업"으로 둘지 다른 인적용역 코드로 둘지에 따라 경비율이 다르니, 지급명세서의 코드와 실제 활동을 맞춰 본다. ② <b>근로소득 누락</b>: 직장인이 부업만 신고하고 근로소득을 빠뜨리는 경우. 홈택스는 연말정산 자료를 불러오지만, 직접 작성하다 근로소득을 지우면 세율이 낮게 계산되어 나중에 과소신고로 고쳐진다. ③ <b>공제 이중 적용</b>: 연말정산에서 받은 인적공제·카드공제를 사업소득 쪽에서 또 넣는 경우. 공제는 사람당 한 번이다. ④ <b>가공 경비</b>: 쓰지 않은 비용을 장부에 넣는 것은 절세가 아니라 탈세이고, 부정행위로 보면 과소신고 가산세가 일반보다 크게 무거워진다. ⑤ <b>지방소득세</b>: 종합소득세만 내고 지방소득세 신고를 빠뜨리는 경우(아래 5월 신고 절).
+    </div>
+  </section>
+
+  <section id="other">
+    <h2>기타소득: 분리과세를 고를까</h2>
+    <p>강연료·원고료·심사료처럼 한 번 받은 대가는 기타소득이다. 강연료는 실제 비용을 따지지 않고 지급액의 <span data-t="other.expenseRate" data-f="pct"></span>를 필요경비로 본다(필요경비 의제). 강연료 100만원이면 기타소득금액은 그 나머지인 <span data-js="lecinc"></span>이고, 지급하는 쪽은 그 <span data-t="other.withholding" data-f="pct"></span>에 지방소득세를 더해 지급액의 <span data-js="oth88"></span>를 뗀다. 한 건의 기타소득금액이 <span data-t="other.minTaxable"></span> 이하면 아예 세금을 떼지 않는다(과세최저한).</p>
+    <p>한 해의 기타소득금액이 <span data-t="other.separateMax"></span> 이하면(강연료처럼 경비 <span data-t="other.expenseRate" data-f="pct"></span>인 경우 지급액으로 약 <span data-js="othpay"></span>) 둘 중 하나를 고른다. 떼인 세금으로 끝내는 <span class="term">분리과세</span><span class="en">(Separate taxation)</span>, 또는 5월에 다른 소득과 합쳐 기본세율로 계산하고 떼인 세금을 빼는 <span class="term">종합과세</span>. 고르는 기준은 간단하다. 내 한계세율이 원천징수 세율 <span data-t="other.withholding" data-f="pct"></span>보다 낮으면 합치는 쪽, 높으면 분리과세가 유리하다.</p>
+
+    <div class="sim" id="sim-oth">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>기타소득: 분리과세와 합산 비교</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="oth-cv"></canvas><span class="hint">가로축 손잡이를 끌어 강연료를 고른다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>근로자의 연봉(식대 포함) <output id="oth-s-out"></output></span><input type="range" id="oth-s" min="2500" max="15000" step="10" value="5240"></label>
+          <label class="check"><input type="checkbox" id="oth-biz" checked> 다온의 일러스트 외주(사업소득)도 함께 신고</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">강연료 / 기타소득금액</span><span class="v" id="oth-o-a">—</span></div>
+        <div class="stat"><span class="k">분리과세(떼인 세금으로 끝)</span><span class="v" id="oth-o-s">—</span></div>
+        <div class="stat"><span class="k">종합과세(합산)</span><span class="v" id="oth-o-c">—</span></div>
+        <div class="stat"><span class="k">유리한 쪽</span><span class="v" id="oth-o-w">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 강연료 100만원(다온)에서 두 선을 비교한다. 다온의 한계세율은 원천징수 세율보다 낮아 합산 쪽 세금이 조금 적다. ② 연봉을 1억원 위로 올린다. 한계세율이 원천징수 세율을 넘으면 두 선의 위아래가 바뀌어 분리과세가 유리해진다. ③ 손잡이를 오른쪽으로 끈다. 기타소득금액이 <span data-t="other.separateMax"></span>를 넘는 점선 오른쪽에서는 분리과세 선이 끊긴다. 고를 수 없고 반드시 합산한다. (강연료처럼 필요경비 <span data-t="other.expenseRate" data-f="pct"></span>인 기타소득으로 본다. 세금은 강연료 때문에 늘어나는 금액이며 지방소득세 포함이다. 연봉을 바꾸면 다온의 다른 공제는 그대로 두고 연봉만 바꾼다.)</div>
+    </div>
+
+    <p>차이는 크지 않다. 강연료 100만원이면 몇만원이다. 그래도 원리는 유용하다. 원천징수 세율이 고정되어 있으니, 한계세율이 그보다 낮은 사람에게 분리과세는 "더 낸 세금을 포기하는 선택"이다. 반대로 고소득자는 분리과세로 끝내는 편이 유리하고 신고할 것도 줄어든다. 단, 연금계좌에서 중도 인출한 돈처럼 무조건 분리과세되는 기타소득도 있어서(<a href="pension.html">10장</a>) 모든 기타소득에 선택권이 있는 것은 아니다.</p>
+  </section>
+
+  <section id="stack">
+    <h2>근로소득 위에 쌓이는 부업 소득</h2>
+    <p>종합소득세의 "종합"은 한 사람의 근로·사업·기타(선택한 경우)·이자·배당(기준을 넘은 경우)·연금소득을 모두 더한다는 뜻이다. 더한 과세표준에 하나의 누진세율표를 적용한다. 그래서 부업 소득은 근로소득이 이미 채운 구간 <b>위에</b> 쌓인다. 다온의 근로 과세표준이 <span data-t="income.rates.1.1" data-f="pct"></span> 구간의 중간에 있다면 부업 소득금액의 첫 1원부터 <span data-t="income.rates.1.1" data-f="pct"></span>가 붙고, 더 쌓여 <span data-t="income.rates.1.0"></span>을 넘는 몫에는 <span data-t="income.rates.2.1" data-f="pct"></span>가 붙는다.</p>
+    <div class="formula">
+      $$\text{부업의 세금} = \text{세율표}(\text{근로 과세표준} + \text{부업 소득금액}) - \text{세율표}(\text{근로 과세표준})$$
+      <div class="where">세율표는 기본세율의 누진 계산이다. 실제로는 세액공제의 바닥과 근로소득세액공제의 안분 때문에 조금 달라진다. 이 책의 모델은 근로소득세액공제를 근로소득 몫의 산출세액에 비례해 다시 계산한다.</div>
+    </div>
+    <p>아래 막대에서 부업 블록의 오른쪽 끝을 끌어 부업 소득금액을 늘려 본다. 블록이 구간 경계를 넘을 때마다 색이 바뀐다.</p>
+
+    <div class="sim" id="sim-stk">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>합산하면 한계세율이 올라간다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="stk-cv"></canvas><span class="hint">부업 블록의 오른쪽 끝을 끈다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>연봉(식대 포함) <output id="stk-s-out"></output></span><input type="range" id="stk-s" min="2500" max="12000" step="10" value="5240"></label>
+          <div class="ctrl"><span>부업 소득금액 빠른 선택</span><div class="seg" id="stk-q"><button data-value="d" class="on">다온(외주)</button><button data-value="1e7">1,000만</button><button data-value="3e7">3,000만</button><button data-value="6e7">6,000만</button></div></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">부업 소득금액</span><span class="v" id="stk-o-a">—</span></div>
+        <div class="stat"><span class="k">늘어난 세금(지방세 포함)</span><span class="v" id="stk-o-t">—</span></div>
+        <div class="stat"><span class="k">부업 소득의 평균 세율</span><span class="v" id="stk-o-e">—</span></div>
+        <div class="stat"><span class="k">마지막 1원의 세율</span><span class="v" id="stk-o-m">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① "다온(외주)"에서 부업 블록 전체가 근로소득이 서 있는 구간과 같은 색인 것을 본다. ② 블록 끝을 끌어 다음 구간 경계를 넘긴다. 넘은 몫만 높은 세율로 바뀌고, 평균 세율은 천천히 따라 올라간다. ③ 연봉을 올린다. 같은 부업 소득이 더 높은 구간에서 시작한다. 연봉 1억원인 사람의 부업 1,000만원은 연봉 3,000만원인 사람의 부업 1,000만원보다 세금이 훨씬 많다. (교육용 가정: 다온의 연말정산 결과 위에 사업소득금액을 더한다. 늘어난 세금은 TX.comprehensive로 계산한 결정세액 차이이며, 원천징수와 건강보험료 변화는 넣지 않았다.)</div>
+    </div>
+    <p>평균 세율과 한계세율의 차이는 1장에서 본 그대로다. 부업 소득에 대한 결정은 마지막 1원의 세율로 한다. 부업을 늘릴지, 장부를 쓸지, 기타소득을 합산할지 모두 "다음 1만원에 몇 %가 붙나"의 문제다. 그리고 세금 말고도 비용이 하나 더 있다. 부업 소득금액이 일정 금액을 넘으면 직장인도 월급 밖 소득에 대한 건강보험료를 따로 낸다. 이 책은 건강보험료를 다루지 않으니 국민건강보험공단의 안내를 확인한다.</p>
+  </section>
+
+  <section id="filing">
+    <h2>5월 신고, 지방소득세, 가산세</h2>
+    <p>한 해의 종합소득은 다음 해 5월(<span data-t="calendar.incomeFiling"></span>)에 신고하고 납부한다(<span data-t="year" data-f="raw"></span>년 소득은 <span data-t="settleYear" data-f="raw"></span>년 5월). 근로소득만 있고 연말정산을 마친 사람은 신고하지 않아도 되지만, 사업소득이나 합산할 기타소득이 있으면 근로소득까지 함께 신고해야 한다. 홈택스는 연말정산 자료와 지급명세서를 불러와 신고서를 미리 채워 준다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 300" role="img" aria-label="5월 종합소득세 신고의 흐름: 연말정산 결과와 사업소득, 합산하기로 한 기타소득을 더해 종합소득 결정세액을 구하고, 연말정산 결정세액과 원천징수를 빼 납부 또는 환급. 지방소득세는 별도로 신고">
+        <defs><marker id="in-ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="12" y="14" width="136" height="54" rx="8" class="f-acc-soft"/>
+        <text x="80" y="37" text-anchor="middle" class="lbl-b">근로소득</text>
+        <text x="80" y="56" text-anchor="middle" class="lbl-dim">연말정산 결과(6장)</text>
+        <rect x="162" y="14" width="136" height="54" rx="8" class="f-acc2-soft"/>
+        <text x="230" y="37" text-anchor="middle" class="lbl-b">사업소득금액</text>
+        <text x="230" y="56" text-anchor="middle" class="lbl-dim">수입 − 경비</text>
+        <rect x="312" y="14" width="136" height="54" rx="8" class="f-warn-soft"/>
+        <text x="380" y="37" text-anchor="middle" class="lbl-b">기타소득금액</text>
+        <text x="380" y="56" text-anchor="middle" class="lbl-dim">합산을 고른 경우만</text>
+        <line x1="80" y1="70" x2="200" y2="104" class="s-line" marker-end="url(#in-ar2)"/>
+        <line x1="230" y1="70" x2="230" y2="102" class="s-line" marker-end="url(#in-ar2)"/>
+        <line x1="380" y1="70" x2="262" y2="104" class="s-line" marker-end="url(#in-ar2)"/>
+        <rect x="120" y="106" width="220" height="40" rx="8" class="f-surface"/>
+        <text x="230" y="131" text-anchor="middle" class="lbl-b">종합소득 과세표준 → 기본세율</text>
+        <line x1="230" y1="148" x2="230" y2="170" class="s-line" marker-end="url(#in-ar2)"/>
+        <rect x="120" y="172" width="220" height="38" rx="8" class="f-bad-soft"/>
+        <text x="230" y="196" text-anchor="middle" class="lbl-b">종합소득 결정세액</text>
+        <text x="352" y="186" class="lbl-dim">− 연말정산 결정세액</text>
+        <text x="352" y="204" class="lbl-dim">− 원천징수(<tspan data-js="biz33"></tspan> 등)</text>
+        <line x1="230" y1="212" x2="230" y2="234" class="s-line" marker-end="url(#in-ar2)"/>
+        <rect x="120" y="236" width="220" height="36" rx="8" class="f-elev"/>
+        <text x="230" y="259" text-anchor="middle" class="lbl-b">5월 납부(양수) · 환급(음수)</text>
+        <rect x="12" y="172" width="96" height="100" rx="8" class="f-surface"/>
+        <text x="60" y="196" text-anchor="middle" class="lbl-b">지방소득세</text>
+        <text x="60" y="216" text-anchor="middle" class="lbl-dim">소득세의</text>
+        <text x="60" y="234" text-anchor="middle" class="lbl-dim"><tspan data-t="income.localRate" data-f="pct"></tspan></text>
+        <text x="60" y="254" text-anchor="middle" class="lbl-acc">별도 신고</text>
+        <text x="230" y="292" text-anchor="middle" class="lbl-dim">신고·납부 기한: <tspan data-t="calendar.incomeFiling"></tspan></text>
+      </svg>
+      <figcaption><b>그림 2. 5월 종합소득세 신고의 흐름.</b> 연말정산은 근로소득만으로 끝난 중간 정산이고, 5월 신고가 그 해 모든 소득의 최종 정산이다. 지방소득세는 지방자치단체에 따로 신고하는 세금이라, 홈택스에서 종합소득세를 신고한 뒤 이어지는 화면(위택스 연계)에서 지방소득세 신고까지 마쳐야 한다.</figcaption>
+    </figure>
+
+    <p>신고를 하지 않거나 적게 하거나 늦게 내면 <span class="term">가산세</span><span class="en">(Penalty tax)</span>가 붙는다(<a data-src="penalty"></a>).</p>
+    <ul>
+      <li><b>무신고 가산세</b>: 기한까지 신고하지 않으면 납부할 세액의 <span data-t="penalty.noFiling" data-f="pct"></span>. 부정행위(이중장부, 가공 경비 등)면 더 무겁다.</li>
+      <li><b>과소신고 가산세</b>: 신고는 했지만 적게 했으면 덜 신고한 세액의 <span data-t="penalty.underFiling" data-f="pct"></span>.</li>
+      <li><b>납부지연 가산세</b>: 내야 할 세금을 늦게 내면 하루에 <span data-js="late"></span>씩 붙는다. 1년이면 약 <span data-js="lateYear"></span>로, 웬만한 대출 이자보다 비싸다.</li>
+    </ul>
+    <p>기한을 넘겼더라도 빨리 신고하면(기한 후 신고) 무신고 가산세 일부를 줄여 준다. 반대로 국세청이 찾아낼 때까지 기다리면 가산세와 지연 일수가 함께 커진다. 아래에서 상황과 늦어진 날수를 바꿔 본다.</p>
+
+    <div class="sim" id="sim-pen">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>늦을수록 커지는 가산세</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="pen-cv"></canvas><span class="hint">가로축 손잡이를 끌어 늦어진 날수를 고른다</span></div>
+        <div class="sim-controls">
+          <div class="seg" id="pen-k"><button data-value="ok">기한 내 신고·납부</button><button data-value="unpaid">신고만 하고 미납</button><button data-value="under" class="on">과소신고</button><button data-value="none">무신고</button></div>
+          <label class="ctrl"><span>덜 낸 세금(본세) <output id="pen-t-out"></output></span><input type="range" id="pen-t" min="10" max="1000" step="5" value="100"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">늦어진 날</span><span class="v" id="pen-o-d">—</span></div>
+        <div class="stat"><span class="k">신고 가산세</span><span class="v" id="pen-o-f">—</span></div>
+        <div class="stat"><span class="k">납부지연 가산세</span><span class="v" id="pen-o-l">—</span></div>
+        <div class="stat"><span class="k">본세 + 가산세</span><span class="v" id="pen-o-t">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 과소신고에서 손잡이를 0일에 둔다. 덜 신고한 것만으로 본세의 <span data-t="penalty.underFiling" data-f="pct"></span>가 붙는다. ② 손잡이를 2년 쪽으로 끈다. 납부지연 가산세가 날마다 쌓여 신고 가산세를 따라잡는다. ③ 무신고로 바꾼다. 출발점이 두 배로 높다. (교육용 단순화: 일반 과소신고·무신고만 다룬다. 기한 후 신고 감면, 부정행위 가산세, 납부지연 가산세의 기간 상한, 수입금액 기준 무신고 가산세 하한은 넣지 않았다. 지방소득세에도 같은 구조의 가산세가 따로 붙는다.)</div>
+    </div>
+
+    <div class="callout check">
+      <strong>신고 전 체크: 5월에 홈택스에서 확인할 것</strong>
+      <ul>
+        <li><b>지급명세서 조회</b>: "지급명세서 등 제출내역"에서 사업소득·기타소득을 준 곳과 금액, 떼인 세금을 확인한다. 내 기록(계좌 입금)과 다르면 지급처에 정정을 요청한다.</li>
+        <li><b>신고 안내 유형</b>: 안내문의 유형(단순경비율·기준경비율·간편장부 대상)과 업종 코드, 적용 경비율을 본다. 경비율은 해마다 고시로 바뀐다.</li>
+        <li><b>근로소득 불러오기</b>: 연말정산 결과(결정세액, 공제 내역)가 신고서에 들어왔는지, 연말정산에서 놓친 공제(<a href="yearend.html">6장</a>)가 있다면 지금 더한다.</li>
+        <li><b>기타소득 선택</b>: 소득금액 <span data-t="other.separateMax"></span> 이하라면 합산할지 고른다. 합산하면 그때 떼인 세금이 기납부세액으로 들어갔는지 본다.</li>
+        <li><b>지방소득세</b>: 종합소득세 신고를 마친 뒤 이어지는 지방소득세 신고 화면까지 제출한다. 납부서도 따로 나온다.</li>
+      </ul>
+    </div>
+
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다</strong>
+      이 장의 원천징수율, 경비율, 기장세액공제와 가산세 비율은 <span data-t="label"></span>이다. 특히 단순경비율과 기준경비율은 업종마다 해마다 고시로 바뀌며, 이 장의 <span data-t="business.simpleRateIllustration" data-f="pct1"></span>은 예시로 쓴 값이다(<span data-t="business._status"></span>). 인적용역 원천징수 3%→2% 인하안은 국회를 통과하지 않은 <b>확정 전</b> 안이라 계산에 넣지 않았다. 이 장의 계산은 교육용 모델의 결과이며 실제 신고 전에는 홈택스 신고 화면의 계산을 확인한다.
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 종합소득세 노트</h2>
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · <span data-t="settleYear" data-f="raw"></span>년 5월</span></div>
+      <h4 id="n-head"></h4>
+      <p>홈택스의 지급명세서 조회에서 일러스트 외주 680만원과 떼인 세금 <b id="n-bw"></b>(지방소득세 포함), 강연료 100만원과 떼인 세금 <b id="n-ow"></b>을 확인했다. 안내문의 유형은 단순경비율이다. 이 책의 모델로 예시 경비율 <span data-t="business.simpleRateIllustration" data-f="pct1"></span>을 적용하면 외주의 비용은 <b id="n-bexp"></b>, 사업소득금액은 <b id="n-binc"></b>이다. 실제 비용(태블릿 펜 교체, 프로그램 구독)은 연 120만원 정도라 장부를 쓰면 소득금액이 오히려 커진다. 이 책의 모델로 장부를 써서 신고하면 5월에 낼 세금이 <b id="n-led"></b>으로 늘어난다. 단순경비율을 쓰기로 했다.</p>
+      <p>강연료의 기타소득금액은 <b id="n-oinc"></b>로 분리과세를 고를 수 있다. 두 가지를 모두 계산해 봤다. 분리과세로 끝내면 5월에 낼 세금은 <b id="n-sep"></b>, 합산하면 <b id="n-com"></b>이다. <b id="n-which"></b> 쪽이 <b id="n-diff"></b> 적다. 다온의 한계세율(<b id="n-mar"></b>)이 기타소득 원천징수 세율 <span data-t="other.withholding" data-f="pct"></span>보다 <b id="n-why"></b>. 다온은 적은 쪽을 골랐다.</p>
+      <p>합산한 결과는 이렇다. 연말정산 과세표준 <b id="n-base0"></b>에 사업소득과 기타소득을 더한 종합소득 과세표준은 <b id="n-base"></b>, 결정세액은 <b id="n-dec"></b>이다. 여기서 2월에 정산한 연말정산 결정세액 <b id="n-ye"></b>과 외주·강연에서 떼인 소득세를 빼면 소득세 <b id="n-due"></b>, 지방소득세 <b id="n-dueL"></b>가 남는다(음수면 환급). 3.3%는 "다 낸 세금"이 아니라 "미리 낸 세금"이었다. 홈택스에서 종합소득세를 낸 뒤 지방소득세 신고 화면까지 마쳤다.</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>부업 소득은 근로소득이 채운 구간 위에 쌓여 과세된다. 단순경비율이 실제 비용보다 넉넉해 장부보다 유리했다. 강연료는 분리과세와 합산을 둘 다 계산해 적은 쪽을 골랐다.</div><div><b>아직 남은 문제</b>내년에 외주가 늘어 수입이 단순경비율 기준을 넘으면 장부가 필요하다. 올해부터 영수증을 모으기로 했다. 정기예금 이자와 ISA는 아직 보지 않았다.</div><div><b>다음 장</b><a href="financial.html">8장</a>: 예금 이자와 배당. 다온의 금융소득은 이 5월 신고에 들어가는가.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>돈이 들어온 이유에 따라 근로소득(고용), 사업소득(독립·계속), 기타소득(일시)으로 나뉘고, 원천징수율·경비·신고 방법이 달라진다.</li>
+      <li>사업소득의 3.3%(소득세 <span data-t="business.withholding" data-f="pct"></span> + 지방소득세)는 미리 낸 세금이다. 5월에 근로소득과 합쳐 다시 계산하고 차액을 내거나 돌려받는다.</li>
+      <li>장부가 없으면 업종별 경비율로 추계한다. 수입이 작으면 단순경비율, 기준을 넘으면 불리한 기준경비율이다. 실제 경비율이 경비율보다 높으면 장부가 유리하고, 복식부기는 기장세액공제(<span data-t="business.bookkeepingCreditRate" data-f="pct"></span>, 한도 <span data-t="business.bookkeepingCreditLimit"></span>)를 받는다. 소규모가 아닌 사업자가 추계하면 무기장 가산세가 붙는다.</li>
+      <li>강연료 같은 기타소득은 지급액의 <span data-t="other.expenseRate" data-f="pct"></span>를 경비로 보고, 소득금액이 <span data-t="other.separateMax"></span> 이하면 분리과세와 합산 중 고른다. 한계세율이 <span data-t="other.withholding" data-f="pct"></span>보다 낮으면 합산, 높으면 분리과세가 유리하다.</li>
+      <li>부업 소득은 근로소득이 채운 구간 위에 쌓이므로 마지막 1원의 세율은 근로소득과 합친 과세표준이 정한다.</li>
+      <li>신고·납부 기한은 <span data-t="calendar.incomeFiling"></span>. 무신고 <span data-t="penalty.noFiling" data-f="pct"></span>, 과소신고 <span data-t="penalty.underFiling" data-f="pct"></span>, 납부지연은 하루 <span data-js="late"></span>다. 지방소득세는 따로 신고한다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>연말정산을 마친 직장인이 한 해 동안 외주비를 받으며 3.3%를 떼였다. 맞는 설명은?</p>
+        <div class="opts">
+          <button class="opt">3.3%를 떼였으므로 신고할 필요가 없다</button>
+          <button class="opt">연말정산 때 회사가 외주비까지 함께 정산한다</button>
+          <button class="opt">외주비만 따로 신고하고 근로소득은 신고서에서 뺀다</button>
+          <button class="opt" data-correct>5월에 근로소득과 사업소득을 합쳐 신고하고, 떼인 3.3%와 연말정산 결정세액을 뺀 차액을 내거나 돌려받는다</button>
+        </div>
+        <div class="quiz-exp">사업소득의 원천징수는 미리 낸 세금이다. 근로소득이 있는 사람은 부업 소득이 근로소득 위에 쌓여 더 높은 세율이 붙으므로, 5월 종합소득세 신고(<span data-t="calendar.incomeFiling"></span>)에서 두 소득을 합쳐 다시 계산한다. 근로소득을 빼고 신고하면 세율이 낮게 계산되어 과소신고가 된다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>단순경비율 대상인 프리랜서의 실제 비용이 수입의 20%다. 단순경비율이 그보다 높다면 일반적으로 유리한 신고 방법은?</p>
+        <div class="opts">
+          <button class="opt" data-correct>단순경비율로 추계 신고(소규모 사업자라 무기장 가산세가 없는 경우)</button>
+          <button class="opt">간편장부로 실제 비용 20%만 신고</button>
+          <button class="opt">비용을 단순경비율만큼 장부에 채워 넣어 신고</button>
+          <button class="opt">신고하지 않고 3.3%로 끝낸다</button>
+        </div>
+        <div class="quiz-exp">장부는 실제 경비율이 경비율보다 높을 때 유리하다. 실제 비용이 경비율보다 작으면 추계가 비용을 더 크게 인정한다. 쓰지 않은 비용을 장부에 넣는 것은 가공 경비로 탈세이고, 신고하지 않으면 무신고 가산세 <span data-t="penalty.noFiling" data-f="pct"></span>가 붙는다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>한계세율이 35%인 사람이 강연료를 받아 기타소득금액이 200만원이다. 분리과세와 합산 중 무엇이 유리한가?</p>
+        <div class="opts">
+          <button class="opt">합산. 필요경비를 더 인정받는다</button>
+          <button class="opt" data-correct>분리과세. 원천징수 세율이 한계세율보다 낮다</button>
+          <button class="opt">고를 수 없다. 반드시 합산한다</button>
+          <button class="opt">고를 수 없다. 반드시 분리과세한다</button>
+        </div>
+        <div class="quiz-exp">기타소득금액이 <span data-t="other.separateMax"></span> 이하라 고를 수 있다. 분리과세는 소득금액에 <span data-t="other.withholding" data-f="pct"></span>로 끝나고, 합산하면 한계세율 35%가 붙는다. 필요경비는 어느 쪽이든 같다. 한계세율이 원천징수 세율보다 낮은 사람만 합산이 유리하다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>종합소득세를 홈택스에서 신고·납부했다. 지방소득세는?</p>
+        <div class="opts">
+          <button class="opt">종합소득세에 자동으로 포함되어 따로 할 일이 없다</button>
+          <button class="opt">다음 해 연말정산 때 회사가 낸다</button>
+          <button class="opt" data-correct>지방자치단체에 따로 신고·납부해야 하며, 홈택스 신고 뒤 이어지는 화면(위택스 연계)에서 할 수 있다</button>
+          <button class="opt">사업소득에는 지방소득세가 없다</button>
+        </div>
+        <div class="quiz-exp">지방소득세는 소득세의 <span data-t="income.localRate" data-f="pct"></span>로 계산하지만 지방세라 신고 주체와 납부처가 다르다. 종합소득세만 내고 지방소득세 신고를 빠뜨리면 지방소득세에 따로 무신고·납부지연 가산세가 붙는다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  function hatch(ctx, x, y, w, h, color) {
+    if (w <= 0 || h <= 0) return;
+    ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+    ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.globalAlpha = 0.5;
+    for (let k = -h; k < w; k += 7) { ctx.beginPath(); ctx.moveTo(x + k, y + h); ctx.lineTo(x + k + h, y); ctx.stroke(); }
+    ctx.restore();
+  }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const won = TB.won;
+  const okW = (v) => '<span class="won plus">' + won(v) + "</span>";
+  const badW = (v) => '<span class="won minus">' + won(v) + "</span>";
+  const dueHtml = (v) => (v > 0 ? '<span class="won minus">납부 ' + won(v) + "</span>" : '<span class="won plus">환급 ' + won(-v) + "</span>");
+  const L1 = 1 + D.income.localRate, C = TX.CASE, B = D.business, O = D.other;
+  const SIMPLE = B.simpleRateIllustration;
+
+  /* 본문의 계산된 비율 */
+  (function () {
+    const fill = (k, s) => document.querySelectorAll('[data-js="' + k + '"]').forEach((el) => { el.textContent = s; });
+    fill("biz33", TB.pct(B.withholding * L1, 2));
+    fill("oth88", TB.pct(O.withholding * (1 - O.expenseRate) * L1, 2));
+    fill("othpay", won(O.separateMax / (1 - O.expenseRate)));
+    fill("late", (D.penalty.lateDaily * 100).toFixed(3) + "%");
+    fill("lecinc", won(1e6 * (1 - O.expenseRate)));
+    fill("lateYear", (D.penalty.lateDaily * 365 * 100).toFixed(1) + "%");
+  })();
+
+  /* 다온의 연말정산(연봉만 바꿀 수 있다) */
+  function daonYE(salary) {
+    const s = salary != null ? salary : C.salaryContract, monthly = s / 12;
+    const pr = TX.payroll({ monthly, nontax: C.mealMonthly, family: 1, kids: 0, ratio: 1 });
+    const x = TX.caseYearEnd();
+    x.gross = (monthly - C.mealMonthly) * 12;
+    x.ins = { pension: pr.ins.pension * 12, health: (pr.ins.health + pr.ins.care) * 12, employ: pr.ins.employ * 12 };
+    x.prepaid = pr.tax * 12; x.prepaidLocal = pr.local * 12;
+    return TX.yearEnd(x);
+  }
+  const ytot = (ye) => ye.decided + ye.local;
+  /* 부업 때문에 늘어나는 세금(지방세 포함)과 5월 납부 */
+  function side(ye, biz, oth) {
+    const c = TX.comprehensive({ ye, business: biz || null, other: oth || null });
+    const extra = c.decided + c.local - ytot(ye);
+    const wh = (biz ? biz.withheld + biz.withheldLocal : 0) + (oth && !oth.separate ? oth.withheld + oth.withheldLocal : 0);
+    return { c, extra, may: c.due + c.dueLocal, wh };
+  }
+  const simpleBiz = (rev) => TX.business({ revenue: rev, rate: SIMPLE });
+
+  /* ---------------------------------------------------------- 1. 소득 구분 */
+  (function () {
+    const aG = TB.range("kind-a", (v) => won(v * 1e4), draw), sG = TB.range("kind-s", (v) => won(v * 1e4), draw);
+    let geo = null;
+    function calc() {
+      const a = aG() * 1e4, salary = sG() * 1e4, ye = daonYE(salary);
+      const ye2 = daonYE(salary + a);
+      const wage = { wh: ye2.prepaid + ye2.prepaidLocal - ye.prepaid - ye.prepaidLocal, fin: ytot(ye2) - ytot(ye) };
+      const bz = simpleBiz(a), sb = side(ye, bz);
+      const biz = { wh: bz.withheld + bz.withheldLocal, fin: sb.extra, may: sb.extra - (bz.withheld + bz.withheldLocal) };
+      const oi = TX.otherIncome(a), so = side(ye, null, { income: oi.income, separate: false, withheld: oi.withheld, withheldLocal: oi.withheldLocal });
+      const sepT = oi.withheld + oi.withheldLocal;
+      const oth = { wh: sepT, fin: oi.separable ? Math.min(sepT, so.extra) : so.extra, sep: oi.separable, pick: oi.separable && sepT <= so.extra ? "분리과세" : "합산" };
+      return { a, wage, biz, oth };
+    }
+    const cv = TB.canvas("#kind-cv", (ctx, w, h) => {
+      const P = TB.palette(), r = calc();
+      const groups = [["근로소득", r.wage, P.accent], ["사업소득", r.biz, P.accent2], ["기타소득", r.oth, P.warn]];
+      const mx = Math.max(1, ...groups.map((g) => Math.max(g[1].wh, g[1].fin))) * 1.18;
+      const bx = 52, bw = w - bx - 12, top = 28, bot = h - 62, Y = (v) => bot - Math.max(0, v) / mx * (bot - top);
+      [0, 0.5, 1].forEach((f) => { const v = mx * f, y = Y(v); ctx.strokeStyle = P.grid; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(bx, y); ctx.lineTo(bx + bw, y); ctx.stroke(); T(ctx, TB.wonAxis(v), bx - 6, y, { size: 10, mono: true, color: P.dim, align: "right", base: "middle" }); });
+      const gw = bw / 3, barw = Math.min(46, gw * 0.32);
+      groups.forEach(([name, g, col], i) => {
+        const cx = bx + gw * (i + 0.5);
+        ctx.fillStyle = col; ctx.globalAlpha = 0.35; ctx.fillRect(cx - barw - 3, Y(g.wh), barw, bot - Y(g.wh));
+        ctx.globalAlpha = 0.9; ctx.fillRect(cx + 3, Y(g.fin), barw, bot - Y(g.fin)); ctx.globalAlpha = 1;
+        T(ctx, TB.wonAxis(g.wh), cx - barw / 2 - 3, Y(g.wh) - 5, { size: 10, mono: true, color: P.dim, align: "center" });
+        T(ctx, TB.wonAxis(g.fin), cx + barw / 2 + 3, Y(g.fin) - 5, { size: 11, mono: true, color: P.text, align: "center", weight: 700 });
+        T(ctx, name, cx, bot + 16, { size: 12, color: P.text, align: "center", weight: 700 });
+        T(ctx, w < 480 ? "떼인 | 최종" : "떼인 돈 | 최종 세금", cx, bot + 31, { size: 10, color: P.dim, align: "center" });
+        if (i === 2) T(ctx, g.sep ? g.pick + " 선택" : "분리과세 불가", cx + barw / 2 + 3, Y(g.fin) - 18, { size: 10, color: g.sep ? P.ok : P.bad, align: "center", weight: 700 });
+      });
+      T(ctx, "지방소득세 포함 · 다온의 연말정산 위에 더한 금액 " + TB.wonAxis(r.a), 12, 16, { size: 11, color: P.dim, weight: 700 });
+      geo = { top, bot, mx };
+    }, { get height() { return pw("kind-cv") < 480 ? 300 : 310; } });
+    let y0 = null, v0 = 0;
+    TB.drag(cv.canvas, { start(x, y) { y0 = y; v0 = aG(); }, move(x, y) { if (y0 == null) return; const v = TB.clamp(Math.round((v0 + (y0 - y) * 8) / 10) * 10, 50, 3000); if (v !== aG()) aG.set(v); }, end() { y0 = null; } });
+    function draw() {
+      const r = calc(), pc = (g) => won(g.fin) + " <small>" + TB.pct(g.fin / r.a, 1) + "</small>";
+      TB.stat("kind-o-w", pc(r.wage)); TB.stat("kind-o-b", pc(r.biz)); TB.stat("kind-o-o", pc(r.oth));
+      TB.stat("kind-o-m", dueHtml(r.biz.may));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 2. 경비율 vs 장부 */
+  (function () {
+    const rG = TB.range("exp-r", (v) => won(v * 1e4), draw);
+    const bigEl = document.getElementById("exp-big"); bigEl.addEventListener("change", draw);
+    const ye = daonYE();
+    let er = 0.2, box = null;
+    function ways(rev, e) {
+      const can = rev < B.simpleThresholdServices;
+      // 추계: 단순경비율(다음 해 기준을 넘으면 쓸 수 없다고 표시)
+      const bs = simpleBiz(rev), s = side(ye, bs);
+      let est = s.may;
+      if (bigEl.checked) { const share = s.c.base > 0 ? bs.income / s.c.base : 0; est += Math.floor(s.c.calc.tax * share * B.noBooksPenalty) * L1; }
+      const bl = TX.business({ revenue: rev, books: "ledger", expenses: rev * e }), l = side(ye, bl);
+      const share = l.c.base > 0 ? bl.income / l.c.base : 0;
+      const credit = Math.min(B.bookkeepingCreditLimit, l.c.calc.tax * share * B.bookkeepingCreditRate, Math.max(0, l.c.decided));
+      return { can, est, ledger: l.may, dbl: l.may - credit * L1 };
+    }
+    const cv = TB.canvas("#exp-cv", (ctx, w, h) => {
+      const P = TB.palette(), rev = rG() * 1e4;
+      const xs = []; for (let e = 0; e <= 0.9001; e += 0.01) xs.push(e);
+      const rs = xs.map((e) => ways(rev, e));
+      const all = rs.flatMap((r) => [r.est, r.ledger, r.dbl]);
+      let lo = Math.min(0, ...all), hi = Math.max(1e4, ...all); const pad = (hi - lo) * 0.12; lo -= pad; hi += pad;
+      const c = TB.chart(ctx, { x: 58, y: 26, w: w - 88, h: h - 86 }, {
+        x: [0, 0.9], y: [lo, hi], xFmt: (v) => Math.round(v * 100) + "%", yFmt: TB.wonAxis, xTicks: [0, 0.2, 0.4, 0.6, 0.8],
+        series: [
+          { data: rs.map((r, i) => [xs[i], r.est]), color: P.accent2, width: 2.4, dash: rs[0].can ? [] : [6, 4] },
+          { data: rs.map((r, i) => [xs[i], r.ledger]), color: P.accent, width: 2.4 },
+          { data: rs.map((r, i) => [xs[i], r.dbl]), color: P.ok, width: 2.2, dash: [4, 3] },
+        ],
+        hlines: [{ y: 0, color: P.axis, dash: [] }],
+        vlines: [{ x: SIMPLE, color: P.faint, label: "단순경비율(예시)" }],
+      });
+      if (!rs[0].can) { hatch(ctx, c.box.x, c.box.y, c.box.w, c.box.h, P.bad); T(ctx, "직전 수입이 기준 이상이면 단순경비율을 쓸 수 없다(기준경비율: 이 모델 밖)", c.box.x + c.box.w, c.box.y + c.box.h - 8, { size: 10, color: P.bad, align: "right", weight: 700 }); }
+      box = c;
+      const r = ways(rev, er), px = c.X(er), hy = c.box.y + c.box.h;
+      [[r.est, P.accent2], [r.ledger, P.accent], [r.dbl, P.ok]].forEach(([v, col]) => { ctx.beginPath(); ctx.arc(px, c.Y(v), 4.5, 0, TAU); ctx.fillStyle = col; ctx.fill(); });
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.45; ctx.beginPath(); ctx.moveTo(px, c.box.y); ctx.lineTo(px, hy); ctx.stroke(); ctx.restore();
+      knob(ctx, px, hy, P);
+      // 범례
+      let lx = 12; const ly = 14;
+      [["추계(단순경비율)", P.accent2], ["간편장부", P.accent], ["복식부기", P.ok]].forEach(([s, col]) => { ctx.fillStyle = col; ctx.fillRect(lx, ly - 4, 12, 3); T(ctx, s, lx + 16, ly, { size: 11, color: P.dim, base: "middle" }); ctx.font = TB.font(11); lx += ctx.measureText(s).width + 30; });
+      T(ctx, "5월에 더 낼 세금(− 환급)", w - 12, ly, { size: 10, color: P.faint, align: "right", base: "middle" });
+    }, { get height() { return pw("exp-cv") < 480 ? 310 : 320; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; er = TB.clamp(Math.round((x - box.box.x) / box.box.w * 0.9 * 100) / 100, 0, 0.9); draw(); } });
+    function draw() {
+      const rev = rG() * 1e4, r = ways(rev, er);
+      TB.stat("exp-o-s", (r.can ? "" : '<small>불가</small> ') + dueHtml(r.est));
+      TB.stat("exp-o-l", dueHtml(r.ledger)); TB.stat("exp-o-d", dueHtml(r.dbl));
+      TB.stat("exp-o-e", Math.round(er * 100) + "% <small>비용 " + won(rev * er) + "</small>");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 기타소득 분리과세 */
+  (function () {
+    const sG = TB.range("oth-s", (v) => won(v * 1e4), draw);
+    const bizEl = document.getElementById("oth-biz"); bizEl.addEventListener("change", draw);
+    const XMAX = 1500e4, cut = O.separateMax / (1 - O.expenseRate);
+    let pay = C.lecture, box = null;
+    function both(ye, base, p) {
+      const oi = TX.otherIncome(p), biz = bizEl.checked ? simpleBiz(C.side.revenue) : null;
+      const comb = side(ye, biz, { income: oi.income, separate: false, withheld: oi.withheld });
+      const sepT = oi.withheld + oi.withheldLocal;
+      return { oi, sep: oi.separable ? sepT : null, com: comb.extra - base };
+    }
+    function baseFor(ye) { const biz = bizEl.checked ? simpleBiz(C.side.revenue) : null; return biz ? side(ye, biz).extra : 0; }
+    const cv = TB.canvas("#oth-cv", (ctx, w, h) => {
+      const P = TB.palette(), ye = daonYE(sG() * 1e4), base = baseFor(ye);
+      const xs = []; for (let p = 0; p <= XMAX + 1; p += XMAX / 120) xs.push(p);
+      const rs = xs.map((p) => both(ye, base, p));
+      const ymax = Math.max(1e4, ...rs.map((r) => Math.max(r.com, r.sep || 0))) * 1.12;
+      const c = TB.chart(ctx, { x: 58, y: 26, w: w - 88, h: h - 86 }, {
+        x: [0, XMAX], y: [0, ymax], xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [
+          { data: rs.map((r, i) => [xs[i], r.sep == null ? NaN : r.sep]), color: P.warn, width: 2.6 },
+          { data: rs.map((r, i) => [xs[i], r.com]), color: P.accent, width: 2.4 },
+        ],
+        vlines: [{ x: cut, color: P.bad, label: "소득금액 " + TB.wonAxis(O.separateMax) }],
+      });
+      box = c;
+      const r = both(ye, base, pay), px = c.X(pay), hy = c.box.y + c.box.h;
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.45; ctx.beginPath(); ctx.moveTo(px, c.box.y); ctx.lineTo(px, hy); ctx.stroke(); ctx.restore();
+      if (r.sep != null) { ctx.beginPath(); ctx.arc(px, c.Y(r.sep), 4.5, 0, TAU); ctx.fillStyle = P.warn; ctx.fill(); }
+      ctx.beginPath(); ctx.arc(px, c.Y(r.com), 4.5, 0, TAU); ctx.fillStyle = P.accent; ctx.fill();
+      knob(ctx, px, hy, P);
+      let lx = 12; const ly = 14;
+      [["분리과세", P.warn], ["합산(종합과세)", P.accent]].forEach(([s, col]) => { ctx.fillStyle = col; ctx.fillRect(lx, ly - 4, 12, 3); T(ctx, s, lx + 16, ly, { size: 11, color: P.dim, base: "middle" }); ctx.font = TB.font(11); lx += ctx.measureText(s).width + 30; });
+      T(ctx, "강연료 때문에 늘어나는 세금", w - 12, ly, { size: 10, color: P.faint, align: "right", base: "middle" });
+    }, { get height() { return pw("oth-cv") < 480 ? 300 : 310; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; pay = TB.clamp(Math.round((x - box.box.x) / box.box.w * XMAX / 1e5) * 1e5, 0, XMAX); draw(); } });
+    function draw() {
+      const ye = daonYE(sG() * 1e4), r = both(ye, baseFor(ye), pay);
+      TB.stat("oth-o-a", won(pay) + " <small>/ " + won(r.oi.income) + "</small>");
+      TB.stat("oth-o-s", r.sep == null ? '<span class="won minus">고를 수 없음</span>' : won(r.sep));
+      TB.stat("oth-o-c", won(r.com));
+      TB.stat("oth-o-w", r.sep == null ? "합산(의무)" : Math.abs(r.sep - r.com) < 10 ? "같음" : r.sep < r.com ? "분리과세 " + okW(r.com - r.sep) : "합산 " + okW(r.sep - r.com));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 4. 합산과 한계세율 */
+  (function () {
+    const sG = TB.range("stk-s", (v) => won(v * 1e4), draw);
+    const dInc = simpleBiz(C.side.revenue).income;
+    const qG = TB.seg("stk-q", (v) => { amt = v === "d" ? dInc : +v; draw(); });
+    let amt = dInc, geo = null;
+    const XMAX = 1.6e8;
+    function calc() {
+      const ye = daonYE(sG() * 1e4), base0 = ye.best.base;
+      const biz = TX.business({ revenue: amt, books: "ledger", expenses: 0 });
+      const s = side(ye, biz), top = TX.incomeTax(base0 + amt).rate;
+      return { ye, base0, extra: s.extra, rate: amt > 0 ? top : TX.incomeTax(base0).rate };
+    }
+    const cv = TB.canvas("#stk-cv", (ctx, w, h) => {
+      const P = TB.palette(), r = calc();
+      const bx = 14, bw = w - 28, X = (v) => bx + Math.min(v, XMAX) / XMAX * bw;
+      const rates = D.income.rates;
+      // 구간 띠
+      let prev = 0; const bandY = 30, bandH = h - 118;
+      rates.forEach(([up, rt], i) => {
+        const top = up == null ? XMAX : Math.min(up, XMAX); if (prev >= XMAX) return;
+        ctx.fillStyle = i % 2 ? P.grid : "transparent"; ctx.fillRect(X(prev), bandY, X(top) - X(prev), bandH);
+        if (X(top) - X(prev) > 26) T(ctx, Math.round(rt * 100) + "%", (X(prev) + X(top)) / 2, bandY + 14, { size: 12, mono: true, color: P.dim, align: "center", weight: 700 });
+        if (up != null && up < XMAX) { ctx.strokeStyle = P.axis; ctx.setLineDash([3, 3]); ctx.beginPath(); ctx.moveTo(X(up), bandY); ctx.lineTo(X(up), bandY + bandH); ctx.stroke(); ctx.setLineDash([]); T(ctx, TB.wonAxis(up), X(up), bandY + bandH + 14, { size: 10, mono: true, color: P.faint, align: "center" }); }
+        prev = top;
+      });
+      T(ctx, "종합소득 과세표준 · 띠 = 기본세율 구간", bx, 18, { size: 11, color: P.dim, weight: 700 });
+      // 근로 블록
+      const y1 = bandY + 32, bh = 30;
+      ctx.fillStyle = P.accent; ctx.globalAlpha = 0.85; ctx.fillRect(X(0), y1, X(r.base0) - X(0), bh); ctx.globalAlpha = 1;
+      T(ctx, "근로 " + TB.wonAxis(r.base0), X(0) + 6, y1 + bh / 2, { size: 11, color: "#fff", base: "middle", weight: 700 });
+      // 부업 블록: 구간마다 색
+      const y2 = y1 + bh + 18; let p0 = r.base0; const end = r.base0 + amt;
+      ctx.fillStyle = P.accent; ctx.globalAlpha = 0.25; ctx.fillRect(X(0), y2, X(r.base0) - X(0), bh); ctx.globalAlpha = 1;
+      const cols = [P.ok, P.warn, P.accent2, P.bad, P.bad, P.bad, P.bad, P.bad];
+      rates.forEach(([up, rt], i) => {
+        const top = up == null ? Infinity : up;
+        const a = Math.max(p0, i === 0 ? 0 : rates[i - 1][0]), b = Math.min(end, top);
+        if (b > a) { ctx.fillStyle = cols[i]; ctx.globalAlpha = 0.9; ctx.fillRect(X(a), y2, Math.max(1.5, X(b) - X(a)), bh); ctx.globalAlpha = 1; }
+      });
+      T(ctx, "+ 부업 " + TB.wonAxis(amt), Math.min(X(end) + 6, w - 90), y2 + bh + 16, { size: 11, color: P.text, weight: 700 });
+      knob(ctx, X(end), y2 + bh / 2, P);
+      geo = { X, bx, bw, y2, bh };
+      T(ctx, "부업 몫의 세금 " + TB.wonAxis(r.extra) + " (지방세 포함)", bx, h - 34, { size: 12, color: P.bad, weight: 700 });
+    }, { get height() { return pw("stk-cv") < 480 ? 250 : 250; } });
+    TB.drag(cv.canvas, { move(x) { if (!geo) return; const r0 = calc().base0; amt = TB.clamp(Math.round(((x - geo.bx) / geo.bw * XMAX - r0) / 1e5) * 1e5, 0, XMAX - r0); draw(); } });
+    function draw() {
+      const r = calc();
+      TB.stat("stk-o-a", won(amt)); TB.stat("stk-o-t", badW(r.extra));
+      TB.stat("stk-o-e", amt > 0 ? TB.pct(r.extra / amt, 1) : "—");
+      TB.stat("stk-o-m", TB.pct(r.rate * L1, 1) + " <small>지방세 포함</small>");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 5. 가산세 */
+  (function () {
+    const kG = TB.seg("pen-k", draw), tG = TB.range("pen-t", (v) => won(v * 1e4), draw);
+    const P_ = D.penalty, DMAX = 730;
+    let days = 90, box = null;
+    function pen(k, tax, d) {
+      if (k === "ok") return { file: 0, late: 0 };
+      const file = k === "none" ? tax * P_.noFiling : k === "under" ? tax * P_.underFiling : 0;
+      return { file, late: tax * P_.lateDaily * d };
+    }
+    const cv = TB.canvas("#pen-cv", (ctx, w, h) => {
+      const P = TB.palette(), tax = tG() * 1e4, k = kG();
+      const ks = [["none", P.bad, "무신고"], ["under", P.warn, "과소신고"], ["unpaid", P.accent2, "미납"], ["ok", P.ok, "기한 내"]];
+      const ymax = tax * (1 + P_.noFiling + P_.lateDaily * DMAX) * 1.06;
+      const series = ks.map(([kk, col]) => { const pts = []; for (let d = 0; d <= DMAX; d += 10) { const p = pen(kk, tax, d); pts.push([d, tax + p.file + p.late]); } return { data: pts, color: col, width: kk === k ? 3 : 1.4, dash: kk === k ? [] : [4, 4] }; });
+      const c = TB.chart(ctx, { x: 58, y: 26, w: w - 88, h: h - 86 }, { x: [0, DMAX], y: [0, ymax], xTicks: [0, 180, 365, 545, 730], xFmt: (v) => v + "일", yFmt: TB.wonAxis, series, hlines: [{ y: tax, color: P.faint, label: "본세" }] });
+      box = c;
+      const p = pen(k, tax, days), px = c.X(days), hy = c.box.y + c.box.h, col = ks.find((q) => q[0] === k)[1];
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.45; ctx.beginPath(); ctx.moveTo(px, c.box.y); ctx.lineTo(px, hy); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(px, c.Y(tax + p.file + p.late), 5, 0, TAU); ctx.fillStyle = col; ctx.fill();
+      knob(ctx, px, hy, P);
+      let lx = 12; const ly = 14;
+      ks.forEach(([kk, cc, s]) => { ctx.fillStyle = cc; ctx.fillRect(lx, ly - 4, 12, 3); T(ctx, s, lx + 16, ly, { size: 11, color: kk === k ? P.text : P.dim, base: "middle", weight: kk === k ? 700 : 400 }); ctx.font = TB.font(11); lx += ctx.measureText(s).width + 28; });
+    }, { get height() { return pw("pen-cv") < 480 ? 290 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; days = TB.clamp(Math.round((x - box.box.x) / box.box.w * DMAX / 5) * 5, 0, DMAX); draw(); } });
+    function draw() {
+      const tax = tG() * 1e4, k = kG(), p = pen(k, tax, days);
+      TB.stat("pen-o-d", k === "ok" ? "0일" : days + "일");
+      TB.stat("pen-o-f", p.file ? badW(p.file) : "0원"); TB.stat("pen-o-l", p.late ? badW(p.late) : "0원");
+      TB.stat("pen-o-t", badW(tax + p.file + p.late));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 다온의 노트 */
+  (function () {
+    const ye = TX.yearEnd(TX.caseYearEnd());
+    const bz = simpleBiz(C.side.revenue), oi = TX.otherIncome(C.lecture);
+    const sep = TX.comprehensive({ ye, business: bz, other: { income: oi.income, separate: true, withheld: oi.withheld } });
+    const com = TX.comprehensive({ ye, business: bz, other: { income: oi.income, separate: false, withheld: oi.withheld } });
+    const mSep = sep.due + sep.dueLocal, mCom = com.due + com.dueLocal;
+    const best = mCom <= mSep ? com : sep;
+    const led = TX.comprehensive({ ye, business: TX.business({ revenue: C.side.revenue, books: "ledger", expenses: 1.2e6 }), other: { income: oi.income, separate: best === sep, withheld: oi.withheld } });
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set("n-bw", won(bz.withheld + bz.withheldLocal)); set("n-ow", won(oi.withheld + oi.withheldLocal));
+    set("n-bexp", won(bz.expenses)); set("n-binc", won(bz.income)); set("n-led", won(led.due + led.dueLocal));
+    set("n-oinc", won(oi.income)); set("n-sep", won(mSep)); set("n-com", won(mCom)); set("n-diff", won(Math.abs(mSep - mCom)));
+    set("n-mar", TB.pct(com.marginal, 0));
+    set("n-base0", won(ye.best.base)); set("n-base", won(best.base)); set("n-dec", won(best.decided)); set("n-ye", won(ye.decided));
+    set("n-due", won(best.due)); set("n-dueL", won(best.dueLocal));
+    set("n-which", best === com ? "합산" : "분리과세");
+    set("n-why", com.marginal * L1 < O.withholding * L1 ? "낮아서, 합산하면 강연료에서 떼인 세금 일부를 돌려받는 셈이다" : "높거나 같아서, 떼인 세금으로 끝내는 편이 낫다");
+    const pay = best.due + best.dueLocal;
+    document.getElementById("n-head").textContent = pay > 0 ? "3.3%로는 모자랐다. 5월에 " + won(pay) + "을 더 낸다" : "3.3%가 넉넉했다. 5월에 " + won(-pay) + "을 돌려받는다";
+  })();
+});
+</script>
+</body>
+</html>

@@ -34,8 +34,11 @@
     TX.YEAR = json.year;
     while (waiters.length) { const fn = waiters.shift(); try { fn(D); } catch (e) { console.error(e); } }
     if (!isNode && typeof document !== "undefined") {
+      // 상단바·푸터(common.js)와 장 스크립트가 만든 요소까지 채우도록 여러 시점에 다시 채운다
       const go = () => { TX.fill(document); document.documentElement.classList.add("tx-ready"); };
       if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", () => setTimeout(go, 0)); else setTimeout(go, 0);
+      if (document.readyState !== "complete") window.addEventListener("load", () => setTimeout(go, 0));
+      setTimeout(go, 400);
     }
     return TX;
   };
@@ -97,7 +100,9 @@
     if (!D) return;
     (scope || document).querySelectorAll("[data-t]").forEach((el) => {
       const v = TX.v(el.getAttribute("data-t"));
-      const f = el.getAttribute("data-f") || (typeof v === "number" ? (Math.abs(v) < 1 && v !== 0 ? "pct" : "won") : "raw");
+      // 형식을 주지 않으면: 1 미만 비율은 %, 1900~2100의 정수는 연도(그대로), 나머지 숫자는 금액
+      const isYear = typeof v === "number" && Number.isInteger(v) && v >= 1900 && v <= 2100;
+      const f = el.getAttribute("data-f") || (typeof v === "number" ? (isYear ? "raw" : Math.abs(v) < 1 && v !== 0 ? "pct" : "won") : "raw");
       el.textContent = v == null ? "확인 필요" : (TX.fmt[f] || TX.fmt.raw)(v);
       el.classList.add("tval");
       el.title = (D.label || "") + " · data/tax-" + D.year + ".json";

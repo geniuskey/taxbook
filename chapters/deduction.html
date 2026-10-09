@@ -1,0 +1,777 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "신용카드 등 소득공제는 총급여의 일정 비율(문턱)을 넘은 사용액에만, 공제율이 낮은 결제 수단부터 문턱을 채운 뒤 한도 안에서 붙는다. 결제 수단별 공제율, 자녀 수별 한도, 추가한도, 청약저축·전세대출·주택담보대출 공제를 시뮬레이터로 만지고, 소득공제의 값이 한계세율로 정해진다는 것을 확인한다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>소득공제: 신용카드와 주택자금 · TaxBook</title>
+<meta name="description" content="신용카드 등 소득공제는 총급여의 일정 비율(문턱)을 넘은 사용액에만, 공제율이 낮은 결제 수단부터 문턱을 채운 뒤 한도 안에서 붙는다. 결제 수단별 공제율, 자녀 수별 한도, 추가한도, 청약저축·전세대출·주택담보대출 공제를 시뮬레이터로 만지고, 소득공제의 값이 한계세율로 정해진다는 것을 확인한다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/deduction.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="소득공제: 신용카드와 주택자금 · TaxBook">
+<meta property="og:description" content="신용카드 등 소득공제는 총급여의 일정 비율(문턱)을 넘은 사용액에만, 공제율이 낮은 결제 수단부터 문턱을 채운 뒤 한도 안에서 붙는다. 결제 수단별 공제율, 자녀 수별 한도, 추가한도, 청약저축·전세대출·주택담보대출 공제를 시뮬레이터로 만지고, 소득공제의 값이 한계세율로 정해진다는 것을 확인한다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/deduction.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/deduction.html#chapter","name":"소득공제: 신용카드와 주택자금","headline":"소득공제: 신용카드와 주택자금 · TaxBook","description":"신용카드 등 소득공제는 총급여의 일정 비율(문턱)을 넘은 사용액에만, 공제율이 낮은 결제 수단부터 문턱을 채운 뒤 한도 안에서 붙는다. 결제 수단별 공제율, 자녀 수별 한도, 추가한도, 청약저축·전세대출·주택담보대출 공제를 시뮬레이터로 만지고, 소득공제의 값이 한계세율로 정해진다는 것을 확인한다.","url":"https://taxbook.euiyun.com/chapters/deduction.html","position":4,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"4. 소득공제: 신용카드와 주택자금","item":"https://taxbook.euiyun.com/chapters/deduction.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="deduction">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 04 · <span data-t="label"></span></div>
+    <h1>소득공제: 신용카드와 주택자금</h1>
+    <p class="lead">7월 초, 다온은 상반기 카드 명세서를 모아 놓고 계산기를 두드렸다. 회사 동료는 "신용카드 말고 체크카드를 써야 연말정산에서 돌려받는다"고 했고, 다른 동료는 "어차피 한도가 있어서 별 차이 없다"고 했다. 둘 다 그럴듯하다. 이 장은 신용카드 등 소득공제가 실제로 어떤 순서로 계산되는지, 결제 수단을 바꾸면 세금이 정말 얼마나 달라지는지, 그리고 청약저축 같은 주택자금 공제가 얼마짜리인지를 숫자로 확인한다. 기준은 <span data-t="label"></span>이고, 이 장의 계산은 <span data-t="settleYear" data-f="raw"></span>년 초 연말정산에 쓰인다.</p>
+    <ul class="objectives">
+      <li>소득공제의 값이 "공제액 × 한계세율(지방소득세 포함)"이라는 것을 과세표준 그림으로 설명한다.</li>
+      <li>신용카드 등 소득공제가 총급여의 <span data-t="card.threshold" data-f="pct"></span> 문턱을 공제율 낮은 결제 수단부터 채운 뒤 계산된다는 것을 따라간다.</li>
+      <li>기본한도와 자녀 수별 한도 상향, 전통시장·대중교통·도서공연 추가한도를 구분하고, 한도에 걸리면 더 써도 공제가 늘지 않는 지점을 찾는다.</li>
+      <li>"체크카드로 바꾸면 얼마나 줄까"를 내 사용액으로 계산해 본다.</li>
+      <li>주택청약종합저축, 주택임차차입금 원리금, 장기주택저당차입금 이자 공제의 요건과 한도를 정리한다.</li>
+    </ul>
+  </header>
+
+  <section id="value">
+    <h2>소득공제 100만원은 얼마짜리인가</h2>
+    <p>연말정산 안내문에는 "공제"라는 말이 두 번 나온다. <span class="term">소득공제</span><span class="en">(Income deduction)</span>는 세금을 매길 소득에서 빼 주는 것이고, <span class="term">세액공제</span><span class="en">(Tax credit)</span>는 계산된 세금에서 빼 주는 것이다. 이 장은 앞의 것을, <a href="credit.html">5장</a>은 뒤의 것을 다룬다. 둘의 차이는 한 줄로 요약된다. 세액공제 10만원은 세금 10만원이지만, 소득공제 100만원은 세금 몇만 원에서 수십만 원 사이의 어딘가다.</p>
+    <p>왜 그런지는 <a href="taxbase.html">3장</a>에서 만든 계단을 다시 보면 안다. 총급여에서 근로소득공제와 인적공제를 빼고 남은 것이 <span class="term">과세표준</span><span class="en">(Tax base)</span>이고, 여기에 누진세율을 곱한다. 소득공제는 이 과세표준의 <b>맨 위 조각</b>을 잘라 낸다. 잘려 나간 조각에는 원래 가장 높은 세율, 곧 <span class="term">한계세율</span><span class="en">(Marginal tax rate)</span>이 붙어 있었다. 그러니 소득공제가 줄여 주는 세금은 공제액에 한계세율을 곱한 만큼이고, 여기에 소득세의 <span data-t="income.localRate" data-f="pct"></span>인 지방소득세가 함께 줄어든다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 300" role="img" aria-label="과세표준 막대의 맨 위 조각을 소득공제가 잘라 내고, 그 조각에 붙어 있던 한계세율만큼 세금이 줄어든다">
+        <defs><marker id="dd-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <text x="20" y="24" class="lbl-b">과세표준(쌓인 순서대로 세율이 붙는다)</text>
+        <rect x="40" y="226" width="130" height="40" class="f-acc-soft"/>
+        <text x="105" y="251" text-anchor="middle" class="lbl"><tspan data-t="income.rates.0.1" data-f="pct"></tspan> 구간</text>
+        <rect x="40" y="120" width="130" height="106" class="f-acc2-soft"/>
+        <text x="105" y="178" text-anchor="middle" class="lbl"><tspan data-t="income.rates.1.1" data-f="pct"></tspan> 구간</text>
+        <rect x="40" y="70" width="130" height="50" class="f-bad-soft"/>
+        <rect x="40" y="70" width="130" height="50" fill="none" class="s-bad" stroke-dasharray="5 4"/>
+        <text x="105" y="92" text-anchor="middle" class="lbl-bad">소득공제로</text>
+        <text x="105" y="110" text-anchor="middle" class="lbl-bad">잘려 나가는 조각</text>
+        <line x1="180" y1="95" x2="250" y2="95" class="s-line" marker-end="url(#dd-ar)"/>
+        <rect x="256" y="58" width="190" height="78" rx="8" class="f-surface"/>
+        <text x="351" y="82" text-anchor="middle" class="lbl-b">줄어드는 세금</text>
+        <text x="351" y="104" text-anchor="middle" class="lbl">= 공제액 × 한계세율</text>
+        <text x="351" y="124" text-anchor="middle" class="lbl-dim">× (1 + 지방소득세 <tspan data-t="income.localRate" data-f="pct"></tspan>)</text>
+        <rect x="256" y="160" width="190" height="80" rx="8" class="f-ok-soft"/>
+        <text x="351" y="184" text-anchor="middle" class="lbl-b">같은 100만원이라도</text>
+        <text x="351" y="206" text-anchor="middle" class="lbl">한계세율 <tspan data-t="income.rates.0.1" data-f="pct"></tspan>이면 작고</text>
+        <text x="351" y="226" text-anchor="middle" class="lbl">한계세율 <tspan data-t="income.rates.3.1" data-f="pct"></tspan>이면 크다</text>
+        <line x1="34" y1="266" x2="34" y2="70" class="s-axis"/>
+        <text x="40" y="288" class="lbl-dim">0원</text>
+      </svg>
+      <figcaption><b>그림 1. 소득공제는 과세표준의 맨 위를 자른다.</b> 누진세율은 과세표준을 아래부터 구간별로 채우므로, 공제로 줄어드는 몫은 가장 높은 세율이 붙은 맨 위 조각이다. 그래서 소득이 높을수록 같은 소득공제의 값이 커진다. 세액공제는 이 그림과 상관없이 세금에서 바로 빠진다(<a href="credit.html">5장</a>).</figcaption>
+    </figure>
+
+    <div class="formula">
+      $$\Delta \text{세금} \approx \text{소득공제액} \times t \times (1 + \text{지방소득세율})$$
+      <div class="where">\(t\)는 공제 전 과세표준의 한계세율이다. 공제액이 커서 과세표준이 아래 구간으로 내려가면, 내려간 부분에는 낮은 세율이 적용되어 이 근사보다 조금 덜 줄어든다.</div>
+    </div>
+
+    <p>아래 그래프의 가로축은 공제하기 전의 과세표준이고, 세로축은 소득공제가 줄여 주는 세금(지방소득세 포함)이다. 가로축 손잡이를 끌어 과세표준을 옮기고, 공제액을 바꿔 본다.</p>
+
+    <div class="sim" id="sim-val">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>소득공제의 값은 한계세율이 정한다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="val-cv"></canvas><span class="hint">가로축 손잡이를 끌어 과세표준을 고른다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>소득공제액 <output id="val-d-out"></output></span><input type="range" id="val-d" min="10" max="1000" step="10" value="100"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">공제 전 과세표준</span><span class="v" id="val-o-b">—</span></div>
+        <div class="stat"><span class="k">한계세율(지방세 포함)</span><span class="v" id="val-o-r">—</span></div>
+        <div class="stat"><span class="k">줄어드는 세금</span><span class="v" id="val-o-s">—</span></div>
+        <div class="stat"><span class="k">공제액 대비</span><span class="v" id="val-o-p">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 과세표준 3,000만원 근처에 둔다. 다온처럼 이 구간에 있는 사람에게 소득공제 100만원은 세금 십몇만 원이다. ② 손잡이를 세율 구간 경계 바로 위로 옮기고 공제액을 키운다. 곡선이 계단 사이에서 비스듬히 내려오는 구간이 생긴다. 공제가 과세표준을 아래 구간으로 끌어내려 일부에 낮은 세율이 붙기 때문이다. ③ 손잡이를 맨 왼쪽(과세표준이 공제액보다 작은 곳)으로 끈다. 공제는 과세표준을 0 아래로 내리지 못하므로, 낼 세금이 거의 없는 사람에게 소득공제는 값이 거의 없다. (근로소득세액공제 등 세액공제는 넣지 않은 산출세액 기준이다. 세액공제가 산출세액을 다 덮는 사람에게는 소득공제의 실제 값이 더 작다.)</div>
+    </div>
+
+    <p>곡선은 계단 모양이다. 계단의 높이가 곧 그 구간의 세율이다. 과세표준이 낮은 사람의 소득공제 100만원은 세금 몇만 원이고, 높은 구간의 사람에게는 수십만 원이다. 소득공제가 "고소득자에게 더 유리하다"는 말은 이 계단에서 나온다. 반대로 과세표준이 공제액보다 작은 사람은 공제를 다 쓰지도 못한다. 이 장의 나머지는 모두 이 한 문장 위에 있다. <b>소득공제의 값 = 공제액 × 나의 한계세율.</b> 공제액을 키우는 이야기를 들을 때마다 이 곱셈을 먼저 하면, 과장된 절세 이야기에 휩쓸리지 않는다.</p>
+  </section>
+
+  <section id="card">
+    <h2>신용카드 등 소득공제의 계단</h2>
+    <p><span class="term">신용카드 등 소득공제</span><span class="en">(Card spending deduction)</span>는 근로자가 한 해 동안 카드·현금영수증으로 쓴 돈의 일부를 소득에서 빼 주는 제도다(<a data-src="card"></a>). 원래 목적은 가게들의 매출을 드러내 세원을 넓히는 것이었고, 근로자에게 주는 공제는 그 대가에 가깝다. 그래서 일정 금액까지는 공제가 없고, 그 위로 쓴 몫에만 공제가 붙는다. 계산은 네 계단이다.</p>
+    <ol>
+      <li><b>사용액을 결제 수단별로 나눈다.</b> 신용카드, 체크카드(직불카드·선불카드 포함), 현금영수증, 도서·신문·공연·박물관·미술관·영화관람료·수영장·체력단련장(이하 도서·공연 등), 전통시장, 대중교통.</li>
+      <li><b>문턱을 뺀다.</b> 총급여의 <span data-t="card.threshold" data-f="pct"></span>까지는 공제가 없다. 이 문턱을 <span class="term">최저사용금액</span><span class="en">(Minimum spending threshold)</span>이라 한다. 문턱은 <b>공제율이 낮은 결제 수단부터</b> 채운다. 신용카드 사용분이 먼저 문턱에 들어가고, 모자라면 체크카드·현금영수증, 그다음 도서·공연 등, 전통시장, 대중교통 순이다.</li>
+      <li><b>문턱을 넘은 몫에 공제율을 곱한다.</b> 결제 수단마다 공제율이 다르다(아래 표).</li>
+      <li><b>한도를 적용한다.</b> 기본한도까지가 일반 공제이고, 기본한도를 넘친 몫 중 전통시장·대중교통·도서·공연 등에서 나온 공제는 추가한도까지 더 인정된다.</li>
+    </ol>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>결제 수단</th><th class="num">공제율</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>신용카드</td><td class="num"><span data-t="card.rates.credit" data-f="pct"></span></td><td>문턱을 가장 먼저 채운다</td></tr>
+          <tr><td>체크카드·직불·선불카드</td><td class="num"><span data-t="card.rates.debit" data-f="pct"></span></td><td></td></tr>
+          <tr><td>현금영수증</td><td class="num"><span data-t="card.rates.cash" data-f="pct"></span></td><td>소득공제용으로 발급받은 것</td></tr>
+          <tr><td>도서·신문·공연·박물관·미술관·영화관람료·수영장·체력단련장</td><td class="num"><span data-t="card.rates.culture" data-f="pct"></span></td><td>총급여 <span data-t="card.cultureGrossMax"></span> 이하만. 넘으면 일반 사용분으로 본다</td></tr>
+          <tr><td>전통시장</td><td class="num"><span data-t="card.rates.market" data-f="pct"></span></td><td></td></tr>
+          <tr><td>대중교통</td><td class="num"><span data-t="card.rates.transit" data-f="pct"></span></td><td><span data-t="year" data-f="raw"></span>년 귀속에는 유지(아래 개정안 참고)</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)"><span data-t="label"></span> 신용카드 등 소득공제율(<a data-src="card"></a>). 이 공제는 <span data-t="card.sunset" data-f="raw"></span>년 12월 31일까지 쓴 금액에 적용하도록 일몰이 연장되어 있다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 280" role="img" aria-label="한 해 사용액 막대에서 총급여 비율 문턱을 신용카드 사용분이 먼저 채우고, 문턱을 넘은 체크카드와 전통시장 사용분에만 공제율이 붙는다">
+        <defs><marker id="dd-ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <text x="20" y="24" class="lbl-b">한 해 사용액(공제율 낮은 것부터 왼쪽에 쌓는다)</text>
+        <rect x="20" y="44" width="210" height="40" class="f-acc-soft"/>
+        <text x="125" y="69" text-anchor="middle" class="lbl">신용카드 <tspan data-t="card.rates.credit" data-f="pct"></tspan></text>
+        <rect x="230" y="44" width="130" height="40" class="f-acc2-soft"/>
+        <text x="295" y="69" text-anchor="middle" class="lbl">체크·현금 <tspan data-t="card.rates.debit" data-f="pct"></tspan></text>
+        <rect x="360" y="44" width="80" height="40" class="f-ok-soft"/>
+        <text x="400" y="62" text-anchor="middle" class="lbl">시장·교통</text>
+        <text x="400" y="78" text-anchor="middle" class="lbl"><tspan data-t="card.rates.market" data-f="pct"></tspan></text>
+        <line x1="180" y1="34" x2="180" y2="196" class="s-bad"/>
+        <text x="172" y="170" text-anchor="end" class="lbl-bad">문턱 =</text><text x="172" y="188" text-anchor="end" class="lbl-bad">총급여 × <tspan data-t="card.threshold" data-f="pct"></tspan></text>
+        <rect x="20" y="104" width="160" height="26" class="f-surface"/>
+        <text x="100" y="122" text-anchor="middle" class="lbl-dim">문턱을 채우는 데 쓰임: 공제 0</text>
+        <rect x="180" y="104" width="50" height="26" class="f-acc"/>
+        <rect x="230" y="104" width="130" height="26" class="f-acc2"/>
+        <rect x="360" y="104" width="80" height="26" class="f-ok"/>
+        <text x="310" y="152" text-anchor="middle" class="lbl">문턱을 넘은 몫 × 각 공제율</text>
+        <line x1="310" y1="160" x2="310" y2="182" class="s-line" marker-end="url(#dd-ar2)"/>
+        <rect x="236" y="186" width="204" height="44" rx="8" class="f-surface"/>
+        <text x="338" y="206" text-anchor="middle" class="lbl-b">합한 뒤 기본한도까지</text>
+        <text x="338" y="223" text-anchor="middle" class="lbl-dim">넘친 시장·교통·도서공연분은 추가한도</text>
+        <text x="20" y="262" class="lbl-dim">문턱 아래에서는 어떤 수단으로 썼든 공제가 없다.</text>
+      </svg>
+      <figcaption><b>그림 2. 문턱은 공제율이 낮은 것부터 채운다.</b> 세법은 최저사용금액을 신용카드 사용분에서 먼저 빼 준다. 그래서 "연초에는 신용카드, 문턱을 넘은 뒤에는 체크카드" 같은 사용 시기 조절은 필요 없다. 계산은 한 해의 합계를 놓고 하며, 쓴 순서와 상관없이 공제율 낮은 몫이 문턱에 먼저 들어간다.</figcaption>
+    </figure>
+
+    <p>이 순서는 근로자에게 유리하게 정해져 있다. 문턱에 들어간 몫은 공제가 0이니, 공제율이 낮은 신용카드 사용분을 거기에 먼저 넣어야 공제율 높은 몫이 살아남는다. 아래 그림에서 신용카드 막대의 끝을 끌어 신용카드 사용액을 바꿔 본다. 체크카드 등 다른 사용액은 다온의 <span data-t="year" data-f="raw"></span>년 예상치에서 시작한다.</p>
+
+    <div class="sim" id="sim-thr">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>총급여 문턱 채우기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="thr-cv"></canvas><span class="hint">신용카드 막대 끝의 손잡이를 끈다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>총급여 <output id="thr-g-out"></output></span><input type="range" id="thr-g" min="2000" max="12000" step="100" value="5000"></label>
+          <label class="ctrl"><span>체크카드 사용액 <output id="thr-d-out"></output></span><input type="range" id="thr-d" min="0" max="3000" step="10" value="460"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">문턱(총급여의 <span data-t="card.threshold" data-f="pct"></span>)</span><span class="v" id="thr-o-t">—</span></div>
+        <div class="stat"><span class="k">한 해 사용액 / 문턱 넘은 몫</span><span class="v" id="thr-o-u">—</span></div>
+        <div class="stat"><span class="k">공제액(한도 적용)</span><span class="v" id="thr-o-d">—</span></div>
+        <div class="stat"><span class="k">사용액 대비 공제</span><span class="v" id="thr-o-p">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(다온: 총급여 5,000만원, 신용카드 1,380만원)에서 신용카드 막대 대부분이 문턱 안에 들어가 공제가 0인 것을 본다. 문턱 밖으로 나온 신용카드 몫에만 낮은 공제율이 붙는다. ② 신용카드 손잡이를 왼쪽으로 끌어 문턱보다 작게 만든다. 그러면 체크카드가 문턱의 나머지를 채우기 시작하고, 사용액 합계가 문턱 아래로 내려가면 공제가 통째로 0이 된다. ③ 총급여를 올린다. 문턱이 오른쪽으로 밀려 같은 사용액에서도 공제가 줄고, 총급여가 도서·공연 기준을 넘으면 그 사용분이 일반 사용분(신용카드 취급)으로 바뀌어 막대 색이 달라진다. (현금영수증·도서공연·전통시장·대중교통은 다온의 예상 사용액으로 고정했다. 전년 대비 소비 증가분 공제는 <span data-t="year" data-f="raw"></span>년 귀속에는 없다.)</div>
+    </div>
+
+    <p>사용액이 문턱을 넘지 못하면 공제는 0원이다. 문턱을 넘어도 공제가 붙는 것은 넘은 몫뿐이고, 그 몫이 어떤 결제 수단에서 나왔는지가 공제율을 정한다. 다온처럼 신용카드를 주로 쓰는 사람은 문턱의 대부분을 신용카드가 채우므로, 체크카드·현금영수증·전통시장 사용분이 거의 그대로 공제 계산에 들어간다. 바로 이 때문에 "체크카드로 바꾸라"는 조언의 효과가 생각보다 작아진다. 이 이야기는 한도를 본 다음 숫자로 확인한다.</p>
+
+    <div class="formula">
+      $$\text{공제액} = \min\Big(\sum_k E_k r_k,\ L_{\text{기본}}\Big) + \min\Big(\text{넘친 몫},\ \sum_{k\in\text{추가}} E_k r_k,\ L_{\text{추가}}\Big)$$
+      <div class="where">\(E_k\)는 결제 수단 \(k\)의 사용액 가운데 문턱을 채우고 남은 몫, \(r_k\)는 그 공제율이다. 넘친 몫은 기본한도를 넘은 공제액이고, 추가한도는 전통시장·대중교통(총급여 <span data-t="card.cultureGrossMax"></span> 이하는 도서·공연 등 포함)에서 나온 공제에만 열린다.</div>
+    </div>
+  </section>
+
+  <section id="limit">
+    <h2>한도: 더 써도 0이 되는 지점</h2>
+    <p>공제액에는 한도가 있다. <span data-t="year" data-f="raw"></span>년 귀속부터는 <b>자녀(손자녀 포함) 수에 따라 기본한도가 올라가는 규정이 새로 생겼다</b>(조세특례제한법 제126조의2 제10항). 기본한도를 넘친 공제 가운데 전통시장·대중교통·도서공연 등에서 나온 몫은 따로 <span class="term">추가한도</span><span class="en">(Additional limit)</span>까지 더 인정된다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>총급여</th><th class="num">기본한도(자녀 없음)</th><th class="num">자녀 1명</th><th class="num">자녀 2명 이상</th><th class="num">추가한도</th></tr></thead>
+        <tbody id="lim-tb"></tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)"><span data-t="label"></span>. 추가한도는 총급여 <span data-t="card.cultureGrossMax"></span> 이하이면 전통시장·대중교통·도서공연 등의 공제 합계에, 넘으면 전통시장·대중교통 공제에만 적용된다. 표는 data/tax-<span data-t="year" data-f="raw"></span>.json의 값으로 만든다.</p>
+
+    <p>아래 그래프의 가로축은 한 해 카드 등 사용액 합계, 세로축은 공제액이다. 두 선은 같은 금액을 모두 신용카드로 썼을 때와 모두 체크카드로 썼을 때다. 손잡이를 끌어 사용액을 늘려 본다.</p>
+
+    <div class="sim" id="sim-lim">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>한도에 걸리면 더 써도 0</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="lim-cv"></canvas><span class="hint">가로축 손잡이를 끌어 사용액을 바꾼다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>총급여 <output id="lim-g-out"></output></span><input type="range" id="lim-g" min="2000" max="15000" step="100" value="5000"></label>
+          <div class="seg" id="lim-k"><button data-value="0" class="on">자녀 없음</button><button data-value="1">자녀 1명</button><button data-value="2">자녀 2명</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">한 해 사용액</span><span class="v" id="lim-o-u">—</span></div>
+        <div class="stat"><span class="k">모두 신용카드면</span><span class="v" id="lim-o-c">—</span></div>
+        <div class="stat"><span class="k">모두 체크카드면</span><span class="v" id="lim-o-d">—</span></div>
+        <div class="stat"><span class="k">한도에 닿는 사용액(체크 / 신용)</span><span class="v" id="lim-o-l">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 손잡이를 문턱 왼쪽에 둔다. 두 선 모두 0이다. ② 손잡이를 오른쪽 끝까지 끈다. 체크카드 선이 먼저 한도에 닿아 평평해지고, 신용카드 선도 결국 같은 높이에서 멈춘다. 한도에 닿은 뒤에는 결제 수단이 무엇이든 1원을 더 써도 공제가 늘지 않는다. ③ '자녀 2명'을 누른다. 기본한도가 올라가 두 선이 더 높은 곳에서 멈춘다. 총급여를 <span data-t="card.cultureGrossMax"></span> 위로 올리면 한도 표가 바뀌어 천장이 낮아진다. (전통시장·대중교통·도서공연 사용은 0으로 두어 기본한도만 보인다. 추가한도는 아래 절에서 다룬다.)</div>
+    </div>
+
+    <p>두 선이 만나는 곳이 이 공제의 천장이다. 체크카드로 쓰면 천장에 빨리 닿을 뿐, 천장의 높이는 같다. 그래서 사용액이 아주 많은 사람에게는 결제 수단이 아무 차이를 만들지 못한다. 사용액이 문턱 근처인 사람에게도 차이가 작다. 문턱을 넘은 몫 자체가 작기 때문이다. 결제 수단이 공제를 의미 있게 바꾸는 것은 문턱과 천장 사이, 두 선이 벌어진 구간뿐이다.</p>
+
+    <h3>추가한도: 전통시장·대중교통·도서공연</h3>
+    <p>기본한도에 닿은 사람도 전통시장, 대중교통, 도서·공연 등에서 쓴 몫이 있으면 공제가 더 늘 수 있다. 계산 순서는 이렇다. 모든 결제 수단의 공제를 합해 기본한도까지 먼저 인정하고, 넘친 몫 가운데 추가 대상(전통시장·대중교통·도서공연 등)에서 나온 공제를 추가한도까지 더한다. 추가 대상 사용분이 없으면 추가한도는 비어 있는 칸일 뿐이다. 다온처럼 기본한도 아래에 있는 사람에게는 추가한도가 아직 쓸 일이 없다.</p>
+
+    <div class="callout deep">
+      <strong>대중교통 우대 폐지 추진(확정 전)</strong>
+      2026년 8월 정부가 발표한 2026 세법개정안에는 대중교통 사용분의 <span data-t="card.rates.transit" data-f="pct"></span> 우대 공제율을 없애고 일반 공제율(신용카드·체크카드 등 결제 수단별)을 적용하며 추가한도 대상에서도 빼는 안이 들어 있다. 대신 교통비 재정지원으로 바꾼다는 설명이다. 도서·공연 등의 총급여 요건을 없애고 추가한도를 줄이는 안도 함께 나왔는데, 한도 수치는 보도마다 달라 확인이 필요하다. 모두 2027년 이후 과세기간을 대상으로 한 <b>정부안</b>이며 2026년 10월 현재 국회 심사 중인 <b>확정 전</b> 내용이다. 이 책의 계산은 현행 <span data-t="label"></span> 값을 쓴다.
+    </div>
+  </section>
+
+  <section id="switch">
+    <h2>체크카드로 바꾸면 얼마나 줄까</h2>
+    <p>이제 처음 질문으로 돌아간다. 다온의 <span data-t="year" data-f="raw"></span>년 예상 사용액을 그대로 두고, 신용카드로 쓴 돈 가운데 일부를 체크카드로 옮기면 세금이 얼마나 줄까. 줄어드는 세금은 <b>공제 증가분 × 한계세율(지방세 포함)</b>이다. 그리고 결제 수단을 바꾸면 신용카드 할인·적립 같은 혜택을 일부 잃을 수 있으니, 그것도 같은 저울에 올린다. 혜택률은 카드마다 달라서 가정으로만 둔다.</p>
+
+    <div class="sim" id="sim-sw">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>체크카드로 옮기는 몫</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="sw-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>신용카드 중 체크카드로 옮기는 몫 <output id="sw-m-out"></output></span><input type="range" id="sw-m" min="0" max="100" step="5" value="50"></label>
+          <div class="seg" id="sw-s"><button data-value="1" class="on">다온의 사용액</button><button data-value="1.5">1.5배</button><button data-value="2.5">2.5배</button></div>
+          <label class="ctrl"><span>신용카드 혜택률(가정) <output id="sw-b-out"></output></span><input type="range" id="sw-b" min="0" max="2" step="0.1" value="0.5"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">옮긴 금액</span><span class="v" id="sw-o-m">—</span></div>
+        <div class="stat"><span class="k">공제 증가</span><span class="v" id="sw-o-d">—</span></div>
+        <div class="stat"><span class="k">줄어드는 세금(지방세 포함)</span><span class="v" id="sw-o-t">—</span></div>
+        <div class="stat"><span class="k">잃는 카드 혜택(가정) 차감 후</span><span class="v" id="sw-o-n">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(다온의 사용액, 절반을 옮김)에서 공제 증가와 세금 감소를 본다. 옮긴 금액의 대부분이 원래 문턱 안에 있던 몫이라 공제가 거의 늘지 않는다. ② 옮기는 몫을 100%까지 올린다. 세금 감소가 어느 지점부터 더 늘지 않는다. 문턱 밖에 있던 신용카드 몫이 모두 체크카드로 바뀐 뒤에는 옮긴 돈이 문턱을 채우는 데만 쓰이기 때문이다. ③ '2.5배'를 누른다. 사용액이 커서 기본한도에 닿으면 옮겨도 공제가 늘지 않고, 잃는 카드 혜택만 남는다. (세금은 다온의 연말정산 전체를 엔진으로 두 번 계산해 결정세액과 지방소득세 합계의 차이로 구했다. 혜택률은 가정이며 특정 상품을 뜻하지 않는다.)</div>
+    </div>
+
+    <p>다온의 숫자로 보면 체크카드 전환의 효과는 한 해 몇만 원이다. 이유는 세 겹이다. 첫째, 다온의 신용카드 사용분은 대부분 문턱 안에 있어 원래부터 공제가 0이었다. 문턱 안의 돈은 신용카드로 쓰든 체크카드로 쓰든 0이다. 둘째, 문턱 밖으로 나온 몫만 공제율 차이(<span data-t="card.rates.credit" data-f="pct"></span>와 <span data-t="card.rates.debit" data-f="pct"></span>)를 누리는데, 그 차이에 다시 한계세율을 곱해야 세금이 된다. 셋째, 사용액이 많은 사람은 한도가 막는다. 결제 수단을 바꾸는 것보다 먼저 볼 것은 내 사용액이 <b>문턱과 한도 사이 어디에 있는가</b>다.</p>
+
+    <div class="callout pro">
+      <strong>회사 급여 담당자가 연말정산에서 자주 보는 카드 공제 실수</strong>
+      <ul>
+        <li><b>형제자매 카드 사용분</b>: 신용카드 공제는 본인과 기본공제 대상인 배우자·직계존비속의 사용분을 합칠 수 있지만, 기본공제를 받는 형제자매의 사용분은 넣을 수 없다. 부모님 카드를 합치려면 부모님이 소득 요건을 채워야 하고, 나이 요건은 보지 않는다.</li>
+        <li><b>맞벌이 몰아주기</b>: 맞벌이 부부는 각자 자기 카드만 공제받는다. 배우자 카드를 내 쪽에 넣을 수 없다. 한쪽에 몰아 쓰면 그 사람의 문턱만 넘기기 쉬워지므로, 두 사람의 총급여와 사용액으로 각각 문턱과 한도를 따져 본다.</li>
+        <li><b>공제 대상이 아닌 사용분</b>: 보험료, 아파트 관리비, 세금·공과금, 상품권 구입, 해외 사용분, 자동차 구입비(중고차는 일부 인정)처럼 신용카드 공제에서 빠지는 지출이 있다. 간소화 자료에 대부분 걸러져 나오지만 회사에 따로 내는 영수증에서 섞이는 경우가 있다.</li>
+        <li><b>의료비와 겹쳐 받기</b>: 카드로 낸 의료비는 의료비 세액공제와 신용카드 공제를 함께 받을 수 있다. 반대로 월세를 카드로 냈다면 월세 세액공제를 받는 몫은 카드 공제에서 빠진다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="housing">
+    <h2>주택자금 공제: 청약저축과 대출</h2>
+    <p>집과 관련된 소득공제는 세 갈래다. 집을 사려고 모으는 <span class="term">주택청약종합저축</span><span class="en">(Housing subscription savings)</span> 납입액, 전세·월세 보증금을 빌리고 갚는 <span class="term">주택임차차입금 원리금 상환액</span><span class="en">(Lease loan repayment)</span>, 집을 사며 빌린 <span class="term">장기주택저당차입금 이자</span><span class="en">(Long-term mortgage interest)</span>다. 앞의 둘은 합쳐서 한도가 하나이고, 장기주택저당 이자는 따로 큰 한도를 가진다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 300" role="img" aria-label="주택자금 공제 세 갈래: 청약저축 납입액과 임차차입금 원리금은 각각 일정 비율을 공제하고 합쳐서 한도 하나, 장기주택저당차입금 이자는 조건별 한도">
+        <rect x="16" y="20" width="132" height="96" rx="8" class="f-acc-soft"/>
+        <text x="82" y="44" text-anchor="middle" class="lbl-b">청약저축</text>
+        <text x="82" y="66" text-anchor="middle" class="lbl">납입 <tspan data-t="housing.subscription.max" data-f="man"></tspan>까지</text>
+        <text x="82" y="86" text-anchor="middle" class="lbl">× <tspan data-t="housing.subscription.rate" data-f="pct"></tspan></text>
+        <text x="82" y="106" text-anchor="middle" class="lbl-dim">무주택 세대주</text>
+        <rect x="164" y="20" width="132" height="96" rx="8" class="f-acc2-soft"/>
+        <text x="230" y="44" text-anchor="middle" class="lbl-b">전세대출 상환</text>
+        <text x="230" y="66" text-anchor="middle" class="lbl">원리금 상환액</text>
+        <text x="230" y="86" text-anchor="middle" class="lbl">× <tspan data-t="housing.lease.rate" data-f="pct"></tspan></text>
+        <text x="230" y="106" text-anchor="middle" class="lbl-dim">국민주택규모 임차</text>
+        <path d="M82 120 L82 146 L230 146 L230 120" fill="none" class="s-line"/>
+        <rect x="56" y="152" width="200" height="40" rx="8" class="f-surface"/>
+        <text x="156" y="177" text-anchor="middle" class="lbl-b">합쳐서 연 <tspan data-t="housing.lease.limit" data-f="man"></tspan> 한도</text>
+        <rect x="312" y="20" width="132" height="172" rx="8" class="f-ok-soft"/>
+        <text x="378" y="44" text-anchor="middle" class="lbl-b">주택담보대출</text>
+        <text x="378" y="66" text-anchor="middle" class="lbl">장기주택저당</text>
+        <text x="378" y="86" text-anchor="middle" class="lbl">차입금 이자</text>
+        <text x="378" y="112" text-anchor="middle" class="lbl-dim">상환 기간·금리</text>
+        <text x="378" y="130" text-anchor="middle" class="lbl-dim">방식에 따라</text>
+        <text x="378" y="154" text-anchor="middle" class="lbl">최대 <tspan data-t="housing.mortgage.limits.both15y" data-f="man"></tspan></text>
+        <text x="378" y="176" text-anchor="middle" class="lbl-dim">(위 한도 포함)</text>
+        <text x="230" y="232" text-anchor="middle" class="lbl">세 가지 모두 소득공제다. 값은 한계세율이 정한다.</text>
+        <text x="230" y="256" text-anchor="middle" class="lbl-dim">청약저축만 총급여 <tspan data-t="housing.subscription.grossMax" data-f="man"></tspan> 이하 요건이 있고</text>
+        <text x="230" y="276" text-anchor="middle" class="lbl-dim">세 가지 모두 무주택 또는 1주택 같은 주택 수 요건이 있다</text>
+      </svg>
+      <figcaption><b>그림 3. 주택자금 공제의 세 갈래.</b> 청약저축과 전세대출 원리금 상환은 각각 <span data-t="housing.lease.rate" data-f="pct"></span>를 공제하고 둘을 합쳐 한도 하나를 나눠 쓴다. 장기주택저당차입금 이자 공제의 한도는 앞의 두 공제를 포함한 전체 한도다. 요건은 해마다 바뀌는 일이 많아 가입·대출 시점의 조건을 함께 확인한다.</figcaption>
+    </figure>
+
+    <h3>주택청약종합저축</h3>
+    <p>총급여 <span data-t="housing.subscription.grossMax"></span> 이하인 <b>무주택 세대주</b>(와 그 배우자)가 주택청약종합저축에 넣은 돈은 연 <span data-t="housing.subscription.max"></span>까지 그 <span data-t="housing.subscription.rate" data-f="pct"></span>를 소득공제한다(<a data-src="housing.subscription"></a>). 한 해 공제는 최대 <b id="hs-submax"></b>이다. 요건은 <b>그 해(과세기간) 동안 주택을 가진 적이 없는 세대의 세대주</b>다. 한 해 중간에 집을 샀다면 그해 납입분은 공제받지 못한다. 세대원이면 공제가 안 되므로, 부모와 한 세대로 등록된 사회초년생은 요건부터 확인한다. 가입한 금융회사에 무주택 확인서를 내야 간소화 자료에 공제 대상으로 잡힌다.</p>
+
+    <h3>주택임차차입금 원리금 상환액</h3>
+    <p>무주택 세대주가 국민주택규모 주택을 빌리면서 금융기관(또는 요건을 갖춘 개인)에게서 보증금을 빌리고 갚은 원금과 이자의 <span data-t="housing.lease.rate" data-f="pct"></span>를 공제한다. 청약저축 공제와 합쳐 연 <span data-t="housing.lease.limit"></span> 한도다. 다온은 보증금 2,000만원을 대출 없이 냈기 때문에 이 공제는 해당이 없다.</p>
+
+    <h3>장기주택저당차입금 이자</h3>
+    <p>무주택 또는 1주택 세대주가 집을 사면서 그 집을 담보로 장기 대출을 받으면 그해 낸 이자를 소득공제한다. 집은 취득 당시 기준시가가 정해진 금액(<span data-t="housing.mortgage.priceMax"></span>) 이하여야 한다. 한도는 상환 기간과 금리·상환 방식으로 갈린다. <span class="term">고정금리</span>는 대출 기간의 일정 부분 이상을 고정 금리로 하는 것, <span class="term">비거치식 분할상환</span>은 처음부터 원금을 나눠 갚는 것이다.</p>
+
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>상환 기간</th><th>금리·상환 방식</th><th class="num">연 이자 공제 한도</th></tr></thead>
+        <tbody>
+          <tr><td>15년 이상</td><td>고정금리 <b>이면서</b> 비거치식 분할상환</td><td class="num"><span data-t="housing.mortgage.limits.both15y" data-f="man"></span></td></tr>
+          <tr><td>15년 이상</td><td>고정금리 <b>또는</b> 비거치식 분할상환</td><td class="num"><span data-t="housing.mortgage.limits.either15y" data-f="man"></span></td></tr>
+          <tr><td>15년 이상</td><td>그 밖의 대출</td><td class="num"><span data-t="housing.mortgage.limits.none15y" data-f="man"></span></td></tr>
+          <tr><td>10년 이상</td><td>고정금리 <b>또는</b> 비거치식 분할상환</td><td class="num"><span data-t="housing.mortgage.limits.short10y" data-f="man"></span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)"><span data-t="label"></span> 장기주택저당차입금 이자상환액 공제 한도(소득세법 제52조 제5항). 청약저축·임차차입금 공제를 포함한 전체 한도다. 집을 사는 쪽의 세금(취득세·보유세·양도세)은 EstateBook <a href="https://estatebook.euiyun.com/chapters/holdingtax.html">13장</a>·<a href="https://estatebook.euiyun.com/chapters/tradetax.html">14장</a>을 본다.</p>
+
+    <p>아래 시뮬레이터는 무주택 세대주인 다온이 청약저축과 전세대출 상환을 함께 한다고 가정한 것이다. 납입액과 상환액을 바꿔 합산 한도에 닿는 곳을 찾는다.</p>
+
+    <div class="sim" id="sim-hs">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>청약저축과 전세대출, 한도 하나</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="hs-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>청약저축 연 납입 <output id="hs-s-out"></output></span><input type="range" id="hs-s" min="0" max="600" step="10" value="240"></label>
+          <label class="ctrl"><span>전세대출 연 원리금 상환 <output id="hs-l-out"></output></span><input type="range" id="hs-l" min="0" max="1500" step="10" value="0"></label>
+          <label class="check"><input type="checkbox" id="hs-hi"> 총급여가 청약저축 기준을 넘는다</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">청약저축 공제</span><span class="v" id="hs-o-s">—</span></div>
+        <div class="stat"><span class="k">전세대출 공제</span><span class="v" id="hs-o-l">—</span></div>
+        <div class="stat"><span class="k">합계(한도 적용)</span><span class="v" id="hs-o-t">—</span></div>
+        <div class="stat"><span class="k">줄어드는 세금(다온 기준)</span><span class="v" id="hs-o-x">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(다온: 월 20만원, 연 240만원 납입)에서 청약저축 공제와 세금 감소를 본다. ② 청약 납입을 연 <span data-t="housing.subscription.max" data-f="man"></span> 위로 올린다. 그 위의 납입은 공제에 더해지지 않는다. ③ 전세대출 상환을 늘린다. 두 공제의 합이 <span data-t="housing.lease.limit" data-f="man"></span>에 닿으면 청약저축 공제가 남아 있어도 더 늘지 않는다. 체크 상자를 켜면 청약저축 공제가 사라진다. (세금 감소는 다온의 연말정산을 엔진으로 다시 계산해 구했다. 임차 주택의 규모·차입처 요건은 채운 것으로 본다.)</div>
+    </div>
+
+    <p>다온의 청약저축 공제는 납입액의 <span data-t="housing.subscription.rate" data-f="pct"></span>이지만, 세금으로 바꾸면 다시 한계세율이 곱해진다. 납입액 대비로 보면 몇 %다. 청약저축의 본래 목적은 공공분양·민영주택 청약 자격이고, 소득공제는 덤이다. 공제만 보고 납입을 늘리기보다 청약 계획과 유동성(해지하면 청약 순위가 사라진다)을 함께 본다.</p>
+
+    <div class="callout check" style="display:block;cursor:auto;font-size:16px;color:var(--text)">
+      <strong>소득공제 서류, 홈택스에서 직접 확인할 것</strong>
+      <ul>
+        <li><b>카드 사용액의 결제 수단 구분</b>: 간소화 자료의 신용카드·체크카드·현금영수증·전통시장·대중교통·도서공연 칸이 제대로 나뉘었는지 본다. 도서·공연 등은 가맹점이 문화비로 등록되어 있어야 따로 잡힌다.</li>
+        <li><b>현금영수증 누락</b>: 현금으로 내고 영수증을 받지 않은 지출은 공제에 들어가지 않는다. 홈택스에서 사용자 등록이 안 된 카드(교통카드 등)로 받은 현금영수증이 빠졌는지 확인한다.</li>
+        <li><b>청약저축 무주택 확인서</b>: 금융회사에 냈는지, 간소화 자료에 공제 대상으로 표시되는지 확인한다. 세대주인지 주민등록등본으로, 그해 집을 가진 적이 없는지 함께 본다.</li>
+        <li><b>전세대출</b>: 금융기관 대출은 간소화 자료에 나오는 경우가 많지만, 요건을 갖춘 개인 간 차입은 증빙을 따로 낸다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="rules">
+    <h2>기준 연도와 바뀌는 것</h2>
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다. 이 장의 값은 <span data-t="label"></span>이다</strong>
+      카드 공제율·문턱·한도, 청약저축 요건, 주택자금 공제 한도는 해마다 개정 대상이다. <span data-t="year" data-f="raw"></span>년에는 자녀 수별 기본한도 상향이 새로 생겼고, 수영장·체력단련장 이용료가 도서·공연 등에 들어간 뒤 처음으로 1년 전체에 적용된다. 2026 세법개정안의 대중교통 우대 폐지, 도서·공연 요건·한도 조정, 청약저축 공제 상시화는 모두 <b>추진 중·확정 전</b>이다. 이 장의 계산은 교육용 모델이며, 실제 공제액은 국세청 홈택스의 연말정산 미리보기·간소화 자료와 회사 급여 담당자에게 확인한다.
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 세금 노트</h2>
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · 2026년 7월</span></div>
+      <h4>결제 수단보다 문턱과 한도가 먼저다</h4>
+      <p><b>상반기 점검.</b> 다온은 1~6월 카드 명세서를 모아 한 해 사용액을 어림했다. 상반기 흐름대로라면 <span data-t="year" data-f="raw"></span>년 사용액은 신용카드 1,380만원, 체크카드 460만원, 현금영수증 110만원, 도서·공연 등 40만원, 전통시장 30만원, 대중교통 84만원, 합계 <b id="nt-total"></b>이다(2025년 합계는 1,950만원). 총급여 5,000만원의 문턱은 <b id="nt-thr"></b>이고, 문턱을 넘은 사용액은 <b id="nt-over"></b>이다. 이 책의 모델로 계산하면 신용카드 등 소득공제는 <b id="nt-ded"></b>로 기본한도 <b id="nt-lim"></b>에 못 미친다. 다온의 한계세율은 지방소득세까지 <b id="nt-mr"></b>라서, 이 공제가 줄여 주는 세금은 <b id="nt-cardtax"></b>이다.</p>
+      <p><b>체크카드로 바꿨다면.</b> 신용카드 1,380만원을 전부 체크카드로 썼다고 다시 계산하면 공제가 <b id="nt-swd"></b> 늘고 세금은 <b id="nt-swt"></b> 줄어든다. 다온의 신용카드 사용분 대부분은 원래 문턱을 채우는 데 쓰였기 때문이다. 동료의 두 말은 둘 다 반만 맞았다. 체크카드가 공제율은 높지만, 다온의 자리에서는 그 차이가 문턱 밖의 작은 몫에만 붙는다.</p>
+      <p><b>청약저축.</b> 다온은 총급여가 <span data-t="housing.subscription.grossMax"></span> 이하이고 혼자 사는 무주택 세대주라 요건을 채운다. 월 20만원씩 연 240만원을 넣어 공제는 <b id="nt-sub"></b>, 세금으로는 <b id="nt-subtax"></b>이다. 은행에 무주택 확인서를 냈는지 확인할 것으로 적었다.</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>소득공제의 값은 공제액 × 한계세율이다. 다온의 카드 공제는 문턱 1,250만원을 넘긴 몫에서 나오고 한도 아래에 있다. 결제 수단을 바꾸는 효과는 한 해 몇만 원 수준이다.</div><div><b>아직 남은 문제</b>소득공제를 다 넣어도 세금이 얼마인지는 세액공제를 빼야 안다. 월세 65만원, 연금저축, 의료비 220만원이 남아 있다.</div><div><b>다음 장</b><a href="credit.html">5장</a>: 세금에서 바로 빼는 세액공제. 다온에게 가장 큰 공제는 무엇인가.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>소득공제는 과세표준의 맨 위 조각을 잘라 낸다. 줄어드는 세금은 공제액 × 한계세율 × (1 + 지방소득세율)이고, 소득이 낮아 세금이 거의 없는 사람에게는 값이 거의 없다.</li>
+      <li>신용카드 등 소득공제는 총급여의 <span data-t="card.threshold" data-f="pct"></span>를 넘게 쓴 몫에만 붙는다. 문턱은 공제율이 낮은 신용카드 사용분부터 채우므로, 쓰는 시기를 나눌 필요가 없다.</li>
+      <li>공제율은 신용카드 <span data-t="card.rates.credit" data-f="pct"></span>, 체크카드·현금영수증 <span data-t="card.rates.debit" data-f="pct"></span>, 도서·공연 등 <span data-t="card.rates.culture" data-f="pct"></span>(총급여 <span data-t="card.cultureGrossMax"></span> 이하), 전통시장·대중교통 <span data-t="card.rates.market" data-f="pct"></span>다.</li>
+      <li>기본한도는 총급여 <span data-t="card.limits.0.upTo"></span> 이하 <span data-t="card.limits.0.base"></span>, 넘으면 <span data-t="card.limits.1.base"></span>이고, <span data-t="year" data-f="raw"></span>년부터 자녀 수에 따라 올라간다. 넘친 몫 가운데 전통시장·대중교통·도서공연 등의 공제는 추가한도까지 더 인정된다. 한도에 닿으면 결제 수단과 상관없이 더 써도 공제가 늘지 않는다.</li>
+      <li>체크카드로 바꾸는 효과는 문턱 밖의 몫에서 공제율 차이 × 한계세율만큼이다. 결제 수단보다 내 사용액이 문턱과 한도 사이 어디에 있는지를 먼저 본다.</li>
+      <li>주택청약종합저축(무주택 세대주, 총급여 <span data-t="housing.subscription.grossMax"></span> 이하, 납입 <span data-t="housing.subscription.max"></span>까지 <span data-t="housing.subscription.rate" data-f="pct"></span>)과 전세대출 원리금 상환(<span data-t="housing.lease.rate" data-f="pct"></span>)은 합쳐서 연 <span data-t="housing.lease.limit"></span> 한도, 장기주택저당차입금 이자는 조건에 따라 최대 <span data-t="housing.mortgage.limits.both15y"></span> 한도다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>총급여 5,000만원인 사람이 한 해에 신용카드 1,000만원, 체크카드 600만원을 썼다. 총급여의 <span data-t="card.threshold" data-f="pct"></span> 문턱은 어느 사용분부터 채우는가?</p>
+        <div class="opts">
+          <button class="opt">먼저 쓴 순서대로 채운다</button>
+          <button class="opt">공제율이 높은 체크카드 사용분부터 채운다</button>
+          <button class="opt" data-correct>공제율이 낮은 신용카드 사용분부터 채운다</button>
+          <button class="opt">두 사용분에서 같은 비율로 채운다</button>
+        </div>
+        <div class="quiz-exp">최저사용금액은 신용카드 사용분에서 먼저 뺀다. 문턱(총급여 × <span data-t="card.threshold" data-f="pct"></span>)은 신용카드 1,000만원이 먼저 채우고, 모자라는 몫만 체크카드가 채운다. 남은 체크카드 사용분에 <span data-t="card.rates.debit" data-f="pct"></span>가 붙는다. 쓴 시기와는 상관없다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>한계세율이 <span data-t="income.rates.1.1" data-f="pct"></span>인 근로자가 소득공제 100만원을 더 받았다. 줄어드는 세금(지방소득세 포함)에 가장 가까운 것은?</p>
+        <div class="opts">
+          <button class="opt" data-correct>100만원 × <span data-t="income.rates.1.1" data-f="pct"></span> × (1 + <span data-t="income.localRate" data-f="pct"></span>)</button>
+          <button class="opt">100만원 그대로</button>
+          <button class="opt">100만원 × <span data-t="income.localRate" data-f="pct"></span></button>
+          <button class="opt">100만원 × 실효세율</button>
+        </div>
+        <div class="quiz-exp">소득공제는 과세표준의 맨 위 조각을 잘라 내므로 그 조각에 붙어 있던 한계세율만큼 세금이 줄고, 지방소득세(소득세의 <span data-t="income.localRate" data-f="pct"></span>)도 함께 준다. 세금에서 그대로 빠지는 것은 세액공제다. 공제가 커서 아래 구간으로 내려가면 이보다 조금 덜 준다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>총급여 6,000만원, 자녀가 없는 사람의 카드 공제 계산액이 이미 기본한도를 넘었다. 이 사람이 신용카드로 200만원을 더 쓰면 공제는?</p>
+        <div class="opts">
+          <button class="opt">200만원 × <span data-t="card.rates.credit" data-f="pct"></span>만큼 는다</button>
+          <button class="opt">200만원 × <span data-t="card.rates.debit" data-f="pct"></span>만큼 는다</button>
+          <button class="opt">추가한도로 넘어가 전부 인정된다</button>
+          <button class="opt" data-correct>늘지 않는다</button>
+        </div>
+        <div class="quiz-exp">기본한도(<span data-t="card.limits.0.base"></span>)에 닿은 뒤에는 일반 사용분을 더 써도 공제가 늘지 않는다. 추가한도는 전통시장·대중교통·도서공연 등에서 나온 공제에만 열린다. 신용카드 사용은 해당하지 않는다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>주택청약종합저축 소득공제에 대한 설명으로 옳은 것은?</p>
+        <div class="opts">
+          <button class="opt">세대원이어도 무주택이면 누구나 받는다</button>
+          <button class="opt" data-correct>총급여 <span data-t="housing.subscription.grossMax"></span> 이하 무주택 세대주가 연 <span data-t="housing.subscription.max"></span>까지 납입액의 <span data-t="housing.subscription.rate" data-f="pct"></span>를 공제받는다</button>
+          <button class="opt">납입액 전액을 세액공제한다</button>
+          <button class="opt">전세대출 원리금 공제와 한도가 따로라 각각 최대로 받는다</button>
+        </div>
+        <div class="quiz-exp">청약저축 공제는 소득공제이고 요건은 무주택 세대주(와 그 배우자)와 총급여 기준이다. 전세대출 원리금 상환 공제와 합쳐 연 <span data-t="housing.lease.limit"></span> 한도를 나눠 쓴다. 공제의 값은 다시 한계세율을 곱해야 세금이 된다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const W = TB.won, A = TB.wonAxis;
+  const plus = (v) => '<span class="plus">' + W(v) + "</span>";
+  const C = TX.CASE, R = D.card.rates, L = D.income.localRate;
+  const GROSS = (C.monthly - C.mealMonthly) * 12;
+  const KEYS = ["credit", "debit", "cash", "culture", "market", "transit"];
+  const NAMES = { credit: "신용카드", debit: "체크카드", cash: "현금영수증", culture: "도서·공연", market: "전통시장", transit: "대중교통" };
+  const pctS = (r) => TB.pct(r, 1).replace(/\.0%$/, "%");
+  // 다온의 연말정산 전체(결정세액 + 지방소득세)
+  const taxAll = (over) => { const r = TX.yearEnd(TX.caseYearEnd(over)); return r.decided + r.local; };
+  function colors(P) { return { credit: P.accent, debit: P.accent2, cash: P.warn, culture: P.dim, market: P.ok, transit: P.bad }; }
+
+  /* 한도 표 */
+  (function () {
+    const tb = document.getElementById("lim-tb");
+    let prev = 0;
+    tb.innerHTML = D.card.limits.map((l) => {
+      const range = l.upTo == null ? W(prev) + " 초과" : W(l.upTo) + " 이하";
+      prev = l.upTo || prev;
+      return "<tr><td>" + range + '</td><td class="num">' + W(l.base) + '</td><td class="num">' + W(l.base + Math.min(l.perChild, l.childMax)) + '</td><td class="num">' + W(l.base + l.childMax) + '</td><td class="num">' + W(l.extra) + "</td></tr>";
+    }).join("");
+  })();
+  document.getElementById("hs-submax").textContent = W(D.housing.subscription.max * D.housing.subscription.rate);
+
+  /* ---------------------------------------------------------- 1. 소득공제의 값 */
+  (function () {
+    const dG = TB.range("val-d", (v) => W(v * 1e4), draw);
+    const XMAX = 1.6e8;
+    let base = 3e7, box = null;
+    const saved = (b, d) => (TX.incomeTax(b).tax - TX.incomeTax(Math.max(0, b - d)).tax) * (1 + L);
+    const cv = TB.canvas("#val-cv", (ctx, w, h) => {
+      const P = TB.palette(), d = dG() * 1e4;
+      const pts = []; let ymax = 0;
+      for (let b = 0; b <= XMAX; b += XMAX / 400) { const s = saved(b, d); pts.push([b, s]); ymax = Math.max(ymax, s); }
+      ymax = Math.max(ymax * 1.18, 1e4);
+      const vl = D.income.rates.filter((r) => r[0] != null && r[0] < XMAX).map((r) => ({ x: r[0], color: P.grid }));
+      const c = TB.chart(ctx, { x: 58, y: 18, w: w - 74, h: h - 66 }, {
+        x: [0, XMAX], y: [0, ymax], xFmt: A, yFmt: A, xTicks: [0, 4e7, 8e7, 1.2e8, 1.6e8],
+        series: [{ data: pts, color: P.ok, width: 2.6 }], vlines: vl,
+      });
+      box = c;
+      // 구간 세율 라벨
+      let prev = 0;
+      D.income.rates.forEach((r) => {
+        const top = r[0] == null ? XMAX : Math.min(r[0], XMAX);
+        if (prev >= XMAX) return;
+        const mid = (prev + top) / 2, px = c.X(mid);
+        if (c.X(top) - c.X(prev) > 26) T(ctx, pctS(r[1]), px, c.box.y + 12, { size: 11, color: P.dim, align: "center", weight: 700 });
+        prev = top;
+      });
+      const s = saved(base, d), px = c.X(base), hy = c.box.y + c.box.h;
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, hy); ctx.lineTo(px, c.Y(s)); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(px, c.Y(s), 5, 0, TAU); ctx.fillStyle = P.ok; ctx.fill();
+      const lab = W(s);
+      ctx.font = TB.font(12, true, 700); const tw = ctx.measureText(lab).width;
+      T(ctx, lab, Math.min(px + 8, c.box.x + c.box.w - tw), Math.max(c.box.y + 28, c.Y(s) - 8), { size: 12, mono: true, color: P.text, weight: 700 });
+      knob(ctx, px, hy, P);
+    }, { get height() { return pw("val-cv") < 480 ? 280 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; base = TB.clamp(Math.round((x - box.box.x) / box.box.w * XMAX / 5e5) * 5e5, 0, XMAX); draw(); } });
+    function draw() {
+      const d = dG() * 1e4, s = saved(base, d);
+      TB.stat("val-o-b", W(base));
+      TB.stat("val-o-r", base > 0 ? pctS(TX.incomeTax(base).rate * (1 + L)) : "—");
+      TB.stat("val-o-s", plus(s));
+      TB.stat("val-o-p", TB.pct(s / d, 1));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 2. 25% 문턱 채우기 */
+  (function () {
+    const gG = TB.range("thr-g", (v) => W(v * 1e4), draw);
+    const dG = TB.range("thr-d", (v) => W(v * 1e4), draw);
+    let credit = C.card.credit, L2 = null;
+    const XMAX = 5e7;
+    function use() { return { credit, debit: dG() * 1e4, cash: C.card.cash, culture: C.card.culture, market: C.card.market, transit: C.card.transit }; }
+    const cv = TB.canvas("#thr-cv", (ctx, w, h) => {
+      const P = TB.palette(), CL = colors(P), g = gG() * 1e4, u = use(), r = TX.cardDeduction(u, g);
+      const low = g <= D.card.cultureGrossMax;
+      const narrow = w < 480;
+      const bx = 16, bw = w - 32, X = (v) => bx + v / XMAX * bw;
+      L2 = { X, bx, bw };
+      T(ctx, "한 해 사용액(공제율 낮은 것부터)", bx, 20, { size: 11, color: P.dim, weight: 700 });
+      const y1 = 34, bh = 30;
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y1, bw, bh);
+      let acc = 0;
+      const segs = [];
+      KEYS.forEach((k) => {
+        let v = u[k];
+        if (k === "credit" && !low) v += u.culture;
+        if (k === "culture" && !low) v = 0;
+        if (v <= 0) { segs.push({ k, a: acc, b: acc }); return; }
+        segs.push({ k, a: acc, b: acc + v });
+        acc += v;
+      });
+      segs.forEach((s) => {
+        if (s.b <= s.a) return;
+        const x0 = X(Math.min(s.a, XMAX)), x1 = X(Math.min(s.b, XMAX));
+        ctx.fillStyle = CL[s.k]; ctx.globalAlpha = 0.85; ctx.fillRect(x0, y1, Math.max(1, x1 - x0), bh); ctx.globalAlpha = 1;
+      });
+      // 문턱 아래 흐리게
+      const th = r.threshold, tx = X(Math.min(th, XMAX));
+      ctx.fillStyle = P.bg; ctx.globalAlpha = 0.55; ctx.fillRect(bx, y1, Math.min(tx, X(Math.min(acc, XMAX))) - bx, bh); ctx.globalAlpha = 1;
+      ctx.strokeStyle = P.bad; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(tx, y1 - 6); ctx.lineTo(tx, y1 + bh + 6); ctx.stroke(); ctx.lineWidth = 1;
+      const thLab = "문턱 " + A(th);
+      ctx.font = TB.font(11, false, 700); const tlw = ctx.measureText(thLab).width;
+      T(ctx, thLab, TB.clamp(tx - tlw / 2, bx, bx + bw - tlw), y1 + bh + 19, { size: 11, color: P.bad, weight: 700 });
+      // 신용카드 손잡이
+      const cEnd = X(Math.min(segs[0].b, XMAX));
+      knob(ctx, cEnd, y1 + bh / 2, P);
+      // 범례
+      let lx = bx, ly = y1 + bh + 40;
+      KEYS.forEach((k) => {
+        if (!low && k === "culture") return;
+        const s = NAMES[k] + " " + pctS(R[k]);
+        ctx.font = TB.font(11); const tw2 = ctx.measureText(s).width;
+        if (lx + tw2 + 18 > bx + bw) { lx = bx; ly += 16; }
+        ctx.fillStyle = CL[k]; ctx.fillRect(lx, ly - 8, 10, 10);
+        T(ctx, s, lx + 14, ly, { size: 11, color: P.dim });
+        lx += tw2 + 26;
+      });
+      // 공제액 막대
+      const y2 = ly + 46;
+      T(ctx, "문턱을 넘은 몫 × 공제율 = 공제액", bx, y2 - 10, { size: 11, color: P.dim, weight: 700 });
+      const DMAX = Math.max(D.card.limits[0].base + D.card.limits[0].extra, r.raw) * 1.05;
+      const Xd = (v) => bx + v / DMAX * bw, bh2 = 24;
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y2, bw, bh2);
+      let a2 = 0;
+      KEYS.forEach((k) => {
+        const v = r.eligible[k] * R[k]; if (v <= 0) return;
+        ctx.fillStyle = CL[k]; ctx.globalAlpha = 0.85; ctx.fillRect(Xd(a2), y2, Math.max(1, Xd(a2 + v) - Xd(a2)), bh2); ctx.globalAlpha = 1;
+        a2 += v;
+      });
+      const lim = r.baseLimit, lx2 = Xd(lim);
+      ctx.save(); ctx.setLineDash([4, 3]); ctx.strokeStyle = P.text; ctx.beginPath(); ctx.moveTo(lx2, y2 - 6); ctx.lineTo(lx2, y2 + bh2 + 6); ctx.stroke(); ctx.restore();
+      T(ctx, "기본한도 " + A(lim), lx2 - 4, y2 + bh2 + 18, { size: 11, color: P.text, align: "right" });
+      if (r.deduction <= 0) T(ctx, "사용액이 문턱을 넘지 못해 공제 0", bx + 6, y2 + bh2 / 2, { size: 12, color: P.bad, base: "middle", weight: 700 });
+      else if (!narrow || true) {
+        const s = A(r.deduction);
+        T(ctx, s, Math.min(Xd(Math.min(a2, DMAX)) + 6, bx + bw - 40), y2 + bh2 / 2, { size: 11, mono: true, color: P.text, base: "middle", weight: 700 });
+      }
+    }, { get height() { return pw("thr-cv") < 480 ? 270 : 240; } });
+    TB.drag(cv.canvas, { move(x) { if (!L2) return; credit = TB.clamp(Math.round((x - L2.bx) / L2.bw * XMAX / 1e5) * 1e5, 0, 4e7); draw(); } });
+    function draw() {
+      const g = gG() * 1e4, r = TX.cardDeduction(use(), g);
+      TB.stat("thr-o-t", W(r.threshold));
+      TB.stat("thr-o-u", W(r.total) + " / " + (r.over > 0 ? W(r.over) : "0원"));
+      TB.stat("thr-o-d", r.deduction > 0 ? plus(r.deduction) : "0원");
+      TB.stat("thr-o-p", r.total > 0 ? TB.pct(r.deduction / r.total, 1) : "—");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 한도에 걸리면 */
+  (function () {
+    const gG = TB.range("lim-g", (v) => W(v * 1e4), draw);
+    const kG = TB.seg("lim-k", draw);
+    const XMAX = 8e7;
+    let spend = 3e7, box = null;
+    const ded = (k, s) => TX.cardDeduction(k === "credit" ? { credit: s } : { debit: s }, gG() * 1e4, { kids: +kG() }).deduction;
+    function reach(k) { // 한도에 닿는 사용액
+      const g = gG() * 1e4, r = TX.cardDeduction({}, g, { kids: +kG() });
+      return g * D.card.threshold + r.baseLimit / R[k];
+    }
+    const cv = TB.canvas("#lim-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      const c1 = [], c2 = [];
+      for (let s = 0; s <= XMAX; s += XMAX / 300) { c1.push([s, ded("credit", s)]); c2.push([s, ded("debit", s)]); }
+      const lim = TX.cardDeduction({}, gG() * 1e4, { kids: +kG() }).baseLimit;
+      const ymax = D.card.limits[0].base + D.card.limits[0].childMax + 5e5;
+      const c = TB.chart(ctx, { x: 58, y: 16, w: w - 86, h: h - 64 }, {
+        x: [0, XMAX], y: [0, ymax], xFmt: A, yFmt: A, xTicks: w < 480 ? [0, 4e7, 8e7] : [0, 2e7, 4e7, 6e7, 8e7],
+        series: [{ data: c1, color: P.accent, width: 2.4 }, { data: c2, color: P.accent2, width: 2.4 }],
+        hlines: [{ y: lim, color: P.text, label: "기본한도 " + A(lim) }],
+        vlines: [{ x: gG() * 1e4 * D.card.threshold, color: P.bad, label: "문턱" }],
+      });
+      box = c;
+      const a = ded("credit", spend), b = ded("debit", spend), px = c.X(spend), hy = c.box.y + c.box.h;
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, hy); ctx.lineTo(px, c.Y(Math.max(a, b))); ctx.stroke(); ctx.restore();
+      if (b > a) { ctx.fillStyle = P.ok; ctx.globalAlpha = 0.18; ctx.fillRect(px - 5, c.Y(b), 10, c.Y(a) - c.Y(b)); ctx.globalAlpha = 1; }
+      ctx.beginPath(); ctx.arc(px, c.Y(a), 5, 0, TAU); ctx.fillStyle = P.accent; ctx.fill();
+      ctx.beginPath(); ctx.arc(px, c.Y(b), 5, 0, TAU); ctx.fillStyle = P.accent2; ctx.fill();
+      knob(ctx, px, hy, P);
+      const lx = c.box.x + c.box.w - 110; let ly = c.box.y + c.box.h * 0.55;
+      [["모두 신용카드", P.accent], ["모두 체크카드", P.accent2]].forEach(([s, col]) => { ctx.fillStyle = col; ctx.fillRect(lx, ly - 2, 12, 3); T(ctx, s, lx + 16, ly, { size: 11, color: P.dim, base: "middle" }); ly += 16; });
+    }, { get height() { return pw("lim-cv") < 480 ? 270 : 290; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; spend = TB.clamp(Math.round((x - box.box.x) / box.box.w * XMAX / 1e6) * 1e6, 0, XMAX); draw(); } });
+    function draw() {
+      const lim = TX.cardDeduction({}, gG() * 1e4, { kids: +kG() }).baseLimit;
+      TB.stat("lim-o-u", W(spend));
+      TB.stat("lim-o-c", W(ded("credit", spend)));
+      TB.stat("lim-o-d", W(ded("debit", spend)));
+      TB.stat("lim-o-l", A(reach("debit")) + " / " + A(reach("credit")));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 4. 체크카드로 옮기는 몫 */
+  (function () {
+    const mG = TB.range("sw-m", (v) => v + "%", draw);
+    const sG = TB.seg("sw-s", draw);
+    const bG = TB.range("sw-b", (v) => v.toFixed(1) + "%", draw);
+    function calc() {
+      const k = +sG(), m = mG() / 100;
+      const base = {}; KEYS.forEach((x) => { base[x] = C.card[x] * k; });
+      const moved = base.credit * m;
+      const alt = Object.assign({}, base, { credit: base.credit - moved, debit: base.debit + moved });
+      const r0 = TX.cardDeduction(base, GROSS), r1 = TX.cardDeduction(alt, GROSS);
+      const t0 = taxAll({ card: base }), t1 = taxAll({ card: alt });
+      return { k, moved, r0, r1, saved: t0 - t1, lostBenefit: moved * bG() / 100 };
+    }
+    const cv = TB.canvas("#sw-cv", (ctx, w, h) => {
+      const P = TB.palette(), CL = colors(P), c = calc();
+      const bx = 84, bw = w - bx - 20;
+      const DMAX = Math.max(D.card.limits[0].base + D.card.limits[0].extra, c.r1.raw, c.r0.raw) * 1.05;
+      const X = (v) => bx + v / DMAX * bw;
+      const rows = [["지금", c.r0], ["옮긴 뒤", c.r1]];
+      rows.forEach(([lab, r], i) => {
+        const y = 30 + i * 62, bh = 28;
+        T(ctx, lab, bx - 8, y + bh / 2, { size: 12, color: P.text, align: "right", base: "middle", weight: 700 });
+        ctx.fillStyle = P.grid; ctx.fillRect(bx, y, bw, bh);
+        let a = 0;
+        KEYS.forEach((k) => { const v = r.eligible[k] * R[k]; if (v <= 0) return; ctx.fillStyle = CL[k]; ctx.globalAlpha = 0.85; ctx.fillRect(X(a), y, Math.max(1, X(a + v) - X(a)), bh); ctx.globalAlpha = 1; a += v; });
+        if (r.raw > r.deduction) { ctx.fillStyle = P.bg; ctx.globalAlpha = 0.6; ctx.fillRect(X(r.deduction), y, X(r.raw) - X(r.deduction), bh); ctx.globalAlpha = 1; }
+        T(ctx, "공제 " + A(r.deduction) + (r.raw > r.deduction ? " (한도 초과분은 사라짐)" : ""), bx, y + bh + 14, { size: 11, color: P.dim });
+      });
+      const lim = c.r0.baseLimit, lx = X(lim);
+      ctx.save(); ctx.setLineDash([4, 3]); ctx.strokeStyle = P.text; ctx.beginPath(); ctx.moveTo(lx, 20); ctx.lineTo(lx, 128); ctx.stroke(); ctx.restore();
+      T(ctx, "기본한도", lx - 4, 16, { size: 11, color: P.text, align: "right" });
+      // 저울
+      const y3 = 168, mid = w / 2, net = c.saved - c.lostBenefit;
+      T(ctx, "세금 감소 " + W(c.saved), mid - 10, y3, { size: 12, color: P.ok, align: "right", weight: 700 });
+      T(ctx, "잃는 혜택 " + W(c.lostBenefit), mid + 10, y3, { size: 12, color: P.bad, weight: 700 });
+      const S = Math.max(c.saved, c.lostBenefit, 1e4), bwid = Math.min(bw * 0.45, 200);
+      ctx.fillStyle = P.ok; ctx.globalAlpha = 0.8; ctx.fillRect(mid - 6 - c.saved / S * bwid, y3 + 10, c.saved / S * bwid, 14); ctx.globalAlpha = 1;
+      ctx.fillStyle = P.bad; ctx.globalAlpha = 0.8; ctx.fillRect(mid + 6, y3 + 10, c.lostBenefit / S * bwid, 14); ctx.globalAlpha = 1;
+      T(ctx, (net >= 0 ? "남는 몫 +" : "오히려 손해 −") + W(Math.abs(net)), mid, y3 + 46, { size: 13, color: net >= 0 ? P.ok : P.bad, align: "center", weight: 700 });
+    }, { get height() { return 236; } });
+    function draw() {
+      const c = calc(), net = c.saved - c.lostBenefit;
+      TB.stat("sw-o-m", W(c.moved));
+      TB.stat("sw-o-d", W(c.r1.deduction - c.r0.deduction));
+      TB.stat("sw-o-t", plus(c.saved));
+      TB.stat("sw-o-n", net >= 0 ? plus(net) : '<span class="minus">−' + W(-net) + "</span>");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 5. 청약저축과 전세대출 */
+  (function () {
+    const sG = TB.range("hs-s", (v) => W(v * 1e4), draw);
+    const lG = TB.range("hs-l", (v) => W(v * 1e4), draw);
+    const hi = document.getElementById("hs-hi"); hi.addEventListener("change", draw);
+    const H = D.housing;
+    function calc() {
+      const g = hi.checked ? H.subscription.grossMax + 1e6 : GROSS;
+      const h = { subscription: sG() * 1e4, leaseRepay: lG() * 1e4 };
+      const r = TX.housingDeduction(h, g);
+      // 세금 감소: 다온 연말정산(총급여는 다온 그대로, 기준 초과는 청약공제 0으로만 반영)
+      const hh = hi.checked ? { subscription: 0, leaseRepay: h.leaseRepay } : h;
+      const saved = taxAll({ housing: {} }) - taxAll({ housing: hh });
+      return { r, saved, h };
+    }
+    const cv = TB.canvas("#hs-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc(), r = c.r;
+      const bx = 16, bw = w - 32, MAX = H.lease.limit * 1.6, X = (v) => bx + v / MAX * bw;
+      T(ctx, "공제액(합산 한도 " + A(H.lease.limit) + ")", bx, 20, { size: 11, color: P.dim, weight: 700 });
+      const y = 34, bh = 34;
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y, bw, bh);
+      const sub = r.subscription, lease = r.lease;
+      ctx.fillStyle = P.accent; ctx.globalAlpha = 0.85; ctx.fillRect(bx, y, X(Math.min(sub, MAX)) - bx, bh);
+      ctx.fillStyle = P.accent2; ctx.fillRect(X(Math.min(sub, MAX)), y, X(Math.min(sub + lease, MAX)) - X(Math.min(sub, MAX)), bh); ctx.globalAlpha = 1;
+      const lx = X(H.lease.limit);
+      if (sub + lease > H.lease.limit) { ctx.fillStyle = P.bg; ctx.globalAlpha = 0.6; ctx.fillRect(lx, y, X(Math.min(sub + lease, MAX)) - lx, bh); ctx.globalAlpha = 1; T(ctx, "한도 밖: 사라짐", Math.min(lx + 6, bx + bw - 90), y + bh + 16, { size: 11, color: P.bad, weight: 700 }); }
+      ctx.strokeStyle = P.bad; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(lx, y - 8); ctx.lineTo(lx, y + bh + 4); ctx.stroke(); ctx.lineWidth = 1;
+      let lgx = bx; const lgy = y + bh + 40;
+      [["청약저축 × " + pctS(H.subscription.rate), P.accent], ["전세대출 원리금 × " + pctS(H.lease.rate), P.accent2]].forEach(([s, col]) => { ctx.font = TB.font(11); const tw = ctx.measureText(s).width; ctx.fillStyle = col; ctx.fillRect(lgx, lgy - 8, 10, 10); T(ctx, s, lgx + 14, lgy, { size: 11, color: P.dim }); lgx += tw + 28; });
+      // 청약 납입 중 공제 밖 몫
+      const y2 = lgy + 30, pay = c.h.subscription, PM = 6e6, Xp = (v) => bx + v / PM * bw;
+      T(ctx, "청약 납입 " + A(pay) + " 중 공제 계산에 들어가는 몫", bx, y2, { size: 11, color: P.dim, weight: 700 });
+      ctx.fillStyle = P.grid; ctx.fillRect(bx, y2 + 8, bw, 16);
+      const inS = hi.checked ? 0 : Math.min(pay, H.subscription.max);
+      ctx.fillStyle = P.accent; ctx.globalAlpha = 0.6; ctx.fillRect(bx, y2 + 8, Xp(inS) - bx, 16); ctx.globalAlpha = 1;
+      if (pay > inS) { ctx.fillStyle = P.faint; ctx.globalAlpha = 0.5; ctx.fillRect(Xp(inS), y2 + 8, Xp(pay) - Xp(inS), 16); ctx.globalAlpha = 1; }
+      if (hi.checked) T(ctx, "총급여 기준 초과: 청약저축 공제 없음", bx + 6, y2 + 16, { size: 11, color: P.bad, base: "middle", weight: 700 });
+    }, { get height() { return 170; } });
+    function draw() {
+      const c = calc(), r = c.r;
+      TB.stat("hs-o-s", W(hi.checked ? 0 : r.subscription));
+      TB.stat("hs-o-l", W(r.lease));
+      TB.stat("hs-o-t", W(r.leaseSub));
+      TB.stat("hs-o-x", plus(c.saved));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  // 공통 머리·꼬리(푸터 등)가 늦게 만들어져도 세법 값이 채워지게 한 번 더 채운다
+  const refill = () => TX.fill(document);
+  if (document.readyState === "complete") setTimeout(refill, 50); else window.addEventListener("load", () => setTimeout(refill, 50));
+
+  /* ---------------------------------------------------------- 다온의 노트 */
+  (function () {
+    const r = TX.cardDeduction(C.card, GROSS);
+    const ye = TX.yearEnd(TX.caseYearEnd());
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set("nt-total", W(r.total));
+    set("nt-thr", W(r.threshold));
+    set("nt-over", W(r.over));
+    set("nt-ded", W(r.deduction));
+    set("nt-lim", W(r.baseLimit));
+    set("nt-mr", pctS(ye.marginal));
+    const t0 = taxAll({});
+    set("nt-cardtax", "약 " + W(Math.round((taxAll({ card: {} }) - t0) / 1e3) * 1e3));
+    const alt = Object.assign({}, C.card, { credit: 0, debit: C.card.debit + C.card.credit });
+    set("nt-swd", W(TX.cardDeduction(alt, GROSS).deduction - r.deduction));
+    set("nt-swt", "약 " + W(Math.round((t0 - taxAll({ card: alt })) / 1e3) * 1e3));
+    set("nt-sub", W(ye.house.subscription));
+    set("nt-subtax", "약 " + W(Math.round((taxAll({ housing: {} }) - t0) / 1e3) * 1e3));
+  })();
+});
+</script>
+</body>
+</html>

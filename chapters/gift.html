@@ -1,0 +1,735 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "증여세는 받는 사람이 10년 동안 같은 그룹에게서 받은 돈을 합쳐 공제를 빼고 누진세율을 곱하는 세금이다. 증여재산공제와 혼인·출산 공제, 10년 합산, 세율 계단, 신고세액공제와 가산세, 미성년 자녀에게 나눠 주기, 차용과 증여의 경계를 시뮬레이터로 따라간다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>증여세 · TaxBook</title>
+<meta name="description" content="증여세는 받는 사람이 10년 동안 같은 그룹에게서 받은 돈을 합쳐 공제를 빼고 누진세율을 곱하는 세금이다. 증여재산공제와 혼인·출산 공제, 10년 합산, 세율 계단, 신고세액공제와 가산세, 미성년 자녀에게 나눠 주기, 차용과 증여의 경계를 시뮬레이터로 따라간다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/gift.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="증여세 · TaxBook">
+<meta property="og:description" content="증여세는 받는 사람이 10년 동안 같은 그룹에게서 받은 돈을 합쳐 공제를 빼고 누진세율을 곱하는 세금이다. 증여재산공제와 혼인·출산 공제, 10년 합산, 세율 계단, 신고세액공제와 가산세, 미성년 자녀에게 나눠 주기, 차용과 증여의 경계를 시뮬레이터로 따라간다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/gift.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/gift.html#chapter","name":"증여세","headline":"증여세 · TaxBook","description":"증여세는 받는 사람이 10년 동안 같은 그룹에게서 받은 돈을 합쳐 공제를 빼고 누진세율을 곱하는 세금이다. 증여재산공제와 혼인·출산 공제, 10년 합산, 세율 계단, 신고세액공제와 가산세, 미성년 자녀에게 나눠 주기, 차용과 증여의 경계를 시뮬레이터로 따라간다.","url":"https://taxbook.euiyun.com/chapters/gift.html","position":13,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"13. 증여세","item":"https://taxbook.euiyun.com/chapters/gift.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+</head>
+<body data-chapter="gift">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 13 · <span data-t="label"></span></div>
+    <h1>증여세</h1>
+    <p class="lead">2026년 11월, 다온의 부모가 결혼 자금을 보태 주겠다고 했다. 아버지는 "엄마 아빠가 각자 주면 공제도 각자 받는다더라"고 했고, 동생 민재는 "<span data-t="gift.windowYears" data-f="num"></span>년에 한 번은 세금 없이 줄 수 있다던데"라고 거들었다. 반은 맞고 반은 틀린 말이다. 증여세는 <b>주는 사람이 아니라 받는 사람</b>이 낸다. 그리고 받는 사람 한 명을 기준으로 지난 <span data-t="gift.windowYears" data-f="num"></span>년 동안 같은 쪽(부모·조부모)에게서 받은 돈을 모두 합쳐 계산한다. 이 장은 증여세가 어떤 순서로 계산되는지, 공제는 누구 기준으로 몇 번 쓰는지, 언제 주느냐가 왜 세금을 바꾸는지를 따라간다. 이 장의 값은 <span data-t="label"></span>이다.</p>
+    <ul class="objectives">
+      <li>증여세를 증여재산 → <span data-t="gift.windowYears" data-f="num"></span>년 합산 → 증여재산공제 → 과세표준 → 세율 → 신고세액공제의 순서로 계산한다.</li>
+      <li>증여재산공제가 받는 사람 기준, 증여자 그룹별로 <span data-t="gift.windowYears" data-f="num"></span>년에 한 번이라는 것과, 부모·조부모가 하나의 그룹이라는 것을 설명한다.</li>
+      <li>혼인·출산 증여재산공제의 기간 요건과 평생 통합 한도를 다온의 결혼 일정에 적용한다.</li>
+      <li>신고와 무신고의 차이(신고세액공제와 가산세), 세대생략 할증, 과세최저한을 숫자로 비교한다.</li>
+      <li>빌린 돈과 받은 돈의 경계, 부동산을 증여받을 때의 평가와 취득세를 개념 수준에서 정리한다.</li>
+    </ul>
+  </header>
+
+  <section id="who">
+    <h2>받는 사람이 내는 세금</h2>
+    <p><span class="term">증여세</span><span class="en">(Gift tax)</span>는 대가 없이 재산을 받은 사람이 내는 세금이다. 돈을 준 부모가 아니라 받은 자녀가 신고하고 납부한다. 이 점이 출발점이다. 세금이 받는 사람 기준이라서 "누가 줬는가"보다 "<b>내가</b> 지난 <span data-t="gift.windowYears" data-f="num"></span>년 동안 <b>어느 쪽에게서</b> 얼마를 받았는가"가 세금을 정한다. 부모가 각자 통장에서 보내도, 받는 다온의 입장에서는 같은 쪽에게서 받은 돈이다.</p>
+    <p>증여세가 무엇에 붙는지도 넓다. 현금 이체만이 아니라 집이나 땅의 명의를 넘기는 것, 주식을 넘기는 것, 부모 돈으로 자녀 명의의 집을 사 주는 것, 자녀 빚을 대신 갚아 주는 것, 시세보다 아주 싸게 파는 것도 증여가 될 수 있다. 반대로 사회 통념상 인정되는 생활비·교육비, 결혼 축의금처럼 성격상 증여로 보지 않는 것도 있다. 다만 생활비 명목으로 받아 예금하거나 집을 사는 데 쓰면 비과세가 아니다. "무엇을 받았느냐"보다 "받아서 어디에 썼느냐"가 갈림길이 되는 경우가 많다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 330" role="img" aria-label="증여세 계산 순서: 이번 증여재산에 10년 내 같은 그룹 증여를 더하고, 증여재산공제를 빼 과세표준을 구한 뒤 세율을 곱하고 이미 낸 세금과 신고세액공제를 뺀다">
+        <defs><marker id="gf-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="20" y="14" width="190" height="44" rx="8" class="f-acc-soft"/>
+        <text x="115" y="34" text-anchor="middle" class="lbl-b">이번에 받은 재산</text>
+        <text x="115" y="50" text-anchor="middle" class="lbl-dim">현금·부동산·주식(시가)</text>
+        <rect x="250" y="14" width="190" height="44" rx="8" class="f-acc2-soft"/>
+        <text x="345" y="34" text-anchor="middle" class="lbl-b">+ <tspan data-t="gift.windowYears" data-f="num"></tspan>년 안에 받은 증여</text>
+        <text x="345" y="50" text-anchor="middle" class="lbl-dim">같은 사람(부모는 부부 합쳐)</text>
+        <line x1="115" y1="58" x2="200" y2="84" class="s-line" marker-end="url(#gf-ar)"/>
+        <line x1="345" y1="58" x2="260" y2="84" class="s-line" marker-end="url(#gf-ar)"/>
+        <rect x="130" y="86" width="200" height="34" rx="8" class="f-surface"/>
+        <text x="230" y="108" text-anchor="middle" class="lbl-b">증여세 과세가액</text>
+        <line x1="230" y1="120" x2="230" y2="142" class="s-line" marker-end="url(#gf-ar)"/>
+        <rect x="130" y="144" width="200" height="34" rx="8" class="f-ok-soft"/>
+        <text x="230" y="166" text-anchor="middle" class="lbl">− 증여재산공제(<tspan data-t="gift.windowYears" data-f="num"></tspan>년 한도)</text>
+        <line x1="230" y1="178" x2="230" y2="200" class="s-line" marker-end="url(#gf-ar)"/>
+        <rect x="130" y="202" width="200" height="34" rx="8" class="f-surface"/>
+        <text x="230" y="224" text-anchor="middle" class="lbl-b">과세표준 × 세율(10~50%)</text>
+        <line x1="230" y1="236" x2="230" y2="258" class="s-line" marker-end="url(#gf-ar)"/>
+        <rect x="100" y="260" width="260" height="34" rx="8" class="f-bad-soft"/>
+        <text x="230" y="282" text-anchor="middle" class="lbl">− 합산분에 이미 낸 세금 − 신고세액공제</text>
+        <text x="230" y="316" text-anchor="middle" class="lbl-dim">세대를 건너뛰면(조부모→손주) 산출세액에 할증</text>
+        <text x="350" y="166" class="lbl-acc">받는 사람</text>
+        <text x="350" y="182" class="lbl-acc">기준</text>
+      </svg>
+      <figcaption><b>그림 1. 증여세의 계단.</b> 이번 증여만 보지 않는다. 같은 사람(직계존속이면 그 배우자 포함)에게서 <span data-t="gift.windowYears" data-f="num"></span>년 안에 받은 증여를 더하고, 공제는 그 <span data-t="gift.windowYears" data-f="num"></span>년 동안 한 번만 쓴다. 합산으로 늘어난 세금에서 지난번에 이미 낸 세금을 빼 준다. 세율은 상속세와 같다.</figcaption>
+    </figure>
+
+    <div class="formula">
+      $$\text{납부세액} = \Big[\text{세율표}\big(\underbrace{\text{이번 증여}+\text{10년 내 합산 증여}}_{\text{과세가액}}-\text{증여재산공제}\big)-\text{합산분 기납부세액}\Big]\times(1-\text{신고세액공제율})$$
+      <div class="where">세율표는 <a href="#rates">아래</a>의 다섯 구간 누진세율(<span data-t="transfer.rates.0.1" data-f="pct"></span>~<span data-t="transfer.rates.4.1" data-f="pct"></span>)이다. 신고세액공제율은 <span data-t="transfer.filingCredit" data-f="pct"></span>로, 기한 안에 신고해야 받는다. 과세표준이 <span data-t="transfer.minBase"></span> 미만이면 세금을 매기지 않는다(<span class="term">과세최저한</span>).</div>
+    </div>
+    <p>이 장의 시뮬레이터는 모두 이 식을 쓰는 이 책의 엔진(<code>TX.giftTax</code>)으로 계산한다. 근거 조문은 <a data-src="transfer.rates"></a>, <a data-src="gift.deduction"></a>, <a data-src="gift.sum10"></a>이다.</p>
+  </section>
+
+  <section id="deduction">
+    <h2>증여재산공제: 누구에게서 받았나</h2>
+    <p><span class="term">증여재산공제</span><span class="en">(Gift deduction)</span>는 가족 사이의 증여에서 일정 금액까지는 세금을 매기지 않는 장치다. 공제액은 <b>받는 사람과 주는 사람의 관계</b>로 정해지고, <span data-t="gift.windowYears" data-f="num"></span>년 동안의 합계 한도다. 한 번 쓰면 <span data-t="gift.windowYears" data-f="num"></span>년이 지나야 다시 생긴다.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>주는 사람(받는 사람 기준)</th><th class="num"><span data-t="gift.windowYears" data-f="num"></span>년 공제 한도</th><th>메모</th></tr></thead>
+        <tbody>
+          <tr><td>배우자</td><td class="num"><span data-t="gift.deduction.spouse"></span></td><td>법률혼 배우자만. 사실혼은 공제 없음</td></tr>
+          <tr><td>직계존속(부모·조부모 등) → 성년 자녀</td><td class="num"><span data-t="gift.deduction.parentToAdult"></span></td><td>부모와 조부모를 <b>합쳐</b> 한 그룹</td></tr>
+          <tr><td>직계존속 → 미성년 자녀</td><td class="num"><span data-t="gift.deduction.parentToMinor"></span></td><td>만 <span data-t="inherit.minorAge" data-f="num"></span>세 미만</td></tr>
+          <tr><td>직계비속(자녀·손주) → 부모</td><td class="num"><span data-t="gift.deduction.childToParent"></span></td><td>자녀가 부모에게 줄 때</td></tr>
+          <tr><td>기타친족</td><td class="num"><span data-t="gift.deduction.relative"></span></td><td>4촌 이내 혈족·3촌 이내 인척(형제자매, 시부모·장인장모 등)</td></tr>
+          <tr><td>그 밖의 사람</td><td class="num"><span data-t="gift.deduction.other"></span></td><td>친구·연인·사실혼 배우자</td></tr>
+          <tr><td>혼인·출산 공제(직계존속에게서)</td><td class="num">+<span data-t="gift.marriageBirth"></span></td><td>위 직계존속 공제와 별도, 평생 한 번의 통합 한도</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)"><span data-t="label"></span> 증여재산공제(<a data-src="gift.deduction"></a>, <a data-src="gift.marriage"></a>). 기타친족 범위는 2025년 3월부터 4촌 이내 혈족·3촌 이내 인척으로 좁아졌다.</p>
+
+    <p>여기서 가장 많이 틀리는 것이 "그룹"이다. 공제는 주는 사람 한 명마다 따로 생기지 않는다. 받는 사람 입장에서 <b>직계존속 전체가 한 그룹</b>이라 아버지, 어머니, 할아버지, 외할머니에게서 받은 것을 모두 합쳐 <span data-t="gift.windowYears" data-f="num"></span>년에 <span data-t="gift.deduction.parentToAdult"></span>(성년 기준)이다. 기타친족도 삼촌·이모·형제를 합쳐 하나의 그룹이다. 반대로 그룹이 다르면 따로 쓴다. 다온이 부모에게서 받으며 쓴 공제와 이모에게서 받으며 쓴 공제는 서로 영향을 주지 않는다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 290" role="img" aria-label="받는 사람 다온을 기준으로 직계존속 그룹(아버지·어머니·조부모)은 공제 하나를 함께 쓰고, 기타친족 그룹과 배우자는 각각 따로 공제를 가진다">
+        <defs><marker id="gf-ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="14" y="14" width="200" height="150" rx="10" class="f-acc-soft"/>
+        <text x="114" y="36" text-anchor="middle" class="lbl-acc">직계존속 그룹</text>
+        <rect x="30" y="48" width="78" height="30" rx="6" class="f-surface"/><text x="69" y="68" text-anchor="middle" class="lbl">아버지</text>
+        <rect x="120" y="48" width="78" height="30" rx="6" class="f-surface"/><text x="159" y="68" text-anchor="middle" class="lbl">어머니</text>
+        <rect x="30" y="86" width="78" height="30" rx="6" class="f-surface"/><text x="69" y="106" text-anchor="middle" class="lbl">할아버지</text>
+        <rect x="120" y="86" width="78" height="30" rx="6" class="f-surface"/><text x="159" y="106" text-anchor="middle" class="lbl">외할머니</text>
+        <text x="114" y="138" text-anchor="middle" class="lbl-b">공제 하나를 함께 쓴다</text>
+        <text x="114" y="155" text-anchor="middle" class="lbl-dim">성년 <tspan data-t="gift.deduction.parentToAdult"></tspan> + 혼인·출산 <tspan data-t="gift.marriageBirth"></tspan></text>
+        <rect x="246" y="14" width="200" height="70" rx="10" class="f-acc2-soft"/>
+        <text x="346" y="38" text-anchor="middle" class="lbl-b">기타친족 그룹</text>
+        <text x="346" y="56" text-anchor="middle" class="lbl-dim">이모·삼촌·형제자매 등 합쳐</text>
+        <text x="346" y="73" text-anchor="middle" class="lbl"><tspan data-t="gift.deduction.relative"></tspan></text>
+        <rect x="246" y="94" width="200" height="70" rx="10" class="f-ok-soft"/>
+        <text x="346" y="118" text-anchor="middle" class="lbl-b">배우자</text>
+        <text x="346" y="136" text-anchor="middle" class="lbl-dim">혼인신고 뒤 법률혼 배우자</text>
+        <text x="346" y="153" text-anchor="middle" class="lbl"><tspan data-t="gift.deduction.spouse"></tspan></text>
+        <rect x="170" y="214" width="120" height="44" rx="22" class="f-elev"/>
+        <text x="230" y="234" text-anchor="middle" class="lbl-b">받는 사람</text>
+        <text x="230" y="250" text-anchor="middle" class="lbl-dim">다온</text>
+        <line x1="114" y1="166" x2="190" y2="212" class="s-acc" marker-end="url(#gf-ar2)"/>
+        <path d="M246 50 C228 50 226 150 238 210" fill="none" class="s-acc2" marker-end="url(#gf-ar2)"/>
+        <line x1="346" y1="166" x2="282" y2="212" class="s-ok" marker-end="url(#gf-ar2)"/>
+        <text x="230" y="280" text-anchor="middle" class="lbl-dim">그룹마다 <tspan data-t="gift.windowYears" data-f="num"></tspan>년 단위로 따로 계산한다</text>
+      </svg>
+      <figcaption><b>그림 2. 공제는 받는 사람 기준, 그룹별로 하나.</b> 직계존속은 친가·외가, 부모·조부모를 가리지 않고 한 그룹이다. 세금 계산의 합산(<span data-t="gift.windowYears" data-f="num"></span>년)은 "같은 사람"(부모는 부부를 같은 사람으로 본다) 단위지만, 공제는 그룹 단위로 나눠 쓴다. 그래서 할아버지에게 받으면 합산은 따로 하되 부모와 공제를 나눠 쓴다.</figcaption>
+    </figure>
+
+    <p>아래 시뮬레이터에서 아버지·어머니·할머니가 각각 주는 금액을 움직여 본다. 맨 위 막대는 받은 돈, 그 아래가 실제로 쓸 수 있는 공제다. 공제를 사람마다 따로 받는다고 착각했을 때의 세금도 함께 보여 준다.</p>
+
+    <div class="sim" id="sim-grp">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>공제는 그룹에 하나: 공제 소진 막대</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="grp-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>아버지가 주는 돈 <output id="grp-d-out"></output></span><input type="range" id="grp-d" min="0" max="3" step="0.05" value="1"></label>
+          <label class="ctrl"><span>어머니가 주는 돈 <output id="grp-m-out"></output></span><input type="range" id="grp-m" min="0" max="3" step="0.05" value="1"></label>
+          <label class="ctrl"><span>할머니가 주는 돈 <output id="grp-g-out"></output></span><input type="range" id="grp-g" min="0" max="2" step="0.05" value="0"></label>
+          <label class="check"><input type="checkbox" id="grp-mar" checked> 혼인·출산 공제 요건을 채운다</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">쓸 수 있는 공제(그룹 합계)</span><span class="v" id="grp-o-ded">—</span></div>
+        <div class="stat"><span class="k">과세표준</span><span class="v" id="grp-o-base">—</span></div>
+        <div class="stat"><span class="k">실제 증여세(신고 기준)</span><span class="v" id="grp-o-tax">—</span></div>
+        <div class="stat"><span class="k">사람마다 공제라고 착각하면</span><span class="v" id="grp-o-wrong">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(아버지·어머니 각 1억원, 혼인·출산 공제 요건 충족)에서 공제 막대가 받은 돈 막대보다 짧아, 넘친 몫에 세금이 붙는 것을 본다. 착각한 계산은 0원이다. ② 혼인·출산 공제를 끄면 공제가 <span data-t="gift.deduction.parentToAdult"></span>로 줄어 세금이 훌쩍 커진다. ③ 할머니 금액을 올린다. 할머니 몫은 부모와 공제를 나눠 쓰고(부모가 이미 다 썼다면 공제 0원), 세대를 건너뛴 증여라 산출세액에 <span data-t="gift.skipRate" data-f="pct"></span> 할증이 붙는다(막대의 옅은 끝). (모든 증여가 같은 해에 있고, <span data-t="gift.windowYears" data-f="num"></span>년 안에 받은 다른 증여는 없다고 가정한다. 공제는 부모 몫에 먼저 쓴다고 단순화했다. 실제로는 먼저 받은 증여부터 공제를 쓴다. 받는 사람은 성년이고 미성년자 <span data-t="gift.skipMinorOver"></span> 초과 할증은 넣지 않았다.)</div>
+    </div>
+
+    <p>부모가 "각자 5천만원씩"이라고 생각하는 순간 공제를 두 배로 계산하게 된다. 받는 사람 기준이라는 원칙 하나로 정리된다. 할머니가 손주에게 바로 주는 <span class="term">세대생략 증여</span><span class="en">(Generation-skipping gift)</span>는 부모를 거치면 두 번 낼 세금을 한 번만 내는 셈이라, 산출세액에 <span data-t="gift.skipRate" data-f="pct"></span>를 더한다. 받는 사람이 미성년자이고 증여재산이 <span data-t="gift.skipMinorOver"></span>을 넘으면 할증은 <span data-t="gift.skipRateMinor" data-f="pct"></span>다(<a data-src="transfer.skip"></a>). 부모가 먼저 돌아가셔서 조부모가 손주에게 주는 경우처럼 할증이 붙지 않는 예외도 있다.</p>
+  </section>
+
+  <section id="marriage">
+    <h2>혼인·출산 공제: 평생 한 번의 추가 공제</h2>
+    <p>2024년부터 직계존속에게서 받는 증여에는 <span class="term">혼인·출산 증여재산공제</span>가 더해졌다. 혼인신고일 전후 <span data-t="gift.marriageWindow" data-f="num"></span>년 안에, 또는 자녀의 출생(입양)신고일부터 <span data-t="gift.marriageWindow" data-f="num"></span>년 안에 직계존속에게서 받은 증여에 <span data-t="gift.marriageBirth"></span>을 더 공제한다(<a data-src="gift.marriage"></a>). 세 가지를 기억하면 된다.</p>
+    <ol>
+      <li><b>기본 공제와 별도다.</b> 성년 자녀는 <span data-t="gift.deduction.parentToAdult"></span> + <span data-t="gift.marriageBirth"></span>까지 직계존속에게서 세금 없이 받을 수 있다. 다만 기본 공제는 <span data-t="gift.windowYears" data-f="num"></span>년마다 다시 생기지만 혼인·출산 공제는 다시 생기지 않는다.</li>
+      <li><b>혼인과 출산을 합친 평생 한도다.</b> 결혼할 때 다 쓰면 아이를 낳았을 때 또 받을 수 없다. 결혼 때 일부만 썼다면 남은 한도를 출산 때 쓸 수 있다.</li>
+      <li><b>직계존속 그룹이 함께 쓴다.</b> 부모와 조부모를 합쳐 한도 하나다. 배우자 쪽 부모에게서 받는 증여는 배우자의 공제를 쓴다. 신랑·신부가 각자 자기 부모에게서 받으면 두 사람이 각자 한도를 가진다.</li>
+    </ol>
+    <p>기간 요건은 날짜로 따진다. "전후"라서 혼인신고 <b>전</b>에 받아도 된다. 다온처럼 2027년 봄에 혼인신고를 할 계획이라면 2026년 11월에 받는 돈도 기간 안이다. 반대로 결혼식을 올리고도 혼인신고를 미루다 기간을 놓치면 공제가 사라진다. 공제는 결혼식이 아니라 <b>혼인신고일</b>을 기준으로 한다.</p>
+
+    <div class="callout check" style="display:block">
+      <strong>혼인·출산 공제를 쓰기 전에</strong>
+      ① 혼인관계증명서의 혼인신고일(또는 가족관계증명서의 출생신고일)을 확인하고, 증여일이 그 전후 <span data-t="gift.marriageWindow" data-f="num"></span>년 안인지 날짜로 센다. ② 지난 <span data-t="gift.windowYears" data-f="num"></span>년 동안 부모·조부모에게서 받은 증여가 있었는지 적어 본다. 이미 공제를 쓴 증여가 있다면 남은 공제만 쓸 수 있다. ③ 출산 공제를 나중에 쓸 생각이라면 혼인 때 한도를 얼마나 남길지 정한다. ④ 홈택스 증여세 신고에서 공제 항목을 "혼인·출산 증여재산공제"로 따로 고르고, 증빙(혼인관계증명서)을 붙인다. ⑤ 받은 돈은 받는 사람 명의 계좌로, 증여 목적을 적어 이체한다.
+    </div>
+  </section>
+
+  <section id="sum10">
+    <h2><span data-t="gift.windowYears" data-f="num"></span>년 합산: 언제 주느냐가 세금을 바꾼다</h2>
+    <p>공제가 <span data-t="gift.windowYears" data-f="num"></span>년 단위인 것과 짝을 이루는 규칙이 <span class="term"><span data-t="gift.windowYears" data-f="num"></span>년 합산</span>이다. 같은 사람(직계존속이면 그 배우자 포함)에게서 받은 증여는 오늘 받은 것에 지난 <span data-t="gift.windowYears" data-f="num"></span>년 동안 받은 것을 더해 세율표에 넣는다(<a data-src="gift.sum10"></a>). 1억원을 두 번에 나눠 받아도 <span data-t="gift.windowYears" data-f="num"></span>년 안이면 2억원을 한 번에 받은 것과 세금이 같다. 지난번에 낸 세금은 빼 주니 두 번 내지는 않지만, 나눠 받아 낮은 세율 구간에 머무르는 효과는 없다.</p>
+    <p>그래서 합산에서 벗어나는 유일한 방법은 <b>시간</b>이다. 아래 타임라인에서 두 번째 증여의 손잡이를 좌우로 끌어 본다. 색칠된 구간이 두 번째 증여일에서 거슬러 올라간 합산 창이다. 첫 증여가 그 창 안에 있으면 둘은 합쳐진다.</p>
+
+    <div class="sim" id="sim-tl">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3><span data-t="gift.windowYears" data-f="num"></span>년 타임라인: 합산 창 끌기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="tl-cv"></canvas><span class="hint">두 번째 증여를 끈다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>첫 증여(2026년) <output id="tl-a-out"></output></span><input type="range" id="tl-a" min="0.1" max="3" step="0.05" value="1"></label>
+          <label class="ctrl"><span>두 번째 증여 <output id="tl-b-out"></output></span><input type="range" id="tl-b" min="0.1" max="3" step="0.05" value="1"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">두 번째 증여 시점</span><span class="v" id="tl-o-t">—</span></div>
+        <div class="stat"><span class="k">합산 여부</span><span class="v" id="tl-o-s">—</span></div>
+        <div class="stat"><span class="k">두 번째 증여세</span><span class="v" id="tl-o-b">—</span></div>
+        <div class="stat"><span class="k">두 증여의 세금 합계</span><span class="v" id="tl-o-sum">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(부모가 성년 자녀에게 2026년 1억원, 몇 해 뒤 1억원)에서 두 번째 증여를 합산 창 안에 두면 두 번째 증여에는 공제가 남아 있지 않고 첫 증여와 합쳐 세율이 매겨지는 것을 본다. ② 손잡이를 끌어 첫 증여에서 <span data-t="gift.windowYears" data-f="num"></span>년이 지난 자리로 옮긴다. 경계를 넘는 순간 공제가 새로 생기고 세금 합계가 계단처럼 떨어진다. ③ 두 금액을 모두 3억원으로 올린다. 합산되면 과세표준이 높은 구간으로 올라가 한계세율이 커지고, 경계 너머와의 차이가 더 벌어진다. (혼인·출산 공제와 다른 그룹의 증여는 넣지 않았다. 합산 기준은 증여일 전 <span data-t="gift.windowYears" data-f="num"></span>년이며, 이 모델은 연 단위로 근사한다. 기한 내 신고를 가정해 신고세액공제를 반영했다.)</div>
+    </div>
+
+    <p>합산 창은 "첫 증여부터 <span data-t="gift.windowYears" data-f="num"></span>년"이 아니라 "<b>이번 증여일에서 거꾸로 <span data-t="gift.windowYears" data-f="num"></span>년</b>"이다. 그래서 2026년, 2031년, 2036년처럼 5년마다 주면 2031년 증여는 2026년 것과, 2036년 증여는 2031년 것과 합쳐진다. 2026년 것은 2036년 증여의 창 밖으로 막 빠져나간다. 공제도 같은 원리라 <span data-t="gift.windowYears" data-f="num"></span>년 동안 한 번이다. 이 규칙이 15장의 "<span data-t="gift.windowYears" data-f="num"></span>년 단위로 나누어 주기"의 바탕이다.</p>
+  </section>
+
+  <section id="rates">
+    <h2>세율 계단과 과세최저한</h2>
+    <p>증여세 세율은 상속세와 같은 다섯 구간의 누진세율이다. 과세표준(공제를 뺀 뒤의 금액) 전체에 하나의 세율을 곱하지 않고, 구간마다 그 구간의 세율을 곱해 더한다. 아래 표의 누진공제는 그 계산을 한 번에 하게 해 주는 빼기 값이다.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>과세표준</th><th class="num">세율</th><th class="num">누진공제</th></tr></thead>
+        <tbody id="gift-rate-tb"></tbody>
+      </table>
+    </div>
+    <p style="font-size:14px;color:var(--text-dim)"><span data-t="label"></span> 상속세·증여세 세율(<a data-src="transfer.rates"></a>). 증여세에는 지방세가 따로 붙지 않는다.</p>
+    <p>세율 계단이 실제 세금에 어떻게 나타나는지 보자. 가로축은 증여액(로그 눈금)이다. 손잡이를 끌어 증여액을 바꾸고, 관계를 바꿔 공제가 어디서 끝나는지 본다. 계단 선은 마지막 1원에 붙는 세율(한계세율), 곡선은 증여액 전체에 대한 세금 비율(실효세율)이다.</p>
+
+    <div class="sim" id="sim-rate">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>증여액별 세율 계단</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="rate-cv"></canvas><span class="hint">끌어서 증여액을 바꾼다</span></div>
+        <div class="sim-controls">
+          <div class="seg" id="rate-rel"><button data-value="parentToAdult" class="on">성년 자녀</button><button data-value="parentToMinor">미성년 자녀</button><button data-value="spouse">배우자</button><button data-value="relative">기타친족</button></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">증여액</span><span class="v" id="rate-o-v">—</span></div>
+        <div class="stat"><span class="k">과세표준</span><span class="v" id="rate-o-b">—</span></div>
+        <div class="stat"><span class="k">한계세율</span><span class="v" id="rate-o-m">—</span></div>
+        <div class="stat"><span class="k">세금 / 실효세율</span><span class="v" id="rate-o-e">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 성년 자녀에서 손잡이를 공제선 바로 위로 옮긴다. 공제를 넘는 몫이 아주 작으면 과세최저한(과세표준 <span data-t="transfer.minBase"></span> 미만) 때문에 세금이 0원이다. ② 증여액을 10억원 근처로 올린다. 한계세율은 계단을 따라 뛰지만 실효세율 곡선은 천천히 올라간다. 세율 계단을 넘었다고 전체 금액에 높은 세율이 붙는 것은 아니다. ③ 배우자로 바꾼다. 공제선이 <span data-t="gift.deduction.spouse"></span>로 옮겨 가 곡선 전체가 오른쪽으로 밀린다. (기한 내 신고를 가정했다. <span data-t="gift.windowYears" data-f="num"></span>년 안의 다른 증여와 혼인·출산 공제, 할증은 넣지 않았다.)</div>
+    </div>
+
+    <p>실효세율이 한계세율보다 늘 낮은 이유는 앞 구간들의 낮은 세율이 먼저 적용되기 때문이다. 증여액이 커질수록 실효세율은 최고세율 쪽으로 다가가지만 끝내 닿지는 않는다. 누진세율의 계단이 처음이라면 MoneyBook의 <a href="https://moneybook.euiyun.com/chapters/tax.html">세금 장</a>과 이 책 <a href="overview.html">1장</a>에서 한계세율과 실효세율을 먼저 보면 좋다.</p>
+  </section>
+
+  <section id="filing">
+    <h2>신고와 납부: 기한, 신고세액공제, 가산세</h2>
+    <p>증여세 신고기한은 <b><span data-t="calendar.giftFiling" data-f="raw"></span></b> 안이다(<a data-src="transfer.filing"></a>). 11월 10일에 받았다면 11월 30일부터 <span data-t="transfer.giftFilingMonths" data-f="num"></span>개월을 센다. 홈택스에서 직접 신고할 수 있고, 받는 사람 주소지 관할 세무서에 낸다. 기한 안에 신고하면 산출세액의 <span data-t="transfer.filingCredit" data-f="pct"></span>를 <span class="term">신고세액공제</span>로 빼 준다.</p>
+    <p>신고하지 않으면 계산이 반대로 간다. 신고세액공제가 없어지고, 본세에 <span class="term">무신고 가산세</span>(일반적으로 본세의 <span data-t="penalty.noFiling" data-f="pct"></span>)가 붙고, 내지 않은 날수만큼 <span class="term">납부지연 가산세</span>(하루 <b id="gift-late-day"></b>)가 쌓인다(<a data-src="penalty"></a>). 차명계좌나 서류 조작 같은 부정행위가 있으면 무신고 가산세율이 더 높다. 증여는 대개 계좌 기록이 남고, 나중에 집을 살 때 자금출처를 조사받으면 그 기록이 다시 나온다. "몰래 주면 모른다"는 계산은 대부분 이 표 하나로 틀린다.</p>
+
+    <div class="sim" id="sim-file">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>신고할 때와 하지 않았다가 적발될 때</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="file-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>성년 자녀가 받은 돈 <output id="file-v-out"></output></span><input type="range" id="file-v" min="0.5" max="10" step="0.1" value="2"></label>
+          <label class="ctrl"><span>적발까지 걸린 기간 <output id="file-m-out"></output></span><input type="range" id="file-m" min="1" max="60" step="1" value="24"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">기한 내 신고</span><span class="v" id="file-o-a">—</span></div>
+        <div class="stat"><span class="k">무신고 후 적발</span><span class="v" id="file-o-b">—</span></div>
+        <div class="stat"><span class="k">차이</span><span class="v" id="file-o-d">—</span></div>
+        <div class="stat"><span class="k">기한 내 신고의 이득</span><span class="v" id="file-o-c">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(2억원, 2년 뒤 적발)에서 두 기둥의 높이 차이를 본다. 신고세액공제는 작지만 무신고 가산세와 납부지연 가산세는 본세의 상당 부분이다. ② 적발까지 기간을 5년으로 늘린다. 납부지연 가산세가 날마다 쌓여 기둥이 계속 자란다. ③ 금액을 공제 근처(0.5억원)로 낮춘다. 본세가 0원이면 가산세도 0원이지만, 신고해 두면 나중에 그 돈의 출처를 설명하는 기록이 된다. (일반 무신고 가산세율을 썼고 부정행위 가산세, 기한 후 신고 감면, 납부지연 가산세의 상한은 넣지 않았다. 한 달은 30.4일로 셌다.)</div>
+    </div>
+
+    <div class="callout pro">
+      <strong>세금이 0원이어도 신고하는 이유</strong>
+      공제 안의 증여는 낼 세금이 없어 신고하지 않는 경우가 많다. 그런데 몇 년 뒤 집을 사면서 자금조달계획서를 내거나 자금출처 조사를 받을 때 "이 돈은 언제 누구에게서 받았다"를 보여 줄 수 있는 가장 확실한 서류가 증여세 신고서다. 또 <span data-t="gift.windowYears" data-f="num"></span>년 합산과 공제 소진은 신고된 증여를 기준으로 맞춰 보기 쉬워서, 나중에 다른 가족이 더 주려고 할 때 남은 공제를 정확히 셀 수 있다. 실무에서는 ① 받는 사람 명의 계좌로 이체하고 ② 이체 메모에 증여라고 적고 ③ 기한 안에 홈택스로 신고(세액 0원)해 두는 순서를 권한다. 현금 다발로 주고받거나, 부모 계좌에서 자녀의 카드값·대출을 대신 갚는 방식은 기록이 흐려져 나중에 더 큰 설명 부담이 된다.
+    </div>
+  </section>
+
+  <section id="minor">
+    <h2>미성년 자녀에게 나눠 주기</h2>
+    <p>공제가 <span data-t="gift.windowYears" data-f="num"></span>년마다 다시 생긴다는 규칙은 아이가 어릴 때 시작할수록 쓸 수 있는 횟수가 늘어난다는 뜻이다. 미성년 자녀는 직계존속에게서 <span data-t="gift.windowYears" data-f="num"></span>년에 <span data-t="gift.deduction.parentToMinor"></span>, 성년이 되면 <span data-t="gift.deduction.parentToAdult"></span>다. 태어나자마자, <span data-t="gift.windowYears" data-f="num"></span>년 뒤, 성년이 된 뒤 각각 공제만큼 주면 같은 돈을 스무 살에 한꺼번에 줄 때보다 세금이 줄어든다. 아래에서 증여 시점을 켜고 끄며 총액을 바꿔 본다.</p>
+
+    <div class="sim" id="sim-kid">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>0세·10세·20세에 나눠 주기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="kid-cv"></canvas></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>자녀에게 줄 총액 <output id="kid-t-out"></output></span><input type="range" id="kid-t" min="0.2" max="5" step="0.1" value="1.5"></label>
+          <label class="check"><input type="checkbox" id="kid-0" checked> 0세(출생 직후)</label>
+          <label class="check"><input type="checkbox" id="kid-10" checked> 10세</label>
+          <label class="check"><input type="checkbox" id="kid-20" checked> 20세</label>
+          <label class="check"><input type="checkbox" id="kid-30"> 30세</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">나눠 줄 때 세금 합계</span><span class="v" id="kid-o-p">—</span></div>
+        <div class="stat"><span class="k">20세에 한 번에</span><span class="v" id="kid-o-l">—</span></div>
+        <div class="stat"><span class="k">줄어드는 세금</span><span class="v" id="kid-o-s">—</span></div>
+        <div class="stat"><span class="k">쓴 공제 합계</span><span class="v" id="kid-o-d">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(총 1억 5,000만원, 0·10·20세)에서 앞의 두 번은 미성년 공제만큼, 남은 돈은 20세에 준다. 세 번의 공제를 다 쓰고 남은 몫에만 세금이 붙는다. ② 0세를 끈다. 한 번의 공제가 사라지고 그만큼 20세 증여의 과세표준이 커진다. ③ 총액을 5억원으로 올리고 30세를 켠다. 공제 횟수를 늘려도 공제 총액이 작아서 큰 금액에서는 줄어드는 세금의 비율이 작아진다. 나머지는 결국 세율표가 정한다. (시점 사이가 모두 <span data-t="gift.windowYears" data-f="num"></span>년 이상이라 합산되지 않는다고 본다. 앞 시점에는 그 나이의 공제만큼만 주고 나머지는 마지막 시점에 준다. 증여한 돈이 불어난 몫과 혼인·출산 공제는 넣지 않았다.)</div>
+    </div>
+
+    <p>나눠 주기의 효과는 공제 횟수에서 나온다. 여기에 하나가 더 붙는다. 일찍 준 돈이 자녀 명의로 불어나면 그 불어난 몫은 원칙적으로 자녀의 재산이다. 증여 시점의 가액으로 세금이 정해지기 때문이다. 이 "가치 고정" 효과는 <a href="transfer.html">15장</a>에서 따로 본다. 다만 부모가 자녀 명의 계좌를 사실상 자기 돈처럼 굴리거나, 증여 신고 없이 자녀 명의로 넣어 두기만 했다면 나중에 그 계좌 전체가 그때 증여된 것으로 다뤄질 수 있다. 미성년 자녀 증여는 신고해 두는 쪽이 기록으로도 낫다.</p>
+  </section>
+
+  <section id="loan">
+    <h2>빌린 돈인가, 받은 돈인가</h2>
+    <p>부모에게서 돈을 받으면서 "나중에 갚을 것"이라고 하면 증여가 아니라 <span class="term">금전소비대차</span><span class="en">(Loan for consumption)</span>, 곧 빌린 돈이다. 빌린 돈에는 증여세가 없다. 하지만 가족 사이의 돈거래는 원칙적으로 증여로 추정되기 쉽고, 빌렸다는 것은 받은 사람이 보여 줘야 한다. 경계를 가르는 것은 서류 한 장이 아니라 <b>실제로 빌린 돈처럼 움직였느냐</b>다.</p>
+    <ul>
+      <li><b>차용증과 조건.</b> 빌린 날, 금액, 이자율, 이자 지급일, 상환 방법과 기한을 적고 서명한다. 공증이나 확정일자를 받아 두면 작성 시점을 증명하기 쉽다.</li>
+      <li><b>이자.</b> 무이자나 아주 낮은 이자로 빌리면 적정 이자와의 차이가 증여가 될 수 있다. 세법은 이 비교에 쓰는 <span class="term">적정이자율</span>(<span data-t="gift.loanRate" data-f="pct1"></span>)을 정해 두고, 그 차이로 생기는 이익이 한 해 <span data-t="gift.loanBenefitMin"></span> 미만이면 증여로 보지 않는다. 그래도 차용 자체를 인정받으려면 약속한 이자를 실제로 보내는 기록이 중요하다.</li>
+      <li><b>상환 실적.</b> 원금을 실제로 갚아 나가는 이체 기록이 가장 강한 증거다. 받는 사람의 소득으로 갚을 수 있는 규모인지도 본다. 연봉에 비해 갚을 수 없는 금액이거나, 몇 년이 지나도 한 번도 갚지 않았다면 차용증이 있어도 증여로 볼 수 있다.</li>
+      <li><b>나중에 탕감하면.</b> 빌려준 돈을 갚지 말라고 하는 순간 그 금액이 증여가 된다. 이때 증여일은 탕감한 날이다.</li>
+    </ul>
+
+    <div class="callout deep">
+      <strong>증여와 차용을 섞는 방법</strong>
+      실무에서는 공제 안의 금액은 증여로 신고하고, 넘는 금액은 차용으로 처리해 소득으로 갚아 나가는 구조가 흔하다. 세금만 보면 깔끔해 보이지만, 차용 부분은 이자와 원금을 매달 실제로 갚아야 하는 진짜 빚이다. 받는 사람의 월 현금 흐름에 부담이 되는지, 부모 입장에서는 그 이자가 소득(이자소득)이 된다는 점, 그리고 부모가 그 돈이 필요해질 때 돌려받을 수 있는지까지 함께 정해야 한다. 이 책의 엔진에는 차용 계산이 없다. 차용으로 처리할 금액과 이자는 세무 상담에서 서류와 함께 확인한다.
+    </div>
+  </section>
+
+  <section id="realestate">
+    <h2>부동산 증여: 평가와 취득세</h2>
+    <p>현금이 아니라 집이나 땅을 증여받으면 두 가지가 더 붙는다. 첫째는 <b>얼마로 평가하느냐</b>다. 증여재산은 증여일 현재의 <span class="term">시가</span>로 평가한다(<a data-src="inherit.valuation"></a>). 아파트는 같은 단지에서 면적과 공시가격이 비슷한 집이 평가기간 안에 거래된 값(<span class="term">유사매매사례가액</span>)이 있으면 그 값이 시가가 된다. 감정평가를 받으면 그 감정가를 쓸 수도 있다. 시가를 찾기 어려운 단독주택이나 토지는 공시가격 같은 기준시가로 평가하는데, 이 경우 신고 뒤에 국세청이 감정평가로 다시 평가하는 일도 있다. "공시가격으로 신고하면 싸다"는 말은 아파트에는 대개 맞지 않는다.</p>
+    <p>둘째는 <b>취득세</b>다. 증여로 집을 받는 것도 취득이라 받는 사람이 취득세를 낸다. 주택을 증여로 받으면 기본 세율이 <span data-t="acqGift.rate" data-f="pct1"></span>이고(농어촌특별세·지방교육세 별도), 조정대상지역에서 시가표준액 <span data-t="acqGift.heavyMinValue"></span> 이상 주택을 받으면 <span data-t="acqGift.heavyRate" data-f="pct"></span>로 중과된다(<a data-src="acqGift"></a>). 1세대 1주택자가 배우자나 직계존비속에게 주는 경우처럼 중과에서 빠지는 예외가 있다. 과세표준은 증여세와 비슷하게 시가인정액이다. 같은 금액이라도 현금으로 받을 때는 없던 세금이 집으로 받을 때는 붙는다는 뜻이다.</p>
+    <p>부동산을 받은 뒤에는 그 집을 팔 때의 양도세, 받는 사람의 주택 수 변화(내 집의 1세대 1주택 비과세가 흔들릴 수 있다), 받은 집을 일정 기간 안에 팔면 취득가액을 증여자의 것으로 되돌리는 이월과세까지 이어진다. 이 부분은 집에 붙는 세금을 다루는 EstateBook <a href="https://estatebook.euiyun.com/chapters/tradetax.html">14장 사고팔 때의 세금</a>에 자세히 있다. 집을 증여할지 현금을 증여할지는 <a href="transfer.html">15장</a>에서 세금 합계로 비교한다.</p>
+
+    <div class="callout check" style="display:block">
+      <strong>증여받은 재산을 신고하기 전에</strong>
+      ① 현금이면 이체 내역(날짜, 보낸 사람)을, 부동산이면 등기 원인일(증여계약일)을 확인한다. 신고기한은 그 날짜가 속한 달의 말일부터 센다. ② 아파트는 국토교통부 실거래가 공개 시스템에서 같은 단지·비슷한 면적·비슷한 공시가격의 최근 거래를 찾아 본다. 홈택스에도 상속·증여재산 평가 안내 서비스가 있다. ③ 지난 <span data-t="gift.windowYears" data-f="num"></span>년 동안 같은 사람(부모는 부부 합쳐)에게서 받은 증여의 신고서를 찾아 합산할 금액과 이미 낸 세금을 적는다. ④ 부동산이면 취득세 신고도 정해진 기한 안에 따로 해야 한다. 취득세는 위택스나 시·군·구청에서 신고한다.
+    </div>
+
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다</strong>
+      이 장의 공제·세율·기한·가산세율은 <span data-t="label"></span>이다(data/tax-<span data-t="year" data-f="raw"></span>.json). 상속세·증여세 세율과 증여재산공제는 2026년에도 바뀌지 않았지만, 세율 인하와 과세 방식 개편은 여러 차례 추진되다 멈췄다. 국회를 통과하지 않은 개정안은 이 장의 계산에 넣지 않았다. 증여는 평가·합산·예외 규정이 많아 한 가지 사실 차이로 결과가 달라진다. 이 장의 숫자는 이 책의 교육용 모델로 계산한 것이며, 실제 신고 전에는 국세청 홈택스의 증여세 모의계산이나 세무 전문가에게 확인한다.
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 세금 노트: 결혼 자금</h2>
+    <p>이제 다온의 숫자로 돌아간다. 부모는 결혼 자금으로 "아빠가 1억, 엄마가 1억"을 주겠다고 했다. 다온과 이준은 2027년 봄에 혼인신고를 할 계획이고, 다온은 지난 <span data-t="gift.windowYears" data-f="num"></span>년 동안 부모에게서 따로 증여를 받은 적이 없다(대학 등록금과 생활비는 받았지만 그때그때 쓴 돈이다). 위의 공제 소진 막대 기본값이 바로 이 상황이다.</p>
+
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · 2026년 11월</span></div>
+      <h4>엄마 아빠가 따로 줘도 공제는 하나다</h4>
+      <p><b>아버지의 말이 맞는지부터.</b> 공제는 주는 사람마다가 아니라 받는 사람 기준, 직계존속 그룹에 하나다. 다온이 부모에게서 받을 수 있는 공제는 성년 자녀 공제 <span data-t="gift.deduction.parentToAdult"></span>에 혼인·출산 공제 <span data-t="gift.marriageBirth"></span>을 더한 <b id="note-ded"></b>가 전부다. 2026년 11월 증여는 2027년 봄 혼인신고일의 "전후 <span data-t="gift.marriageWindow" data-f="num"></span>년" 안이라 혼인·출산 공제를 쓸 수 있다. 엄마와 아빠는 부부라 <span data-t="gift.windowYears" data-f="num"></span>년 합산에서도 같은 사람으로 본다.</p>
+      <p><b>2억원을 받으면.</b> 이 책의 모델로 계산하면 2억원에서 공제를 뺀 과세표준은 <b id="note-base"></b>이고, 세율 <b id="note-rate"></b>를 곱한 산출세액 <b id="note-calc"></b>에서 신고세액공제를 빼면 <b id="note-pay"></b>를 내야 한다. 공제를 사람마다 받는다고 생각했다면 0원이라고 믿었을 금액이다. 공제 한도인 <b id="note-ded2"></b>만 받으면 세금은 <b id="note-pay15"></b>이다.</p>
+      <p><b>정한 것.</b> 부모와 이야기해 결혼 자금은 공제 한도만큼 받기로 했다. 아빠와 엄마가 절반씩 각자 다온 명의 계좌로 이체하고 메모에 "결혼 자금 증여"라고 적는다. 세금은 없지만 신고는 한다. 신고기한은 증여일이 속한 달의 말일부터 <span data-t="transfer.giftFilingMonths" data-f="num"></span>개월, 곧 <b id="note-due"></b>까지다. 혼인관계증명서는 혼인신고 뒤에야 나오니, 혼인신고 전에 신고할 때 무엇을 붙여야 하는지는 세무서에 확인할 것으로 남겼다. 나머지 <b id="note-rest"></b>은 받지 않기로 했다. 차용증을 쓰고 빌리는 방법도 생각했지만, 그러려면 이자와 원금을 매달 실제로 갚아야 하고, 부모의 노후 자금이 그만큼 묶인다.</p>
+      <p><b>덧붙여 확인한 것.</b> 이준도 자기 부모에게서 받는다면 이준의 공제는 이준 몫으로 따로 있다. 증여세와 별개로 소득세의 혼인세액공제는 <span data-t="credits.marriageUntil" data-f="raw"></span>년 혼인신고분까지라, 2027년에 혼인신고를 하는 다온에게는 <b id="note-mc"></b>.</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>증여세는 받는 사람 기준이고, 부모·조부모는 한 그룹이라 공제가 하나다. <span data-t="gift.windowYears" data-f="num"></span>년 합산, 혼인·출산 공제의 기간, 신고세액공제와 가산세.</div><div><b>아직 남은 문제</b>결혼 자금은 부모 예금에서 나간다. 부모 재산 전체가 언젠가 넘어갈 때(상속)는 계산이 어떻게 다른가. 이번 증여가 그때 다시 합산되는가.</div><div><b>다음 장</b>14장: 부모의 아파트와 예금으로 '만약'의 상속세를 계산한다.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>증여세는 받는 사람이 낸다. 이번 증여에 같은 사람(직계존속은 부부 합쳐)에게서 <span data-t="gift.windowYears" data-f="num"></span>년 안에 받은 증여를 더하고 공제를 뺀 뒤 누진세율(<span data-t="transfer.rates.0.1" data-f="pct"></span>~<span data-t="transfer.rates.4.1" data-f="pct"></span>)을 곱한다. 합산분에 이미 낸 세금은 빼 준다.</li>
+      <li>증여재산공제는 받는 사람 기준, 증여자 그룹별로 <span data-t="gift.windowYears" data-f="num"></span>년 한도다. 배우자 <span data-t="gift.deduction.spouse"></span>, 직계존속→성년 <span data-t="gift.deduction.parentToAdult"></span>(미성년 <span data-t="gift.deduction.parentToMinor"></span>), 직계비속→존속 <span data-t="gift.deduction.childToParent"></span>, 기타친족 <span data-t="gift.deduction.relative"></span>. 부모·조부모는 합쳐 한 그룹이다.</li>
+      <li>혼인신고일 전후 또는 출생신고일부터 정해진 기간 안에 직계존속에게서 받으면 <span data-t="gift.marriageBirth"></span>을 더 공제한다. 혼인과 출산을 합친 평생 한도이고 직계존속 그룹이 함께 쓴다.</li>
+      <li>합산 창은 이번 증여일에서 거꾸로 <span data-t="gift.windowYears" data-f="num"></span>년이다. 공제와 세율 구간을 다시 쓰려면 <span data-t="gift.windowYears" data-f="num"></span>년이 지나야 한다.</li>
+      <li>기한(<span data-t="calendar.giftFiling" data-f="raw"></span>) 안에 신고하면 <span data-t="transfer.filingCredit" data-f="pct"></span> 신고세액공제, 신고하지 않으면 무신고 가산세 <span data-t="penalty.noFiling" data-f="pct"></span>와 납부지연 가산세가 붙는다. 과세표준 <span data-t="transfer.minBase"></span> 미만이면 세금이 없다.</li>
+      <li>조부모가 손주에게 바로 주면 산출세액에 <span data-t="gift.skipRate" data-f="pct"></span> 할증이 붙는다. 빌린 돈은 증여가 아니지만 이자와 상환의 실제 기록이 있어야 인정된다. 부동산 증여는 시가(아파트는 유사매매사례가액)로 평가하고 받는 사람이 취득세를 낸다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>성년인 다온이 같은 해에 아버지에게서 5,000만원, 어머니에게서 5,000만원을 받았다(혼인·출산 공제는 쓰지 않는다). 증여재산공제는 얼마인가?</p>
+        <div class="opts">
+          <button class="opt">부모 각각 <span data-t="gift.deduction.parentToAdult"></span>씩, 두 배</button>
+          <button class="opt" data-correct>직계존속 그룹 합계 하나(성년 기준 <span data-t="gift.deduction.parentToAdult"></span>)</button>
+          <button class="opt">0원(두 사람에게서 받으면 공제가 없다)</button>
+          <button class="opt">2억원(부부 공제가 두 배)</button>
+        </div>
+        <div class="quiz-exp">증여재산공제는 받는 사람 기준으로 직계존속 전체에 하나다. 아버지와 어머니에게서 받은 1억원 합계에서 <span data-t="gift.deduction.parentToAdult"></span>만 빼고 나머지에 세율을 곱한다. 부모는 <span data-t="gift.windowYears" data-f="num"></span>년 합산에서도 같은 사람으로 본다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>2026년에 부모에게서 1억원을 받고, 2033년에 다시 1억원을 받았다. 2033년 증여세 계산으로 맞는 것은?</p>
+        <div class="opts">
+          <button class="opt">2033년의 1억원에서 공제를 다시 빼고 따로 계산한다</button>
+          <button class="opt">2026년 증여는 이미 신고했으므로 상관없다</button>
+          <button class="opt" data-correct><span data-t="gift.windowYears" data-f="num"></span>년 안이라 2억원을 합쳐 계산하고, 2026년에 낸 세금을 뺀다</button>
+          <button class="opt">합산되므로 2026년 세금을 한 번 더 낸다</button>
+        </div>
+        <div class="quiz-exp">같은 사람에게서 <span data-t="gift.windowYears" data-f="num"></span>년 안에 받은 증여는 합산한다. 2033년 증여의 합산 창(2023~2033년)에 2026년 증여가 들어가므로 2억원을 세율표에 넣고, 2026년 증여분의 산출세액을 뺀다. 공제도 <span data-t="gift.windowYears" data-f="num"></span>년 동안 한 번이라 다시 생기지 않는다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>혼인·출산 증여재산공제에 대한 설명으로 틀린 것은?</p>
+        <div class="opts">
+          <button class="opt">혼인신고 전에 받은 증여에도 쓸 수 있다</button>
+          <button class="opt">결혼 때 다 쓰면 출산 때 다시 받을 수 없다</button>
+          <button class="opt">성년 자녀 기본 공제와 별도로 받는다</button>
+          <button class="opt" data-correct>아버지와 어머니에게서 각각 <span data-t="gift.marriageBirth"></span>씩 받을 수 있다</button>
+        </div>
+        <div class="quiz-exp">혼인·출산 공제 <span data-t="gift.marriageBirth"></span>은 혼인과 출산을 합친 평생 한도이고, 직계존속(부모·조부모) 그룹이 함께 쓴다. 혼인신고일 "전후" 기간이라 신고 전 증여에도 쓸 수 있고, 성년 자녀 공제 <span data-t="gift.deduction.parentToAdult"></span>와는 별도다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>증여세를 기한 안에 신고하지 않았다가 나중에 적발되면 어떻게 되는가?</p>
+        <div class="opts">
+          <button class="opt" data-correct>신고세액공제를 받지 못하고, 무신고 가산세와 날수에 비례한 납부지연 가산세가 붙는다</button>
+          <button class="opt">본세만 내면 된다</button>
+          <button class="opt"><span data-t="gift.windowYears" data-f="num"></span>년이 지나면 합산 기간이 끝나 세금이 없어진다</button>
+          <button class="opt">세액이 0원이 아니면 신고세액공제는 그대로 받는다</button>
+        </div>
+        <div class="quiz-exp">신고세액공제(<span data-t="transfer.filingCredit" data-f="pct"></span>)는 기한 안에 신고해야 받는다. 무신고면 본세에 무신고 가산세(일반 <span data-t="penalty.noFiling" data-f="pct"></span>)가 붙고, 내지 않은 날마다 납부지연 가산세가 쌓인다. <span data-t="gift.windowYears" data-f="num"></span>년 합산 기간은 세금 계산 방법이지 세금을 없애 주는 기간이 아니다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const W = TB.won;
+  const minus = (v) => '<span class="minus">' + W(v) + "</span>";
+  const plus = (v) => '<span class="plus">' + W(v) + "</span>";
+  const taxSpan = (v) => (v > 0 ? minus(v) : '<span class="plus">0원</span>');
+  const G = D.gift, R = D.transfer;
+  const ADULT = "parentToAdult", MINOR = "parentToMinor";
+  const eok = (v) => W(v * 1e8);
+
+  /* 세율표 */
+  (function () {
+    const tb = document.getElementById("gift-rate-tb");
+    tb.innerHTML = TX.quickTable(R.rates).map((r) => {
+      const lab = r.to == null ? W(r.from) + " 초과" : r.from === 0 ? W(r.to) + " 이하" : W(r.from) + " 초과 ~ " + W(r.to) + " 이하";
+      return "<tr><td>" + lab + '</td><td class="num">' + TB.pct(r.rate, 0) + '</td><td class="num">' + (r.quick ? W(r.quick) : "—") + "</td></tr>";
+    }).join("");
+    const el = document.getElementById("gift-late-day");
+    if (el) el.textContent = +(D.penalty.lateDaily * 100).toFixed(4) + "%";
+  })();
+
+  /* ---------------------------------------------------------- 1. 공제 소진 막대 */
+  (function () {
+    const dG = TB.range("grp-d", eok, draw), mG = TB.range("grp-m", eok, draw), gG = TB.range("grp-g", eok, draw);
+    const mar = document.getElementById("grp-mar");
+    mar.addEventListener("change", draw);
+    function calc() {
+      const dad = dG() * 1e8, mom = mG() * 1e8, gr = gG() * 1e8, m = mar.checked;
+      const ded = TX.giftDeduction(ADULT, { marriage: m });
+      const par = dad + mom;
+      const tp = TX.giftTax({ value: par, relation: ADULT, marriage: m });
+      const used = Math.min(ded, par);
+      const tg = TX.giftTax({ value: gr, relation: ADULT, marriage: m, usedDeduction: used, skip: true });
+      const tg0 = TX.giftTax({ value: gr, relation: ADULT, marriage: m, usedDeduction: used, skip: false });
+      const wrong = [dad, mom, gr].reduce((s, v, i) => s + (v > 0 ? TX.giftTax({ value: v, relation: ADULT, marriage: m, skip: i === 2 }).pay : 0), 0);
+      return { dad, mom, gr, ded, par, tp, tg, surcharge: gr > 0 ? tg.pay - tg0.pay : 0, wrong, total: par + gr, usedAll: Math.min(ded, par + gr) };
+    }
+    const cv = TB.canvas("#grp-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc(), narrow = w < 460;
+      const lx = narrow ? 64 : 84, bx = lx + 8, bw = w - bx - 16;
+      const max = Math.max(1e8, c.total, c.ded) * 1.18, X = (v) => bx + (v / max) * bw;
+      const rows = ["받은 돈", "공제", "과세표준", "증여세"];
+      const top = 22, rowH = (h - top - 34) / rows.length, bh = Math.min(30, rowH * 0.56);
+      rows.forEach((k, i) => T(ctx, k, lx, top + i * rowH + rowH / 2, { size: narrow ? 11 : 12, color: P.text, align: "right", base: "middle", weight: 700 }));
+      const yy = (i) => top + i * rowH + (rowH - bh) / 2;
+      const seg = (y, a, b, col, alpha) => { if (b - a <= 0) return; ctx.globalAlpha = alpha || 0.85; ctx.fillStyle = col; ctx.fillRect(X(a), y, Math.max(1.5, X(b) - X(a)), bh); ctx.globalAlpha = 1; };
+      const lab = (s, x0, x1, y, inside) => {
+        ctx.font = TB.font(11, true, 700); const tw = ctx.measureText(s).width;
+        if (inside && x1 - x0 > tw + 8) T(ctx, s, (x0 + x1) / 2, y + bh / 2, { size: 11, mono: true, weight: 700, color: "#fff", align: "center", base: "middle" });
+        else T(ctx, s, Math.min(x1 + 5, w - tw - 4), y + bh / 2, { size: 11, mono: true, weight: 700, color: P.text, base: "middle" });
+      };
+      // 1 받은 돈
+      let y = yy(0);
+      seg(y, 0, c.dad, P.accent); seg(y, c.dad, c.par, P.accent2); seg(y, c.par, c.total, P.warn);
+      const names = [["아빠", 0, c.dad], ["엄마", c.dad, c.par], ["할머니", c.par, c.total]];
+      names.forEach(([n, a, b]) => { if (b - a > 0) { ctx.font = TB.font(11, false, 700); if (X(b) - X(a) > ctx.measureText(n).width + 8) T(ctx, n, (X(a) + X(b)) / 2, y + bh / 2, { size: 11, weight: 700, color: "#fff", align: "center", base: "middle" }); } });
+      if (c.total > 0) T(ctx, TB.wonAxis(c.total), Math.min(X(c.total) + 5, w - 40), y + bh / 2, { size: 11, mono: true, weight: 700, color: P.text, base: "middle" });
+      // 공제 한도선
+      ctx.save(); ctx.setLineDash([4, 3]); ctx.strokeStyle = P.ok; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(X(c.ded), top - 6); ctx.lineTo(X(c.ded), h - 30); ctx.stroke(); ctx.restore();
+      const dl = "공제 한도 " + TB.wonAxis(c.ded);
+      ctx.font = TB.font(11, false, 700); const dlw = ctx.measureText(dl).width;
+      T(ctx, dl, X(c.ded) + dlw + 6 > w ? X(c.ded) - 4 : X(c.ded) + 4, 12, { size: 11, weight: 700, color: P.ok, align: X(c.ded) + dlw + 6 > w ? "right" : "left" });
+      // 2 공제
+      y = yy(1);
+      ctx.globalAlpha = 0.18; ctx.fillStyle = P.ok; ctx.fillRect(bx, y, X(c.ded) - bx, bh); ctx.globalAlpha = 1;
+      seg(y, 0, c.usedAll, P.ok);
+      lab(TB.wonAxis(c.usedAll), X(0), X(c.usedAll), y, true);
+      // 3 과세표준
+      y = yy(2);
+      seg(y, 0, c.tp.base, P.accent, 0.7); seg(y, c.tp.base, c.tp.base + c.tg.base, P.warn, 0.7);
+      lab(c.tp.base + c.tg.base > 0 ? TB.wonAxis(c.tp.base + c.tg.base) : "0", X(0), X(c.tp.base + c.tg.base), y, false);
+      // 4 세금
+      y = yy(3);
+      const tt = c.tp.pay + c.tg.pay;
+      seg(y, 0, tt - c.surcharge, P.bad); seg(y, tt - c.surcharge, tt, P.bad, 0.4);
+      lab(tt > 0 ? TB.wonAxis(tt) : "0원", X(0), X(tt), y, false);
+      T(ctx, "막대 길이는 같은 축(원)", bx, h - 10, { size: 10, color: P.faint });
+      if (c.surcharge > 0) T(ctx, "옅은 끝 = 세대생략 할증", w - 12, h - 10, { size: 10, color: P.bad, align: "right" });
+    }, { get height() { return pw("grp-cv") < 460 ? 260 : 280; } });
+    function draw() {
+      const c = calc();
+      TB.stat("grp-o-ded", W(c.ded) + (c.total < c.ded ? " (쓴 공제 " + W(c.usedAll) + ")" : ""));
+      TB.stat("grp-o-base", W(c.tp.base + c.tg.base));
+      TB.stat("grp-o-tax", taxSpan(c.tp.pay + c.tg.pay) + (c.surcharge > 0 ? ' <span style="font-size:12px">(할증 ' + W(c.surcharge) + ")</span>" : ""));
+      TB.stat("grp-o-wrong", W(c.wrong));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 2. 10년 타임라인 */
+  (function () {
+    const aG = TB.range("tl-a", eok, draw), bG = TB.range("tl-b", eok, draw);
+    const SPAN = 15, WIN = G.windowYears;
+    let tB = 6, L = null;
+    function calc() {
+      const a = aG() * 1e8, b = bG() * 1e8;
+      const A = TX.giftTax({ value: a, relation: ADULT });
+      const inWin = tB < WIN;
+      const B = inWin ? TX.giftTax({ value: b, relation: ADULT, prior: a, priorTax: A.tax }) : TX.giftTax({ value: b, relation: ADULT });
+      return { a, b, A, B, inWin, sum: A.pay + B.pay };
+    }
+    const cv = TB.canvas("#tl-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc();
+      const bx = 22, bw = w - 44, X = (t) => bx + (t / SPAN) * bw, base = h - 50;
+      L = { X, bx, bw };
+      // 합산 창
+      const w0 = Math.max(0, tB - WIN);
+      ctx.fillStyle = TB.color("accent-soft") || P.grid; ctx.fillRect(X(w0), 26, X(tB) - X(w0), base - 26);
+      ctx.strokeStyle = P.accent; ctx.lineWidth = 1; ctx.setLineDash([4, 3]);
+      ctx.beginPath(); ctx.moveTo(X(Math.max(0, tB - WIN)), 26); ctx.lineTo(X(Math.max(0, tB - WIN)), base); ctx.stroke(); ctx.setLineDash([]);
+      const wl = "합산 창 " + WIN + "년";
+      T(ctx, wl, (X(w0) + X(tB)) / 2, 18, { size: 11, weight: 700, color: P.accent, align: "center" });
+      // 축
+      ctx.strokeStyle = P.axis; ctx.beginPath(); ctx.moveTo(bx, base); ctx.lineTo(bx + bw, base); ctx.stroke();
+      for (let t = 0; t <= SPAN; t++) {
+        ctx.beginPath(); ctx.moveTo(X(t), base); ctx.lineTo(X(t), base + (t % 5 ? 3 : 6)); ctx.stroke();
+        if (t % 5 === 0) T(ctx, String(2026 + t), X(t), base + 18, { size: 11, mono: true, color: P.dim, align: "center" });
+      }
+      // 막대
+      const maxH = base - 70, hOf = (v) => (v / Math.max(c.a + c.b, 1e8)) * maxH;
+      const bwid = Math.max(16, Math.min(34, bw / 22));
+      const bar = (t, v, col, tax, label) => {
+        const hh = Math.min(maxH, hOf(v));
+        ctx.fillStyle = col; ctx.globalAlpha = 0.85; ctx.fillRect(X(t) - bwid / 2, base - hh, bwid, hh); ctx.globalAlpha = 1;
+        return base - hh;
+      };
+      const yA = bar(0, c.a, P.accent2);
+      let yB = bar(tB, c.b, P.accent);
+      if (c.inWin) {
+        const ha = hOf(c.a);
+        ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.accent2; ctx.lineWidth = 1.5;
+        ctx.strokeRect(X(tB) - bwid / 2, yB - ha, bwid, ha); ctx.restore();
+        yB -= ha;
+      }
+      T(ctx, "세금 " + (c.A.pay > 0 ? TB.wonAxis(c.A.pay) : "0"), X(0) + bwid / 2 + 4, yA + 4, { size: 11, mono: true, weight: 700, color: c.A.pay > 0 ? P.bad : P.ok, base: "top" });
+      const sB = "세금 " + (c.B.pay > 0 ? TB.wonAxis(c.B.pay) : "0") + (c.inWin ? " (합산)" : "");
+      ctx.font = TB.font(11, true, 700); const sw = ctx.measureText(sB).width;
+      const right = X(tB) + bwid / 2 + 4 + sw < w - 4;
+      T(ctx, sB, right ? X(tB) + bwid / 2 + 4 : X(tB) - bwid / 2 - 4, yB + 4, { size: 11, mono: true, weight: 700, color: c.B.pay > 0 ? P.bad : P.ok, base: "top", align: right ? "left" : "right" });
+      knob(ctx, X(tB), base, P);
+    }, { get height() { return pw("tl-cv") < 460 ? 250 : 270; } });
+    TB.drag(cv.canvas, { move(x) { if (!L) return; tB = TB.clamp(Math.round(((x - L.bx) / L.bw) * SPAN * 2) / 2, 0.5, SPAN); draw(); } });
+    function draw() {
+      const c = calc();
+      TB.stat("tl-o-t", (2026 + Math.floor(tB)) + "년 · " + tB + "년 뒤");
+      TB.stat("tl-o-s", c.inWin ? '<span class="minus">합산</span>' : '<span class="plus">따로 계산</span>');
+      TB.stat("tl-o-b", taxSpan(c.B.pay));
+      TB.stat("tl-o-sum", taxSpan(c.sum));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 세율 계단 */
+  (function () {
+    const rG = TB.seg("rate-rel", draw);
+    const XMIN = 1e7, XMAX = 5e9;
+    let v = 3e8, C = null;
+    const tax = (x) => TX.giftTax({ value: x, relation: rG() });
+    const cv = TB.canvas("#rate-cv", (ctx, w, h) => {
+      const P = TB.palette(), rel = rG(), ded = TX.giftDeduction(rel);
+      const pts = [], mar = [];
+      for (let i = 0; i <= 260; i++) {
+        const x = XMIN * Math.pow(XMAX / XMIN, i / 260), t = tax(x);
+        pts.push([x, t.pay / x]); mar.push([x, t.base > 0 ? t.rate : 0]);
+      }
+      const vl = [{ x: Math.max(XMIN, ded), color: P.ok, label: ded >= XMIN ? "공제" : "", dash: [4, 3] }];
+      R.rates.forEach(([up]) => { if (up != null && ded + up < XMAX) vl.push({ x: ded + up, color: P.faint, dash: [2, 4] }); });
+      const narrow = w < 460;
+      C = TB.chart(ctx, { x: 46, y: 34, w: w - 62, h: h - 80 }, {
+        x: [XMIN, XMAX], y: [0, 0.55], logX: true,
+        xTicks: narrow ? [1e7, 1e8, 1e9, 5e9] : [1e7, 5e7, 1e8, 5e8, 1e9, 5e9], xFmt: TB.wonAxis, yTicks: [0, 0.1, 0.2, 0.3, 0.4, 0.5], yFmt: (y) => Math.round(y * 100) + "%",
+        series: [{ data: mar, color: P.bad, width: 2 }, { data: pts, color: P.accent, width: 2.6 }],
+        vlines: vl,
+      });
+      const t = tax(v), px = C.X(v);
+      ctx.beginPath(); ctx.arc(px, C.Y(t.pay / v), 5, 0, TAU); ctx.fillStyle = P.accent; ctx.fill();
+      ctx.beginPath(); ctx.arc(px, C.Y(t.base > 0 ? t.rate : 0), 5, 0, TAU); ctx.fillStyle = P.bad; ctx.fill();
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, C.box.y); ctx.lineTo(px, C.box.y + C.box.h); ctx.stroke(); ctx.restore();
+      knob(ctx, px, C.box.y + C.box.h, P);
+      const lg = [["한계세율", P.bad], ["실효세율(세금÷증여액)", P.accent]];
+      let lx = C.box.x + 8;
+      lg.forEach(([s, col]) => { ctx.fillStyle = col; ctx.fillRect(lx, 12, 12, 3); T(ctx, s, lx + 16, 14, { size: 11, color: P.dim, base: "middle" }); ctx.font = TB.font(11); lx += ctx.measureText(s).width + 32; });
+    }, { get height() { return pw("rate-cv") < 460 ? 270 : 300; } });
+    TB.drag(cv.canvas, { move(x) { if (!C) return; const f = TB.clamp((x - C.box.x) / C.box.w, 0, 1); const raw = XMIN * Math.pow(XMAX / XMIN, f); const step = raw < 1e8 ? 1e6 : raw < 1e9 ? 1e7 : 1e8; v = TB.clamp(Math.round(raw / step) * step, XMIN, XMAX); draw(); } });
+    function draw() {
+      const t = tax(v);
+      TB.stat("rate-o-v", W(v));
+      TB.stat("rate-o-b", W(t.base) + (t.base > 0 && t.base < R.minBase ? " (과세최저한 미만)" : ""));
+      TB.stat("rate-o-m", t.base > 0 ? TB.pct(t.rate, 0) : "0%");
+      TB.stat("rate-o-e", taxSpan(t.pay) + " · " + TB.pct(t.pay / v, 1));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 4. 신고 vs 무신고 */
+  (function () {
+    const vG = TB.range("file-v", eok, draw);
+    const mG = TB.range("file-m", (m) => (m < 12 ? m + "개월" : Math.floor(m / 12) + "년" + (m % 12 ? " " + (m % 12) + "개월" : "")), draw);
+    function calc() {
+      const v = vG() * 1e8, m = mG();
+      const t = TX.giftTax({ value: v, relation: ADULT, filed: true });
+      const p1 = t.tax * D.penalty.noFiling, p2 = t.tax * D.penalty.lateDaily * Math.round(m * 30.4);
+      return { t, p1, p2, on: t.pay, off: t.tax + p1 + p2 };
+    }
+    const cv = TB.canvas("#file-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc();
+      const top = Math.max(1e6, c.off) * 1.18;
+      const b = TB.bars(ctx, { x: 58, y: 34, w: w - 76, h: h - 66 }, {
+        labels: ["기한 내 신고", "무신고 → 적발"], y: [0, top], yFmt: TB.wonAxis, gap: 0.45,
+        stacks: [
+          { label: "본세", color: P.bad, data: [c.on, c.t.tax] },
+          { label: "무신고 가산세", color: P.warn, data: [0, c.p1] },
+          { label: "납부지연 가산세", color: P.accent2, data: [0, c.p2] },
+        ],
+        valueFmt: (v) => (v > 0 ? TB.wonAxis(v) : "0원"),
+      });
+      if (c.t.credit > 0) {
+        const x0 = b.X(0) - b.bw / 2, y0 = b.Y(c.on + c.t.credit), y1 = b.Y(c.on);
+        ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.ok; ctx.lineWidth = 1.5; ctx.strokeRect(x0, y0, b.bw, Math.max(2, y1 - y0)); ctx.restore();
+      }
+      const lg = [["본세", P.bad], ["무신고 가산세", P.warn], ["납부지연 가산세", P.accent2], ["신고세액공제(빠진 몫)", P.ok]];
+      let lx = 58, ly = 14;
+      lg.forEach(([s, col]) => { ctx.font = TB.font(11); const tw = ctx.measureText(s).width; if (lx + tw + 22 > w) { lx = 58; ly += 15; } ctx.fillStyle = col; ctx.fillRect(lx, ly - 5, 10, 10); T(ctx, s, lx + 14, ly, { size: 11, color: P.dim, base: "middle" }); lx += tw + 28; });
+    }, { get height() { return pw("file-cv") < 460 ? 280 : 290; } });
+    function draw() {
+      const c = calc();
+      TB.stat("file-o-a", taxSpan(c.on));
+      TB.stat("file-o-b", taxSpan(c.off));
+      TB.stat("file-o-d", c.off - c.on > 0 ? minus(c.off - c.on) : "0원");
+      TB.stat("file-o-c", c.t.credit > 0 ? plus(c.t.credit) + " 공제" : "—");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 5. 미성년 자녀 나눠 주기 */
+  (function () {
+    const tG = TB.range("kid-t", eok, draw);
+    const AGES = [0, 10, 20, 30];
+    const boxes = AGES.map((a) => document.getElementById("kid-" + a));
+    boxes.forEach((b) => b.addEventListener("change", draw));
+    const relOf = (age) => (age < D.inherit.minorAge ? MINOR : ADULT);
+    function calc() {
+      const total = tG() * 1e8;
+      const ages = AGES.filter((a, i) => boxes[i].checked);
+      let rem = total;
+      const gifts = ages.map((age, i) => {
+        const ded = TX.giftDeduction(relOf(age));
+        const amt = i === ages.length - 1 ? rem : Math.min(rem, ded);
+        rem -= amt;
+        const t = TX.giftTax({ value: amt, relation: relOf(age) });
+        return { age, amt, ded, t };
+      });
+      const lump = TX.giftTax({ value: total, relation: ADULT });
+      const plan = gifts.reduce((s, g) => s + g.t.pay, 0);
+      const used = gifts.reduce((s, g) => s + Math.min(g.amt, g.ded), 0);
+      return { total, gifts, lump, plan, used };
+    }
+    const cv = TB.canvas("#kid-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc();
+      const bx = 34, bw = w - 54, X = (a) => bx + (a / 34) * bw, base = h - 92;
+      ctx.strokeStyle = P.axis; ctx.beginPath(); ctx.moveTo(bx, base); ctx.lineTo(bx + bw, base); ctx.stroke();
+      [0, 10, 20, 30].forEach((a) => T(ctx, a + "세", X(a), base + 15, { size: 11, mono: true, color: P.dim, align: "center" }));
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.faint; ctx.beginPath(); ctx.moveTo(X(D.inherit.minorAge), 22); ctx.lineTo(X(D.inherit.minorAge), base); ctx.stroke(); ctx.restore();
+      T(ctx, "성년", X(D.inherit.minorAge) + 4, 30, { size: 10, color: P.faint });
+      if (!c.gifts.length) { T(ctx, "증여 시점을 하나 이상 고른다", w / 2, base / 2, { size: 13, color: P.dim, align: "center" }); }
+      const maxH = base - 44, sc = (v) => (v / Math.max(c.total, 1)) * maxH, bwid = Math.max(18, Math.min(40, bw / 12));
+      c.gifts.forEach((g) => {
+        const okH = sc(Math.min(g.amt, g.ded)), badH = sc(Math.max(0, g.amt - g.ded)), x = X(g.age) - bwid / 2;
+        ctx.globalAlpha = 0.85; ctx.fillStyle = P.ok; ctx.fillRect(x, base - okH, bwid, okH);
+        ctx.fillStyle = P.bad; ctx.fillRect(x, base - okH - badH, bwid, badH); ctx.globalAlpha = 1;
+        const yTop = base - okH - badH;
+        T(ctx, TB.wonAxis(g.amt), X(g.age), yTop - 16, { size: 11, mono: true, weight: 700, color: P.text, align: "center" });
+        T(ctx, "세금 " + (g.t.pay > 0 ? TB.wonAxis(g.t.pay) : "0"), X(g.age), yTop - 4, { size: 10, mono: true, color: g.t.pay > 0 ? P.bad : P.ok, align: "center" });
+      });
+      // 아래: 합계 비교 막대
+      const y1 = base + 32, y2 = base + 58, mx = Math.max(c.lump.pay, c.plan, 1e6), lx = 100, lw = w - lx - 70;
+      const narrow = w < 460;
+      T(ctx, narrow ? "나눠서" : "나눠 줄 때", lx - 8, y1 + 7, { size: 11, color: P.text, align: "right", base: "middle", weight: 700 });
+      T(ctx, narrow ? "20세 한 번" : "20세에 한 번", lx - 8, y2 + 7, { size: 11, color: P.text, align: "right", base: "middle", weight: 700 });
+      ctx.fillStyle = P.bad; ctx.globalAlpha = 0.8; ctx.fillRect(lx, y1, Math.max(1.5, (c.plan / mx) * lw), 14); ctx.fillRect(lx, y2, Math.max(1.5, (c.lump.pay / mx) * lw), 14); ctx.globalAlpha = 1;
+      T(ctx, W(c.plan), lx + (c.plan / mx) * lw + 5, y1 + 7, { size: 11, mono: true, color: P.text, base: "middle" });
+      T(ctx, W(c.lump.pay), lx + (c.lump.pay / mx) * lw + 5, y2 + 7, { size: 11, mono: true, color: P.text, base: "middle" });
+      T(ctx, "초록 = 공제 안, 빨강 = 공제를 넘는 몫", bx, 14, { size: 10, color: P.faint });
+    }, { get height() { return pw("kid-cv") < 460 ? 290 : 300; } });
+    function draw() {
+      const c = calc();
+      TB.stat("kid-o-p", c.gifts.length ? taxSpan(c.plan) : "—");
+      TB.stat("kid-o-l", taxSpan(c.lump.pay));
+      TB.stat("kid-o-s", c.gifts.length && c.lump.pay - c.plan > 0 ? plus(c.lump.pay - c.plan) : "0원");
+      TB.stat("kid-o-d", W(c.used));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 다온의 노트 */
+  (function () {
+    const C = TX.CASE;
+    const ded = TX.giftDeduction(ADULT, { marriage: true });
+    const t2 = TX.giftTax({ value: 2e8, relation: ADULT, marriage: true });
+    const t15 = TX.giftTax({ value: ded, relation: ADULT, marriage: true });
+    const set = (id, s) => { const el = document.getElementById(id); if (el) el.textContent = s; };
+    set("note-ded", W(ded)); set("note-ded2", W(ded));
+    set("note-base", W(t2.base)); set("note-rate", TB.pct(t2.rate, 0)); set("note-calc", W(t2.calc)); set("note-pay", W(t2.pay));
+    set("note-pay15", t15.pay > 0 ? W(t15.pay) : "0원");
+    set("note-rest", W(Math.max(0, 2e8 - ded)));
+    // 신고기한: 2026년 11월 증여 → 11월 말일부터 n개월
+    const m = 11 + R.giftFilingMonths, yy = 2026 + Math.floor((m - 1) / 12), mm = ((m - 1) % 12) + 1;
+    set("note-due", yy + "년 " + mm + "월 말일");
+    set("note-mc", C.wedding > D.credits.marriageUntil ? "해당하지 않는다(5장)" : "해당한다(5장)");
+  })();
+});
+</script>
+</body>
+</html>

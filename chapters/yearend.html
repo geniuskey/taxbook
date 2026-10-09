@@ -1,0 +1,1110 @@
+<!doctype html>
+<!-- Copyright (c) 2026 geniuskey and TaxBook contributors.
+     Executable code: MIT (see ../LICENSE-MIT).
+     Text, illustrations, questions and explanations: CC-BY-4.0 (see ../LICENSE.md). -->
+<html lang="ko">
+<head>
+<!--head:start {"desc": "연말정산은 한 해 동안 매달 미리 낸 세금과 1년치 진짜 세금을 맞춰 보는 정산이다. 자기 숫자를 넣어 결정세액과 환급액을 계산하는 계산기와, 환급이 갈리는 원리·공제 하나의 값·맞벌이 몰아주기·세액공제의 바닥을 시뮬레이터로 따라간다."}-->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>연말정산 계산기 · TaxBook</title>
+<meta name="description" content="연말정산은 한 해 동안 매달 미리 낸 세금과 1년치 진짜 세금을 맞춰 보는 정산이다. 자기 숫자를 넣어 결정세액과 환급액을 계산하는 계산기와, 환급이 갈리는 원리·공제 하나의 값·맞벌이 몰아주기·세액공제의 바닥을 시뮬레이터로 따라간다.">
+<link rel="canonical" href="https://taxbook.euiyun.com/chapters/yearend.html">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<meta name="theme-color" content="#8b3a8f">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="TaxBook">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:title" content="연말정산 계산기 · TaxBook">
+<meta property="og:description" content="연말정산은 한 해 동안 매달 미리 낸 세금과 1년치 진짜 세금을 맞춰 보는 정산이다. 자기 숫자를 넣어 결정세액과 환급액을 계산하는 계산기와, 환급이 갈리는 원리·공제 하나의 값·맞벌이 몰아주기·세액공제의 바닥을 시뮬레이터로 따라간다.">
+<meta property="og:url" content="https://taxbook.euiyun.com/chapters/yearend.html">
+<meta property="og:image" content="https://taxbook.euiyun.com/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":["Chapter","LearningResource"],"@id":"https://taxbook.euiyun.com/chapters/yearend.html#chapter","name":"연말정산 계산기","headline":"연말정산 계산기 · TaxBook","description":"연말정산은 한 해 동안 매달 미리 낸 세금과 1년치 진짜 세금을 맞춰 보는 정산이다. 자기 숫자를 넣어 결정세액과 환급액을 계산하는 계산기와, 환급이 갈리는 원리·공제 하나의 값·맞벌이 몰아주기·세액공제의 바닥을 시뮬레이터로 따라간다.","url":"https://taxbook.euiyun.com/chapters/yearend.html","position":6,"inLanguage":"ko","isAccessibleForFree":true,"learningResourceType":"인터랙티브 교재","educationalLevel":"일반 성인","image":"https://taxbook.euiyun.com/og.png","dateModified":"2026-10-09","isPartOf":{"@type":"Book","@id":"https://taxbook.euiyun.com/#book","name":"TaxBook · 숫자를 직접 바꾸며 배우는 세금 교과서","url":"https://taxbook.euiyun.com/"}},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"TaxBook","item":"https://taxbook.euiyun.com/"},{"@type":"ListItem","position":2,"name":"6. 연말정산 계산기","item":"https://taxbook.euiyun.com/chapters/yearend.html"}]}]}</script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"></script>
+<link rel="stylesheet" href="../css/style.css">
+<script src="../js/common.js"></script>
+<script src="../js/tax.js"></script>
+<!--head:end-->
+<!-- Cloudflare Web Analytics -->
+<script defer src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token":"3d6151a0abc94ede89285d462527fa80"}'></script>
+<!-- End Cloudflare Web Analytics -->
+<style>
+  .calc-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px 16px; padding: 14px 18px; border-bottom: 1px solid var(--border); }
+  .calc-top .calc-year { font-size: 24px; font-weight: 800; color: var(--accent); line-height: 1.2; }
+  .calc-top .calc-year small { display: block; font-size: 12px; font-weight: 400; color: var(--text-dim); }
+  .calc-form { padding: 16px 18px; border-bottom: 1px solid var(--border); }
+  .calc-form .form-grid label.check { display: flex; align-items: center; gap: 8px; color: var(--text-dim); }
+  .calc-form .wide { grid-column: 1 / -1; }
+  .calc-form .sub { font-size: 12px; color: var(--text-faint); }
+  .calc-form .seg { justify-self: start; }
+  .calc-msg { margin: 10px 0 0; font-size: 13px; color: var(--warn); min-height: 1em; }
+  .calc-out { display: grid; gap: 18px; padding: 16px 18px; grid-template-columns: minmax(0, 1fr); border-top: 1px solid var(--border); }
+  @media (min-width: 820px) { .calc-out { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
+  .calc-out h4 { margin: 0 0 8px; font-size: 15px; }
+  .calc-out .slip { margin: 0; }
+  .calc-out table { font-size: 14px; }
+  .cbar { display: inline-block; height: 8px; border-radius: 4px; background: var(--ok); vertical-align: middle; margin-right: 6px; }
+  .calc-out .chosen { color: var(--accent); font-weight: 700; }
+</style>
+</head>
+<body data-chapter="yearend">
+<main class="chapter">
+  <header class="chapter-hero">
+    <div class="eyebrow">Chapter 06 · <span data-t="label"></span></div>
+    <h1>연말정산 계산기</h1>
+    <p class="lead"><span data-t="settleYear" data-f="raw"></span>년 1월 중순, 홈택스의 연말정산 간소화 서비스가 열리는 날 다온은 노트를 펼쳤다. 2장에서 매달 떼인 세금을 봤고, 3장부터 5장까지 공제를 하나씩 따져 봤다. 이제 그 조각을 한 장의 계산서로 합칠 차례다. 연말정산은 "한 해 동안 매달 미리 낸 세금"과 "1년치를 다 모아서 계산한 진짜 세금"을 맞춰 보고, 더 냈으면 돌려받고 덜 냈으면 더 내는 정산이다. 이 장의 계산기에 자기 숫자를 넣으면 결정세액과 환급액이 나온다. 이 장의 모든 값은 <span data-t="label"></span>이다.</p>
+    <ul class="objectives">
+      <li>연말정산을 총급여 → 근로소득금액 → 과세표준 → 산출세액 → 결정세액 → 기납부세액과 비교의 계단으로 설명한다.</li>
+      <li>자기 숫자를 계산기에 넣고 항목별 공제와 표준세액공제 가운데 유리한 쪽, 공제별 기여, 실효세율과 한계세율을 읽는다.</li>
+      <li>환급과 추가 납부가 원천징수 비율이 아니라 "결정세액 대 기납부세액"으로 갈린다는 것을 보인다.</li>
+      <li>공제 하나를 더했을 때 환급이 얼마 늘어나는지, 문턱·한도·바닥에서 왜 0이 되는지 설명한다.</li>
+      <li>맞벌이 부부가 공제를 누구에게 모을지, 간소화에 안 잡히는 자료와 놓쳤을 때의 경정청구를 정리한다.</li>
+    </ul>
+  </header>
+
+  <section id="flow">
+    <h2>연말정산은 한 해의 정산서다</h2>
+    <p>회사는 매달 월급을 줄 때 소득세를 떼어 국가에 낸다. 이것이 <span class="term">원천징수</span><span class="en">(Withholding)</span>다. 그런데 1월에 회사가 아는 것은 그 달의 월급뿐이다. 다온이 한 해 동안 카드를 얼마나 쓸지, 치과에 얼마를 낼지, 월세 세액공제를 신청할지는 아무도 모른다. 그래서 매달 떼는 세금은 <span class="term">간이세액표</span>라는 "평균적인 사람이라면 이 정도"의 추정으로 정한다(<a href="payslip.html">2장</a>). 한 해가 끝나면 실제 숫자를 모두 모아 1년치 세금을 다시 계산한다. 이것이 <span class="term">연말정산</span><span class="en">(Year-end tax settlement)</span>이다.</p>
+    <p>계산의 뼈대는 3·4·5장에서 본 것과 같다. 총급여에서 근로소득공제를 빼면 근로소득금액, 거기서 인적공제와 각종 소득공제를 빼면 <span class="term">과세표준</span><span class="en">(Tax base)</span>, 과세표준에 기본세율을 곱하면 <span class="term">산출세액</span>, 산출세액에서 세액공제를 빼면 <span class="term">결정세액</span><span class="en">(Determined tax)</span>이다. 결정세액이 1년치 진짜 세금이고, 매달 떼인 세금의 합계인 <span class="term">기납부세액</span><span class="en">(Tax prepaid)</span>과 비교한다.</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 390" role="img" aria-label="연말정산의 계단: 총급여에서 근로소득공제를 빼 근로소득금액, 소득공제를 빼 과세표준, 기본세율을 곱해 산출세액, 세액공제를 빼 결정세액, 기납부세액과 비교해 환급 또는 추가 납부">
+        <defs><marker id="ye-ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <rect x="20" y="14" width="160" height="36" rx="7" class="f-acc-soft"/>
+        <text x="100" y="37" text-anchor="middle" class="lbl-b">총급여</text>
+        <line x1="100" y1="52" x2="100" y2="78" class="s-line" marker-end="url(#ye-ar)"/>
+        <text x="112" y="70" class="lbl-dim">− 근로소득공제 (3장)</text>
+        <rect x="20" y="80" width="160" height="36" rx="7" class="f-surface"/>
+        <text x="100" y="103" text-anchor="middle" class="lbl-b">근로소득금액</text>
+        <line x1="100" y1="118" x2="100" y2="144" class="s-line" marker-end="url(#ye-ar)"/>
+        <text x="112" y="136" class="lbl-dim">− 인적공제·소득공제 (3·4장)</text>
+        <rect x="20" y="146" width="160" height="36" rx="7" class="f-acc-soft"/>
+        <text x="100" y="169" text-anchor="middle" class="lbl-b">과세표준</text>
+        <line x1="100" y1="184" x2="100" y2="210" class="s-line" marker-end="url(#ye-ar)"/>
+        <text x="112" y="202" class="lbl-dim">× 기본세율 (누진)</text>
+        <rect x="20" y="212" width="160" height="36" rx="7" class="f-bad-soft"/>
+        <text x="100" y="235" text-anchor="middle" class="lbl-b">산출세액</text>
+        <line x1="100" y1="250" x2="100" y2="276" class="s-line" marker-end="url(#ye-ar)"/>
+        <text x="112" y="268" class="lbl-dim">− 세액공제 (5장)</text>
+        <rect x="20" y="278" width="160" height="36" rx="7" class="f-bad-soft"/>
+        <text x="100" y="301" text-anchor="middle" class="lbl-b">결정세액</text>
+        <text x="100" y="332" text-anchor="middle" class="lbl-dim">1년치 진짜 세금</text>
+        <rect x="282" y="146" width="160" height="50" rx="7" class="f-acc2-soft"/>
+        <text x="362" y="167" text-anchor="middle" class="lbl-b">기납부세액</text>
+        <text x="362" y="186" text-anchor="middle" class="lbl-dim">매달 떼인 세금 (2장)</text>
+        <line x1="182" y1="296" x2="280" y2="296" class="s-line" marker-end="url(#ye-ar)"/>
+        <line x1="362" y1="198" x2="362" y2="276" class="s-line" marker-end="url(#ye-ar)"/>
+        <rect x="282" y="278" width="160" height="36" rx="7" class="f-elev"/>
+        <text x="362" y="301" text-anchor="middle" class="lbl-b">결정 − 기납부</text>
+        <line x1="330" y1="316" x2="300" y2="344" class="s-line" marker-end="url(#ye-ar)"/>
+        <line x1="394" y1="316" x2="424" y2="344" class="s-line" marker-end="url(#ye-ar)"/>
+        <rect x="232" y="346" width="106" height="34" rx="7" class="f-ok-soft"/>
+        <text x="285" y="368" text-anchor="middle" class="lbl-b">음수면 환급</text>
+        <rect x="346" y="346" width="106" height="34" rx="7" class="f-bad-soft"/>
+        <text x="399" y="368" text-anchor="middle" class="lbl-b">양수면 추가 납부</text>
+      </svg>
+      <figcaption><b>그림 1. 연말정산의 계단.</b> 왼쪽 기둥은 1년치 세금을 처음부터 다시 계산하는 길이고, 오른쪽 위는 한 해 동안 이미 낸 돈이다. 둘의 차이가 2월 월급에 더해지거나(환급) 빠진다(추가 납부). 지방소득세는 소득세의 <span data-t="income.localRate" data-f="pct"></span>로 같은 방식으로 정산한다.</figcaption>
+    </figure>
+
+    <div class="formula">
+      $$\text{차감징수세액} = \underbrace{\text{결정세액}}_{\text{1년치 진짜 세금}} - \underbrace{\text{기납부세액}}_{\text{매달 미리 낸 세금}},\qquad \text{결정세액} = \max\big(0,\ \text{산출세액} - \text{세액공제}\big)$$
+      <div class="where">차감징수세액이 음수면 그만큼 돌려받고(환급), 양수면 더 낸다. 결정세액은 0원 아래로 내려가지 않으므로 돌려받을 수 있는 돈은 많아야 기납부세액 전부다. 원천징수영수증에서는 이 값을 "차감징수세액"이라 부르고 10원 미만은 버린다.</div>
+    </div>
+    <p>이 식에서 중요한 것은 환급이 "세금을 덜 냈다"는 뜻이 아니라는 점이다. 환급은 미리 너무 많이 낸 돈을 돌려받는 것이다. <span class="term">13월의 월급</span>이라는 말은 그래서 반만 맞다. 1년치 세금 자체를 줄이는 것은 공제이고, 환급의 크기는 공제와 "미리 얼마나 냈나"가 함께 정한다. 아래 계산기는 이 두 줄을 따로 보여 준다.</p>
+  </section>
+
+  <section id="calc">
+    <h2>내 숫자로 계산하기</h2>
+    <p>홈택스 간소화 자료나 회사가 준 원천징수영수증을 옆에 두고 숫자를 넣는다. 금액은 모두 <b>만원 단위</b>다(예: 연봉 5,240만원은 5240). 처음에는 다온의 숫자가 들어 있다. 칸을 비우면 0으로 본다. 단, 맨 아래 기납부세액을 비워 두면 연봉과 가족 수로 매달 원천징수(100%)를 추정해 넣는다. 입력값은 이 브라우저에만 저장되고 어디로도 보내지 않는다.</p>
+
+    <div class="sim" id="sim-calc">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>연말정산 계산기</h3></div>
+      <div class="calc-top">
+        <div class="calc-year"><span data-t="label"></span><small><span data-t="year" data-f="raw"></span>년 1~12월 근로소득 · <span data-t="settleYear" data-f="raw"></span>년 1~2월 정산 · data/tax-<span data-t="year" data-f="raw"></span>.json</small></div>
+        <div class="btn-row">
+          <button class="btn primary" id="c-daon">다온의 숫자로 채우기</button>
+          <button class="btn" id="c-clear">비우기</button>
+          <button class="btn" id="c-share">공유 링크 만들기</button>
+        </div>
+      </div>
+      <div class="calc-form">
+        <div class="form-grid">
+          <fieldset><legend>급여</legend>
+            <label>연봉(세전 급여 총액)<input type="number" class="num-in" id="c-salary" min="0" step="any" inputmode="decimal"></label>
+            <label>그중 비과세(식대 등)<input type="number" class="num-in" id="c-nontax" min="0" step="any" inputmode="decimal"></label>
+            <span class="sub wide">식대 비과세는 월 <span data-t="wage.nontax.mealMonthly" data-f="man"></span>까지. 총급여 = 연봉 − 비과세.</span>
+          </fieldset>
+          <fieldset><legend>가족(기본공제 대상)</legend>
+            <label class="check"><input type="checkbox" id="c-spouse"> 배우자(소득 요건 충족)</label>
+            <label>자녀 수<input type="number" class="num-in" id="c-kids" min="0" max="10" step="1" inputmode="numeric"></label>
+            <label><span>그중 <span data-t="credits.child.ageMin" data-f="num"></span>세 이상</span><input type="number" class="num-in" id="c-kids9" min="0" max="10" step="1" inputmode="numeric"></label>
+            <div class="wide"><span class="sub">올해 출산·입양</span><br><div class="seg" id="c-birth"><button data-value="0" class="on">없음</button><button data-value="1">첫째</button><button data-value="2">둘째</button><button data-value="3">셋째 이상</button></div></div>
+            <label><span>부모 등(<span data-t="personal.parentAgeMin" data-f="num"></span>세 이상)</span><input type="number" class="num-in" id="c-parents" min="0" max="10" step="1" inputmode="numeric"></label>
+            <label><span>그중·본인 포함 <span data-t="personal.elderlyAge" data-f="num"></span>세 이상</span><input type="number" class="num-in" id="c-elderly" min="0" max="10" step="1" inputmode="numeric"></label>
+            <label>장애인(본인 포함)<input type="number" class="num-in" id="c-disabled" min="0" max="10" step="1" inputmode="numeric"></label>
+            <label class="check"><input type="checkbox" id="c-woman"> 부녀자 공제</label>
+            <label class="check"><input type="checkbox" id="c-single"> 한부모 공제</label>
+          </fieldset>
+          <fieldset><legend>4대보험(근로자 부담, 연간)</legend>
+            <label>국민연금<input type="number" class="num-in" id="c-pension" min="0" step="any" inputmode="decimal"></label>
+            <label>건강보험(장기요양 포함)<input type="number" class="num-in" id="c-health" min="0" step="any" inputmode="decimal"></label>
+            <label>고용보험<input type="number" class="num-in" id="c-employ" min="0" step="any" inputmode="decimal"></label>
+            <div class="wide btn-row"><button class="btn sm" id="c-ins-auto">급여로 자동 계산</button><span class="sub">월 과세 급여 × 보험료율(<span data-t="year" data-f="raw"></span>년)로 추정한다. 원천징수영수증의 실제 값이 있으면 그 값을 넣는다.</span></div>
+          </fieldset>
+          <fieldset><legend>카드 등 사용액(연간)</legend>
+            <label>신용카드<input type="number" class="num-in" id="c-credit" min="0" step="any" inputmode="decimal"></label>
+            <label>체크·직불카드<input type="number" class="num-in" id="c-debit" min="0" step="any" inputmode="decimal"></label>
+            <label>현금영수증<input type="number" class="num-in" id="c-cash" min="0" step="any" inputmode="decimal"></label>
+            <label>도서·공연·박물관 등<input type="number" class="num-in" id="c-culture" min="0" step="any" inputmode="decimal"></label>
+            <label>전통시장<input type="number" class="num-in" id="c-market" min="0" step="any" inputmode="decimal"></label>
+            <label>대중교통<input type="number" class="num-in" id="c-transit" min="0" step="any" inputmode="decimal"></label>
+            <span class="sub wide">전통시장·대중교통·도서 등은 카드 종류와 상관없이 그 칸에만 넣는다(신용카드 칸과 겹치지 않게).</span>
+          </fieldset>
+          <fieldset><legend>주택</legend>
+            <label>주택청약종합저축 납입액<input type="number" class="num-in" id="c-sub" min="0" step="any" inputmode="decimal"></label>
+            <label>주택임차차입금 원리금 상환<input type="number" class="num-in" id="c-lease" min="0" step="any" inputmode="decimal"></label>
+            <label>장기주택저당차입금 이자<input type="number" class="num-in" id="c-mort" min="0" step="any" inputmode="decimal"></label>
+            <div class="wide"><span class="sub">주택담보대출의 조건(이자 공제 한도가 갈린다)</span><br><div class="seg" id="c-mortcap"><button data-value="both15y">15년+ 고정금리·비거치</button><button data-value="fixedOrInstallment" class="on">15년+ 고정 또는 비거치</button><button data-value="none15y">15년+ 그 밖</button><button data-value="short10y">10년+ 고정 또는 비거치</button></div></div>
+          </fieldset>
+          <fieldset><legend>연금계좌</legend>
+            <label>연금저축 납입액<input type="number" class="num-in" id="c-saving" min="0" step="any" inputmode="decimal"></label>
+            <label>IRP 납입액<input type="number" class="num-in" id="c-irp" min="0" step="any" inputmode="decimal"></label>
+          </fieldset>
+          <fieldset><legend>보험료·의료비·교육비·기부금</legend>
+            <label>보장성 보험료<input type="number" class="num-in" id="c-ins" min="0" step="any" inputmode="decimal"></label>
+            <label>의료비: 본인·65세 이상·장애인·6세 이하<input type="number" class="num-in" id="c-medSelf" min="0" step="any" inputmode="decimal"></label>
+            <label>의료비: 그 밖의 부양가족<input type="number" class="num-in" id="c-medOther" min="0" step="any" inputmode="decimal"></label>
+            <label>교육비: 본인<input type="number" class="num-in" id="c-eduSelf" min="0" step="any" inputmode="decimal"></label>
+            <label>교육비: 취학 전·초중고(합계)<input type="number" class="num-in" id="c-eduKid" min="0" step="any" inputmode="decimal"></label>
+            <label>교육비: 대학생(합계)<input type="number" class="num-in" id="c-eduUniv" min="0" step="any" inputmode="decimal"></label>
+            <label>고향사랑기부금<input type="number" class="num-in" id="c-donHome" min="0" step="any" inputmode="decimal"></label>
+            <label>일반 기부금<input type="number" class="num-in" id="c-donGen" min="0" step="any" inputmode="decimal"></label>
+          </fieldset>
+          <fieldset><legend>월세·혼인</legend>
+            <label>월세(1년 합계)<input type="number" class="num-in" id="c-rent" min="0" step="any" inputmode="decimal"></label>
+            <label class="check"><input type="checkbox" id="c-marriage"> 올해 혼인신고(혼인세액공제)</label>
+            <span class="sub wide">월세 세액공제는 무주택 세대주, 국민주택규모(전용 <span data-t="credits.rent.areaMax" data-f="num"></span>㎡) 이하 또는 기준시가 <span data-t="credits.rent.officialPriceMax"></span> 이하 주택이 요건이다. 혼인세액공제는 <span data-t="credits.marriageUntil" data-f="raw"></span>년 혼인신고분까지.</span>
+          </fieldset>
+          <fieldset><legend>기납부세액(한 해 동안 떼인 세금)</legend>
+            <label>소득세 합계<input type="number" class="num-in" id="c-prepaid" min="0" step="any" inputmode="decimal" placeholder="비우면 추정"></label>
+            <label>지방소득세 합계<input type="number" class="num-in" id="c-prepaidLocal" min="0" step="any" inputmode="decimal" placeholder="비우면 소득세의 10%"></label>
+            <span class="sub wide">원천징수영수증의 "기납부세액(주(현)근무지)" 또는 12달 급여명세서의 소득세를 더한 값. 이직했다면 전 직장분도 더한다.</span>
+          </fieldset>
+        </div>
+        <p class="calc-msg" id="c-msg"></p>
+      </div>
+      <div class="sim-view"><canvas id="calc-cv"></canvas></div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">결정세액(지방세 포함)</span><span class="v" id="c-o-dec">—</span></div>
+        <div class="stat"><span class="k" id="c-o-pre-k">기납부세액</span><span class="v" id="c-o-pre">—</span></div>
+        <div class="stat"><span class="k">2월 월급에서</span><span class="v" id="c-o-res">—</span></div>
+        <div class="stat"><span class="k">실효세율 / 한계세율</span><span class="v" id="c-o-rate">—</span></div>
+      </div>
+      <div class="calc-out">
+        <div><h4>항목별 공제 vs 표준세액공제</h4><div class="table-wrap" id="c-cmp"></div></div>
+        <div><h4>공제별 기여(그 공제를 빼면 늘어나는 세금)</h4><div class="table-wrap" id="c-contrib"></div></div>
+        <div><h4>근로소득 원천징수영수증 요약</h4><div class="slip" id="c-slip"></div></div>
+        <div><h4>이 결과를 읽는 법</h4><div id="c-read" style="font-size:14px;color:var(--text-dim);line-height:1.6"></div></div>
+      </div>
+      <div class="sim-note">해볼 것: ① "다온의 숫자로 채우기"를 누른 뒤 월세(1년 합계)를 0으로 바꾼다. 결정세액이 뛰고, 계단 그림의 맨 아래 막대가 환급 쪽에서 크게 줄어든다. ② 의료비를 총급여의 <span data-t="credits.medical.threshold" data-f="pct"></span> 아래로 내렸다 올려 본다. 문턱을 넘기 전까지 공제별 기여가 0이다. ③ 연봉을 낮춰 산출세액이 세액공제보다 작아지게 하면 계단 그림에 "사라짐"이 나타나고 결정세액은 0원에서 멈춘다. ④ 기납부세액 칸에 실제 원천징수영수증 값을 넣으면 추정이 실제로 바뀐다.<br><b>이 책의 모델이 생략하거나 단순화한 것</b>: 중도 입사·퇴사와 전 근무지 합산의 세부, 비과세 항목별 요건, 부양가족의 나이·소득 요건 판정(입력한 사람은 모두 요건을 채운다고 본다), 부녀자 공제의 세대주·배우자 요건, 장애인 전용 보험료, 난임·미숙아 의료비와 산후조리원·안경 한도, 교육비의 장애인 특수교육비, 정치자금·우리사주·특례 기부금의 구분과 기부금 이월, 소비 증가분 추가공제, 주택자금 공제의 세부 요건(무주택·주택 규모·취득 시기), 중소기업 취업자 감면 등 세액감면, 외국인 단일세율, 세액공제 적용 순서와 한도 초과분 이월. 기납부세액 추정은 간이세액표를 만든 산식의 근사다. 실제 세액은 홈택스 연말정산 모의계산이나 회사 급여 담당자에게 확인한다.</div>
+    </div>
+
+    <p>계단 그림의 위쪽 절반은 "소득에서 빼는 공제", 아래쪽 절반은 "세금에서 빼는 공제"다. 두 절반의 축은 다르다. 위쪽은 총급여 크기에 맞췄고, 아래쪽은 세금 크기에 맞춰 크게 확대했다. 소득공제 수백만원이 과세표준을 줄여도 세금으로는 그 금액에 한계세율을 곱한 만큼만 줄어드는 이유가 여기서 보인다(<a href="deduction.html">4장</a>). 반대로 세액공제는 아래쪽 막대를 그 금액 그대로 줄인다(<a href="credit.html">5장</a>).</p>
+    <h3>항목별 공제와 표준세액공제</h3>
+    <p>계산기는 두 길을 모두 계산해 세금이 적은 쪽을 고른다. <b>항목별 공제</b>는 건강·고용보험료와 주택자금 같은 특별소득공제, 보험료·의료비·교육비·기부금 같은 특별세액공제, 월세 세액공제를 하나하나 넣는 길이다. <b>표준세액공제</b>는 이것들을 모두 포기하는 대신 근로자에게 <span data-t="credits.standardWage"></span>을 일괄로 빼 주는 길이다. 카드 등 소득공제, 연금계좌, 자녀 세액공제는 어느 길에서나 받는다. 공제 자료가 거의 없는 사회초년생은 표준세액공제가 유리한 경우가 많고, 월세나 의료비가 있는 사람은 항목별이 이긴다. 다온은 건강보험료 소득공제와 월세 세액공제만으로도 표준세액공제를 크게 넘는다.</p>
+    <h3>공제별 기여와 원천징수영수증</h3>
+    <p>"공제별 기여"는 그 공제 하나만 빼고 다시 계산했을 때 세금이 얼마나 늘어나는지다. 공제끼리 서로 영향을 주므로(한 공제가 과세표준을 낮추면 다른 소득공제의 값도 바뀌고, 세액공제가 바닥에 닿으면 나머지가 0이 된다) 기여를 모두 더해도 전체 절세액과 정확히 같지는 않다. 영수증 모양의 요약은 회사가 3월에 국세청에 내는 <span class="term">근로소득 원천징수영수증</span><span class="en">(Withholding receipt)</span>의 핵심 줄을 따온 것이다. 실제 영수증을 홈택스에서 내려받아 같은 줄끼리 맞춰 보면 이 계산기의 어느 칸이 어디에 들어가는지 알 수 있다.</p>
+
+    <div class="callout check">
+      <strong>신고 전 체크: 계산기에 넣기 전에 홈택스에서 확인할 것</strong>
+      <ul>
+        <li><b>총급여와 기납부세액</b>: 홈택스 "지급명세서 등 제출내역"이나 회사가 준 전년도 원천징수영수증. 이직했다면 전 직장의 영수증을 새 회사에 내야 합산된다.</li>
+        <li><b>부양가족 자료 제공 동의</b>: 부모·배우자의 의료비와 카드 사용액은 그 사람이 홈택스(또는 손택스)에서 자료 제공에 동의해야 간소화 화면에 뜬다.</li>
+        <li><b>카드 사용액의 구분</b>: 간소화 자료는 전통시장·대중교통·도서 등을 따로 집계한다. 신용카드 합계에 이미 포함되어 있는지 내역을 보고 겹치지 않게 넣는다.</li>
+        <li><b>의료비 문턱</b>: 총급여의 <span data-t="credits.medical.threshold" data-f="pct"></span>를 넘는 몫만 공제된다. 실손보험금으로 돌려받은 의료비는 빼야 한다.</li>
+        <li><b>월세</b>: 임대차계약서(주민등록 주소와 같은 주소), 이체 내역. 간소화 자료에 자동으로 뜨지 않는 경우가 많다.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section id="balance">
+    <h2>환급이냐 추가 납부냐: 저울의 두 접시</h2>
+    <p>"올해는 왜 토해냈지?"라는 질문의 답은 늘 한 줄이다. 기납부세액이 결정세액보다 적었다. <span class="term">토해내기</span>는 연말정산에서 추가로 세금을 내는 것을 부르는 현장 말이다. 두 접시 가운데 결정세액은 공제가 정하고, 기납부세액은 매달 원천징수가 정한다. 2장에서 본 것처럼 근로자는 간이세액표 금액의 <span data-js="ratios"></span> 가운데 하나를 골라 매달 떼일 수 있다. 120%를 고르면 매달 더 떼이고 2월에 더 돌려받으며, 80%를 고르면 매달 덜 떼이고 2월에 덜 돌려받거나 더 낸다. 어느 쪽이든 1년치 세금, 곧 결정세액은 그대로다.</p>
+    <p>아래 저울에서 원천징수 비율을 바꿔 보고, 월세 세액공제 신청 여부와 공제 자료 제출 여부를 바꿔 본다. 비율은 왼쪽 접시만, 공제는 오른쪽 접시만 움직인다.</p>
+
+    <div class="sim" id="sim-bal">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>기납부세액과 결정세액의 저울</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="bal-cv"></canvas><span class="hint">왼쪽 접시를 위아래로 끌면 비율이 바뀐다</span></div>
+        <div class="sim-controls">
+          <div class="ctrl"><span>원천징수 비율</span><div class="seg" id="bal-r"></div></div>
+          <label class="ctrl"><span>연봉(식대 포함) <output id="bal-s-out"></output></span><input type="range" id="bal-s" min="2500" max="12000" step="10" value="5240"></label>
+          <label class="check"><input type="checkbox" id="bal-rent" checked> 월세 세액공제 신청</label>
+          <label class="check"><input type="checkbox" id="bal-none"> 공제 자료를 하나도 내지 않음</label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">매달 떼이는 세금</span><span class="v" id="bal-o-m">—</span></div>
+        <div class="stat"><span class="k">기납부세액(1년)</span><span class="v" id="bal-o-p">—</span></div>
+        <div class="stat"><span class="k">결정세액</span><span class="v" id="bal-o-d">—</span></div>
+        <div class="stat"><span class="k">2월 정산</span><span class="v" id="bal-o-r">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 다온의 연봉에서 비율을 바꾼다. 왼쪽 접시만 무거워지거나 가벼워지고 오른쪽 결정세액은 꿈쩍하지 않는다. ② "공제 자료를 하나도 내지 않음"을 켠다. 오른쪽 접시가 무거워져 저울이 반대로 기울고, 낮은 비율에서는 추가 납부가 된다. ③ 월세 공제를 끄고 켜며 오른쪽 접시가 얼마나 가벼워지는지 본다. (금액은 모두 지방소득세 포함. 다온의 공제 자료를 기본으로 하고 연봉만 바꾼다. 4대보험은 연봉에 맞춰 다시 계산하고, 기납부세액은 간이세액표 산식의 근사다.)</div>
+    </div>
+
+    <p>다온처럼 월세와 의료비가 있는 사람은 간이세액표가 가정한 것보다 실제 공제가 많아서 100%로 떼여도 환급이 나온다. 반대로 공제 자료가 거의 없는 사람, 한 해에 두 회사에서 월급을 받아 각각 낮은 구간으로 떼인 사람, 부양가족 공제를 매달 원천징수에는 넣었는데 연말에는 요건이 안 돼 빼야 하는 사람은 추가 납부가 나기 쉽다. 저울을 보면 고를 것은 명확하다. 2월에 큰 돈을 돌려받는 것이 좋은지(120%), 매달 손에 쥐는 돈이 많은 것이 좋은지(80%)는 취향과 현금 흐름의 문제이고 세금의 크기와는 상관없다. 미리 많이 낸 돈에는 이자가 붙지 않는다는 점만 기억한다.</p>
+  </section>
+
+  <section id="marginal">
+    <h2>공제 하나의 값: 1만원을 더 쓰면 얼마가 돌아오나</h2>
+    <p>"IRP에 100만원 더 넣으면 얼마 돌려받아요?" 같은 질문에는 늘 "지금 어디에 서 있느냐에 따라"라는 답이 붙는다. 공제마다 세 가지 꺾이는 점이 있기 때문이다. 첫째는 <b>문턱</b>이다. 카드는 총급여의 <span data-t="card.threshold" data-f="pct"></span>, 의료비는 <span data-t="credits.medical.threshold" data-f="pct"></span>를 넘기 전까지 아무리 써도 공제가 0이다. 둘째는 <b>한도</b>다. 보장성 보험료는 <span data-t="credits.insurance.limit"></span>, 연금계좌는 합산 <span data-t="pension.totalLimit"></span>, 월세는 <span data-t="credits.rent.limit"></span>을 넘는 몫이 공제되지 않는다. 셋째는 <b>바닥</b>이다. 결정세액이 이미 0원이면 어떤 공제를 더해도 돌려받을 세금이 없다.</p>
+    <p>그 사이 구간에서 1만원의 값은 공제의 종류가 정한다. 세액공제는 공제율 그대로(연금계좌 <span data-t="pension.rateLow" data-f="pct"></span> 또는 <span data-t="pension.rateHigh" data-f="pct"></span>, 의료비 <span data-t="credits.medical.rate" data-f="pct"></span>, 월세 <span data-t="credits.rent.rateLow" data-f="pct"></span> 또는 <span data-t="credits.rent.rateHigh" data-f="pct"></span>)이고, 소득공제인 카드는 공제율에 한계세율을 한 번 더 곱한다. 지방소득세까지 더하면 각각 1.1배가 된다. 아래에서 항목을 고르고, 가로축 손잡이를 끌어 다온의 지금 숫자 위에 얼마를 더할지 정한다.</p>
+
+    <div class="formula">
+      $$\Delta\text{환급} \approx \begin{cases} \Delta\text{지출} \times \text{공제율} \times \text{한계세율} \times 1.1 & \text{소득공제(카드)} \\ \Delta\text{지출} \times \text{공제율} \times 1.1 & \text{세액공제} \\ 0 & \text{문턱 아래 · 한도 위 · 결정세액 0} \end{cases}$$
+      <div class="where">1.1은 지방소득세(소득세의 <span data-t="income.localRate" data-f="pct"></span>)를 더한 것이다. 한계세율은 과세표준이 속한 구간의 세율이다.</div>
+    </div>
+
+    <div class="sim" id="sim-mg">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>공제 하나를 더하면 환급은 얼마 늘어나나</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="mg-cv"></canvas><span class="hint">가로축 손잡이를 끌어 더할 금액을 고른다</span></div>
+        <div class="sim-controls">
+          <div class="seg" id="mg-k"><button data-value="irp" class="on">IRP</button><button data-value="card">신용카드</button><button data-value="med">의료비</button><button data-value="don">기부금</button><button data-value="rent">월세</button><button data-value="ins">보험료</button></div>
+          <label class="ctrl"><span>연봉(식대 포함) <output id="mg-s-out"></output></span><input type="range" id="mg-s" min="2500" max="10000" step="10" value="7000"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">다온의 숫자에 더한 금액</span><span class="v" id="mg-o-a">—</span></div>
+        <div class="stat"><span class="k">늘어난 환급</span><span class="v" id="mg-o-r">—</span></div>
+        <div class="stat"><span class="k">여기서 10만원 더 쓰면</span><span class="v" id="mg-o-s">—</span></div>
+        <div class="stat"><span class="k">지금 상태</span><span class="v" id="mg-o-w">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값은 다온의 공제 자료를 그대로 두고 연봉만 7,000만원으로 올린 경우다. IRP를 고르고 손잡이를 끝까지 민다. 연금저축과 합친 한도에 닿는 지점에서 선이 평평해진다. ② 보험료를 고른다. 이미 한도 근처라 거의 처음부터 평평하다. ③ 신용카드를 고른다. 기울기가 세액공제보다 훨씬 완만하고(공제율 × 한계세율), 한도에 닿으면 눕는다. 월세는 한도에서 눕는다. ④ 연봉을 다온의 5,240만원으로 내린다. 다온은 월세 공제 덕분에 결정세액이 이미 0원 가까이라, 어떤 항목이든 조금만 더하면 바닥에 닿아 선이 눕는다. (고른 항목만 더한다. 환급 증가는 지방소득세 포함, 기납부세액은 그대로다.)</div>
+    </div>
+
+    <p>선이 눕는 이유는 세 가지 가운데 하나다. 오른쪽 "지금 상태"가 그 이유를 말해 준다. 공제를 위해 돈을 쓰기 전에 "나는 지금 문턱 아래인가, 한도 위인가, 바닥인가"를 먼저 묻는 습관이 이 장의 가장 쓸모 있는 결론이다. 특히 IRP와 연금저축은 공제가 크지만 <span data-t="pension.startAge" data-f="num"></span>세 전에 꺼내면 공제받은 금액에 세금이 다시 붙는 묶인 돈이라는 점을 함께 따진다(<a href="pension.html">10장</a>).</p>
+  </section>
+
+  <section id="couple">
+    <h2>맞벌이 부부: 공제를 누구에게 모을까</h2>
+    <p><span class="term">맞벌이 몰아주기</span>는 부부가 각자 연말정산을 하면서 부양가족이나 지출을 한쪽에 모아 둘의 세금 합계를 줄이는 것을 부르는 현장 말이다. 세법이 허락하는 범위 안에서 고를 수 있는 것은 생각보다 적다.</p>
+    <ul>
+      <li><b>부양가족(자녀·부모)</b>: 한 사람은 한 근로자만 기본공제를 받을 수 있다. 자녀를 올린 쪽이 자녀 세액공제와 그 자녀의 교육비 공제, 카드 한도의 자녀 가산까지 함께 받는다. 소득공제(기본공제)는 한계세율이 높은 쪽에서 값이 크다.</li>
+      <li><b>카드 사용액</b>: 카드 공제는 그 카드 주인(명의자)에게 붙는다. 맞벌이 배우자의 카드 사용액은 다른 배우자가 가져갈 수 없다. 그래서 "몰아주기"는 연말이 아니라 한 해 동안 <b>누구 카드로 결제하느냐</b>의 문제다. 문턱(각자 총급여의 <span data-t="card.threshold" data-f="pct"></span>)이 있으므로 한쪽이 문턱을 넘기지 못하면 그쪽 사용액은 모두 문턱 채우기에 쓰인다.</li>
+      <li><b>의료비</b>: 의료비는 부양가족의 나이·소득 요건 없이, 실제로 돈을 낸 근로자가 공제받는다(배우자 의료비를 다른 배우자가 내면 낸 사람이 공제). 문턱이 총급여의 <span data-t="credits.medical.threshold" data-f="pct"></span>라서 총급여가 낮은 쪽이 문턱을 넘기 쉽다.</li>
+    </ul>
+    <p>아래 시뮬레이터는 부부 A·B가 생활비 카드 결제, 의료비, 자녀 한 명을 누구에게 둘지 여덟 가지 조합을 모두 계산한다. 막대를 누르면 그 조합이 선택된다.</p>
+
+    <div class="sim" id="sim-cp">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>맞벌이 부부의 공제 몰아주기</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="cp-cv"></canvas><span class="hint">막대를 눌러 조합을 고른다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>A의 총급여 <output id="cp-a-out"></output></span><input type="range" id="cp-a" min="2000" max="12000" step="50" value="7500"></label>
+          <label class="ctrl"><span>B의 총급여 <output id="cp-b-out"></output></span><input type="range" id="cp-b" min="2000" max="12000" step="50" value="3500"></label>
+          <div class="ctrl"><span>생활비 카드 2,000만원 결제</span><div class="seg" id="cp-card"><button data-value="A" class="on">A 카드</button><button data-value="B">B 카드</button></div></div>
+          <div class="ctrl"><span>부부 의료비 400만원 결제</span><div class="seg" id="cp-med"><button data-value="A" class="on">A</button><button data-value="B">B</button></div></div>
+          <div class="ctrl"><span><span>자녀 1명(<span data-t="credits.child.ageMin" data-f="num"></span>세 이상) 기본공제</span></span><div class="seg" id="cp-kid"><button data-value="A" class="on">A</button><button data-value="B">B</button></div></div>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">A의 결정세액</span><span class="v" id="cp-o-a">—</span></div>
+        <div class="stat"><span class="k">B의 결정세액</span><span class="v" id="cp-o-b">—</span></div>
+        <div class="stat"><span class="k">부부 합계</span><span class="v" id="cp-o-t">—</span></div>
+        <div class="stat"><span class="k">가장 적은 조합과 차이</span><span class="v" id="cp-o-d">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(A 7,500만원, B 3,500만원)에서 의료비를 B로 옮긴다. B의 문턱이 낮아 공제되는 몫이 커진다. ② 생활비 카드를 B로 옮긴다. 둘의 총급여가 다르면 문턱과 한도, 한계세율이 함께 바뀌어 결과가 단순하지 않다. 막대 위 "최소" 표시를 찾아본다. ③ 두 총급여를 비슷하게 맞추면 막대 높이 차이가 작아진다. 몰아주기의 효과는 둘의 소득 차이가 클 때 크다. (교육용 가정: 각자 개인 카드 500만원은 따로 쓰고, 4대보험은 총급여로 추정한다. 다른 공제는 없다. 금액은 지방소득세 포함 결정세액이고 기납부세액은 비교하지 않는다. 의료비는 한도가 있는 일반 의료비로 넣었다.)</div>
+    </div>
+
+    <p>여덟 막대의 높이 차이가 몰아주기로 아낄 수 있는 돈의 전부다. 소득 차이가 클수록 차이가 벌어지지만, 대개 수십만원 단위다. 그리고 세법이 고르게 해 주지 않는 것을 고르면 안 된다. 같은 자녀를 부부가 둘 다 올리거나, 형제가 같은 부모를 둘 다 올리는 <span class="term">중복 공제</span>는 국세청 전산에서 걸러져 나중에 가산세와 함께 추징된다.</p>
+
+    <div class="callout pro">
+      <strong>실무 노트: 급여 담당자가 해마다 보는 실수</strong>
+      회사 급여 담당자가 연말정산 시즌에 가장 많이 돌려보내는 서류는 세 가지다. ① <b>부양가족 중복</b>: 형제자매가 같은 부모를, 맞벌이 부부가 같은 자녀를 각자 올린 경우. 회사는 서로 다른 회사의 신고를 모르기 때문에 그대로 통과되고, 몇 달 뒤 국세청 점검에서 걸려 공제를 뺀 세금과 과소신고 가산세가 나온다. 가족끼리 누가 누구를 올릴지 1월에 먼저 정한다. ② <b>소득 요건을 넘는 부양가족</b>: 부모의 연간 소득금액이 <span data-t="personal.depIncomeMax"></span>(근로소득만 있으면 총급여 <span data-t="personal.depWageGrossMax"></span>)을 넘으면 기본공제 대상이 아니다. 부모의 이자·연금·임대소득을 확인하지 않고 올리는 일이 흔하다. 다만 의료비처럼 나이·소득 요건 없이 공제되는 항목도 있다. ③ <b>맞벌이 배우자의 카드</b>: 배우자 명의 카드 사용액을 합쳐 넣는 경우. 배우자가 소득 요건을 채우는 부양가족일 때만 합칠 수 있다.
+    </div>
+  </section>
+
+  <section id="floor">
+    <h2>바닥: 세액공제가 사라지는 곳</h2>
+    <p>세액공제는 산출세액에서 빼는 것이라 산출세액보다 클 수 없다. 산출세액이 50만원인 사람이 세액공제를 80만원 신청하면 결정세액은 0원이 되고 나머지 30만원은 그냥 사라진다. 돌려받는 돈은 많아야 기납부세액 전부다. 사회초년생, 육아휴직으로 소득이 줄어든 해, 연중에 입사한 해에 이 <b>바닥</b>이 자주 나타난다.</p>
+    <p>바닥에서 특히 아까운 것은 연금계좌 세액공제다. 근로소득세액공제와 자녀 세액공제가 먼저 산출세액을 채우면 연금계좌 공제가 한 푼도 쓰이지 않을 수 있다. 그래도 연금계좌에 넣은 돈은 나중에 꺼낼 때 "공제받지 않은 원금"으로 따로 관리되어 그 몫에는 세금이 붙지 않지만, 올해 세금을 줄이는 효과는 없다. 아래에서 총급여를 낮추며 세액공제 막대가 산출세액 막대를 넘는 순간을 본다.</p>
+
+    <div class="sim" id="sim-fl">
+      <div class="sim-head"><span class="sim-tag">SIMULATOR</span><h3>산출세액을 넘은 세액공제는 사라진다</h3></div>
+      <div class="sim-body side">
+        <div class="sim-view"><canvas id="fl-cv"></canvas><span class="hint">아래 그래프의 손잡이를 끌어 총급여를 고른다</span></div>
+        <div class="sim-controls">
+          <label class="ctrl"><span>총급여 <output id="fl-g-out"></output></span><input type="range" id="fl-g" min="1200" max="6000" step="50" value="2600"></label>
+          <label class="ctrl"><span>연금계좌 납입 <output id="fl-p-out"></output></span><input type="range" id="fl-p" min="0" max="900" step="10" value="600"></label>
+          <label class="ctrl"><span><span>자녀(<span data-t="credits.child.ageMin" data-f="num"></span>세 이상)</span> <output id="fl-k-out"></output></span><input type="range" id="fl-k" min="0" max="3" step="1" value="1"></label>
+        </div>
+      </div>
+      <div class="sim-readout">
+        <div class="stat"><span class="k">산출세액</span><span class="v" id="fl-o-c">—</span></div>
+        <div class="stat"><span class="k">신청한 세액공제</span><span class="v" id="fl-o-a">—</span></div>
+        <div class="stat"><span class="k">실제로 쓰인 공제</span><span class="v" id="fl-o-u">—</span></div>
+        <div class="stat"><span class="k">사라진 공제</span><span class="v" id="fl-o-l">—</span></div>
+      </div>
+      <div class="sim-note">해볼 것: ① 기본값(총급여 2,600만원, 연금계좌 600만원, 자녀 1명)에서 위쪽 막대를 본다. 세액공제가 산출세액을 넘고, 넘친 몫(빗금)은 사라진다. 연금계좌 공제 대부분이 빗금 속에 있다. ② 손잡이를 오른쪽으로 끈다. 산출세액이 커지면서 빗금이 줄어들고, 어느 총급여에서 0이 된다. ③ 연금계좌 납입을 0으로 줄인다. 사라지던 공제가 없어질 뿐 결정세액은 그대로다. 바닥에서는 공제를 위한 납입이 올해 세금을 줄이지 못한다. (교육용 가정: 본인과 자녀 외 부양가족 없음, 4대보험은 총급여로 추정, 다른 공제 없음. 이 책의 모델은 근로소득세액공제 → 자녀 → 연금계좌 → 특별세액공제·표준세액공제 순으로 채운다. 실제 적용 순서와 이월 규정은 생략했다.)</div>
+    </div>
+
+    <p>그래프의 빗금 영역이 "신청했지만 쓰이지 않은 공제"다. 총급여가 낮을수록 넓다. 이 바닥을 알면 두 가지 판단이 쉬워진다. 하나는 맞벌이 부부라면 세액공제를 쓸 여유(산출세액)가 있는 쪽에 공제를 둔다는 것, 다른 하나는 바닥에 있는 해에는 세액공제를 위한 지출을 서두를 이유가 없다는 것이다.</p>
+
+    <div class="callout deep">
+      <strong>심화: 넘친 공제가 다음 해로 넘어가는 경우</strong>
+      대부분의 세액공제는 그 해에 다 쓰지 못하면 사라지지만, 예외가 있다. 기부금 세액공제는 한도를 넘거나 산출세액이 모자라 공제받지 못한 금액을 정해진 기간 동안 다음 해로 넘겨 공제할 수 있다(소득세법 제59조의4). 또 세법은 세액공제와 세액감면을 정해진 순서로 적용하는데, 이 순서가 어떤 공제가 바닥에 걸려 사라지는지를 정한다. 이 책의 모델은 이월과 정확한 순서를 생략했으므로, 결정세액이 0원 근처인 사람은 홈택스 모의계산으로 다시 확인한다.
+    </div>
+  </section>
+
+  <section id="schedule">
+    <h2>일정, 간소화에 안 잡히는 것, 놓쳤을 때</h2>
+    <p>연말정산은 회사가 대신 해 주는 신고다. 근로자는 자료를 모아 회사에 내고, 회사가 계산해 2월 급여에서 정산한다. <span data-t="settleYear" data-f="raw"></span>년 일정은 아직 발표 전이라 아래는 지난해와 같은 구조를 가정한 것이다(<span data-t="calendar.simplifiedOpenStatus"></span>).</p>
+
+    <figure class="diagram">
+      <svg viewBox="0 0 460 250" role="img" aria-label="연말정산 일정: 1월 중순 간소화 서비스 개통, 1월 말 공제신고서 제출, 2월 급여 정산, 3월 10일 지급명세서 제출, 5월 종합소득세 신고, 그 뒤 경정청구">
+        <defs><marker id="ye-ar2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="context-stroke"/></marker></defs>
+        <line x1="20" y1="120" x2="446" y2="120" class="s-axis" marker-end="url(#ye-ar2)"/>
+        <circle cx="44" cy="120" r="7" class="f-acc"/>
+        <circle cx="124" cy="120" r="7" class="f-acc"/>
+        <circle cx="204" cy="120" r="7" class="f-ok"/>
+        <circle cx="284" cy="120" r="7" class="f-acc"/>
+        <circle cx="364" cy="120" r="7" class="f-warn"/>
+        <rect x="14" y="30" width="130" height="62" rx="7" class="f-acc-soft"/>
+        <text x="79" y="52" text-anchor="middle" class="lbl-b"><tspan data-t="calendar.simplifiedOpen"></tspan></text>
+        <text x="79" y="70" text-anchor="middle" class="lbl">간소화 서비스 개통</text>
+        <text x="79" y="86" text-anchor="middle" class="lbl-dim">홈택스에서 자료 확인</text>
+        <line x1="44" y1="94" x2="44" y2="112" class="s-line"/>
+        <rect x="64" y="148" width="130" height="62" rx="7" class="f-surface"/>
+        <text x="129" y="170" text-anchor="middle" class="lbl-b">1월 말~2월 초</text>
+        <text x="129" y="188" text-anchor="middle" class="lbl">공제신고서 제출</text>
+        <text x="129" y="204" text-anchor="middle" class="lbl-dim">회사가 정한 마감</text>
+        <line x1="124" y1="128" x2="124" y2="146" class="s-line"/>
+        <rect x="164" y="30" width="130" height="62" rx="7" class="f-ok-soft"/>
+        <text x="229" y="52" text-anchor="middle" class="lbl-b"><tspan data-t="calendar.settlement"></tspan></text>
+        <text x="229" y="70" text-anchor="middle" class="lbl">환급·추가 납부 반영</text>
+        <text x="229" y="86" text-anchor="middle" class="lbl-dim">회사가 정산</text>
+        <line x1="204" y1="94" x2="204" y2="112" class="s-line"/>
+        <rect x="224" y="148" width="120" height="62" rx="7" class="f-surface"/>
+        <text x="284" y="170" text-anchor="middle" class="lbl-b"><tspan data-t="calendar.withholdingReport"></tspan></text>
+        <text x="284" y="188" text-anchor="middle" class="lbl">지급명세서 제출</text>
+        <text x="284" y="204" text-anchor="middle" class="lbl-dim">영수증 확정</text>
+        <line x1="284" y1="128" x2="284" y2="146" class="s-line"/>
+        <rect x="314" y="30" width="136" height="62" rx="7" class="f-warn-soft"/>
+        <text x="382" y="52" text-anchor="middle" class="lbl-b">5월</text>
+        <text x="382" y="70" text-anchor="middle" class="lbl">종합소득세 신고</text>
+        <text x="382" y="86" text-anchor="middle" class="lbl-dim">놓친 공제 반영 가능</text>
+        <line x1="364" y1="94" x2="364" y2="112" class="s-line"/>
+        <text x="420" y="144" text-anchor="middle" class="lbl-acc">그 뒤</text>
+        <text x="420" y="162" text-anchor="middle" class="lbl-dim">경정청구</text>
+        <text x="230" y="238" text-anchor="middle" class="lbl-dim">날짜는 지난해 일정 기준 예상이다. 회사 마감은 회사마다 다르다.</text>
+      </svg>
+      <figcaption><b>그림 2. 연말정산의 한 해 일정.</b> 1월에 자료를 모으고, 2월 급여에서 정산하고, 3월에 회사가 국세청에 최종 영수증을 낸다. 2월에 놓친 공제는 5월 종합소득세 확정신고 때 직접 넣을 수 있고, 그 뒤에도 경정청구로 바로잡을 수 있다.</figcaption>
+    </figure>
+
+    <h3>간소화 자료에 안 잡히는 것</h3>
+    <p>간소화 서비스는 병원·카드사·학교·금융회사가 국세청에 낸 자료를 모아 보여 준다. 자료를 내지 않는 곳에서 쓴 돈은 화면에 없고, 근로자가 영수증을 직접 받아 회사에 내야 한다. 자주 빠지는 것은 아래와 같다.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>왜 빠지나</th><th>챙길 서류</th></tr></thead>
+        <tbody>
+          <tr><td>월세</td><td>집주인은 자료 제출 의무가 없다</td><td>임대차계약서, 이체 내역(계좌이체 확인서)</td></tr>
+          <tr><td>안경·콘택트렌즈</td><td>안경점이 자료를 내지 않는 경우가 있다(의료비, 1인당 한도 있음)</td><td>사용자 이름이 적힌 구입 영수증</td></tr>
+          <tr><td>교복·체육복</td><td>판매처에 따라 빠진다(교육비, 한도 있음)</td><td>교복 구입 영수증</td></tr>
+          <tr><td>취학 전 자녀 학원·체육시설</td><td>시설이 자료를 내지 않으면 빠진다</td><td>교육비 납입 증명서</td></tr>
+          <tr><td>종교단체·일부 단체 기부금</td><td>단체가 전자 제출하지 않으면 빠진다</td><td>기부금 영수증(단체 고유번호 기재)</td></tr>
+          <tr><td>보청기·장애인 보장구, 의료기기 구입</td><td>병원이 아닌 곳에서 산 경우</td><td>처방전과 구입 영수증</td></tr>
+          <tr><td>부양가족의 자료</td><td>부양가족이 자료 제공에 동의하지 않았다</td><td>홈택스 자료 제공 동의(부양가족 본인)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout pro">
+      <strong>실무 노트: 놓쳤다면 2월이 끝이 아니다</strong>
+      2월 정산에서 월세나 기부금을 빠뜨렸다고 회사에 다시 해 달라고 할 필요는 없다(회사가 3월 10일 전이면 고쳐 주기도 한다). 근로자 본인이 5월 종합소득세 확정신고 기간(<span data-t="calendar.incomeFiling"></span>)에 홈택스에서 연말정산 내용을 불러와 빠진 공제를 더해 신고하면 차액을 돌려받는다. 5월도 지났다면 <span class="term">경정청구</span><span class="en">(Claim for refund)</span>를 한다. 이미 낸 세금이 너무 많았으니 다시 계산해 달라는 청구로, 법정신고기한부터 <b data-js="amend"></b> 안에 할 수 있다(국세기본법 제45조의2). 반대로 공제를 너무 많이 받은 것(중복 공제, 요건 안 되는 부양가족)을 알았다면 <span class="term">수정신고</span>로 먼저 바로잡는 쪽이 가산세를 줄인다. 국세청이 먼저 찾아내면 덜 낸 세금에 과소신고 가산세 <span data-t="penalty.underFiling" data-f="pct"></span>와 날짜만큼의 납부지연 가산세가 붙는다.
+    </div>
+
+    <div class="callout check">
+      <strong>신고 전 체크: 2월 급여명세서와 3월 원천징수영수증</strong>
+      <ul>
+        <li>2월 급여명세서의 "연말정산 소득세·지방소득세" 줄이 계산기의 환급·추가 납부와 같은 방향인지 본다. 크게 다르면 회사에 낸 공제신고서의 금액을 다시 확인한다.</li>
+        <li>추가 납부액이 크면 회사에 분납을 신청할 수 있는지 묻는다(추가 납부 세액이 일정 금액을 넘으면 2~4월 급여에 나누어 낼 수 있다).</li>
+        <li>3월 10일 이후 홈택스에서 확정된 원천징수영수증을 내려받아 결정세액과 기납부세액을 노트에 옮겨 둔다. 5월에 부업 소득을 신고할 때(<a href="income.html">7장</a>) 이 숫자가 출발점이다.</li>
+      </ul>
+    </div>
+
+    <div class="callout warn">
+      <strong>세법은 해마다 바뀐다</strong>
+      이 장의 계산기와 시뮬레이터는 <span data-t="label"></span>의 값(data/tax-<span data-t="year" data-f="raw"></span>.json)으로 계산한다. 계산기 머리의 기준 연도가 그 표시다. 자녀 세액공제의 대상 연령은 해마다 한 살씩 올라가도록 정해져 있고(<span data-t="year" data-f="raw"></span>년 <span data-t="credits.child.ageMin" data-f="num"></span>세 이상), 혼인세액공제는 <span data-t="credits.marriageUntil" data-f="raw"></span>년 혼인신고분까지다. 2026년 세법개정안(부양가족 소득 요건 완화, 출산·입양 세액공제의 재정지원 전환 등)은 국회 심사 중인 <b>확정 전</b> 안이라 계산에 넣지 않았다. 이 계산기는 교육용 모델이므로 실제 신고 전에는 홈택스 모의계산으로 확인한다.
+    </div>
+  </section>
+
+  <section id="case">
+    <h2>다온의 연말정산 노트</h2>
+    <div class="casefile">
+      <div class="tag"><b>NOTE 다온</b><span>세금 노트 · <span data-t="settleYear" data-f="raw"></span>년 1~2월</span></div>
+      <h4>결정세액은 <b id="note-dec"></b>. 매달 미리 낸 돈 가운데 <b id="note-refund"></b>이 2월 월급으로 돌아온다</h4>
+      <p>간소화 서비스가 열린 날, 다온은 화면의 숫자를 노트에 옮기고 빠진 것을 찾았다. 신용카드·체크카드·현금영수증·대중교통이 모두 떠 있었고, 보험료 96만원과 치과 치료비 220만원, 연금저축 300만원, 청약저축 240만원, 기부금도 있었다. 화면에 없는 것은 하나, 월세였다. 집주인은 자료를 내지 않으니 임대차계약서와 1년치 이체 내역(65만원 × 12달 = 780만원)을 따로 챙겨 회사에 냈다.</p>
+      <p>이 책의 모델로 계산하면 총급여 5,000만원에서 과세표준은 <b id="note-base"></b>, 산출세액은 <b id="note-calc"></b>이다. 여기서 근로소득세액공제 <b id="note-ec"></b>, 월세 세액공제 <b id="note-rent"></b>, 연금계좌 <b id="note-pen"></b>를 비롯한 세액공제를 빼면 결정세액은 <b id="note-dec2"></b>(지방소득세 포함 <b id="note-total"></b>)이다. 한 해 동안 매달 떼인 세금은 지방소득세까지 <b id="note-pre"></b>였으니, 차이 <b id="note-refund2"></b>을 2월에 돌려받는다. 실효세율은 총급여의 <b id="note-eff"></b>다.</p>
+      <p>작년보다 더 돌려받는 이유를 따져 보니 답은 월세였다. 작년에는 "집주인 동의가 있어야 한다"고 잘못 알고 월세 세액공제를 신청하지 않았다. 올해 숫자에서 월세만 빼고 다시 계산하면 환급은 <b id="note-norent"></b>에 그친다. 월세 하나가 <b id="note-diff"></b>의 차이를 만든 셈이다. 총급여가 <span data-t="credits.rent.lowGrossMax"></span> 이하라 공제율도 높은 쪽(<span data-t="credits.rent.rateLow" data-f="pct"></span>)이었다. 작년 몫은 아직 늦지 않았다. 법정신고기한부터 <b data-js="amend"></b> 안이면 경정청구로 돌려받을 수 있어 "확인할 것"에 적었다.</p>
+      <div class="clue"><div><b>이 장에서 정리한 것</b>결정세액(진짜 세금)과 기납부세액(미리 낸 돈)을 따로 본다. 환급의 크기를 바꾼 것은 월세 세액공제였다. 원천징수 비율은 2월의 금액만 바꾼다.</div><div><b>아직 남은 문제</b>일러스트 외주와 강연료는 연말정산에 들어가지 않았다. 이 소득을 합치면 결정세액이 다시 바뀐다. 작년 월세의 경정청구도 해야 한다.</div><div><b>다음 장</b><a href="income.html">7장</a>: 5월 종합소득세 신고. 이 연말정산 결과가 출발점이다.</div></div>
+    </div>
+  </section>
+
+  <section class="keypoints" id="summary">
+    <h2>핵심 정리</h2>
+    <ol>
+      <li>연말정산은 총급여 → 근로소득공제 → 근로소득금액 → 소득공제 → 과세표준 → 기본세율 → 산출세액 → 세액공제 → 결정세액의 계단이고, 결정세액에서 기납부세액을 빼 환급(음수)과 추가 납부(양수)를 정한다.</li>
+      <li>환급은 세금을 덜 낸 것이 아니라 미리 많이 낸 돈을 돌려받는 것이다. 원천징수 비율(<span data-js="ratios"></span>)은 기납부세액만 바꾸고 결정세액은 바꾸지 않는다.</li>
+      <li>항목별 공제와 표준세액공제(<span data-t="credits.standardWage"></span>) 가운데 세금이 적은 쪽이 적용된다. 카드·연금계좌·자녀 공제는 어느 쪽에서나 받는다.</li>
+      <li>공제 하나의 값은 문턱(카드 <span data-t="card.threshold" data-f="pct"></span>, 의료비 <span data-t="credits.medical.threshold" data-f="pct"></span>) 아래와 한도 위에서 0이고, 그 사이에서 세액공제는 공제율, 소득공제는 공제율 × 한계세율이다.</li>
+      <li>세액공제는 산출세액을 넘을 수 없다. 결정세액이 0원이면 남는 공제는 사라지고(기부금 이월 등 예외), 환급은 기납부세액이 상한이다.</li>
+      <li>맞벌이 부부는 부양가족을 누구에게 올릴지, 누구 카드로 결제하고 누가 의료비를 낼지를 정할 수 있다. 같은 사람을 둘이 올리는 중복 공제는 가산세와 함께 추징된다.</li>
+      <li>간소화에 안 잡히는 자료(월세, 안경, 교복, 일부 기부금)는 직접 챙긴다. 놓친 공제는 5월 확정신고나 경정청구로 바로잡는다.</li>
+    </ol>
+  </section>
+
+  <section class="quiz-sec" id="quiz">
+    <h2>확인 퀴즈</h2>
+    <div class="quiz">
+      <div class="quiz-q">
+        <p>다온이 매달 원천징수 비율을 100%에서 120%로 바꿨다. 다른 숫자가 그대로라면 연말정산에서 무엇이 달라지는가?</p>
+        <div class="opts">
+          <button class="opt">결정세액이 20% 늘어난다</button>
+          <button class="opt" data-correct>결정세액은 그대로이고, 기납부세액이 늘어 환급이 그만큼 커진다</button>
+          <button class="opt">결정세액이 줄어 세금을 아낀다</button>
+          <button class="opt">환급과 결정세액이 모두 그대로다</button>
+        </div>
+        <div class="quiz-exp">원천징수 비율은 매달 "미리 내는 돈"만 바꾼다. 1년치 진짜 세금인 결정세액은 소득과 공제로 정해진다. 120%를 고르면 매달 더 떼이고 그 차이가 2월에 돌아온다. 미리 낸 돈에는 이자가 붙지 않으므로 세금을 아끼는 방법이 아니다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>총급여 5,000만원인 사람이 한 해에 본인 의료비 120만원을 냈다. 의료비 세액공제는 얼마인가?</p>
+        <div class="opts">
+          <button class="opt">120만원 × 공제율</button>
+          <button class="opt">한도 안이므로 120만원 전액</button>
+          <button class="opt">120만원 − 표준세액공제</button>
+          <button class="opt" data-correct>0원(문턱 아래)</button>
+        </div>
+        <div class="quiz-exp">의료비는 총급여의 <span data-t="credits.medical.threshold" data-f="pct"></span>를 넘는 금액에만 공제율 <span data-t="credits.medical.rate" data-f="pct"></span>를 곱한다. 총급여 5,000만원의 문턱은 5,000만원 × <span data-t="credits.medical.threshold" data-f="pct"></span>이고, 120만원은 그보다 작아 공제가 0원이다. 문턱을 넘긴 뒤부터 1만원마다 공제가 생긴다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>산출세액이 40만원인 사람이 세액공제를 모두 합쳐 90만원 신청했다. 기납부세액은 30만원이다. 결과로 맞는 것은?</p>
+        <div class="opts">
+          <button class="opt" data-correct>결정세액 0원, 기납부세액 30만원 전액 환급, 남은 공제 50만원은 사라진다</button>
+          <button class="opt">결정세액 −50만원, 80만원 환급</button>
+          <button class="opt">결정세액 0원, 90만원 환급</button>
+          <button class="opt">결정세액 40만원, 10만원 추가 납부</button>
+        </div>
+        <div class="quiz-exp">세액공제는 산출세액을 넘을 수 없어 결정세액은 0원이 최저다. 돌려받는 돈은 미리 낸 30만원(과 그에 딸린 지방소득세)이 전부이고, 산출세액을 넘은 공제 50만원은 이월이 허용되는 일부 항목을 빼면 사라진다.</div>
+      </div>
+      <div class="quiz-q">
+        <p>2월 정산이 끝난 뒤, 월세 세액공제를 신청하지 않았다는 것을 알았다. 가장 알맞은 방법은?</p>
+        <div class="opts">
+          <button class="opt">다음 해 연말정산에서 2년치를 함께 신청한다</button>
+          <button class="opt">이미 끝났으므로 돌려받을 방법이 없다</button>
+          <button class="opt" data-correct>5월 종합소득세 확정신고 때 공제를 더해 신고하거나, 기한이 지났으면 경정청구를 한다</button>
+          <button class="opt">회사에 수정신고를 요구해야만 한다</button>
+        </div>
+        <div class="quiz-exp">연말정산을 한 근로자도 5월(<span data-t="calendar.incomeFiling"></span>) 확정신고에서 빠진 공제를 직접 넣을 수 있다. 그 기간도 지났다면 법정신고기한부터 정해진 기간 안에 경정청구로 돌려받는다. 공제는 그 해 귀속으로만 받으므로 다음 해에 몰아서 받을 수는 없다.</div>
+      </div>
+    </div>
+  </section>
+</main>
+<script>
+TX.ready(function (D) {
+  "use strict";
+  const TAU = Math.PI * 2;
+  function T(ctx, s, x, y, o) {
+    o = o || {};
+    ctx.font = TB.font(o.size || 12, o.mono, o.weight);
+    ctx.fillStyle = o.color; ctx.textAlign = o.align || "left"; ctx.textBaseline = o.base || "alphabetic";
+    ctx.fillText(s, x, y);
+  }
+  function knob(ctx, x, y, P) { ctx.beginPath(); ctx.arc(x, y, 8, 0, TAU); ctx.fillStyle = P.text; ctx.fill(); ctx.lineWidth = 2; ctx.strokeStyle = P.bg; ctx.stroke(); }
+  function hatch(ctx, x, y, w, h, color) {
+    if (w <= 0 || h <= 0) return;
+    ctx.save(); ctx.beginPath(); ctx.rect(x, y, w, h); ctx.clip();
+    ctx.strokeStyle = color; ctx.lineWidth = 1.2; ctx.globalAlpha = 0.8;
+    for (let k = -h; k < w; k += 6) { ctx.beginPath(); ctx.moveTo(x + k, y + h); ctx.lineTo(x + k + h, y); ctx.stroke(); }
+    ctx.restore();
+    ctx.strokeStyle = color; ctx.lineWidth = 1; ctx.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1);
+  }
+  const pw = (id) => document.getElementById(id).parentElement.clientWidth;
+  const won = TB.won;
+  const okW = (v) => '<span class="won plus">' + won(v) + "</span>";
+  const badW = (v) => '<span class="won minus">' + won(v) + "</span>";
+  const refundHtml = (r) => (r >= 0 ? '<span class="won plus">환급 ' + won(r) + "</span>" : '<span class="won minus">추가 납부 ' + won(-r) + "</span>");
+  const tot = (r) => r.decided + r.local;
+  const clone = (o) => JSON.parse(JSON.stringify(o));
+  const L1 = 1 + D.income.localRate;
+  const C = TX.CASE;
+
+  /* 다온의 연말정산 입력에서 연봉·비율만 바꾼다 */
+  function daon(o) {
+    o = o || {};
+    const salary = o.salary != null ? o.salary : C.salaryContract, monthly = salary / 12;
+    const pr = TX.payroll({ monthly, nontax: C.mealMonthly, family: 1, kids: 0, ratio: o.ratio || 1 });
+    const x = TX.caseYearEnd();
+    x.gross = (monthly - C.mealMonthly) * 12;
+    x.ins = { pension: pr.ins.pension * 12, health: (pr.ins.health + pr.ins.care) * 12, employ: pr.ins.employ * 12 };
+    x.prepaid = pr.tax * 12; x.prepaidLocal = pr.local * 12;
+    x._pr = pr;
+    return x;
+  }
+  function insFor(gross) {
+    if (gross <= 0) return { pension: 0, health: 0, employ: 0 };
+    const s = TX.social(gross / 12);
+    return { pension: s.pension * 12, health: (s.health + s.care) * 12, employ: s.employ * 12 };
+  }
+
+  /* 법령 값 가운데 JSON 키가 아직 없을 수 있는 것: 경정청구 기한 */
+  (function () {
+    const y = TX.v("calendar.amendYears");
+    document.querySelectorAll('[data-js="amend"]').forEach((el) => { el.textContent = y ? y + "년" : "정해진 기간(확인 필요)"; });
+    document.querySelectorAll('[data-js="ratios"]').forEach((el) => { el.textContent = D.simplified.ratios.map((r) => Math.round(r * 100) + "%").join("·"); });
+  })();
+
+  /* ---------------------------------------------------------- 1. 연말정산 계산기 */
+  (function () {
+    const $ = (id) => document.getElementById(id);
+    const NUM = ["salary", "nontax", "kids", "kids9", "parents", "elderly", "disabled", "pension", "health", "employ",
+      "credit", "debit", "cash", "culture", "market", "transit", "sub", "lease", "mort", "saving", "irp",
+      "ins", "medSelf", "medOther", "eduSelf", "eduKid", "eduUniv", "donHome", "donGen", "rent", "prepaid", "prepaidLocal"];
+    const CHK = ["spouse", "woman", "single", "marriage"];
+    const KEY = "tb-yearend-v1";
+    const CY = TX.caseYearEnd();
+    const m = (v) => +(v / 1e4).toFixed(4);
+    const DAON = {
+      salary: m(C.salaryContract), nontax: m(C.mealMonthly * 12), kids: 0, kids9: 0, parents: 0, elderly: 0, disabled: 0,
+      pension: m(CY.ins.pension), health: m(CY.ins.health), employ: m(CY.ins.employ),
+      credit: m(C.card.credit), debit: m(C.card.debit), cash: m(C.card.cash), culture: m(C.card.culture), market: m(C.card.market), transit: m(C.card.transit),
+      sub: m(C.subscription), lease: 0, mort: 0, saving: m(C.pensionSaving), irp: 0,
+      ins: m(C.insurance), medSelf: m(C.medical.self), medOther: m(C.medical.other), eduSelf: 0, eduKid: 0, eduUniv: 0,
+      donHome: m(C.donation.hometown), donGen: m(C.donation.general), rent: m(C.home.rent * 12), prepaid: "", prepaidLocal: "",
+      spouse: false, woman: false, single: false, marriage: false, birth: "0", mortcap: "fixedOrInstallment",
+    };
+    const birthG = TB.seg("c-birth", calc), capG = TB.seg("c-mortcap", calc);
+    if (D.year > D.credits.marriageUntil) { $("c-marriage").disabled = true; }
+
+    function put(s) {
+      NUM.forEach((k) => { const v = s[k]; $("c-" + k).value = v === "" || v == null ? "" : String(v); });
+      CHK.forEach((k) => { $("c-" + k).checked = !!s[k]; });
+      birthG.set(String(s.birth || "0"), false); capG.set(s.mortcap || "fixedOrInstallment", false);
+    }
+    function read() {
+      const s = {};
+      NUM.forEach((k) => { const raw = $("c-" + k).value.trim(); s[k] = raw === "" ? "" : Math.max(0, parseFloat(raw) || 0); });
+      CHK.forEach((k) => { s[k] = $("c-" + k).checked; });
+      s.birth = birthG(); s.mortcap = capG();
+      return s;
+    }
+    function toInput(s) {
+      const n = (k) => (+s[k] || 0) * 1e4, cnt = (k) => Math.max(0, Math.round(+s[k] || 0));
+      const msgs = [];
+      const salary = n("salary"), nontax = Math.min(n("nontax"), salary), gross = salary - nontax;
+      const kids = cnt("kids"); let kids9 = cnt("kids9"); if (kids9 > kids) { kids9 = kids; msgs.push("대상 연령 이상 자녀 수를 자녀 수에 맞췄다."); }
+      const parents = cnt("parents"), people = 1 + (s.spouse ? 1 : 0) + kids + parents;
+      let elderly = cnt("elderly"), disabled = cnt("disabled");
+      if (elderly > people) { elderly = people; msgs.push("경로우대 인원을 공제 대상 인원에 맞췄다."); }
+      if (disabled > people) { disabled = people; msgs.push("장애인 인원을 공제 대상 인원에 맞췄다."); }
+      const earned = gross - TX.earnedDeduction(gross);
+      let woman = s.woman && !s.single;
+      if (woman && earned > D.personal.womanIncomeMax) { woman = false; msgs.push("근로소득금액이 " + won(D.personal.womanIncomeMax) + "을 넘어 부녀자 공제를 뺐다."); }
+      const marriage = s.marriage && D.year <= D.credits.marriageUntil;
+      let prepaid = s.prepaid === "" ? null : n("prepaid"), prepaidLocal = s.prepaidLocal === "" ? null : n("prepaidLocal"), est = false;
+      if (prepaid == null) {
+        est = true;
+        if (salary > 0) { const pr = TX.payroll({ monthly: salary / 12, nontax: nontax / 12, family: people, kids: kids9, ratio: 1 }); prepaid = pr.tax * 12; if (prepaidLocal == null) prepaidLocal = pr.local * 12; }
+        else prepaid = 0;
+      }
+      const x = {
+        gross, people: { spouse: !!s.spouse, children: kids, parents, elderly, disabled, woman, single: !!s.single },
+        ins: { pension: n("pension"), health: n("health"), employ: n("employ") },
+        housing: { subscription: n("sub"), leaseRepay: n("lease"), mortgageInterest: n("mort"), mortgageCap: s.mortcap },
+        card: { credit: n("credit"), debit: n("debit"), cash: n("cash"), culture: n("culture"), market: n("market"), transit: n("transit") },
+        kidsAll: kids, kids8: kids9, births: +s.birth ? [+s.birth] : [],
+        pensionAcct: { saving: n("saving"), irp: n("irp") },
+        special: { insurance: n("ins"), medical: { self: n("medSelf"), other: n("medOther") }, education: { self: n("eduSelf"), school: n("eduKid"), univ: n("eduUniv") }, donation: { hometown: n("donHome"), general: n("donGen") } },
+        rent: n("rent"), marriage, prepaid, prepaidLocal,
+      };
+      if (n("rent") > 0 && gross > D.credits.rent.grossMax) msgs.push("총급여가 " + won(D.credits.rent.grossMax) + "을 넘어 월세 세액공제를 받을 수 없다.");
+      if (n("sub") > 0 && gross > D.housing.subscription.grossMax) msgs.push("총급여가 " + won(D.housing.subscription.grossMax) + "을 넘어 청약저축 소득공제를 받을 수 없다.");
+      return { x, est, msgs };
+    }
+    function save(s) { try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { /* 저장 불가 환경 */ } }
+    function loadInit() {
+      try {
+        const h = location.hash.slice(1);
+        if (h.indexOf("ye=1") === 0) {
+          const q = new URLSearchParams(h), s = Object.assign({}, DAON);
+          NUM.forEach((k) => { s[k] = q.has(k) ? q.get(k) : (k === "prepaid" || k === "prepaidLocal" ? "" : 0); });
+          CHK.forEach((k) => { s[k] = q.get(k) === "1"; });
+          s.birth = q.get("birth") || "0"; s.mortcap = q.get("mortcap") || "fixedOrInstallment";
+          return s;
+        }
+      } catch (e) { /* 해시 해석 실패 */ }
+      try { const v = localStorage.getItem(KEY); if (v) return Object.assign({}, DAON, JSON.parse(v)); } catch (e) { /* 저장소 없음 */ }
+      return DAON;
+    }
+
+    let R = null, last = null;
+    const cv = TB.canvas("#calc-cv", (ctx, w, h) => {
+      const P = TB.palette();
+      if (!R || R.gross <= 0) { T(ctx, "총급여를 넣으면 계단이 그려진다", w / 2, h / 2, { size: 14, color: P.dim, align: "center", base: "middle" }); return; }
+      const r = R, b = r.best, narrow = w < 520;
+      const lw = narrow ? 112 : 150, bx = lw + 8, bw = w - bx - (narrow ? 12 : 18);
+      const rowH = narrow ? 21 : 22;
+      // 위: 소득 → 과세표준
+      const top = [
+        { k: "총급여", a: 0, v: r.gross, c: P.accent, t: 1 },
+        { k: "근로소득공제", d: r.earnedDed },
+        { k: "근로소득금액", v: r.earned, c: P.accent, t: 1 },
+        { k: "인적공제", d: r.personal.total },
+        { k: "연금보험료", d: r.pensionIns },
+        { k: "특별소득공제", d: b.special },
+        { k: "카드 등 소득공제", d: r.card.deduction },
+        { k: "과세표준", v: b.base, c: P.accent, t: 1 },
+      ];
+      let y = 26;
+      T(ctx, "소득에서 빼는 공제 (축: 총급여)", 12, 16, { size: 11, color: P.dim, weight: 700 });
+      const X1 = (v) => bx + Math.max(0, v) / r.gross * bw;
+      let run = 0;
+      top.forEach((it) => {
+        const yy = y + rowH * 0.15, bh = rowH * 0.7;
+        let x0, x1, txt, col;
+        if (it.t) { run = it.v; x0 = X1(0); x1 = X1(it.v); txt = TB.wonAxis(it.v); col = it.c; }
+        else { const from = run, to = Math.max(0, run - it.d); x0 = X1(to); x1 = X1(from); txt = it.d > 0 ? "−" + TB.wonAxis(it.d) : "0"; col = P.ok; run = to; }
+        ctx.fillStyle = col; ctx.globalAlpha = it.t ? 0.9 : 0.65;
+        if (x1 - x0 > 0) ctx.fillRect(x0, yy, Math.max(1.5, x1 - x0), bh);
+        ctx.globalAlpha = 1;
+        T(ctx, it.k, lw, yy + bh / 2, { size: narrow ? 11 : 12, color: it.t ? P.text : P.dim, align: "right", base: "middle", weight: it.t ? 700 : 400 });
+        ctx.font = TB.font(11, true, 700); const tw = ctx.measureText(txt).width;
+        const right = x1 + 6 + tw < bx + bw;
+        const inside = !right && x1 - x0 > tw + 10;
+        T(ctx, txt, right ? x1 + 5 : inside ? x1 - 5 : x0 - 5, yy + bh / 2, { size: 11, mono: true, color: inside ? "#fff" : P.text, align: right ? "left" : "right", base: "middle", weight: 700 });
+        y += rowH;
+      });
+      // 아래: 세금
+      y += 12;
+      ctx.strokeStyle = P.grid; ctx.beginPath(); ctx.moveTo(12, y - 6); ctx.lineTo(w - 12, y - 6); ctx.stroke();
+      T(ctx, "세금에서 빼는 공제 (축: 세금, 확대)", 12, y + 8, { size: 11, color: P.dim, weight: 700 });
+      y += 16;
+      const preT = r.prepaid + r.prepaidLocal, calc = b.calc.tax;
+      const scale = Math.max(calc, preT, r.total, 1) * 1.04;
+      const X2 = (v) => bx + Math.max(0, v) / scale * bw;
+      const sp = b.credits.filter((c) => ["insurance", "medical", "education", "donation"].includes(c.key));
+      const grp = [
+        b.credits.find((c) => c.key === "earned"),
+        b.credits.find((c) => c.key === "child"),
+        b.credits.find((c) => c.key === "pension"),
+        b.itemized ? { label: "특별세액공제", value: sp.reduce((s, c) => s + c.value, 0), used: sp.reduce((s, c) => s + c.used, 0) } : b.credits.find((c) => c.key === "standard"),
+        b.itemized ? b.credits.find((c) => c.key === "rent") : null,
+        b.credits.find((c) => c.key === "marriage"),
+      ].filter((c) => c && (c.value > 0 || c.key === "earned"));
+      const rows = [{ k: "산출세액", v: calc, t: 1, c: P.bad }];
+      grp.forEach((c) => rows.push({ k: c.label === "자녀·출산" ? "자녀·출산 공제" : c.label === "연금계좌" ? "연금계좌 공제" : c.label === "혼인" ? "혼인 공제" : c.label, d: c.used, lost: c.value - c.used }));
+      rows.push({ k: "결정세액", v: r.decided, t: 1, c: P.bad });
+      rows.push({ k: "+ 지방소득세", add: r.local });
+      rows.push({ k: "기납부세액", pre: preT });
+      rows.push({ k: r.refund >= 0 ? "환급" : "추가 납부", res: r.refund });
+      run = 0;
+      rows.forEach((it) => {
+        const yy = y + rowH * 0.15, bh = rowH * 0.7;
+        let x0, x1, txt, col, alpha = 0.65;
+        if (it.t) { run = it.v; x0 = X2(0); x1 = X2(it.v); txt = TB.wonAxis(it.v); col = it.c; alpha = 0.9; }
+        else if (it.d != null) { const to = Math.max(0, run - it.d); x0 = X2(to); x1 = X2(run); txt = "−" + TB.wonAxis(it.d); col = P.ok; run = to; }
+        else if (it.add != null) { x0 = X2(run); x1 = X2(run + it.add); run += it.add; txt = "+" + TB.wonAxis(it.add); col = P.bad; }
+        else if (it.pre != null) { x0 = X2(0); x1 = X2(it.pre); txt = TB.wonAxis(it.pre); col = P.accent2; alpha = 0.85; }
+        else { const a = Math.min(r.total, preT), bb = Math.max(r.total, preT); x0 = X2(a); x1 = X2(bb); txt = TB.wonAxis(Math.abs(it.res)); col = it.res >= 0 ? P.ok : P.bad; alpha = 0.95; }
+        ctx.fillStyle = col; ctx.globalAlpha = alpha;
+        if (x1 - x0 > 0) ctx.fillRect(x0, yy, Math.max(1.5, x1 - x0), bh);
+        ctx.globalAlpha = 1;
+        let tx = txt;
+        if (it.lost > 1) {
+          // 사라진 몫: 0 아래로는 못 내려가므로 별도 빗금 상자
+          const lwid = Math.min(bw * 0.35, Math.max(14, it.lost / scale * bw));
+          hatch(ctx, X2(0), yy, lwid, bh, P.faint);
+          tx = txt + "  사라짐 " + TB.wonAxis(it.lost);
+          x1 = Math.max(x1, X2(0) + lwid);
+        }
+        T(ctx, it.k, lw, yy + bh / 2, { size: narrow ? 11 : 12, color: it.t || it.res != null ? P.text : P.dim, align: "right", base: "middle", weight: it.t || it.res != null ? 700 : 400 });
+        ctx.font = TB.font(11, true, 700); const tw = ctx.measureText(tx).width;
+        const right = x1 + 6 + tw < bx + bw;
+        const inside = !right && x1 - x0 > tw + 10;
+        T(ctx, tx, right ? x1 + 5 : inside ? x1 - 5 : x0 - 5, yy + bh / 2, { size: 11, mono: true, color: inside ? "#fff" : (it.res != null ? col : P.text), align: right ? "left" : "right", base: "middle", weight: 700 });
+        y += rowH;
+      });
+    }, { get height() { return pw("calc-cv") < 520 ? 470 : 480; } });
+
+    function contrib(x) {
+      const base = tot(TX.yearEnd(x));
+      const items = [
+        ["부양가족 인적공제", (c) => { c.people = {}; }, R.personal.total > D.personal.basic],
+        ["4대보험 소득공제", (c) => { c.ins = { pension: 0, health: 0, employ: 0 }; }, true],
+        ["주택자금 공제", (c) => { c.housing = {}; }, R.house.total > 0],
+        ["카드 등 소득공제", (c) => { c.card = {}; }, true],
+        ["자녀·출산 세액공제", (c) => { c.kids8 = 0; c.births = []; }, R.kidsCr > 0],
+        ["연금계좌 세액공제", (c) => { c.pensionAcct = {}; }, true],
+        ["보험료 세액공제", (c) => { c.special.insurance = 0; }, true],
+        ["의료비 세액공제", (c) => { c.special.medical = {}; }, true],
+        ["교육비 세액공제", (c) => { c.special.education = {}; }, R.sp.rows[2].value > 0],
+        ["기부금 세액공제", (c) => { c.special.donation = {}; }, true],
+        ["월세 세액공제", (c) => { c.rent = 0; }, true],
+        ["혼인세액공제", (c) => { c.marriage = false; }, R.marriage > 0],
+      ].filter((it) => it[2]);
+      const out = items.map(([k, f]) => { const c = clone(x); f(c); return [k, Math.max(0, tot(TX.yearEnd(c)) - base)]; });
+      const mx = Math.max(1, ...out.map((o) => o[1]));
+      return '<table><tbody>' + out.map(([k, v]) => '<tr><td>' + k + '</td><td class="num"><span class="cbar" style="width:' + Math.round(v / mx * 70) + 'px"></span>' + (v > 0 ? okW(v) : "0원") + "</td></tr>").join("") + "</tbody></table>";
+    }
+    function cmp(r) {
+      const A = r.itemized, B = r.standard, ch = r.chose;
+      const row = (k, a, b) => "<tr><td>" + k + '</td><td class="num">' + a + '</td><td class="num">' + b + "</td></tr>";
+      const sum = (p) => p.credits.reduce((s, c) => s + c.used, 0);
+      return "<table><thead><tr><th></th><th class=\"num" + (ch === "itemized" ? " chosen" : "") + "\">항목별" + (ch === "itemized" ? " ✓" : "") + "</th><th class=\"num" + (ch === "standard" ? " chosen" : "") + "\">표준" + (ch === "standard" ? " ✓" : "") + "</th></tr></thead><tbody>" +
+        row("특별소득공제", won(A.special), won(B.special)) +
+        row("과세표준", won(A.base), won(B.base)) +
+        row("산출세액", won(A.calc.tax), won(B.calc.tax)) +
+        row("세액공제(쓰인 몫)", won(sum(A)), won(sum(B))) +
+        row("결정세액", won(A.decided), won(B.decided)) +
+        row("지방세 포함", won(A.decided + A.local), won(B.decided + B.local)) + "</tbody></table>";
+    }
+    function slip(r) {
+      const f = TX.fmt.wonfull, b = r.best;
+      const credits = b.credits.reduce((s, c) => s + c.used, 0);
+      const d = r.diff, dl = r.diffLocal;
+      const sg = (v) => (v < 0 ? "−" + f(-v) : f(v));
+      return [
+        ["총급여", f(r.gross)], ["근로소득공제", "−" + f(r.earnedDed)], ["근로소득금액", f(r.earned)],
+        ["종합소득 과세표준", f(b.base)], ["산출세액", f(b.calc.tax)], ["세액공제 합계", "−" + f(credits)],
+        ["결정세액 · 소득세", f(r.decided)], ["결정세액 · 지방소득세", f(r.local)],
+        ["기납부세액 · 소득세", f(r.prepaid)], ["기납부세액 · 지방소득세", f(r.prepaidLocal)],
+      ].map(([k, v]) => '<div class="row"><span>' + k + "</span><span>" + v + "</span></div>").join("") +
+        '<div class="row"><span>차감징수세액 · 소득세</span><span>' + sg(d) + "</span></div>" +
+        '<div class="row"><span>차감징수세액 · 지방소득세</span><span>' + sg(dl) + "</span></div>" +
+        '<div class="row total"><span>' + (d + dl <= 0 ? "합계(음수 = 환급)" : "합계(추가 납부)") + "</span><span>" + sg(d + dl) + "</span></div>";
+    }
+    function readText(r, est) {
+      const b = r.best, out = [];
+      out.push("과세표준 " + won(b.base) + "은 기본세율 " + TB.pct(b.calc.rate, 0) + " 구간에 있다. 소득공제 100만원을 더하면 세금이 약 " + won(1e6 * r.marginal) + " 줄어든다(지방소득세 포함 한계세율 " + TB.pct(r.marginal, 1) + ").");
+      out.push((r.chose === "itemized" ? "항목별 공제가 표준세액공제보다 " : "표준세액공제가 항목별 공제보다 ") + won(Math.abs(tot(r.itemized) - tot(r.standard))) + " 유리하다.");
+      const lost = b.credits.reduce((s, c) => s + (c.value - c.used), 0);
+      if (lost > 1) out.push("결정세액이 0원에 닿아 세액공제 " + won(lost) + "이 쓰이지 못했다. 이 몫은 공제를 더해도 돌아오지 않는다.");
+      if (est) out.push("기납부세액은 입력하지 않아 간이세액표 100% 추정으로 넣었다. 실제 원천징수영수증 값을 넣으면 정확해진다.");
+      return out.map((s) => "<p style=\"margin:0 0 8px\">" + s + "</p>").join("");
+    }
+    function calc() {
+      const s = read(), t = toInput(s);
+      R = TX.yearEnd(t.x); last = t;
+      save(s);
+      TB.stat("c-o-dec", won(R.total) + ' <small>' + (R.chose === "itemized" ? "항목별" : "표준") + "</small>");
+      $("c-o-pre-k").textContent = "기납부세액" + (t.est ? "(추정)" : "");
+      TB.stat("c-o-pre", won(R.prepaid + R.prepaidLocal));
+      TB.stat("c-o-res", R.gross > 0 ? refundHtml(R.refund) : "—");
+      TB.stat("c-o-rate", TB.pct(R.effective, 1) + " / " + TB.pct(R.marginal, 1));
+      $("c-cmp").innerHTML = cmp(R);
+      $("c-contrib").innerHTML = contrib(t.x);
+      $("c-slip").innerHTML = slip(R);
+      $("c-read").innerHTML = R.gross > 0 ? readText(R, t.est) : "총급여를 넣으면 해설이 나온다.";
+      $("c-msg").textContent = t.msgs.join(" ");
+      cv.redraw();
+    }
+    put(loadInit());
+    document.querySelectorAll("#sim-calc .num-in, #sim-calc input[type=checkbox]").forEach((el) => { el.addEventListener("input", calc); el.addEventListener("change", calc); });
+    $("c-daon").addEventListener("click", () => { put(DAON); calc(); });
+    $("c-clear").addEventListener("click", () => { const z = {}; NUM.forEach((k) => { z[k] = ""; }); CHK.forEach((k) => { z[k] = false; }); z.birth = "0"; z.mortcap = "fixedOrInstallment"; put(z); calc(); });
+    $("c-ins-auto").addEventListener("click", () => {
+      const s = read(), salary = (+s.salary || 0) * 1e4, nontax = Math.min((+s.nontax || 0) * 1e4, salary);
+      const i = insFor(salary - nontax);
+      $("c-pension").value = m(i.pension); $("c-health").value = m(i.health); $("c-employ").value = m(i.employ);
+      calc();
+    });
+    $("c-share").addEventListener("click", () => {
+      const s = read(), q = new URLSearchParams();
+      q.set("ye", "1");
+      NUM.forEach((k) => { if (s[k] !== "" && +s[k] !== 0) q.set(k, s[k]); else if (s[k] === 0 && (k === "prepaid" || k === "prepaidLocal")) q.set(k, 0); });
+      CHK.forEach((k) => { if (s[k]) q.set(k, "1"); });
+      if (s.birth !== "0") q.set("birth", s.birth);
+      if (s.mortcap !== "fixedOrInstallment") q.set("mortcap", s.mortcap);
+      const url = location.href.split("#")[0] + "#" + q.toString();
+      try { history.replaceState(null, "", url); } catch (e) { /* 무시 */ }
+      const msg = $("c-msg");
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(() => { msg.textContent = "주소창의 링크를 복사했다. 이 링크를 열면 같은 숫자가 채워진다(숫자가 주소에 그대로 담기니 공유 상대를 가린다)."; }, () => { msg.textContent = "주소창의 링크에 입력값이 담겼다. 주소를 복사해 공유한다(숫자가 주소에 그대로 담긴다)."; });
+        } else msg.textContent = "주소창의 링크에 입력값이 담겼다. 주소를 복사해 공유한다.";
+      } catch (e) { msg.textContent = "주소창의 링크에 입력값이 담겼다."; }
+    });
+    calc();
+  })();
+
+  /* ---------------------------------------------------------- 2. 저울 */
+  (function () {
+    const segEl = document.getElementById("bal-r");
+    segEl.innerHTML = D.simplified.ratios.map((r) => '<button data-value="' + r + '"' + (r === 1 ? ' class="on"' : "") + ">" + Math.round(r * 100) + "%</button>").join("");
+    const rG = TB.seg("bal-r", draw);
+    const sG = TB.range("bal-s", (v) => won(v * 1e4), draw);
+    const rentEl = document.getElementById("bal-rent"), noneEl = document.getElementById("bal-none");
+    rentEl.addEventListener("change", draw); noneEl.addEventListener("change", draw);
+    let geo = null;
+    function calc() {
+      const x = daon({ salary: sG() * 1e4, ratio: +rG() });
+      if (!rentEl.checked) x.rent = 0;
+      if (noneEl.checked) { x.card = {}; x.housing = {}; x.pensionAcct = {}; x.special = {}; x.rent = 0; }
+      return { r: TX.yearEnd(x), pr: x._pr };
+    }
+    const cv = TB.canvas("#bal-cv", (ctx, w, h) => {
+      const P = TB.palette(), c = calc(), r = c.r;
+      const L = r.prepaid + r.prepaidLocal, Rt = r.total, mx = Math.max(L, Rt, 1);
+      const cx = w / 2, py = 70, arm = Math.min(w * 0.36, 190);
+      const ang = TB.clamp((L - Rt) / mx * 0.32, -0.32, 0.32);
+      // 받침
+      ctx.fillStyle = P.border; ctx.beginPath(); ctx.moveTo(cx, py); ctx.lineTo(cx - 26, h - 26); ctx.lineTo(cx + 26, h - 26); ctx.closePath(); ctx.fill();
+      ctx.fillRect(cx - 70, h - 26, 140, 6);
+      const lx = cx - arm * Math.cos(ang), ly = py + arm * Math.sin(ang), rx = cx + arm * Math.cos(ang), ry = py - arm * Math.sin(ang);
+      ctx.strokeStyle = P.text; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(lx, ly); ctx.lineTo(rx, ry); ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, py, 6, 0, TAU); ctx.fillStyle = P.text; ctx.fill();
+      const maxH = 88;
+      function pan(x, y, v, col, label, sub) {
+        const pwid = Math.min(120, w * 0.26), ph = 104;
+        ctx.strokeStyle = P.dim; ctx.lineWidth = 1.2;
+        ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x - pwid / 2, y + ph); ctx.moveTo(x, y); ctx.lineTo(x + pwid / 2, y + ph); ctx.stroke();
+        ctx.fillStyle = P.dim; ctx.fillRect(x - pwid / 2 - 4, y + ph, pwid + 8, 4);
+        const bh = Math.max(2, v / mx * maxH);
+        ctx.fillStyle = col; ctx.globalAlpha = 0.85; ctx.fillRect(x - pwid / 2 + 8, y + ph - bh, pwid - 16, bh); ctx.globalAlpha = 1;
+        T(ctx, label, x, y + ph + 22, { size: 12, color: P.text, align: "center", weight: 700 });
+        T(ctx, TB.wonAxis(v), x, y + ph + 40, { size: 13, mono: true, color: col, align: "center", weight: 700 });
+        T(ctx, sub, x, y + ph + 56, { size: 10, color: P.dim, align: "center" });
+        return { x, y: y + ph - bh, w: pwid, h: bh + 20 };
+      }
+      const lp = pan(lx, ly, L, P.accent2, "기납부세액", "매달 떼인 돈 × 12");
+      pan(rx, ry, Rt, P.bad, "결정세액", "1년치 진짜 세금");
+      geo = { lx, ly, lp };
+      const d = r.refund;
+      T(ctx, d >= 0 ? "왼쪽이 무겁다 → 환급 " + TB.wonAxis(d) : "오른쪽이 무겁다 → 추가 납부 " + TB.wonAxis(-d), cx, 26, { size: 14, color: d >= 0 ? P.ok : P.bad, align: "center", weight: 800 });
+    }, { get height() { return pw("bal-cv") < 480 ? 330 : 340; } });
+    let y0 = null, startIdx = 0;
+    TB.drag(cv.canvas, {
+      start(x, y) { const rs = D.simplified.ratios; startIdx = rs.indexOf(+rG()); y0 = geo && Math.abs(x - geo.lx) < 90 ? y : null; },
+      move(x, y) {
+        if (y0 == null) return;
+        const rs = D.simplified.ratios, k = TB.clamp(startIdx + Math.round((y - y0) / 30), 0, rs.length - 1);
+        if (String(rs[k]) !== rG()) { rG.set(String(rs[k])); }
+      },
+      end() { y0 = null; },
+    });
+    function draw() {
+      const c = calc(), r = c.r;
+      TB.stat("bal-o-m", won(c.pr.tax + c.pr.local));
+      TB.stat("bal-o-p", won(r.prepaid + r.prepaidLocal));
+      TB.stat("bal-o-d", won(r.total));
+      TB.stat("bal-o-r", refundHtml(r.refund));
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 3. 한계 효과 */
+  (function () {
+    const ITEMS = {
+      irp: { max: 900e4, f: (x, a) => { x.pensionAcct.irp = (x.pensionAcct.irp || 0) + a; }, limitWhy: "연금계좌 한도" },
+      card: { max: 3000e4, f: (x, a) => { x.card.credit += a; }, limitWhy: "카드 공제 한도" },
+      med: { max: 1500e4, f: (x, a) => { x.special.medical.self += a; }, limitWhy: "한도" },
+      don: { max: 500e4, f: (x, a) => { x.special.donation.general += a; }, limitWhy: "한도" },
+      rent: { max: 1200e4, f: (x, a) => { x.rent += a; }, limitWhy: "월세 공제 한도" },
+      ins: { max: 200e4, f: (x, a) => { x.special.insurance += a; }, limitWhy: "보험료 공제 한도" },
+    };
+    const kG = TB.seg("mg-k", () => { add = ITEMS[kG()].max * 0.4; draw(); });
+    const sG = TB.range("mg-s", (v) => won(v * 1e4), draw);
+    let add = ITEMS.irp.max * 0.4, box = null;
+    function run(a) { const x = daon({ salary: sG() * 1e4 }); ITEMS[kG()].f(x, a); return TX.yearEnd(x); }
+    function gain(a, base) { return run(a).refund - base; }
+    const cv = TB.canvas("#mg-cv", (ctx, w, h) => {
+      const P = TB.palette(), it = ITEMS[kG()], base = run(0).refund;
+      const pts = []; let ymax = 1e4;
+      for (let i = 0; i <= 120; i++) { const a = it.max * i / 120, g = gain(a, base); pts.push([a, g]); ymax = Math.max(ymax, g); }
+      ymax *= 1.15;
+      const c = TB.chart(ctx, { x: 58, y: 18, w: w - 76, h: h - 66 }, {
+        x: [0, it.max], y: [0, ymax], xFmt: TB.wonAxis, yFmt: TB.wonAxis,
+        series: [{ data: pts, color: P.ok, width: 2.6, fill: TB.color("ok-soft") || undefined }],
+      });
+      box = c;
+      const g = gain(add, base), px = c.X(add), hy = c.box.y + c.box.h;
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, hy); ctx.lineTo(px, c.Y(g)); ctx.stroke(); ctx.restore();
+      ctx.beginPath(); ctx.arc(px, c.Y(g), 5, 0, TAU); ctx.fillStyle = P.ok; ctx.fill();
+      knob(ctx, px, hy, P);
+      T(ctx, "늘어난 환급(지방세 포함)", c.box.x + 6, c.box.y + 10, { size: 11, color: P.dim, weight: 700 });
+    }, { get height() { return pw("mg-cv") < 480 ? 270 : 290; } });
+    TB.drag(cv.canvas, { move(x) { if (!box) return; const it = ITEMS[kG()]; add = TB.clamp(Math.round((x - box.box.x) / box.box.w * it.max / 1e5) * 1e5, 0, it.max); draw(); } });
+    function draw() {
+      const it = ITEMS[kG()], r0 = run(0), base = r0.refund, ra = run(add);
+      const step = 1e5, a2 = Math.min(it.max + step, add + step);
+      const rb = run(a2), slope = (rb.refund - ra.refund) / (a2 - add);
+      TB.stat("mg-o-a", won(add));
+      TB.stat("mg-o-r", okW(ra.refund - base));
+      TB.stat("mg-o-s", slope > 1e-6 ? okW(slope * step) : "0원");
+      let why;
+      if (ra.decided === 0 && slope < 1e-6) why = "바닥(결정세액 0원)";
+      else if (slope < 1e-6) {
+        const k = kG();
+        if (k === "card") why = ra.card.total <= ra.card.threshold ? "문턱 아래" : it.limitWhy;
+        else if (k === "med") why = "문턱 아래";
+        else if (k === "rent" && ra.rent.rate === 0) why = "총급여 요건 초과";
+        else why = it.limitWhy;
+      } else {
+        const k = kG();
+        if (k === "card") why = "공제율 × 한계세율";
+        else if (k === "irp") why = "공제율 " + TB.pct(ra.pen.rate, 0);
+        else if (k === "rent") why = "공제율 " + TB.pct(ra.rent.rate, 0);
+        else why = "공제율 구간";
+      }
+      TB.stat("mg-o-w", why);
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 4. 맞벌이 몰아주기 */
+  (function () {
+    const aG = TB.range("cp-a", (v) => won(v * 1e4), draw), bG = TB.range("cp-b", (v) => won(v * 1e4), draw);
+    const cG = TB.seg("cp-card", draw), mG = TB.seg("cp-med", draw), kG = TB.seg("cp-kid", draw);
+    const SHARED = 2000e4, OWN = 500e4, MED = 400e4;
+    let bars = [];
+    function person(gross, card, med, kid) {
+      return TX.yearEnd({
+        gross, people: { children: kid ? 1 : 0 }, kidsAll: kid ? 1 : 0, kids8: kid ? 1 : 0, ins: insFor(gross),
+        card: { credit: OWN + (card ? SHARED : 0) }, special: { medical: { other: med ? MED : 0 } },
+      });
+    }
+    function combo(c, m, k) {
+      const A = person(aG() * 1e4, c === "A", m === "A", k === "A"), B = person(bG() * 1e4, c === "B", m === "B", k === "B");
+      return { A: tot(A), B: tot(B), t: tot(A) + tot(B) };
+    }
+    const ALL = []; ["A", "B"].forEach((c) => ["A", "B"].forEach((m) => ["A", "B"].forEach((k) => ALL.push([c, m, k]))));
+    const cv = TB.canvas("#cp-cv", (ctx, w, h) => {
+      const P = TB.palette(), res = ALL.map((k) => combo(...k)), mn = Math.min(...res.map((r) => r.t)), mx = Math.max(...res.map((r) => r.t), 1);
+      const cur = ALL.findIndex((k) => k[0] === cG() && k[1] === mG() && k[2] === kG());
+      const nar = w < 480, bx = 50, bw = w - bx - 12, top = nar ? 50 : 34, bot = h - 58, slot = bw / 8, barw = slot * 0.66;
+      const Y = (v) => bot - v / (mx * 1.1) * (bot - top);
+      T(ctx, "부부 결정세액 합계(지방세 포함) · 조합 8가지", 12, 18, { size: 11, color: P.dim, weight: 700 });
+      [0, 0.5, 1].forEach((f) => { const v = mx * 1.1 * f, y = Y(v); ctx.strokeStyle = P.grid; ctx.beginPath(); ctx.moveTo(bx, y); ctx.lineTo(bx + bw, y); ctx.stroke(); T(ctx, TB.wonAxis(v), bx - 6, y, { size: 10, mono: true, color: P.dim, align: "right", base: "middle" }); });
+      bars = [];
+      res.forEach((r, i) => {
+        const x = bx + slot * i + (slot - barw) / 2, on = i === cur;
+        ctx.globalAlpha = on ? 1 : 0.45;
+        ctx.fillStyle = P.accent; ctx.fillRect(x, Y(r.A), barw, bot - Y(r.A));
+        ctx.fillStyle = P.accent2; ctx.fillRect(x, Y(r.t), barw, Y(r.A) - Y(r.t));
+        ctx.globalAlpha = 1;
+        if (on) { ctx.strokeStyle = P.text; ctx.lineWidth = 2; ctx.strokeRect(x - 1, Y(r.t) - 1, barw + 2, bot - Y(r.t) + 2); }
+        if (Math.abs(r.t - mn) < 1) T(ctx, "최소", x + barw / 2, Y(r.t) - 5, { size: 11, color: P.ok, align: "center", weight: 800 });
+        const k = ALL[i];
+        T(ctx, k[0], x + barw / 2, bot + 14, { size: 11, mono: true, color: on ? P.text : P.dim, align: "center", weight: on ? 700 : 400 });
+        T(ctx, k[1], x + barw / 2, bot + 28, { size: 11, mono: true, color: on ? P.text : P.dim, align: "center", weight: on ? 700 : 400 });
+        T(ctx, k[2], x + barw / 2, bot + 42, { size: 11, mono: true, color: on ? P.text : P.dim, align: "center", weight: on ? 700 : 400 });
+        bars.push({ x0: bx + slot * i, x1: bx + slot * (i + 1) });
+      });
+      T(ctx, "카드", bx - 6, bot + 14, { size: 10, color: P.dim, align: "right" });
+      T(ctx, "의료", bx - 6, bot + 28, { size: 10, color: P.dim, align: "right" });
+      T(ctx, "자녀", bx - 6, bot + 42, { size: 10, color: P.dim, align: "right" });
+      const ly = nar ? 28 : 10;
+      ctx.fillStyle = P.accent; ctx.fillRect(w - 128, ly, 10, 10); T(ctx, "A", w - 114, ly + 9, { size: 11, color: P.dim });
+      ctx.fillStyle = P.accent2; ctx.fillRect(w - 92, ly, 10, 10); T(ctx, "B", w - 78, ly + 9, { size: 11, color: P.dim });
+    }, { get height() { return pw("cp-cv") < 480 ? 280 : 300; } });
+    TB.drag(cv.canvas, { start(x) { const i = bars.findIndex((b) => x >= b.x0 && x < b.x1); if (i >= 0) { const k = ALL[i]; cG.set(k[0], false); mG.set(k[1], false); kG.set(k[2], false); draw(); } } });
+    function draw() {
+      const r = combo(cG(), mG(), kG()), mn = Math.min(...ALL.map((k) => combo(...k).t));
+      TB.stat("cp-o-a", won(r.A)); TB.stat("cp-o-b", won(r.B)); TB.stat("cp-o-t", won(r.t));
+      TB.stat("cp-o-d", r.t - mn > 1 ? badW(r.t - mn) + " 더 냄" : '<span class="won plus">최소 조합</span>');
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 5. 바닥 */
+  (function () {
+    const gG = TB.range("fl-g", (v) => won(v * 1e4), draw), pG = TB.range("fl-p", (v) => won(v * 1e4), draw), kG = TB.range("fl-k", (v) => v + "명", draw);
+    let box = null;
+    function run(g) {
+      const k = kG();
+      return TX.yearEnd({ gross: g, people: { children: k }, kidsAll: k, kids8: k, ins: insFor(g), pensionAcct: { saving: Math.min(pG() * 1e4, D.pension.savingLimit), irp: Math.max(0, pG() * 1e4 - D.pension.savingLimit) } });
+    }
+    const GMIN = 1200e4, GMAX = 6000e4;
+    const cv = TB.canvas("#fl-cv", (ctx, w, h) => {
+      const P = TB.palette(), g = gG() * 1e4, r = run(g), b = r.best;
+      const cr = b.credits.filter((c) => c.value > 0);
+      const asked = cr.reduce((s, c) => s + c.value, 0), calc = b.calc.tax;
+      const lw = 66, bx = lw + 8, bw = w - bx - 14, sc = Math.max(asked, calc, 1) * 1.05, X = (v) => bx + v / sc * bw;
+      T(ctx, "산출세액", lw, 30, { size: 12, color: P.text, align: "right", base: "middle", weight: 700 });
+      ctx.fillStyle = P.bad; ctx.globalAlpha = 0.85; ctx.fillRect(bx, 20, X(calc) - bx, 20); ctx.globalAlpha = 1;
+      T(ctx, "세액공제", lw, 62, { size: 12, color: P.text, align: "right", base: "middle", weight: 700 });
+      const cols = [P.ok, P.accent, P.accent2, P.warn, P.dim];
+      let x = 0;
+      cr.forEach((c, i) => {
+        const x0 = X(x), xu = X(x + c.used), x1 = X(x + c.value);
+        ctx.fillStyle = cols[i % cols.length]; ctx.globalAlpha = 0.85; ctx.fillRect(x0, 52, Math.max(0, xu - x0), 20); ctx.globalAlpha = 1;
+        hatch(ctx, xu, 52, x1 - xu, 20, cols[i % cols.length]);
+        x += c.value;
+      });
+      ctx.strokeStyle = P.bad; ctx.setLineDash([4, 3]); ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(X(calc), 14); ctx.lineTo(X(calc), 80); ctx.stroke(); ctx.setLineDash([]);
+      // 범례
+      let lx = bx, ly = 96;
+      cr.forEach((c, i) => {
+        const s = c.label; ctx.font = TB.font(11); const tw = ctx.measureText(s).width;
+        if (lx + tw + 20 > w - 10) { lx = bx; ly += 15; }
+        ctx.fillStyle = cols[i % cols.length]; ctx.fillRect(lx, ly - 5, 10, 8); T(ctx, s, lx + 14, ly, { size: 11, color: P.dim, base: "middle" }); lx += tw + 26;
+      });
+      T(ctx, "빗금 = 산출세액을 넘어 사라진 몫", lx > bx + 10 && lx + 170 < w ? lx : bx, lx > bx + 10 && lx + 170 < w ? ly : ly + 15, { size: 11, color: P.faint, base: "middle" });
+      // 아래 그래프: 총급여별 산출세액과 신청 공제
+      const cy = ly + 30;
+      const xs = []; for (let gg = GMIN; gg <= GMAX + 1; gg += (GMAX - GMIN) / 96) xs.push(gg);
+      const rs = xs.map((gg) => run(gg));
+      const s1 = rs.map((q, i) => [xs[i], q.best.calc.tax]), s2 = rs.map((q, i) => [xs[i], q.best.credits.reduce((s, c) => s + c.value, 0)]);
+      const ymax = Math.max(...s1.map((p) => p[1]), ...s2.map((p) => p[1])) * 1.1;
+      const c = TB.chart(ctx, { x: 58, y: cy, w: w - 84, h: h - cy - 48 }, {
+        x: [GMIN, GMAX], y: [0, ymax], xFmt: TB.wonAxis, yFmt: TB.wonAxis, xTicks: [2e7, 3e7, 4e7, 5e7, 6e7],
+        series: [{ data: s2, color: P.ok, width: 2.2, dash: [5, 3] }, { data: s1, color: P.bad, width: 2.4 }],
+      });
+      // 사라진 영역 칠하기
+      ctx.save(); ctx.beginPath(); ctx.rect(c.box.x, c.box.y, c.box.w, c.box.h); ctx.clip();
+      ctx.fillStyle = P.faint; ctx.globalAlpha = 0.18;
+      for (let i = 0; i < xs.length - 1; i++) { const a = s1[i][1], bb = s2[i][1]; if (bb > a) ctx.fillRect(c.X(xs[i]), c.Y(bb), c.X(xs[i + 1]) - c.X(xs[i]) + 0.5, c.Y(a) - c.Y(bb)); }
+      ctx.restore();
+      T(ctx, "— 산출세액", c.box.x + 6, c.box.y + 10, { size: 11, color: P.bad, weight: 700 });
+      T(ctx, "- - 신청한 세액공제", c.box.x + 90, c.box.y + 10, { size: 11, color: P.ok, weight: 700 });
+      box = c;
+      const px = c.X(g), hy = c.box.y + c.box.h;
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = P.text; ctx.globalAlpha = 0.5; ctx.beginPath(); ctx.moveTo(px, hy); ctx.lineTo(px, c.box.y); ctx.stroke(); ctx.restore();
+      knob(ctx, px, hy, P);
+    }, { get height() { return pw("fl-cv") < 480 ? 390 : 380; } });
+    TB.drag(cv.canvas, { move(x, y) { if (!box || y < box.box.y - 10) return; const g = TB.clamp(Math.round((GMIN + (x - box.box.x) / box.box.w * (GMAX - GMIN)) / 50e4) * 50, 1200, 6000); if (g !== gG()) gG.set(g); } });
+    function draw() {
+      const r = run(gG() * 1e4), b = r.best;
+      const asked = b.credits.reduce((s, c) => s + c.value, 0), used = b.credits.reduce((s, c) => s + c.used, 0);
+      TB.stat("fl-o-c", won(b.calc.tax)); TB.stat("fl-o-a", won(asked)); TB.stat("fl-o-u", okW(used));
+      TB.stat("fl-o-l", asked - used > 1 ? badW(asked - used) : "0원");
+      cv.redraw();
+    }
+    draw();
+  })();
+
+  /* ---------------------------------------------------------- 다온의 노트 */
+  (function () {
+    const x = TX.caseYearEnd(), r = TX.yearEnd(x), b = r.best;
+    const n0 = TX.yearEnd(Object.assign(TX.caseYearEnd(), { rent: 0 }));
+    const get = (k) => b.credits.find((c) => c.key === k);
+    const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+    set("note-dec", won(r.decided)); set("note-dec2", won(r.decided)); set("note-total", won(r.total));
+    set("note-refund", won(r.refund)); set("note-refund2", won(r.refund));
+    set("note-base", won(b.base)); set("note-calc", won(b.calc.tax));
+    set("note-ec", won(get("earned").used)); set("note-rent", won(get("rent").used)); set("note-pen", won(get("pension").used));
+    set("note-pre", won(r.prepaid + r.prepaidLocal)); set("note-eff", TB.pct(r.effective, 2));
+    set("note-norent", won(n0.refund)); set("note-diff", won(r.refund - n0.refund));
+  })();
+});
+</script>
+</body>
+</html>
