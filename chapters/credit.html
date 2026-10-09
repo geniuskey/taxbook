@@ -335,7 +335,7 @@
 
     <p>다온은 이미 바닥 가까이에 있다. 여기서 공제를 더 늘리면 세금이 0원 아래로 내려가는 것이 아니라, 늘린 공제가 그냥 사라진다. IRP를 더 넣을지는 공제의 크기만이 아니라 묶이는 기간과 비상금을 함께 보고 정할 일이라 <a href="pension.html">10장</a>에서 따로 판단한다. 이 장에서 확인할 것은 하나다. 결정세액이 0원에 닿은 뒤의 세액공제는 0원의 값이다.</p>
 
-    <div class="callout check" style="display:block;cursor:auto;font-size:16px;color:var(--text)">
+    <div class="callout check">
       <strong>세액공제 서류, 제출 전에 직접 확인할 것</strong>
       <ul>
         <li><b>월세</b>: 임대차계약서의 주소와 주민등록등본 주소가 같은지, 계약 기간에 낸 월세 이체 내역이 있는지. 계약서상 면적·주택 유형이 요건에 맞는지.</li>
@@ -440,8 +440,6 @@ TX.ready(function (D) {
   const pctS = (r) => TB.pct(r, 1).replace(/\.0%$/, "%");
   const C = TX.CASE, GROSS = (C.monthly - C.mealMonthly) * 12;
   const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
-  const refill = () => TX.fill(document);
-  if (document.readyState === "complete") setTimeout(refill, 50); else window.addEventListener("load", () => setTimeout(refill, 50));
 
   /* 표·본문 숫자 */
   (function () {

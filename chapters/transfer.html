@@ -481,7 +481,7 @@ TX.ready(function (D) {
       });
       // 아래: 세금 기둥
       const top = Math.max(c.wait.total, c.plan.total) * 1.2 || 1e7;
-      TB.bars(ctx, { x: 58, y: 84, w: w - 76, h: h - 84 - 30 }, {
+      TB.bars(ctx, { x: 58, y: 84, w: w - 76, h: h - 84 - 40 }, {
         labels: ["기다리기", "나눠 주기"], y: [0, top], yFmt: TB.wonAxis, gap: 0.45,
         stacks: [{ label: "상속세", color: P.bad, data: [c.wait.inh, c.plan.inh] }, { label: "증여세", color: P.warn, data: [0, c.plan.gift] }],
         valueFmt: (v) => TB.wonAxis(v),

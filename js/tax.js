@@ -537,7 +537,7 @@
   /**
    * 상속세. {estate(상속재산 총액, 사전증여 제외), debts(채무), funeral(장례비), priorGifts(합산 대상 사전증여), priorGiftTax,
    *   spouse(배우자가 실제 받는 금액, 없으면 null), spouseShare(배우자 법정상속분 비율), children, minors:[나이...], elderly, financial(순금융재산),
-   *   cohabitHouse(동거주택 가액, 요건 충족 시), filed}
+   *   cohabitHouse(동거주택 가액, 요건 충족 시), priorGiftDeduction(사전증여 때 받은 증여재산공제), filed}
    */
   TX.inheritTax = function (h) {
     const I = D.inherit;
@@ -555,8 +555,9 @@
     const fin = (function (f) { const F = I.financial; if (!f) return 0; if (f <= F.fullUpTo) return f; return Math.min(F.max, Math.max(F.fullUpTo, f * F.rate)); })(h.financial || 0);
     const house = Math.min(I.cohabit.max, (h.cohabitHouse || 0) * I.cohabit.rate);
     let deduction = personal + spouse + fin + house;
-    // 상속공제 종합한도: 과세가액에서 사전증여(상속인)를 뺀 금액
-    const cap = Math.max(0, taxable - (h.priorGifts || 0));
+    // 상속공제 종합한도: 과세가액이 기준(5억)을 넘으면 사전증여가산액에서 그때 받은 증여재산공제를 뺀 금액만큼 줄어든다
+    const priorNet = Math.max(0, (h.priorGifts || 0) - (h.priorGiftDeduction || 0));
+    const cap = Math.max(0, taxable - (taxable > I.capPriorMinTaxable ? priorNet : 0));
     deduction = Math.min(deduction, cap);
     const base = Math.max(0, taxable - deduction);
     const calc = TX.transferTax(base);

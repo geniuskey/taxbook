@@ -542,7 +542,8 @@
     "filingCredit": 0.03,
     "minBase": 500000,
     "giftFilingMonths": 3,
-    "inheritFilingMonths": 6
+    "inheritFilingMonths": 6,
+    "splitMin": 10000000
   },
   "gift": {
     "deduction": {
@@ -557,7 +558,11 @@
     "windowYears": 10,
     "skipRate": 0.3,
     "skipRateMinor": 0.4,
-    "skipMinorOver": 2000000000
+    "skipMinorOver": 2000000000,
+    "marriageWindow": 2,
+    "loanRate": 0.046,
+    "loanBenefitMin": 10000000,
+    "_loanStatus": "적정이자율 4.6%(상증법 시행규칙 제10조의5)와 이익 1천만원 기준(시행령 제31조의4)은 대체로 확인"
   },
   "inherit": {
     "basic": 200000000,
@@ -588,7 +593,9 @@
     },
     "priorHeirYears": 10,
     "priorOtherYears": 5,
-    "installmentYears": 10
+    "installmentYears": 10,
+    "installmentMin": 20000000,
+    "capPriorMinTaxable": 500000000
   },
   "acqGift": {
     "rate": 0.035,
@@ -787,6 +794,10 @@
     "amend": {
       "law": "국세기본법 제45조의2",
       "url": "https://www.law.go.kr/법령/국세기본법/제45조의2"
+    },
+    "gift.loan": {
+      "law": "상속세 및 증여세법 제41조의4, 시행령 제31조의4, 시행규칙 제10조의5",
+      "url": "https://www.law.go.kr/법령/상속세및증여세법/제41조의4"
     }
   },
   "penalty": {
