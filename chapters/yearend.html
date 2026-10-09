@@ -177,7 +177,7 @@
           </fieldset>
           <fieldset><legend>보험료·의료비·교육비·기부금</legend>
             <label>보장성 보험료<input type="number" class="num-in" id="c-ins" min="0" step="any" inputmode="decimal"></label>
-            <label>의료비: 본인·65세 이상·장애인·6세 이하<input type="number" class="num-in" id="c-medSelf" min="0" step="any" inputmode="decimal"></label>
+            <label>의료비: 본인·<span data-t="credits.medical.elderlyAge" data-f="num"></span>세 이상·장애인·<span data-t="credits.medical.childAgeMax" data-f="num"></span>세 이하<input type="number" class="num-in" id="c-medSelf" min="0" step="any" inputmode="decimal"></label>
             <label>의료비: 그 밖의 부양가족<input type="number" class="num-in" id="c-medOther" min="0" step="any" inputmode="decimal"></label>
             <label>교육비: 본인<input type="number" class="num-in" id="c-eduSelf" min="0" step="any" inputmode="decimal"></label>
             <label>교육비: 취학 전·초중고(합계)<input type="number" class="num-in" id="c-eduKid" min="0" step="any" inputmode="decimal"></label>

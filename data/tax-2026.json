@@ -108,7 +108,8 @@
       "mealMonthly": 200000,
       "carMonthly": 200000,
       "childcareMonthly": 200000,
-      "_note": "출산·보육수당은 2026년부터 6세 이하 자녀 1인당 월 20만원."
+      "_note": "출산·보육수당은 2026년부터 6세 이하 자녀 1인당 월 20만원.",
+      "childcareAgeMax": 6
     }
   },
   "personal": {
@@ -265,7 +266,9 @@
       "two": 45830,
       "extraPerChild": 33330,
       "since": "2026-03-01"
-    }
+    },
+    "childAgeMin": 8,
+    "childAgeMax": 20
   },
   "card": {
     "threshold": 0.25,
@@ -315,7 +318,8 @@
         "short10y": 6000000,
         "either15y": 18000000,
         "none15y": 8000000
-      }
+      },
+      "priceMax": 600000000
     }
   },
   "credits": {
@@ -341,7 +345,9 @@
       "rate": 0.15,
       "otherLimit": 7000000,
       "infertilityRate": 0.3,
-      "prematureRate": 0.2
+      "prematureRate": 0.2,
+      "childAgeMax": 6,
+      "elderlyAge": 65
     },
     "education": {
       "rate": 0.15,
@@ -383,7 +389,8 @@
     "bookkeepingCreditRate": 0.2,
     "bookkeepingCreditLimit": 1000000,
     "noBooksPenalty": 0.2,
-    "_status": "단순경비율 64.1%(940909 기타자영업)는 2차 자료로만 확인. 2026년 귀속 경비율은 2027년 고시."
+    "_status": "단순경비율 64.1%(940909 기타자영업)는 2차 자료로만 확인. 2026년 귀속 경비율은 2027년 고시.",
+    "noBooksExemptPrev": 48000000
   },
   "other": {
     "expenseRate": 0.6,
@@ -772,6 +779,14 @@
     "penalty": {
       "law": "국세기본법 제47조의2~제47조의4",
       "url": "https://www.law.go.kr/법령/국세기본법/제47조의2"
+    },
+    "foreignAccount": {
+      "law": "국제조세조정에 관한 법률 제52조~제57조",
+      "url": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?cntntsId=7819&mi=2513"
+    },
+    "amend": {
+      "law": "국세기본법 제45조의2",
+      "url": "https://www.law.go.kr/법령/국세기본법/제45조의2"
     }
   },
   "penalty": {
@@ -788,6 +803,11 @@
     "incomeFiling": "5월 1일~5월 31일",
     "giftFiling": "증여일이 속한 달의 말일부터 3개월",
     "inheritFiling": "상속개시일이 속한 달의 말일부터 6개월",
-    "foreignAccount": "6월"
+    "foreignAccount": "6월",
+    "amendYears": 5
+  },
+  "foreignAccount": {
+    "threshold": 500000000,
+    "_note": "매월 말일 중 하루라도 해외금융계좌(해외 가상자산 계좌 포함) 잔액 합계가 이 금액을 넘으면 다음 해 6월 신고"
   }
 }

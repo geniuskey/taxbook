@@ -184,7 +184,7 @@
     <h2>의료비: 총급여 문턱</h2>
     <p>의료비 세액공제는 아파서 쓴 돈을 모두 돌려주는 제도가 아니다. 총급여의 <span data-t="credits.medical.threshold" data-f="pct"></span>까지는 누구나 쓰는 보통 수준의 의료비로 보고 공제하지 않는다. 그 문턱을 넘은 몫에만 <span data-t="credits.medical.rate" data-f="pct"></span>를 곱한다. 대상은 두 묶음으로 나뉜다.</p>
     <ul>
-      <li><b>한도가 없는 대상</b>: 본인, 6세 이하, 65세 이상, 장애인을 위해 쓴 의료비.</li>
+      <li><b>한도가 없는 대상</b>: 본인, <span data-t="credits.medical.childAgeMax" data-f="num"></span>세 이하, <span data-t="credits.medical.elderlyAge" data-f="num"></span>세 이상, 장애인을 위해 쓴 의료비.</li>
       <li><b>그 밖의 부양가족</b>: 연 <span data-t="credits.medical.otherLimit"></span>까지만 공제 대상이 된다.</li>
     </ul>
     <p>문턱은 한도가 있는 일반 의료비에서 먼저 뺀다. 그래야 한도 없는 의료비가 더 많이 살아남는다. 난임시술비는 <span data-t="credits.medical.infertilityRate" data-f="pct"></span>, 미숙아·선천성이상아 의료비는 <span data-t="credits.medical.prematureRate" data-f="pct"></span>로 공제율이 높다. 의료비는 기본공제 대상자의 나이·소득 요건을 따지지 않고 부양하는 가족을 위해 쓴 돈이면 넣을 수 있다는 점도 다른 공제와 다르다.</p>
@@ -202,7 +202,7 @@
         <div class="sim-view"><canvas id="med-cv"></canvas><span class="hint">의료비 막대 끝의 손잡이를 끈다</span></div>
         <div class="sim-controls">
           <label class="ctrl"><span>총급여 <output id="med-g-out"></output></span><input type="range" id="med-g" min="2000" max="15000" step="100" value="5000"></label>
-          <div class="seg" id="med-w"><button data-value="self" class="on">본인·65세 이상 등</button><button data-value="other">그 밖의 부양가족</button></div>
+          <div class="seg" id="med-w"><button data-value="self" class="on">본인·<span data-t="credits.medical.elderlyAge" data-f="num"></span>세 이상 등</button><button data-value="other">그 밖의 부양가족</button></div>
         </div>
       </div>
       <div class="sim-readout">
