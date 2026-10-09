@@ -103,7 +103,7 @@
       <table>
         <thead><tr><th>항목</th><th>무엇이 → 무엇으로</th><th>적용 시점</th><th>이 책에서</th><th>JSON 키</th></tr></thead>
         <tbody>
-          <tr><td>자녀세액공제 대상 연령</td><td><span data-p="childAgeMin"></span>세 이상 → <b><span data-t="credits.child.ageMin" data-f="num"></span>세 이상</b>. 2030년까지 해마다 올려 13세 이상(금액은 그대로)</td><td>2026년 과세기간분(법률 제21548호, 2026.4.21)</td><td><a href="credit.html">5장</a>, <a href="yearend.html">6장</a>, 아래 <a href="#sim-age">연령 시뮬레이터</a></td><td><code>credits.child.ageMin</code></td></tr>
+          <tr><td>자녀세액공제 대상 연령</td><td><span data-p="childAgeMin"></span>세 이상 → <b><span data-t="credits.child.ageMin" data-f="num"></span>세 이상</b>. 2027년 10세, 2028년 11세, 2029년 12세를 거쳐 2030년부터 <span data-t="credits.child.ageBase" data-f="num"></span>세 이상(금액은 그대로, <span data-t="credits.child.agePlanExcludeBirthYear" data-f="raw"></span>년생은 단계 연령 제외)</td><td>2026년 과세기간분(법률 제21548호, 2026.4.21)</td><td><a href="credit.html">5장</a>, <a href="yearend.html">6장</a>, 아래 <a href="#sim-age">연령 시뮬레이터</a></td><td><code>credits.child.ageMin</code>, <code>agePlan</code></td></tr>
           <tr><td>신용카드 등 기본공제 한도</td><td>자녀 가산 없음 → 총급여 <span data-t="card.limits.0.upTo"></span> 이하 자녀 1명당 <span data-t="card.limits.0.perChild" data-f="man"></span>(최대 <span data-t="card.limits.0.childMax" data-f="man"></span>), 초과 1명당 <span data-t="card.limits.1.perChild" data-f="man"></span>(최대 <span data-t="card.limits.1.childMax" data-f="man"></span>) 가산. 공제 일몰 <span data-t="card.sunset" data-f="raw"></span>년 말로 연장</td><td>2026년 사용분</td><td><a href="deduction.html">4장</a>, 아래 <a href="#sim-cmp">비교기</a></td><td><code>card.limits.*.perChild</code>, <code>childMax</code>, <code>card.sunset</code></td></tr>
           <tr><td>수영장·체력단련장 이용료</td><td>2025년 7월부터 문화체육 사용분(공제율 <span data-t="card.rates.culture"></span>) → 2026년에는 한 해 전체 적용</td><td>2025.7.1 시행, 2026년 첫 전체 연도</td><td><a href="deduction.html">4장</a></td><td><code>card.rates.culture</code>, <code>card.cultureGrossMax</code></td></tr>
           <tr><td>출산·보육수당 비과세</td><td>근로자 1인당 월 20만원 → 6세 이하 자녀 1인당 월 <span data-t="wage.nontax.childcareMonthly" data-f="man"></span></td><td>2026.1.1 지급분</td><td><a href="taxbase.html">3장</a></td><td><code>wage.nontax.childcareMonthly</code></td></tr>
@@ -202,7 +202,7 @@
 
   <section id="childage">
     <h2>자녀세액공제 연령, 해마다 한 살씩</h2>
-    <p>이번 개정에서 가장 오래 영향을 주는 것은 자녀세액공제 대상 연령이다. 아동수당 지급 연령이 8세 미만에서 13세 미만으로 단계적으로 넓어지는 데 맞춰, 수당을 받는 나이와 세액공제를 받는 나이가 겹치지 않게 공제 시작 연령을 해마다 올린다. 2026년은 <span data-t="credits.child.ageMin" data-f="num"></span>세 이상이고, 법률 부칙에 따라 2030년에는 13세 이상이 된다. 그 사이 해의 연령은 "해마다 1세씩"이라는 설명이 있지만, 이 책은 2027년(10세)·2028년(11세) 연령을 정한 부칙 문언을 원문으로 확인하지 못했다. 그래서 아래 그림에서 그 사이는 점선(확인 필요)으로 그렸다. 부칙에 2017년생에 관한 특례 문구가 있다는 것도 확인했지만 정확한 뜻은 확인 필요다.</p>
+    <p>이번 개정에서 가장 오래 영향을 주는 것은 자녀세액공제 대상 연령이다. 아동수당 지급 연령이 8세 미만에서 13세 미만으로 단계적으로 넓어지는 데 맞춰, 수당을 받는 나이와 세액공제를 받는 나이가 겹치지 않게 공제 시작 연령을 해마다 올린다. 2026년은 <span data-t="credits.child.agePlan.2026" data-f="num"></span>세 이상, 2027년 <span data-t="credits.child.agePlan.2027" data-f="num"></span>세, 2028년 <span data-t="credits.child.agePlan.2028" data-f="num"></span>세, 2029년 <span data-t="credits.child.agePlan.2029" data-f="num"></span>세 이상이고, 그 뒤로는 법 본문의 <span data-t="credits.child.ageBase" data-f="num"></span>세 이상이 된다(법률 제21548호 부칙 제2조 제2항). 단 <span data-t="credits.child.agePlanExcludeBirthYear" data-f="raw"></span>년생 자녀에게는 이 단계 연령을 적용하지 않고 처음부터 본문 연령을 쓴다(같은 조 제3항). 국가법령정보센터의 부칙 원문으로 확인했다.</p>
     <p>슬라이더로 자녀의 출생연도를 바꿔 본다. 한 아이가 몇 해 동안 자녀세액공제를 받는지가 개정 전후로 어떻게 달라지는지 보인다.</p>
 
     <div class="sim" id="sim-age">
@@ -219,7 +219,7 @@
         <div class="stat"><span class="k">줄어든 해</span><span class="v" id="age-o-d">—</span></div>
         <div class="stat"><span class="k">첫째 한 명 기준 공제액 차이</span><span class="v" id="age-o-w">—</span></div>
       </div>
-      <div class="sim-note">해볼 것: ① 2018년생을 고른다. 2026년에 8세라 올해는 공제를 받지 못하고, 다음 해들도 대상 연령이 함께 올라가 몇 해를 잃는다. ② 2022년생 이후를 고른다. 2030년 이후에 공제 연령에 닿으므로 13세부터 받는다. 개정 전보다 줄어든 해 수가 가장 크다. ③ 2012년생 이전을 고른다. 이미 대상 연령을 넘어 개정의 영향이 없다. (모델의 가정: 나이는 그 해 연도 − 출생연도, 공제 대상 상한은 기본공제 자녀 나이 <span data-t="personal.childAgeMax" data-f="num"></span>세. 2027~2029년의 연령은 "해마다 1세씩" 설명에 따른 추정이며 확인 필요. 2017년생 특례는 반영하지 않았다. 공제액은 자녀 한 명일 때 금액(<span data-t="credits.child.one" data-f="man"></span>)으로 계산했고, 자녀가 둘 이상이면 금액이 달라진다. 2030년 이후의 법 개정은 알 수 없다.)</div>
+      <div class="sim-note">해볼 것: ① 2018년생을 고른다. 2026년에 8세라 올해는 공제를 받지 못하고, 다음 해들도 대상 연령이 함께 올라가 몇 해를 잃는다. ② 2022년생 이후를 고른다. 2030년 이후에 공제 연령에 닿으므로 13세부터 받는다. 개정 전보다 줄어든 해 수가 가장 크다. ③ 2012년생 이전을 고른다. 이미 대상 연령을 넘어 개정의 영향이 없다. (모델의 가정: 나이는 그 해 연도 − 출생연도, 공제 대상 상한은 기본공제 자녀 나이 <span data-t="personal.childAgeMax" data-f="num"></span>세. 연도별 연령과 2017년생 특례는 부칙 원문대로 반영했다. 공제액은 자녀 한 명일 때 금액(<span data-t="credits.child.one" data-f="man"></span>)으로 계산했고, 자녀가 둘 이상이면 금액이 달라진다. 2030년 이후의 법 개정은 알 수 없다.)</div>
     </div>
 
     <p>막대 둘의 길이 차이가 개정으로 줄어든 공제 연수다. 대신 그 몇 해 동안에는 아동수당이 이어진다. 세금만 보면 손해지만 가계 전체로 보면 현금 지원과 세액공제의 자리를 바꾼 것에 가깝다. 아동수당 금액과 지급 연령의 세부는 이 책의 범위 밖이라 계산에 넣지 않았다.</p>
@@ -409,15 +409,15 @@ TX.ready(function (D) {
     tx: { kospi: 0.0015, kosdaq: 0.0015, konex: 0.001 },  // 증권거래세+농특세 합계(코스피 0%+0.15%, 코스닥 0.15%)
     lifetimeAnnuity: 0.04,          // 종신형 사적연금 연금소득세
   };
-  // 자녀세액공제 대상 연령표(법률 제21548호 부칙). 2026년은 세법 수치 파일 값, 2030년 13세는 SOURCES.md, 그 사이는 확인 필요.
-  const AGE_PLAN = [
-    { y: 2026, age: D.credits.child.ageMin, ok: true },
-    { y: 2027, age: D.credits.child.ageMin + 1, ok: false },
-    { y: 2028, age: D.credits.child.ageMin + 2, ok: false },
-    { y: 2029, age: D.credits.child.ageMin + 3, ok: false },
-    { y: 2030, age: 13, ok: true },
-  ];
-  const ageMinIn = (y) => { if (y < 2026) return PREV.childAgeMin; const r = AGE_PLAN.find((a) => a.y === y); return r ? r.age : AGE_PLAN[AGE_PLAN.length - 1].age; };
+  // 자녀세액공제 대상 연령표(법률 제21548호 부칙 제2조): 세법 수치 파일의 agePlan, 그 뒤는 본문 연령(ageBase)
+  const CH = D.credits.child, PLAN = CH.agePlan || {};
+  const AGE_PLAN = Object.keys(PLAN).map((y) => ({ y: +y, age: PLAN[y], ok: true })).concat([{ y: Math.max(...Object.keys(PLAN).map(Number)) + 1, age: CH.ageBase, ok: true }]);
+  // 부칙 제2조 제3항: 정해진 출생연도의 자녀에게는 단계 연령 대신 본문 연령을 쓴다
+  const ageMinIn = (y, birth) => {
+    if (y < 2026) return PREV.childAgeMin;
+    if (PLAN[y] != null) return birth != null && birth === CH.agePlanExcludeBirthYear ? CH.ageBase : PLAN[y];
+    return CH.ageBase;
+  };
   // 개정 시간표(SOURCES.md 기준 공포·발표일)
   const EVENTS = [
     { d: "2025-12-02", t: "국회 본회의 통과(2025 세법개정)", k: "law" },
@@ -536,7 +536,7 @@ TX.ready(function (D) {
       for (let y = Y0; y <= Y1; y++) {
         const a = y - b;
         if (a >= PREV.childAgeMin && a <= MAXAGE) prev.push(y);
-        if (y < 2026 ? a >= PREV.childAgeMin && a <= MAXAGE : a >= ageMinIn(y) && a <= MAXAGE) now.push(y);
+        if (y < 2026 ? a >= PREV.childAgeMin && a <= MAXAGE : a >= ageMinIn(y, b) && a <= MAXAGE) now.push(y);
       }
       return { prev, now };
     }
@@ -555,7 +555,7 @@ TX.ready(function (D) {
         ctx.beginPath(); ctx.moveTo(X(y), YA(a)); ctx.lineTo(X(y + 1), YA(a)); ctx.stroke(); ctx.setLineDash([]);
         if (y >= 2026 && y <= 2030) T(ctx, a + "", X(y) + cw / 2, YA(a) - 6, { size: 10, color: ok ? P.accent : P.warn, align: "center", mono: true, weight: 700 });
       }
-      T(ctx, "공제 시작 연령(점선 구간은 확인 필요)", bx, top + 2, { size: 11, color: P.dim });
+      T(ctx, "공제 시작 연령(법률 제21548호 부칙)", bx, top + 2, { size: 11, color: P.dim });
       // 아래: 이 아이가 공제받는 해
       const ry = top + th + 34, rh = 18;
       [["개정 전 규칙", r.prev, P.faint], ["개정 후", r.now, P.ok]].forEach(([name, list, col], i) => {

@@ -126,7 +126,7 @@
     <h2>경비: 경비율로 할까, 장부를 쓸까</h2>
     <p>사업소득은 번 돈(<span class="term">수입금액</span>) 전부가 아니라 비용을 뺀 <span class="term">소득금액</span>에 세금을 매긴다. 비용을 계산하는 방법은 장부가 있느냐로 나뉜다.</p>
     <ul>
-      <li><b>추계(장부 없이)</b>: 국세청이 업종별로 정한 경비율로 비용을 추정한다. 직전 연도 수입금액이 작은 사업자는 <span class="term">단순경비율</span><span class="en">(Simple expense rate)</span>을 쓴다. 수입금액 × 단순경비율이 비용이 된다. 인적용역 사업자는 직전 연도 수입금액 <span data-t="business.simpleThresholdServices"></span> 미만이 기준이다(신규 사업자는 따로 정한 기준). 그보다 크면 <span class="term">기준경비율</span>을 쓰는데, 이때는 임차료·인건비 같은 주요 경비를 증빙으로 따로 빼고 나머지에만 낮은 경비율을 적용하므로 단순경비율보다 훨씬 불리하다.</li>
+      <li><b>추계(장부 없이)</b>: 국세청이 업종별로 정한 경비율로 비용을 추정한다. 직전 연도 수입금액이 작은 사업자는 <span class="term">단순경비율</span><span class="en">(Simple expense rate)</span>을 쓴다. 수입금액 × 단순경비율이 비용이 된다. 인적용역 사업자는 수입금액 <span data-t="business.simpleRateOverFrom"></span>까지는 기본율, 넘는 부분은 더 낮은 초과율을 쓴다(<a data-src="business.rateNotice"></a> 제4조). 인적용역 사업자는 직전 연도 수입금액 <span data-t="business.simpleThresholdServices"></span> 미만이 기준이다(신규 사업자는 따로 정한 기준). 그보다 크면 <span class="term">기준경비율</span>을 쓰는데, 이때는 임차료·인건비 같은 주요 경비를 증빙으로 따로 빼고 나머지에만 낮은 경비율을 적용하므로 단순경비율보다 훨씬 불리하다.</li>
       <li><b>간편장부</b>: 수입과 비용을 날짜별로 적는 가계부 같은 장부. 실제 비용을 증빙(세금계산서, 카드 영수증)과 함께 뺀다. 수입이 업종별 기준 금액 미만인 사업자가 쓸 수 있다.</li>
       <li><b>복식부기</b>: 회계 원리에 따라 재무제표를 만드는 장부. 간편장부를 써도 되는 사업자가 복식부기로 신고하면 <span class="term">기장세액공제</span>로 사업소득에 해당하는 산출세액의 <span data-t="business.bookkeepingCreditRate" data-f="pct"></span>(한도 <span data-t="business.bookkeepingCreditLimit"></span>)를 빼 준다.</li>
     </ul>
@@ -155,7 +155,7 @@
 
     <div class="callout pro">
       <strong>실무 노트: 프리랜서 5월 신고에서 흔한 실수</strong>
-      ① <b>업종 코드</b>: 홈택스 안내문에 찍힌 업종 코드가 실제 일과 다르면 경비율이 달라진다. 일러스트·디자인 외주를 "기타자영업"으로 둘지 다른 인적용역 코드로 둘지에 따라 경비율이 다르니, 지급명세서의 코드와 실제 활동을 맞춰 본다. ② <b>근로소득 누락</b>: 직장인이 부업만 신고하고 근로소득을 빠뜨리는 경우. 홈택스는 연말정산 자료를 불러오지만, 직접 작성하다 근로소득을 지우면 세율이 낮게 계산되어 나중에 과소신고로 고쳐진다. ③ <b>공제 이중 적용</b>: 연말정산에서 받은 인적공제·카드공제를 사업소득 쪽에서 또 넣는 경우. 공제는 사람당 한 번이다. ④ <b>가공 경비</b>: 쓰지 않은 비용을 장부에 넣는 것은 절세가 아니라 탈세이고, 부정행위로 보면 과소신고 가산세가 일반보다 크게 무거워진다. ⑤ <b>지방소득세</b>: 종합소득세만 내고 지방소득세 신고를 빠뜨리는 경우(아래 5월 신고 절).
+      ① <b>업종 코드</b>: 홈택스 안내문에 찍힌 업종 코드가 실제 일과 다르면 경비율이 달라진다. 같은 프리랜서라도 화가 및 관련예술가(<span data-t="business.simpleRateCode"></span>), 작가, 컴퓨터프로그래머 등 인적용역 코드마다 경비율이 다르니, 지급명세서의 코드와 실제 활동을 맞춰 본다. ② <b>근로소득 누락</b>: 직장인이 부업만 신고하고 근로소득을 빠뜨리는 경우. 홈택스는 연말정산 자료를 불러오지만, 직접 작성하다 근로소득을 지우면 세율이 낮게 계산되어 나중에 과소신고로 고쳐진다. ③ <b>공제 이중 적용</b>: 연말정산에서 받은 인적공제·카드공제를 사업소득 쪽에서 또 넣는 경우. 공제는 사람당 한 번이다. ④ <b>가공 경비</b>: 쓰지 않은 비용을 장부에 넣는 것은 절세가 아니라 탈세이고, 부정행위로 보면 과소신고 가산세가 일반보다 크게 무거워진다. ⑤ <b>지방소득세</b>: 종합소득세만 내고 지방소득세 신고를 빠뜨리는 경우(아래 5월 신고 절).
     </div>
   </section>
 
@@ -292,7 +292,7 @@
 
     <div class="callout warn">
       <strong>세법은 해마다 바뀐다</strong>
-      이 장의 원천징수율, 경비율, 기장세액공제와 가산세 비율은 <span data-t="label"></span>이다. 특히 단순경비율과 기준경비율은 업종마다 해마다 고시로 바뀌며, 이 장의 <span data-t="business.simpleRateIllustration" data-f="pct1"></span>은 예시로 쓴 값이다(<span data-t="business._status"></span>). 인적용역 원천징수 3%→2% 인하안은 국회를 통과하지 않은 <b>확정 전</b> 안이라 계산에 넣지 않았다. 이 장의 계산은 교육용 모델의 결과이며 실제 신고 전에는 홈택스 신고 화면의 계산을 확인한다.
+      이 장의 원천징수율, 경비율, 기장세액공제와 가산세 비율은 <span data-t="label"></span>이다. 특히 단순경비율과 기준경비율은 업종마다 해마다 고시로 바뀌며, 이 장의 단순경비율 <span data-t="business.simpleRateIllustration" data-f="pct1"></span>(수입금액 <span data-t="business.simpleRateOverFrom"></span> 초과분은 <span data-t="business.simpleRateOver" data-f="pct1"></span>)은 <span data-t="business.rateNotice"></span>의 <span data-t="business.simpleRateName"></span> 값이다. <span data-t="year"></span>년 귀속 경비율은 다음 해 봄에 고시된다. 인적용역 원천징수 3%→2% 인하안은 국회를 통과하지 않은 <b>확정 전</b> 안이라 계산에 넣지 않았다. 이 장의 계산은 교육용 모델의 결과이며 실제 신고 전에는 홈택스 신고 화면의 계산을 확인한다.
     </div>
   </section>
 
@@ -421,7 +421,7 @@ TX.ready(function (D) {
     const wh = (biz ? biz.withheld + biz.withheldLocal : 0) + (oth && !oth.separate ? oth.withheld + oth.withheldLocal : 0);
     return { c, extra, may: c.due + c.dueLocal, wh };
   }
-  const simpleBiz = (rev) => TX.business({ revenue: rev, rate: SIMPLE });
+  const simpleBiz = (rev) => TX.business({ revenue: rev, rate: SIMPLE, overRate: B.simpleRateOver, overFrom: B.simpleRateOverFrom });
 
   /* ---------------------------------------------------------- 1. 소득 구분 */
   (function () {

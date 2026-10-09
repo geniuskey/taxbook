@@ -41,6 +41,12 @@ eq("신용카드 공제", TX.cardDeduction({ credit: 2.25e7 }, 5e7).deduction, 1
 eq("신용카드 한도", TX.cardDeduction({ credit: 1e8 }, 5e7).deduction, D.card.limits[0].base);
 // 10. 월세: 총급여 5,000만, 연 780만 → 17% 132.6만
 eq("월세 세액공제", TX.rentCredit(7.8e6, 5e7).credit, 7.8e6 * D.credits.rent.rateLow);
+// 10-1. 간이세액표(별표 2): 표에 있는 값 그대로. 월 416만 6,667원·1명, 월 601만원·4명·자녀 2명(차감 45,830원), 1,200만원·2명(초과 산식)
+if (D.simplified && D.simplified.table) {
+  eq("간이세액표 다온", TX.payroll({ monthly: 4166667, family: 1 }).tax, 217320, 0);
+  eq("간이세액표 자녀 차감", TX.payroll({ monthly: 6010000, family: 4, kids: 2 }).tax, 331140, 0);
+  eq("간이세액표 1천만 초과", TX.payroll({ monthly: 12000000, family: 2 }).tax, 2142570, 0);
+}
 // 11. 연말정산이 끝까지 돌고, 결정세액이 음수가 아니다
 const ye = TX.yearEnd(TX.caseYearEnd());
 n++; if (!(ye.decided >= 0 && isFinite(ye.refund))) { bad++; console.log("  실패 연말정산 케이스", ye.decided, ye.refund); }

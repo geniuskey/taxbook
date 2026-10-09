@@ -71,7 +71,7 @@ with sync_playwright() as pw:
             r = page.evaluate(POKE)
             if shots:
                 page.screenshot(path=str(shots / f"{name}-{tag}.png"), full_page=True)
-            errs = [e for e in errs if "net::ERR" not in e and "Failed to load resource" not in e]
+            errs = [e for e in errs if "net::ERR" not in e and "Failed to load resource" not in e and "cloudflareinsights.com" not in e]  # 로컬 서버에서 분석 비콘의 CORS 거부는 무시
             probs = errs[:8]
             if r["overflow"] > 1: probs.append(f"가로 넘침 {r['overflow']}px: {r['wide']}")
             if r["blank"]: probs.append(f"그려지지 않은 캔버스: {r['blank']}")

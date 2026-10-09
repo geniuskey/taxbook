@@ -423,7 +423,7 @@ TX.ready(function (D) {
   document.querySelectorAll("[data-x]").forEach((el) => { const v = X[el.getAttribute("data-x")]; el.textContent = v == null ? "확인 필요" : v; el.classList.add("tval"); });
 
   /* ---------------------------------------------------------- 다온의 한 해: 연말정산과 5월 신고 */
-  const biz = TX.business({ revenue: C.side.revenue, rate: D.business.simpleRateIllustration });
+  const biz = TX.business({ revenue: C.side.revenue, rate: D.business.simpleRateIllustration, overRate: D.business.simpleRateOver, overFrom: D.business.simpleRateOverFrom });
   const oth = TX.otherIncome(C.lecture);
   function daon(paid) {
     const saving = Math.min(paid, Pn.savingLimit), irp = Math.max(0, paid - Pn.savingLimit);

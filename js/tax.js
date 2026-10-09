@@ -192,8 +192,9 @@
     return { pension, health, care, employ, total: pension + health + care + employ };
   };
   /**
-   * 월급명세서: 매달 원천징수(간이세액표를 만든 산식의 교육용 재현).
-   * {monthly(세전 월급), nontax(월 비과세), family(본인 포함 공제대상가족 수), kids(8~20세 자녀 수), ratio(0.8|1|1.2)}
+   * 월급명세서: 매달 원천징수. 그 해 파일에 간이세액표(simplified.table)가 있으면 표에서 찾고, 없으면 표를 만든 산식으로 근사한다.
+   * {monthly(세전 월급), nontax(월 비과세), family(본인 포함 공제대상가족 수), kids(간이세액표 자녀 차감 대상 자녀 수), ratio(0.8|1|1.2)}
+   * 반환 source: "table"(별표 값) | "formula"(산식 근사). steps는 산식 쪽 계산 단계(2장의 설명용)
    */
   TX.payroll = function (o) {
     const S = D.simplified;
@@ -215,13 +216,31 @@
     const calc = TX.incomeTax(base).tax;
     const ec = TX.earnedCredit(calc, gross).credit;
     const yearly = Math.max(0, calc - ec);
-    let tax = trunc10(yearly / 12);
+    const formulaTax = trunc10(yearly / 12);
+    const tableTax = TX.simplifiedTable(taxable, fam);
+    let tax = tableTax != null ? tableTax : formulaTax;
     const kids = o.kids || 0, CM = S.childMonthly;
     if (kids) tax = Math.max(0, tax - (kids === 1 ? CM.one : CM.two + (kids - 2) * CM.extraPerChild));
     tax = trunc10(tax * (o.ratio || 1));
     const local = trunc10(tax * D.income.localRate);
     const take = monthly - ins.total - tax - local;
-    return { monthly, nontax, taxable, ins, tax, local, take, yearly: tax * 12, steps: { gross, earned, personal, pensionDed, special, base, calc, ec } };
+    return { monthly, nontax, taxable, ins, tax, local, take, yearly: tax * 12, source: tableTax != null ? "table" : "formula", formulaTax, tableTax, steps: { gross, earned, personal, pensionDed, special, base, calc, ec } };
+  };
+  /** 간이세액표 찾기(자녀 차감·비율 적용 전). taxable: 비과세 제외 월급여(원), fam: 공제대상가족 수. 표가 없으면 null */
+  TX.simplifiedTable = function (taxable, fam) {
+    const T = D.simplified && D.simplified.table;
+    if (!T || !T.rows || !T.rows.length) return null;
+    const k = Math.max(1, Math.round(fam || 1));
+    const col = (row, n) => row[2 + n - 1];
+    const pick = (row) => (k <= 11 ? col(row, k) : Math.max(0, col(row, 11) - (col(row, 10) - col(row, 11)) * (k - 11)));
+    const m = taxable / 1000;                               // 천원
+    const first = T.rows[0], last = T.rows[T.rows.length - 1];
+    if (m < first[0]) return 0;
+    if (m < last[1]) { const row = T.rows.find((r) => m >= r[0] && m < r[1]); return row ? pick(row) : null; }
+    const base10 = pick([0, 0].concat(T.at10000));
+    if (m <= last[1]) return base10;
+    const o = T.over.find((x) => x[0] == null || m <= x[0]);
+    return Math.floor((base10 + o[1] + (m - o[2]) * 1000 * o[4] * o[3]) / 10) * 10;
   };
 
   /**
@@ -384,9 +403,11 @@
   };
 
   /* ------------------------------------------------------------ 종합소득 */
-  /** 사업소득(장부 없이 추계). {revenue, rate(단순경비율), books:"simple"|"ledger", expenses} */
+  /** 사업소득(장부 없이 추계). {revenue, rate(단순경비율), overRate·overFrom(인적용역은 기준 금액 초과분에 낮은 초과율), books:"simple"|"ledger", expenses} */
   TX.business = function (b) {
-    const expenses = b.books === "ledger" ? b.expenses || 0 : (b.revenue || 0) * (b.rate || 0);
+    const rev = b.revenue || 0, from = b.overFrom != null ? b.overFrom : Infinity;
+    const est = Math.min(rev, from) * (b.rate || 0) + Math.max(0, rev - from) * (b.overRate != null ? b.overRate : b.rate || 0);
+    const expenses = b.books === "ledger" ? b.expenses || 0 : est;
     const income = Math.max(0, (b.revenue || 0) - expenses);
     const withheld = trunc10((b.revenue || 0) * D.business.withholding);
     return { revenue: b.revenue || 0, expenses, income, withheld, withheldLocal: trunc10(withheld * D.income.localRate) };
