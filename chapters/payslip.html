@@ -124,9 +124,9 @@
     <h2>4대보험: 세금이 아닌 공제</h2>
     <p>4대보험은 국민연금, 건강보험(장기요양보험 포함), 고용보험, 산재보험이다. 산재보험은 회사가 전액 내므로 명세서에는 셋(장기요양을 따로 적으면 넷)만 보인다. 요율은 법과 각 위원회가 해마다 정하고, 보통 회사와 근로자가 절반씩 낸다. <span data-t="label"></span> 근로자 부담 요율은 다음과 같다.</p>
     <ul>
-      <li><b>국민연금</b>: 기준소득월액의 <span data-t="social.pension" data-f="pct"></span>. 2026년 1월 연금개혁으로 회사 몫까지 합친 전체 보험료율이 9%에서 <span id="ps-ptot"></span>로 올랐다. 기준소득월액에는 하한 <span data-t="social.pensionMinBase" data-f="man"></span>과 상한 <span data-t="social.pensionMaxBase" data-f="man"></span>이 있고(1~6월 기준), 7월부터는 상한 <span data-t="social.pensionMaxBaseFromJuly" data-f="man"></span>, 하한 <span data-t="social.pensionMinBaseFromJuly" data-f="man"></span>으로 바뀐다.</li>
+      <li><b>국민연금</b>: 기준소득월액의 <span data-t="social.pension" data-f="pct"></span>. 2026년 1월 연금개혁으로 회사 몫까지 합친 전체 보험료율이 9%에서 <span id="ps-ptot"></span>로 올랐다. 신고 소득월액에서 천원 미만을 버려 기준소득월액을 정한다. 기준소득월액에는 하한 <span data-t="social.pensionMinBase" data-f="man"></span>과 상한 <span data-t="social.pensionMaxBase" data-f="man"></span>이 있고(1~6월 기준), 7월부터는 상한 <span data-t="social.pensionMaxBaseFromJuly" data-f="man"></span>, 하한 <span data-t="social.pensionMinBaseFromJuly" data-f="man"></span>으로 바뀐다.</li>
       <li><b>건강보험</b>: 보수월액의 <span id="ps-hr"></span>. 상한은 아주 높아 대부분의 직장인에게는 비례로 붙는다.</li>
-      <li><b>장기요양보험</b>: 건강보험료의 <span data-t="social.careOfHealth" data-f="pct"></span>. 건강보험료에 따라붙는다.</li>
+      <li><b>장기요양보험</b>: 건강보험료 × (0.9448% ÷ 7.19%)로 계산한다. 건강보험료 대비 약 <span data-t="social.careOfHealth" data-f="pct"></span>이고, 표시용으로 반올림한 비율을 그대로 곱하면 10원 미만 절사 경계에서 차이가 날 수 있다.</li>
       <li><b>고용보험</b>: 보수의 <span data-t="social.employment" data-f="pct"></span>(실업급여분 근로자 부담).</li>
     </ul>
     <p>이 가운데 국민연금의 <b>상한</b>이 중요하다. 기준소득월액이 상한을 넘으면 보험료는 상한에 요율을 곱한 금액에서 더 늘지 않는다. 그래서 월급이 아주 높은 사람은 소득에 비해 연금보험료 비율이 낮아진다. 연금도 그만큼만 쌓인다는 뜻이다. 아래 그래프의 손잡이를 끌어 과세 급여를 바꿔 본다.</p>
@@ -383,7 +383,7 @@ TX.ready(function (D) {
   const plus = (v) => '<span class="plus">' + TB.won(v) + "</span>";
   const set = (id, s) => { const el = document.getElementById(id); if (el) el.textContent = s; };
   const pct3 = (x) => +(x * 100).toFixed(3) + "%";
-  const trunc10 = (x) => Math.floor(Math.max(0, x) / 10) * 10;
+  const trunc10 = TX.trunc10;
   set("ps-hr", pct3(S.health)); set("ps-ptot", pct3(S.pension * 2)); set("kp-hr", pct3(S.health));
 
   /* ---------------------------------------------------------- 다온의 1월 명세서 */
@@ -449,8 +449,8 @@ TX.ready(function (D) {
     const ins = (x) => {
       const july = hG() === "b";
       const lo = july ? S.pensionMinBaseFromJuly : S.pensionMinBase, hi = july ? S.pensionMaxBaseFromJuly : S.pensionMaxBase;
-      const base = TB.clamp(x, lo, hi);
-      const pension = trunc10(base * S.pension), health = trunc10(x * S.health), care = trunc10(health * S.careOfHealth), employ = trunc10(x * S.employment);
+      const base = TB.clamp(Math.floor(x / 1000) * 1000, lo, hi);
+      const { pension, health, care, employ } = TX.social(x, july ? 7 : 1);
       return { base, hi, pension, health, care, employ, total: pension + health + care + employ };
     };
     const cv = TB.canvas("#in-cv", (ctx, w, h) => {

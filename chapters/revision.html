@@ -469,11 +469,11 @@ TX.ready(function (D) {
     const sG = TB.range("cmp-s", (v) => won(v * 1e4), draw);
     const mG = TB.seg("cmp-m", draw);
     function input(prevKids) {
-      const g = Number(gG()), n = kG(), eight = e8.checked && n > 0, s = TX.social(g / 12);
+      const g = Number(gG()), n = kG(), eight = e8.checked && n > 0, s = TX.socialYear(g / 12);
       const card = cG() * 1e4;
       return {
         gross: g, people: { children: n },
-        ins: { pension: s.pension * 12, health: (s.health + s.care) * 12, employ: s.employ * 12 },
+        ins: { pension: s.pension, health: s.health + s.care, employ: s.employ },
         card: { credit: card * 0.7, debit: card * 0.3 },
         kids8: n - (eight && !prevKids ? 1 : 0),
         special: { donation: { hometown: hG() * 1e4 } },

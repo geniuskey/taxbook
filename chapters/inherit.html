@@ -152,7 +152,7 @@
         <div class="stat"><span class="k">과세표준</span><span class="v" id="flow-o-b">—</span></div>
         <div class="stat"><span class="k">납부세액 / 재산 대비</span><span class="v" id="flow-o-x">—</span></div>
       </div>
-      <div class="sim-note">해볼 것: ① 기본값(12억 3,000만원, 배우자 있음)에서 공제 막대 두 개(일괄공제와 배우자공제)가 과세가액 대부분을 덮어 과세표준이 작게 남는 것을 본다. ② '배우자 없음'으로 바꾼다. 배우자공제가 사라져 같은 재산의 세금이 몇 배로 커진다. 2차 상속(어머니가 돌아가실 때)이 바로 이 모양이다. ③ 상속재산을 3억원으로 낮추고 사전증여를 5억원으로 올린다. 사전증여가 과세가액에 더해지지만 공제 종합한도가 줄어 공제를 다 쓰지 못하는 지점이 생긴다. (자녀 둘, 장례비 1,000만원, 배우자는 법정상속분만큼 받는다고 가정했다. 금융재산·동거주택 공제와 채무는 넣지 않았다. 이 책의 엔진은 공제 종합한도를 과세가액 − 사전증여재산으로 단순화했다. 실제 한도는 사전증여에서 증여재산공제를 뺀 금액만 빼고, 과세가액이 일정 금액 이하이면 빼지 않는다.)</div>
+      <div class="sim-note">해볼 것: ① 기본값(12억 3,000만원, 배우자 있음)에서 공제 막대 두 개(일괄공제와 배우자공제)가 과세가액 대부분을 덮어 과세표준이 작게 남는 것을 본다. ② '배우자 없음'으로 바꾼다. 배우자공제가 사라져 같은 재산의 세금이 몇 배로 커진다. 2차 상속(어머니가 돌아가실 때)이 바로 이 모양이다. ③ 상속재산을 3억원으로 낮추고 사전증여를 5억원으로 올린다. 사전증여가 과세가액에 더해지지만 공제 종합한도가 줄어 공제를 다 쓰지 못하는 지점이 생긴다. (자녀 둘, 장례비 1,000만원, 배우자는 법정상속분만큼 받는다고 가정했다. 금융재산·동거주택 공제와 채무는 넣지 않았다. 공제 종합한도는 과세가액이 5억원을 넘을 때 사전증여재산에서 증여재산공제를 뺀 금액만큼 줄어든다. 이 화면은 사전증여재산공제를 입력받지 않으므로 0원으로 가정한다.)</div>
     </div>
 
     <p>같은 12억원대 재산이라도 배우자가 있느냐 없느냐로 세금이 크게 갈린다. 배우자공제가 상속세에서 가장 큰 공제이기 때문이다. 사전증여는 "미리 줘서 상속재산을 줄이는" 효과가 <span data-t="inherit.priorHeirYears" data-f="num"></span>년(비상속인은 <span data-t="inherit.priorOtherYears" data-f="num"></span>년) 동안 없다는 것도 보인다. 상속 직전의 증여는 상속세를 거의 줄이지 못한다. 이 이야기는 <a href="transfer.html">15장</a>에서 자세히 한다.</p>
@@ -175,6 +175,7 @@
           <label class="ctrl"><span>자녀 수 <output id="lump-n-out"></output></span><input type="range" id="lump-n" min="0" max="8" step="1" value="2"></label>
           <label class="ctrl"><span>그중 미성년 자녀 <output id="lump-m-out"></output></span><input type="range" id="lump-m" min="0" max="8" step="1" value="0"></label>
           <label class="ctrl"><span>미성년 자녀의 나이 <output id="lump-a-out"></output></span><input type="range" id="lump-a" min="0" max="18" step="1" value="8"></label>
+          <label class="check"><input type="checkbox" id="lump-sole"> 배우자 단독 상속(자녀 등 다른 상속인 없음)</label>
         </div>
       </div>
       <div class="sim-readout">
@@ -488,10 +489,12 @@ TX.ready(function (D) {
   (function () {
     const nG = TB.range("lump-n", (v) => v + "명", draw), mG = TB.range("lump-m", (v) => v + "명", draw), aG = TB.range("lump-a", (v) => v + "세", draw);
     function calc() {
-      const n = nG(), m = Math.min(mG(), n), a = aG();
+      const sole = document.getElementById("lump-sole").checked;
+      const n = sole ? 0 : nG(), m = sole ? 0 : Math.min(mG(), n), a = aG();
       const child = n * I.child, minor = m * Math.max(0, I.minorAge - a) * I.minorPerYear;
       const sum = I.basic + child + minor;
-      return { n, m, a, child, minor, sum, use: Math.max(sum, I.lump) };
+      const r = TX.inheritTax({ estate: 1e11, children: n, minors: Array(m).fill(a), soleSpouse: sole });
+      return { n, m, a, child, minor, sum, sole, use: r.personal };
     }
     const cv = TB.canvas("#lump-cv", (ctx, w, h) => {
       const P = TB.palette(), c = calc(), narrow = w < 460;
@@ -510,20 +513,22 @@ TX.ready(function (D) {
       T(ctx, TB.wonAxis(c.sum), X(c.sum) + 5, y1 + bh / 2, { size: 12, mono: true, weight: 700, color: P.text, base: "middle" });
       const y2 = y1 + bh + 52;
       T(ctx, "일괄공제", bx, y2 - 10, { size: 12, color: P.text, weight: 700 });
-      ctx.fillStyle = P.ok; ctx.globalAlpha = 0.8; ctx.fillRect(X(0), y2, X(I.lump) - X(0), bh); ctx.globalAlpha = 1;
+      ctx.fillStyle = P.ok; ctx.globalAlpha = c.sole ? 0.15 : 0.8; ctx.fillRect(X(0), y2, X(I.lump) - X(0), bh); ctx.globalAlpha = 1;
       T(ctx, TB.wonAxis(I.lump), X(I.lump) + 5, y2 + bh / 2, { size: 12, mono: true, weight: 700, color: P.text, base: "middle" });
       ctx.save(); ctx.setLineDash([4, 3]); ctx.strokeStyle = P.ok; ctx.lineWidth = 1.5; ctx.beginPath(); ctx.moveTo(X(I.lump), 30); ctx.lineTo(X(I.lump), y2 + bh + 8); ctx.stroke(); ctx.restore();
-      const win = c.sum > I.lump ? "기초 + 인적공제가 더 크다 → 그쪽을 쓴다" : "일괄공제가 더 크다 → 일괄공제를 쓴다";
+      const win = c.sole ? "배우자 단독 상속 → 일괄공제 적용 제외" : c.sum > I.lump ? "기초 + 인적공제가 더 크다 → 그쪽을 쓴다" : "일괄공제가 더 크다 → 일괄공제를 쓴다";
       T(ctx, win, bx, h - 18, { size: narrow ? 12 : 13, weight: 700, color: c.sum > I.lump ? P.accent2 : P.ok });
     }, { get height() { return 250; } });
     function draw() {
       const c = calc();
       TB.stat("lump-o-b", W(c.sum));
-      TB.stat("lump-o-l", W(I.lump));
-      TB.stat("lump-o-g", c.sum >= I.lump ? "넘었다" : W(I.lump - c.sum));
+      TB.stat("lump-o-l", c.sole ? "적용 제외" : W(I.lump));
+      TB.stat("lump-o-g", c.sole ? "비교 대상 아님" : c.sum >= I.lump ? "넘었다" : W(I.lump - c.sum));
+      ["lump-n", "lump-m", "lump-a"].forEach((id) => { document.getElementById(id).disabled = c.sole; });
       TB.stat("lump-o-u", '<span class="plus">' + W(c.use) + "</span>");
       cv.redraw();
     }
+    document.getElementById("lump-sole").addEventListener("change", draw);
     draw();
   })();
 

@@ -154,7 +154,7 @@
             <label>국민연금<input type="number" class="num-in" id="c-pension" min="0" step="any" inputmode="decimal"></label>
             <label>건강보험(장기요양 포함)<input type="number" class="num-in" id="c-health" min="0" step="any" inputmode="decimal"></label>
             <label>고용보험<input type="number" class="num-in" id="c-employ" min="0" step="any" inputmode="decimal"></label>
-            <div class="wide btn-row"><button class="btn sm" id="c-ins-auto">급여로 자동 계산</button><span class="sub">월 과세 급여 × 보험료율(<span data-t="year" data-f="raw"></span>년)로 추정한다. 원천징수영수증의 실제 값이 있으면 그 값을 넣는다.</span></div>
+            <div class="wide btn-row"><button class="btn sm" id="c-ins-auto">급여로 자동 계산</button><span class="sub">매달 같은 과세 급여로 가정하고 1~6월·7~12월 국민연금 기준액을 나눠 추정한다. 실제 고지된 보험료는 아래에 직접 입력한다. 원천징수영수증의 실제 값이 있으면 그 값을 넣는다.</span></div>
           </fieldset>
           <fieldset><legend>카드 등 사용액(연간)</legend>
             <label>신용카드<input type="number" class="num-in" id="c-credit" min="0" step="any" inputmode="decimal"></label>
@@ -551,15 +551,15 @@ TX.ready(function (D) {
     const pr = TX.payroll({ monthly, nontax: C.mealMonthly, family: 1, kids: 0, ratio: o.ratio || 1 });
     const x = TX.caseYearEnd();
     x.gross = (monthly - C.mealMonthly) * 12;
-    x.ins = { pension: pr.ins.pension * 12, health: (pr.ins.health + pr.ins.care) * 12, employ: pr.ins.employ * 12 };
+    x.ins = insFor(x.gross);
     x.prepaid = pr.tax * 12; x.prepaidLocal = pr.local * 12;
     x._pr = pr;
     return x;
   }
   function insFor(gross) {
     if (gross <= 0) return { pension: 0, health: 0, employ: 0 };
-    const s = TX.social(gross / 12);
-    return { pension: s.pension * 12, health: (s.health + s.care) * 12, employ: s.employ * 12 };
+    const s = TX.socialYear(gross / 12);
+    return { pension: s.pension, health: s.health + s.care, employ: s.employ };
   }
 
   /* 법령 값 가운데 JSON 키가 아직 없을 수 있는 것: 경정청구 기한 */

@@ -143,8 +143,10 @@
     return table.map(([up, r]) => { const row = { from: prev, to: up, rate: r, quick: prev * r - acc }; acc += ((up == null ? prev : up) - prev) * r; prev = up == null ? prev : up; return row; });
   };
   TX.incomeTax = (base) => TX.progressive(D.income.rates, base);
-  TX.local = (tax) => Math.floor(Math.max(0, tax) * D.income.localRate / 10) * 10;
-  const trunc10 = (x) => Math.floor(Math.max(0, x) / 10) * 10;
+  // 부동소수점 표현 오차만 보정한다. 예: 100000 × 0.009 = 899.9999999999999.
+  const trunc10 = (x) => { const units = Math.max(0, x) / 10; return Math.floor(units + Number.EPSILON * Math.max(1, units) * 4) * 10; };
+  TX.trunc10 = trunc10;
+  TX.local = (tax) => trunc10(Math.max(0, tax) * D.income.localRate);
   const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
   const sumv = (o) => Object.values(o || {}).reduce((s, x) => s + (+x || 0), 0);
 
@@ -182,14 +184,24 @@
     return { total: rows.reduce((s, r) => s + r.value, 0), rows, n };
   };
   /** 4대보험 근로자 부담(월). monthly: 월 과세 급여 */
-  TX.social = function (monthly) {
+  TX.social = function (monthly, month = 1) {
     const S = D.social;
-    const pBase = clamp(monthly, S.pensionMinBase, S.pensionMaxBase);
+    const july = month >= 7;
+    const lo = july ? (S.pensionMinBaseFromJuly ?? S.pensionMinBase) : S.pensionMinBase;
+    const hi = july ? (S.pensionMaxBaseFromJuly ?? S.pensionMaxBase) : S.pensionMaxBase;
+    const pBase = clamp(Math.floor(monthly / 1000) * 1000, lo, hi);
     const pension = trunc10(pBase * S.pension);
     const health = trunc10(monthly * S.health);
-    const care = trunc10(health * S.careOfHealth);
+    const care = trunc10(health * (S.careOfHealthExact ?? S.careOfHealth));
     const employ = trunc10(monthly * S.employment);
     return { pension, health, care, employ, total: pension + health + care + employ };
+  };
+  /** 같은 월 보수가 12개월 유지된다는 가정. 7월 국민연금 기준액 변경을 반영한다. */
+  TX.socialYear = function (monthly) {
+    const before = TX.social(monthly, 1), after = TX.social(monthly, 7);
+    const result = {};
+    for (const key of ["pension", "health", "care", "employ", "total"]) result[key] = (before[key] + after[key]) * 6;
+    return result;
   };
   /**
    * 월급명세서: 매달 원천징수. 그 해 파일에 간이세액표(simplified.table)가 있으면 표에서 찾고, 없으면 표를 만든 산식으로 근사한다.
@@ -199,7 +211,7 @@
   TX.payroll = function (o) {
     const S = D.simplified;
     const monthly = o.monthly, nontax = Math.min(o.nontax || 0, monthly), taxable = monthly - nontax;
-    const ins = TX.social(taxable);
+    const ins = TX.social(taxable, o.month);
     const gross = taxable * 12;
     const earned = gross - TX.earnedDeduction(gross);
     const fam = Math.max(1, o.family || 1);
@@ -340,7 +352,8 @@
   TX.rentCredit = function (rent, gross, totalIncome) {
     const R = D.credits.rent;
     if (gross > R.grossMax || (totalIncome != null && totalIncome > R.incomeMax)) return { credit: 0, rate: 0, eligible: 0 };
-    const rate = gross <= R.lowGrossMax ? R.rateLow : R.rateHigh;
+    const low = gross <= R.lowGrossMax && (totalIncome == null || totalIncome <= R.lowIncomeMax);
+    const rate = low ? R.rateLow : R.rateHigh;
     const eligible = Math.min(rent || 0, R.limit);
     return { credit: eligible * rate, rate, eligible };
   };
@@ -568,7 +581,7 @@
   /**
    * 상속세. {estate(상속재산 총액, 사전증여 제외), debts(채무), funeral(장례비), priorGifts(합산 대상 사전증여), priorGiftTax,
    *   spouse(배우자가 실제 받는 금액, 없으면 null), spouseShare(배우자 법정상속분 비율), children, minors:[나이...], elderly, financial(순금융재산),
-   *   cohabitHouse(동거주택 가액, 요건 충족 시), priorGiftDeduction(사전증여 때 받은 증여재산공제), filed}
+   *   cohabitHouse(동거주택 가액, 요건 충족 시), priorGiftDeduction(사전증여 때 받은 증여재산공제), soleSpouse(배우자 단독 상속), filed}
    */
   TX.inheritTax = function (h) {
     const I = D.inherit;
@@ -576,7 +589,7 @@
     const gross = (h.estate || 0) + (h.priorGifts || 0);
     const taxable = Math.max(0, gross - (h.debts || 0) - funeral);
     const basicPlus = I.basic + (h.children || 0) * I.child + (h.minors || []).reduce((s, a) => s + Math.max(0, I.minorAge - a) * I.minorPerYear, 0) + (h.elderly || 0) * I.elderly;
-    const personal = Math.max(I.lump, basicPlus);
+    const personal = h.soleSpouse ? basicPlus : Math.max(I.lump, basicPlus);
     let spouse = 0;
     if (h.spouse != null) {
       // 실제 받은 금액과 법정상속분 한도 중 작은 값, 단 최소·최대 사이
@@ -596,7 +609,7 @@
     if (base < D.transfer.minBase) tax = 0;
     const credit = h.filed === false ? 0 : tax * D.transfer.filingCredit;
     const pay = Math.max(0, tax - credit);
-    return { gross, funeral, taxable, personal, lumpUsed: personal === I.lump, spouse, fin, house, deduction, cap, base, rate: calc.rate, calc: calc.tax, tax, credit, pay, effective: gross ? pay / gross : 0 };
+    return { gross, funeral, taxable, personal, lumpUsed: !h.soleSpouse && personal === I.lump, spouse, fin, house, deduction, cap, base, rate: calc.rate, calc: calc.tax, tax, credit, pay, effective: gross ? pay / gross : 0 };
   };
 
   /* ------------------------------------------------------------ 케이스: 다온의 세금 노트 */
@@ -632,11 +645,12 @@
   /** 다온의 연말정산 입력(TX.yearEnd에 그대로 넣는다). over로 일부 값을 바꿀 수 있다 */
   TX.caseYearEnd = function (over) {
     const C = TX.CASE, pr = TX.casePayroll((over && over.ratio) || 1);
+    const annualIns = TX.socialYear(C.monthly - C.mealMonthly);
     const gross = (C.monthly - C.mealMonthly) * 12;
     const x = {
       gross,
       people: { woman: false },
-      ins: { pension: pr.ins.pension * 12, health: (pr.ins.health + pr.ins.care) * 12, employ: pr.ins.employ * 12 },
+      ins: { pension: annualIns.pension, health: annualIns.health + annualIns.care, employ: annualIns.employ },
       housing: { subscription: C.subscription },
       card: Object.assign({}, C.card), cardPrev: C.cardPrev,
       kids8: 0, births: [],

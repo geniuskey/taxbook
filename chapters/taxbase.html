@@ -423,7 +423,7 @@ TX.ready(function (D) {
   const plus = (v) => '<span class="plus">' + TB.won(v) + "</span>";
   const set = (id, s) => { const el = document.getElementById(id); if (el) el.textContent = s; };
   /** 연간 보험료(월 과세 급여 기준, 2장 요율) */
-  const insYear = (gross) => { const s = TX.social(gross / 12); return { pension: s.pension * 12, other: (s.health + s.care + s.employ) * 12 }; };
+  const insYear = (gross) => { const s = TX.socialYear(gross / 12); return { pension: s.pension, other: s.health + s.care + s.employ }; };
   /** 총급여 → 과세표준(4장 공제 전), 인적공제 total 입력 */
   const baseOf = (gross, personal) => { const ins = insYear(gross); return Math.max(0, gross - TX.earnedDeduction(gross) - personal - ins.pension - ins.other); };
   /** 결정세액(근로소득세액공제까지) */
@@ -708,7 +708,8 @@ TX.ready(function (D) {
   (function () {
     const C = TX.CASE, pr = TX.casePayroll(1);
     const gross = (C.monthly - C.mealMonthly) * 12, ed = TX.earnedDeduction(gross), earned = gross - ed;
-    const pen = pr.ins.pension * 12, hi = (pr.ins.health + pr.ins.care + pr.ins.employ) * 12;
+    const annualIns = TX.socialYear(gross / 12);
+    const pen = annualIns.pension, hi = annualIns.health + annualIns.care + annualIns.employ;
     const base = Math.max(0, earned - PS.basic - pen - hi);
     set("n3-g", TB.won(gross)); set("n3-ed", TB.won(ed)); set("n3-e", TB.won(earned));
     set("n3-p", TB.won(PS.basic)); set("n3-pen", TX.fmt.wonfull(pen)); set("n3-hi", TX.fmt.wonfull(hi));
