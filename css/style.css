@@ -507,3 +507,8 @@ html:not(.tx-ready) [data-t]:empty::before { content: "…"; color: var(--text-f
 .form-grid label { display: grid; gap: 4px; font-size: 13px; color: var(--text-dim); }
 .form-grid fieldset { grid-column: 1 / -1; border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 10px 12px 12px; margin: 0; display: grid; gap: 10px 14px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 .form-grid legend { font-size: 13px; font-weight: 700; color: var(--text); padding: 0 6px; }
+
+/* Shareable simulator anchor links */
+.sim-link { margin-left: auto; flex: 0 0 auto; font: 12px var(--mono); color: var(--text-faint); }
+.sim-link:hover, .sim-link:focus-visible { color: var(--accent); text-decoration: none; }
+.sim { scroll-margin-top: 1rem; }
