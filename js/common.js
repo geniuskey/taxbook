@@ -748,3 +748,12 @@ const LOGO = `<svg class="mark" viewBox="0 0 32 32" aria-hidden="true"><defs><li
     addSimulatorLinks();
   }
 })();
+
+// Series glossary tooltips (same runtime across independently deployed books).
+(function () {
+  const base = new URL(".", document.currentScript.src);
+  window.BOOK_GLOSSARY_CONFIG = { dataUrl: new URL("glossary-data.js", base).href, format: "tax" };
+  const script = document.createElement("script");
+  script.src = new URL("glossary-tooltips.js", base).href;
+  document.head.append(script);
+})();
